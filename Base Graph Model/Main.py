@@ -9,6 +9,7 @@ import Simulate
 
 def main(n,p,starting_exposed_percentage,days,graph_obj):
 	agents=[]
+	#Intialize a percentage of agents as Exposed
 	for i in range(n):
 		state='Susceptible'
 		if random.random()<starting_exposed_percentage:
@@ -16,7 +17,7 @@ def main(n,p,starting_exposed_percentage,days,graph_obj):
 		agent=Agent.Agent(state,i)
 		agents.append(agent)
 
-	#create graph of agents from graph_obj
+	#Create a graph of agents from graph_obj
 	for indx,agent in enumerate(agents):
 		agent.index=indx
 		for j in graph_obj.adj_list[indx]:
@@ -24,7 +25,8 @@ def main(n,p,starting_exposed_percentage,days,graph_obj):
 
 	individual_types=['Susceptible','Exposed','Asymptomatic','Symptomatic','Recovered']
 
-	def p_infection(p1,p2):  # probability of infectiong neighbour
+	#Probability of infecting a neighbour
+	def p_infection(p1,p2):  
 		def p_fn(my_agent,neighbour_agents):
 			p_inf_symp=p1
 			p_inf_asymp=p2
@@ -62,6 +64,7 @@ def main(n,p,starting_exposed_percentage,days,graph_obj):
 	sim_obj.simulate_days(days)
 	return sim_obj.state_history
 
+#Average number time series
 def average(tdict,number):
 	for k in tdict.keys():
 		l=tdict[k]
@@ -70,6 +73,7 @@ def average(tdict,number):
 
 	return tdict
 
+#Averages number of simulations and plots a single plot
 def worlds(number):
 	n=1000
 	p=0.003
