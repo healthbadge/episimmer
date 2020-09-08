@@ -75,10 +75,10 @@ def average(tdict,number):
 
 #Averages number of simulations and plots a single plot
 def worlds(number):
-	n=1000
-	p=0.003
-	num_exp=0.01
-	days=100
+	n=1000			#Number of agents/nodes in graph
+	p=0.003			#Probability of edge in random graph G(n,p)
+	num_exp=0.01	#Starting percentage of Exposed agents
+	days=100 		#Total number of days of simulation
 	individual_types=['Susceptible','Exposed','Asymptomatic','Symptomatic','Recovered']
 	tdict={}
 	for state in individual_types:
