@@ -22,9 +22,7 @@ def average(tdict,number):
 
 	return tdict
 
-#Averages number of simulations and plots a single plot
-def worlds(config_obj,graph_obj):
-	
+def compartment_model():
 	individual_types=['Susceptible','Exposed','Asymptomatic','Symptomatic','Recovered']
 
 	#Probability of infecting a neighbour
@@ -61,6 +59,13 @@ def worlds(config_obj,graph_obj):
 	transmission_prob['Symptomatic']['Recovered']= p_standard(0.2)
 	transmission_prob['Asymptomatic']['Recovered']= p_standard(0.2)
 	transmission_prob['Recovered']['Susceptible']= p_standard(0)
+
+	return individual_types,transmission_prob
+
+#Averages number of simulations and plots a single plot
+def worlds(config_obj,graph_obj):
+
+	individual_types,transmission_prob=compartment_model()
 
 	tdict={}
 	for state in individual_types:
