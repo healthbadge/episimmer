@@ -7,8 +7,24 @@ import numpy as np
 import Agent
 import Simulate
 
-def engine(agents,days):
+def engine(agents,days, transmission_prob,individual_types):
 
+	sim_obj=Simulate.Simulate(agents,transmission_prob,individual_types)
+	sim_obj.simulate_days(days)
+	return sim_obj.state_history
+
+#Average number time series
+def average(tdict,number):
+	for k in tdict.keys():
+		l=tdict[k]
+		for i in range(len(l)):
+			tdict[k][i]/=number
+
+	return tdict
+
+#Averages number of simulations and plots a single plot
+def worlds(config_obj,graph_obj):
+	
 	individual_types=['Susceptible','Exposed','Asymptomatic','Symptomatic','Recovered']
 
 	#Probability of infecting a neighbour
@@ -46,29 +62,13 @@ def engine(agents,days):
 	transmission_prob['Asymptomatic']['Recovered']= p_standard(0.2)
 	transmission_prob['Recovered']['Susceptible']= p_standard(0)
 
-	sim_obj=Simulate.Simulate(agents,transmission_prob,individual_types)
-	sim_obj.simulate_days(days)
-	return sim_obj.state_history
-
-#Average number time series
-def average(tdict,number):
-	for k in tdict.keys():
-		l=tdict[k]
-		for i in range(len(l)):
-			tdict[k][i]/=number
-
-	return tdict
-
-#Averages number of simulations and plots a single plot
-def worlds(config_obj,graph_obj):
-	individual_types=['Susceptible','Exposed','Asymptomatic','Symptomatic','Recovered']
 	tdict={}
 	for state in individual_types:
 		tdict[state]=[0]*(config_obj.days+1)
 
 	for i in range(config_obj.worlds):
 		agents=graph_obj.create_agents(config_obj.starting_exposed_percentage,config_obj.starting_infected_percentage)
-		sdict= engine(agents,config_obj.days)
+		sdict= engine(agents,config_obj.days,transmission_prob,individual_types)
 		for state in individual_types:
 			for j in range(len(tdict[state])):
 				tdict[state][j]+=sdict[state][j]
