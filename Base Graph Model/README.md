@@ -1,5 +1,5 @@
 
-To run model : python Main.py config.txt graph_file.txt
+To run model : python Main.py config.txt \<graph flat file>
 
 
 
