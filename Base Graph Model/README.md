@@ -3,7 +3,7 @@ To run model : python Main.py config.txt <graph flat file>
 
 
 
-config file format:
+Config file format(.txt):
 
     Number of worlds : 30
   
@@ -15,7 +15,7 @@ config file format:
 
 
 
-Graph Flat file
+Graph Flat file format(.txt):
 
  Currently there are two formats. Code to generate them is given in folder Generate Graph.
  
