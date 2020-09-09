@@ -5,8 +5,7 @@ from matplotlib import colors
 import numpy as np
 
 class Simulate():
-	def __init__(self,graph_obj,agents,transmission_probability,individual_state_types):
-		self.graph_obj=graph_obj
+	def __init__(self,agents,transmission_probability,individual_state_types):
 		self.agents=agents
 		self.transmission_probability=transmission_probability
 		self.individual_state_types=individual_state_types
