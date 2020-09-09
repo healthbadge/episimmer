@@ -5,13 +5,14 @@ To run model : python Main.py config.txt <graph flat file>
 
 config file format:
 
-  Number of worlds : 30
+    Number of worlds : 30
   
-  Number of Days : 30
+    Number of Days : 30
   
-  Starting Exposed Percentage : 0.3
+    Starting Exposed Percentage : 0.3
   
-  Starting Infected Percentage : 0
+    Starting Infected Percentage : 0
+
 
 
 Graph Flat file
