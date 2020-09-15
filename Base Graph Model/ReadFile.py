@@ -80,8 +80,6 @@ class ReadSimpleGraph():
 			r=random.random()
 			if r<starting_exposed_percentage:
 				state='Exposed'
-			elif r<starting_exposed_percentage+starting_infected_percentage:
-				state='Infected'
 			agent=Agent.Agent(state,i)
 			agents.append(agent)
 
