@@ -55,7 +55,7 @@ The code is can take in an infinite number of parameters. Only requirment is 'Ag
 <br>
 
 ### interaction_files_list.txt <br>
-This is a file containg a names of interaction files in order. The filenames must be enclosed in \<\> <br>
+This is a file containg a names of interaction files in order. The filenames must be enclosed in \<\> . The code cycles throught the files till the number of days run out. <br>
 <br> 
 Example :
     
@@ -90,7 +90,7 @@ On calling function generate_model(), corresponding model object should be retur
 <br>
 User can use all parameters given in agents.txt and intercation files. For example:
 
-   	#EXAMPLE 1
+   	#Example 1
 		if contact_agent.state=='Symptomatic':
 			return math.tanh(float(c_dict['Time Interval']))*p_inf_symp
 		elif contact_agent.state=='Asymptomatic':
