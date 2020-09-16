@@ -1,9 +1,13 @@
 # Epidemic Simulation Platform
 
 ## Running
-To run code from current directory : python Main.py \<path to folder containing required files\> 
+To run code from current directory : 
+
+		python Main.py \<path to folder containing required files\> 
 <br>
-For example :  python Main.py Example_1/ <br>
+For example :  
+
+		python Main.py Example_1/ <br>
 will result in simulation of 100 agents being cycled through a weekly schedule for 30 days and averaged 10 times.
 <br>
 <br>
