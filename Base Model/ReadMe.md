@@ -1,6 +1,6 @@
-#Epidemic Simulation Platform
+# Epidemic Simulation Platform
 
-##Running
+## Running
 To run code from current directory : python Main.py <path to folder containing required files> 
 <br>
 The required files are as follows <br>
@@ -11,5 +11,5 @@ The required files are as follows <br>
   -All files specified in interaction_files_list.txt <br>
 <br>
 
-###config.txt
+### config.txt
 
