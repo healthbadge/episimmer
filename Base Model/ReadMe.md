@@ -25,5 +25,10 @@ The format is as follows with values given in \<...\>
     Agent Parameter Keys <Agent Index:Type:Residence:HLA Type>
 
     Contact Info Keys <Agent Index:Interacting Agent Index:Time Interval:Intensity>
-    
+<br>
+Agent parameter Keys has to match with agent.txt and Contact Info Keys has to match with the files mentione din interaction_files_list.txt
+<br>
+
+### agents.txt
+The format is as follows with comments given in {..}
     
