@@ -82,7 +82,7 @@ On calling function generate_model(), corresponding model object should be retur
 <br>
 User can use all parameters given in agents.txt and intercation files. For example:
 
-    #EXAMPLE 1
+   	#EXAMPLE 1
 		if contact_agent.state=='Symptomatic':
 			return math.tanh(float(c_dict['Time Interval']))*p_inf_symp
 		elif contact_agent.state=='Asymptomatic':
@@ -90,11 +90,11 @@ User can use all parameters given in agents.txt and intercation files. For examp
 		else:
 			return 0
 
-		#Example 2
+	#Example 2
 		if contact_agent.state=='Symptomatic':
-			return math.tanh(float(c_dict['Time Interval'])*float(c_dict['Intensity']))*p_inf_symp
+			return math.tanh(float(c_dict['Time Interval'])*float(c_dict['Intensity']))*p_inf_symp*agent.info_dict['Innate Suscptibility']
 		elif contact_agent.state=='Asymptomatic':
-			return math.tanh(float(c_dict['Time Interval'])*float(c_dict['Intensity']))*p_inf_asymp
+			return math.tanh(float(c_dict['Time Interval'])*float(c_dict['Intensity']))*p_inf_asymp*agent.info_dict['Innate Suscptibility']
 		else:
 			return 0
 
