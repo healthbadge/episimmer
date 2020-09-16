@@ -5,11 +5,6 @@ To run code from current directory :
 
 		python Main.py \<path to folder containing required files\> 
 <br>
-For example :  
-
-		python Main.py Example_1/ <br>
-will result in simulation of 100 agents being cycled through a weekly schedule for 30 days and averaged 10 times.
-<br>
 <br>
 The required files are as follows <br>
   -config.txt <br>
@@ -18,6 +13,12 @@ The required files are as follows <br>
   -All files specified in interaction_files_list.txt <br>
   -Generate_model.py (user defined script) <br>
 <br>
+For example :  
+
+		python Main.py Example_1/ <br>
+will result in simulation of 100 agents being cycled through a weekly schedule for 30 days and averaged 10 times.
+<br>
+
 
 ### config.txt <br>
 The format is shown with an example with values given in \<...\> and comments in {...}
