@@ -48,20 +48,55 @@ The code is can take in an infinite number of parameters. Only requirment is 'Ag
 
 ### interaction_files_list.txt <br>
 This is a file containg a names of interaction files in order. The filenames must be enclosed in \<\> <br>
+<br> 
+Example :
     
-    Example 
+    <monday.txt> 
+    <tuesday.txt> 
+    <wednesday.txt> 
+    <thursday.txt> 
+    <friday.txt> 
+    <saturday.txt> 
+    <sunday.txt> 
     
-    <monday.txt> <br>
-    <tuesday.txt> <br>
-    <wednesday.txt> <br>
-    <thursday.txt> <br>
-    <friday.txt> <br>
-    <saturday.txt> <br>
-    <sunday.txt> <br>
+### interaction file <br>
+The format of an intercation file has been shown with an example. The interactions are directional and must require keys 'Agent Index' and 'Interacting Agent Index'. The code is can take in an infinite number of parameters.
+<br>
+      
+      30  {Integer denoting number of interactions}
+      
+      Agent Index:Interacting Agent Index:Time Interval:Intensity   {Refers to input parameters in Interaction list separated by ':' and must match config.txt}
+      
+      12:7:10:0.7
+      
+      12:6:10:0.7
+
+      ...
+      
+<br>
+A simple example would be a class that goe son for 1 hour. Then all agents will require bi-directional(A:B and B:A) interactions with time interval 60. Furthermore class size, ventilation can be parameters. All these parameters can be used in the user defined model.
 
 ### Generate_model.py <br>
 This will soon be changed. Models can be user defined here using library Model.py
 On calling function generate_model(), corresponding model object should be returned.
+<br>
+User can use all parameters given in agents.txt and intercation files. For example:
+
+    #EXAMPLE 1
+		if contact_agent.state=='Symptomatic':
+			return math.tanh(float(c_dict['Time Interval']))*p_inf_symp
+		elif contact_agent.state=='Asymptomatic':
+			return math.tanh(float(c_dict['Time Interval']))*p_inf_asymp
+		else:
+			return 0
+
+		#Example 2
+		if contact_agent.state=='Symptomatic':
+			return math.tanh(float(c_dict['Time Interval'])*float(c_dict['Intensity']))*p_inf_symp
+		elif contact_agent.state=='Asymptomatic':
+			return math.tanh(float(c_dict['Time Interval'])*float(c_dict['Intensity']))*p_inf_asymp
+		else:
+			return 0
 
 
 
