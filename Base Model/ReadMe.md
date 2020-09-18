@@ -15,7 +15,7 @@ The required files are as follows <br>
 <br>
 For example :  
 
-		python Main.py Example_1/ <br>
+		python Main.py Examples/Example_1/ <br>
 will result in simulation of 100 agents being cycled through a weekly schedule for 30 days and averaged 10 times.
 <br>
 
@@ -85,10 +85,43 @@ The format of an intercation file has been shown with an example. The interactio
 A simple example would be a class that goe son for 1 hour. Then all agents will require bi-directional(A:B and B:A) interactions with time interval 60. Furthermore class size, ventilation can be parameters. All these parameters can be used in the user defined model.
 
 ### Generate_model.py <br>
-This will soon be changed. Models can be user defined here using library Model.py
+This will soon be changed. Models can be user defined here using library Model.py <br>
+There are two types of models that can currently be defined
+<br>
+#### Stochastic Model <br>
+Example
+
+	individual_types=['Susceptible','Exposed','Asymptomatic','Symptomatic','Recovered']
+	model=Model.StochasticModel(individual_types)
+	model.set_transition('Susceptible', 'Exposed', model.p_infection(0.3,0.1,probabilityOfInfection_fn))
+	model.set_transition('Exposed', 'Symptomatic', model.p_standard(0.15))
+	model.set_transition('Exposed', 'Asymptomatic', model.p_standard(0.2))
+	model.set_transition('Symptomatic', 'Recovered', model.p_standard(0.2))
+	model.set_transition('Asymptomatic', 'Recovered', model.p_standard(0.2))
+
+	return model
+	
+	
+
+<br>
+#### Scheduled Model  <br>
+Example 
+
+	model=Model.ScheduledModel()
+	model.insert_state('Susceptible',None, None,model.p_infection(0.3,0.1,probabilityOfInfection_fn,{'Exposed':1}))
+	model.insert_state('Exposed',5,2,model.scheduled({'Symptomatic':0.7,'Asymptomatic':0.3}))
+	model.insert_state('Symptomatic',7,1,model.scheduled({'Recovered':0.7, 'ICU':0.3}))
+	model.insert_state('ICU',10,5,model.scheduled({'Recovered':0.1,'Dead':0.9}))
+	model.insert_state('Asymptomatic',6,3,model.scheduled({'Recovered':1}))
+	model.insert_state('Recovered',None, None,model.scheduled({'Recovered':1}))
+	model.insert_state('Dead',None, None,model.scheduled({'Dead':1}))
+	
+	return model
+	
 On calling function generate_model(), corresponding model object should be returned.
 <br>
-User can use all parameters given in agents.txt and intercation files. For example:
+Note : User can use all parameters given in agents.txt and intercation files.  <br>
+Below is a n example of probabilityOfInfection_fn function. 
 
    	#Example 1
 		if contact_agent.state=='Symptomatic':
