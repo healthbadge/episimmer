@@ -1,5 +1,10 @@
 # Epidemic Simulation Platform
 
+
+## Dependencies
+
+To install dependencies using pipenv run ```pipenv install```.
+
 ## Running
 To run code from current directory : 
 
