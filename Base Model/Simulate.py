@@ -25,6 +25,7 @@ class Simulate():
 			r=random.random()
 			if r<self.config_obj.starting_exposed_percentage:
 				agent.state='Exposed'
+				agent.scheduled_time_left=None
 
 		#Update State list
 		for agent in self.agents_obj.agents.values():

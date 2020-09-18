@@ -25,7 +25,7 @@ interactionFiles_list=list(map(lambda x : path+x ,interactionFiles_obj.file_list
 
 #model=pickle.load(open(model_filename, "rb"))
 Generate_model = module_from_file("Generate_model", path+'Generate_model.py')
-model=Generate_model.generate_stochastic_model()
+model=Generate_model.generate_model()
 
 world_obj=World.World(config_obj,agents_filename,model,interactionFiles_list)
 world_obj.simulate_worlds()

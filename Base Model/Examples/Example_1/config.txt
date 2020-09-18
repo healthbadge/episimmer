@@ -1,0 +1,5 @@
+Number of worlds <10>
+Number of Days <30>
+Starting Exposed Percentage <0.25>
+Agent Parameter Keys <Agent Index:Type:Residence:HLA Type>
+Interaction Info Keys <Agent Index:Interacting Agent Index:Time Interval:Intensity>
