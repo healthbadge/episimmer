@@ -10,23 +10,32 @@ import math
 import ReadFile
 
 class World():
-	def __init__(self,config_obj,agents_filename,model,interactionFiles_list):
+	def __init__(self,config_obj,model,agents_filename,interactionFiles_list,locations_filename,eventFiles_list):
 		self.config_obj=config_obj
 		self.agents_filename=agents_filename
+		self.locations_filename=locations_filename
 		self.model=model
 		self.interactionFiles_list=interactionFiles_list
+		self.eventFiles_list=eventFiles_list
 
 	def one_world(self):
 
 		days = self.config_obj.days
 
-		sim_obj= Simulate.Simulate(self.config_obj,self.agents_filename,self.model)
+		sim_obj= Simulate.Simulate(self.config_obj,self.model,self.agents_filename,self.locations_filename)
 		sim_obj.onStartSimulation()
 
 		for i in range(days):
-			interactions_filename=self.interactionFiles_list[days%len(self.interactionFiles_list)]
+			if self.interactionFiles_list==[]:
+				interactions_filename=None
+			else:
+				interactions_filename=self.interactionFiles_list[days%len(self.interactionFiles_list)]
+			if self.eventFiles_list==[]:
+				events_filename=None
+			else:
+				events_filename=self.eventFiles_list[days%len(self.eventFiles_list)]
 
-			sim_obj.onStartDay(interactions_filename)
+			sim_obj.onStartDay(interactions_filename,events_filename)
 			sim_obj.handleDayForAllAgents()
 			sim_obj.endDay()
 

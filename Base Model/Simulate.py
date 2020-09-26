@@ -4,14 +4,18 @@ import numpy as np
 import ReadFile
 
 class Simulate():
-	def __init__(self,config_obj,agents_filename,model):
+	def __init__(self,config_obj,model,agents_filename,locations_filename):
 		self.agents_filename=agents_filename
+		self.locations_filename=locations_filename
 		self.model=model
 		self.config_obj=config_obj
 
 	def onStartSimulation(self):
 		#Initialize agents
 		self.agents_obj=ReadFile.ReadAgents(self.agents_filename,self.config_obj)
+
+		#Intialize locations
+		self.locations_obj=ReadFile.ReadLocations(self.locations_filename,self.config_obj)
 
 		#Intitialize state list
 		self.state_list={}
@@ -34,11 +38,26 @@ class Simulate():
 		#Store state list
 		self.store_state()
 
-	def onStartDay(self,filename):
+	def onStartDay(self,interactions_filename,events_filename):
 		for agent in self.agents_obj.agents.values():
 			agent.new_day()
 
-		ReadFile.ReadInteractions(filename,self.config_obj,self.agents_obj)
+		for location in self.locations_obj.locations.values():
+			location.new_day()
+
+		#Add Interactions to agents
+		if interactions_filename!=None:
+			ReadFile.ReadInteractions(interactions_filename,self.config_obj,self.agents_obj)
+		
+		#Add events to locations
+		if events_filename!=None:
+			ReadFile.ReadEvents(events_filename,self.config_obj,self.locations_obj)
+
+			#Update event info to agents from location
+			for location in self.locations_obj.locations.values():
+				for event_info in location.events:
+					self.model.update_event_infection(event_info,location,self.agents_obj)
+
 
 	def handleDayForAllAgents(self):
 		#Too ensure concurrency we update agent.next_state in method handleDayAsAgent
@@ -53,6 +72,7 @@ class Simulate():
 	def handleDayAsAgent(self,agent):
 		#Too ensure concurrency we update agent.next_state in method handleDayAsAgent
 		#After every agent has updated next_state we update states of all agents in method handleDay()
+
 
 		#Finding next_state
 		agent.set_next_state(self.model.find_next_state(agent,self.agents_obj.agents)) 
