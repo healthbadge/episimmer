@@ -2,4 +2,10 @@ Number of worlds <10>
 Number of Days <30>
 Starting Exposed Percentage <0.2>
 Agent Parameter Keys <Agent Index:Type:Susceptibility>
+Agent list filename <agents.txt>
 Interaction Info Keys <Agent Index:Interacting Agent Index:Room Ventilation>
+Interaction Files list filename <interaction_files_list.txt>
+Location Parameter Keys <>
+Location list filename <>
+Event Parameter Keys <>
+Event Files list filename <>
