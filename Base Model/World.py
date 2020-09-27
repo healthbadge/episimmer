@@ -26,11 +26,11 @@ class World():
 		sim_obj.onStartSimulation()
 
 		for i in range(days):
-			if self.interactionFiles_list==[]:
+			if self.interactionFiles_list==[] or self.interactionFiles_list==None:
 				interactions_filename=None
 			else:
 				interactions_filename=self.interactionFiles_list[days%len(self.interactionFiles_list)]
-			if self.eventFiles_list==[]:
+			if self.eventFiles_list==[] or self.eventFiles_list==None:
 				events_filename=None
 			else:
 				events_filename=self.eventFiles_list[days%len(self.eventFiles_list)]
