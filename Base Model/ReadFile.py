@@ -1,118 +1,97 @@
 import Agent
 import random
-import re
 
 class ReadConfiguration():
 	def __init__(self,filename):
 		self.worlds=None
 		self.days=None
 		self.starting_exposed_percentage=None
-		self.agent_info_keys=None
-		self.contact_info_keys=None
+		self.starting_infected_percentage=None
 
-		self.f = open(filename,"r")
+		f = open(filename,"r")
+		line=f.readline()
+		self.worlds=(int)(self.get_value(line))
+		line=f.readline()
+		self.days=(int)(self.get_value(line))
+		line=f.readline()
+		self.starting_exposed_percentage=(float)(self.get_value(line))
+		line=f.readline()
+		self.starting_infected_percentage=(float)(self.get_value(line))
 
-		self.worlds=(int)(self.get_value())
-		self.days=(int)(self.get_value())
-		self.starting_exposed_percentage=(float)(self.get_value())
-		self.agent_info_keys=self.get_value()
-		self.contact_info_keys=self.get_value()
-
-		if 'Agent Index' not in self.agent_info_keys.split(':'):
-			print("Error! Agent file  does not contain parameter \'Agent Index\'")
-
-		if 'Agent Index' not in self.contact_info_keys.split(':') or 'Interacting Agent Index' not in self.contact_info_keys.split(':'):
-			print("Error! Contact/Interaction List does not contain parameter \'Agent Index\' or parameter \'Interacting Agent Index\'")
-			return None
-
-		if self.starting_exposed_percentage>1:
+		if self.starting_infected_percentage+self.starting_exposed_percentage>1:
 			print('Error! Not valid starting percentages')
 
-	def get_value(self):
-		line=self.f.readline()
-		l = re.findall("\<.*?\>", line)
-		if len(l)!=1:
-			print("Error! Invalid entry in config.txt")
-			return None
-		value=(((l[0])[1:])[:-1])
+
+
+	def get_value(self,line):
+		value=line.split(':')[-1]
+		if value.endswith('\n'):
+			value=value[:-1]
 		return value
 
-class ReadAgents():
-	def __init__(self,filename,config_obj):
-		f=open(filename,'r')
-		self.n=int(self.get_value(f.readline()))
-		agent_info_keys=self.get_value(f.readline())
-		if agent_info_keys != config_obj.agent_info_keys:
-			print("Error! Agent Information parameters donot match the config.txt file")
-			return None
-		self.parameter_keys=agent_info_keys.split(':')
-		self.agents={}
 
+class ReadSimpleGraph():
+	def __init__(self,file_type,filename):
+		self.file_type=file_type
+		self.filename=filename
+		self.n=None
+		self.adj_list=[]
+
+		if self.file_type=='Simple Adjacency List':
+			self.read_adjacent_list_file()
+		elif self.file_type=='Simple Edge List':
+			self.read_edge_list_file()
+		else:
+			print('Error! Not a valid filetype')
+			return None
+
+	def read_adjacent_list_file(self):
+		f = open(self.filename, "r")
+		firstline=f.readline()
+		self.n=(int)(firstline[:-1])
 		for i in range(self.n):
-			info_dict=self.create_info_dict(self.get_value(f.readline()).split(':'))
+			self.adj_list.append([])
+		for line in f:
+			if line.endswith('/n'):
+				line=line[:-1]
+			line_list=line.split(' ')
+			node=int(line_list[0])
+
+			for elem in line_list[1:]:
+				self.adj_list[node].append(int(elem))
+
+	def read_edge_list_file(self):
+		f = open(self.filename, "r")
+		firstline=f.readline()
+		self.n=(int)(firstline[:-1])
+		for i in range(self.n):
+			self.adj_list.append([])
+		for line in f:
+			if line.endswith('/n'):
+				line=line[:-1]
+			line_list=line.split(' ')
+			self.adj_list[int(line_list[0])].append(int(line_list[1]))
+
+	def create_agents(self,starting_exposed_percentage,starting_infected_percentage):
+		agents=[]
+		#Intialize a percentage of agents as Exposed, Infected
+		for i in range(self.n):
 			state='Susceptible'
-			agent=Agent.Agent(state,info_dict)
-			self.agents[agent.index]=agent
+			r=random.random()
+			if r<starting_exposed_percentage:
+				state='Exposed'
+			elif r<starting_exposed_percentage+starting_infected_percentage:
+				state='Infected'
+			agent=Agent.Agent(state,i)
+			agents.append(agent)
 
-	def create_info_dict(self,info_list):
-		info_dict={}
-		for i,key in enumerate(self.parameter_keys):
-			info_dict[key]=info_list[i]
+		#Create a graph of agents from adj_list
+		for indx,agent in enumerate(agents):
+			agent.index=indx
+			for j in self.adj_list[indx]:
+				agent.neighbours.append(agents[j])
 
-		return info_dict
-
-	def get_value(self,line):
-		if line.endswith('\n'):
-			line=line[:-1]
-		return line
-
-class ReadInteractionFilesList():
-	def __init__(self,filename):
-		self.file_list=[]
-		f=open(filename,'r')
-		lines=f.readlines()
-		separator=' '
-		text=separator.join(lines)
-		l = re.findall("\<.*?\>", text)
-		for filename in l:
-			self.file_list.append(((filename)[1:])[:-1])
-
-
-class ReadInteractions():
-	def __init__(self,filename,config_obj,agents_obj):
-		self.config_obj=config_obj
-		self.agents_obj=agents_obj
-		f=open(filename,'r')
-		self.no_interactions=int(self.get_value(f.readline()))
-		contact_info_keys=self.get_value(f.readline())
-		if contact_info_keys != config_obj.contact_info_keys:
-			print("Error! Contact parameters donot match the config.txt file")
-			return None
-		self.parameter_keys=contact_info_keys.split(':')
-
-		for i in range(self.no_interactions):
-			parameter_list=(self.get_value(f.readline())).split(':')
-			agent_index,info_dict=self.get_interaction(parameter_list)
-			agents_obj.agents[agent_index].add_contact(info_dict)
-
-	def get_interaction(self,parameter_list):
-		info_dict={}
-		agent_index=None
-		contact_agent_index=None
-		for i,key in enumerate(self.parameter_keys):
-			if key=='Agent Index':
-				agent_index=parameter_list[i]
-			else:
-				info_dict[key]=parameter_list[i]
-
-		return agent_index,info_dict
-
-	def get_value(self,line):
-		if line.endswith('\n'):
-			line=line[:-1]
-		return line
-
-
+		return agents
 		
 
 
