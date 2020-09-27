@@ -1,5 +1,5 @@
-300
-Agent Index:Interacting Agent Index:Time Interval:Intensity
+ 300;
+Agent Index:Interacting Agent Index:Time Interval:Intensity: have mask
 32:91:3.901351436822462:0.7339762595213493
 78:90:3.5626711544249745:0.6746469145132054
 5:85:3.045488921169931:0.039540230198430115

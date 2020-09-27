@@ -26,7 +26,6 @@ def generate_model():
 		else:
 			return 0
 
-
 	individual_types=['Susceptible','Exposed','Asymptomatic','Symptomatic','Recovered']
 	model=Model.StochasticModel(individual_types)
 	model.set_transition('Susceptible', 'Exposed', model.p_infection(0.3,0.1,probabilityOfInfection_fn))
@@ -34,6 +33,32 @@ def generate_model():
 	model.set_transition('Exposed', 'Asymptomatic', model.p_standard(0.2))
 	model.set_transition('Symptomatic', 'Recovered', model.p_standard(0.2))
 	model.set_transition('Asymptomatic', 'Recovered', model.p_standard(0.2))
+
+	def event_contribute_fn(agent,event_info,location):
+		#Example 1
+		if agent.state=='Symptomatic':
+			return 1
+		elif agent.state=='Asymptomatic':
+			return 0.3
+		else:
+			return 0
+
+		#Example 2
+		susceptibility=1
+		if agent.info['HLA Type']=='A':
+			susceptibility=0.9
+
+		if agent.state=='Symptomatic':
+			return math.tanh(float(event_info['Time Interval']))*(1-location.info['Ventilation'])*susceptibility
+		elif agent.state=='Asymptomatic':
+			return 0.3*math.tanh(float(event_info['Time Interval']))*(1-location.info['Ventilation'])*susceptibility
+
+	def event_recieve_fn(agent,ambient_infection,event_info,location):
+		p=math.tanh(ambient_infection*0.3)
+		return p
+
+	model.set_event_contribution_fn(event_contribute_fn)
+	model.set_event_recieve_fn(event_recieve_fn)
 
 	return model
 
