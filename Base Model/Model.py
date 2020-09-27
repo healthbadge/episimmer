@@ -41,6 +41,8 @@ class StochasticModel():
 				contact_agent=agents[contact_index]
 				p_not_inf*=(1-fn(p_inf_symp,p_inf_asymp,contact_agent,c_dict))
 				
+			for p in agent.event_probabilities:
+				p_not_inf*=(1-p)	
 			return 1 - p_not_inf
 
 	def p_infection(self,p1,p2,fn):  
@@ -48,6 +50,24 @@ class StochasticModel():
 
 	def set_transition(self,s1,s2,fn):
 		self.transmission_prob[s1][s2]= fn
+
+	def set_event_contribution_fn(self,fn):
+		self.contribute_fn=fn
+
+	def set_event_recieve_fn(self,fn):
+		self.recieve_fn=fn
+
+	def update_event_infection(self,event_info,location,agents_obj):
+		ambient_infection=0
+		for agent_index in event_info['Agents']:
+			agent=agents_obj.agents[agent_index]
+			ambient_infection+=self.contribute_fn(agent,event_info,location)
+
+		for agent_index in event_info['Agents']:
+			agent=agents_obj.agents[agent_index]
+			p=self.recieve_fn(agent,ambient_infection,event_info,location)
+			agent.add_event_result(p)
+
 
 class ScheduledModel():
 	def __init__(self):
@@ -96,6 +116,9 @@ class ScheduledModel():
 				contact_agent=agents[contact_index]
 				p_not_inf*=(1-fn(p_inf_symp,p_inf_asymp,contact_agent,c_dict))
 				
+			for p in agent.event_probabilities:
+				p_not_inf*=(1-p)
+
 			r=random.random()
 			if r>=1 - p_not_inf:
 				new_state = agent.state
@@ -117,6 +140,23 @@ class ScheduledModel():
 		if new_state==None:
 			print('Error! State probabilities do not add to 1')
 		return new_state
+
+	def set_event_contribution_fn(self,fn):
+		self.contribute_fn=fn
+
+	def set_event_recieve_fn(self,fn):
+		self.recieve_fn=fn
+
+	def update_event_infection(self,event_info,location,agents_obj):
+		ambient_infection=0
+		for agent_index in event_info['Agents']:
+			agent=agents_obj.agents[agent_index]
+			ambient_infection+=self.contribute_fn(agent,event_info,location)
+
+		for agent_index in event_info['Agents']:
+			agent=agents_obj.agents[agent_index]
+			p=self.recieve_fn(agent,ambient_infection,event_info,location)
+			agent.add_event_result(p)
 
 
 
