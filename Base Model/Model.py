@@ -3,8 +3,9 @@ import Agent
 from functools import partial
 
 class StochasticModel():
-	def __init__(self,individual_state_types):
+	def __init__(self,individual_state_types,infected_states):
 		self.individual_state_types=individual_state_types
+		self.infected_states=infected_states
 
 		self.reset()
 
@@ -75,8 +76,11 @@ class ScheduledModel():
 		self.state_transition_fn={}	#One of Scheduled or Dependant
 		self.state_mean={}
 		self.state_vary={}
+		self.infected_states=[]
 	
-	def insert_state(self, state, mean, vary, transition_fn):
+	def insert_state(self, state, mean, vary, transition_fn,infected_state):
+		if infected_state:
+			self.infected_states.append(state)
 		self.individual_state_types.append(state)
 		self.state_transition_fn[state]=transition_fn
 		self.state_mean[state]=mean
