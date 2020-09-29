@@ -28,11 +28,11 @@ def generate_model():
 
 
 	model=Model.ScheduledModel()
-	model.insert_state('Susceptible',None, None,model.p_infection(0.3,0.1,probabilityOfInfection_fn,{'Exposed':1}))
-	model.insert_state('Exposed',5,2,model.scheduled({'Symptomatic':0.3,'Asymptomatic':0.7}))
-	model.insert_state('Symptomatic',11,5,model.scheduled({'Recovered':1}))
-	model.insert_state('Asymptomatic',6,3,model.scheduled({'Recovered':1}))
-	model.insert_state('Recovered',100, 0,model.scheduled({'Recovered':1}))
+	model.insert_state('Susceptible',None, None,model.p_infection(0.3,0.1,probabilityOfInfection_fn,{'Exposed':1}),False)
+	model.insert_state('Exposed',5,2,model.scheduled({'Symptomatic':0.3,'Asymptomatic':0.7}),False)
+	model.insert_state('Symptomatic',11,5,model.scheduled({'Recovered':1}),True)
+	model.insert_state('Asymptomatic',6,3,model.scheduled({'Recovered':1}),True)
+	model.insert_state('Recovered',100, 0,model.scheduled({'Recovered':1}),False)
 
 	return model
 
