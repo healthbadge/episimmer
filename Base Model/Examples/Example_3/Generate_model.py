@@ -21,13 +21,13 @@ def generate_model():
 
 
 	model=Model.ScheduledModel()
-	model.insert_state('Susceptible',None, None,model.p_infection(0.3,0.1,probabilityOfInfection_fn,{'Exposed':1}))
-	model.insert_state('Exposed',5,2,model.scheduled({'Symptomatic':0.7,'Asymptomatic':0.3}))
-	model.insert_state('Symptomatic',7,1,model.scheduled({'Recovered':0.7, 'ICU':0.3}))
-	model.insert_state('ICU',10,5,model.scheduled({'Recovered':0.1,'Dead':0.9}))
-	model.insert_state('Asymptomatic',6,3,model.scheduled({'Recovered':1}))
-	model.insert_state('Recovered',None, None,model.scheduled({'Recovered':1}))
-	model.insert_state('Dead',None, None,model.scheduled({'Dead':1}))
+	model.insert_state('Susceptible',None, None,model.p_infection(0.3,0.1,probabilityOfInfection_fn,{'Exposed':1}),False)
+	model.insert_state('Exposed',5,2,model.scheduled({'Symptomatic':0.7,'Asymptomatic':0.3}),False)
+	model.insert_state('Symptomatic',7,1,model.scheduled({'Recovered':0.7, 'ICU':0.3}),True)
+	model.insert_state('ICU',10,5,model.scheduled({'Recovered':0.1,'Dead':0.9}),False)
+	model.insert_state('Asymptomatic',6,3,model.scheduled({'Recovered':1}),True)
+	model.insert_state('Recovered',None, None,model.scheduled({'Recovered':1}),False)
+	model.insert_state('Dead',None, None,model.scheduled({'Dead':1}),False)
 
 	return model
 
