@@ -27,7 +27,8 @@ def generate_model():
 			return 0
 
 	individual_types=['Susceptible','Exposed','Asymptomatic','Symptomatic','Recovered']
-	model=Model.StochasticModel(individual_types)
+	infected_states=['Asymptomatic','Symptomatic']
+	model=Model.StochasticModel(individual_types,infected_states)
 	model.set_transition('Susceptible', 'Exposed', model.p_infection(0.3,0.1,probabilityOfInfection_fn))
 	model.set_transition('Exposed', 'Symptomatic', model.p_standard(0.15))
 	model.set_transition('Exposed', 'Asymptomatic', model.p_standard(0.2))
