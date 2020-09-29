@@ -1,4 +1,0 @@
-Number of worlds : 30
-Number of Days : 30
-Starting Exposed Percentage : 0.5
-Starting Infected Percentage : 0
