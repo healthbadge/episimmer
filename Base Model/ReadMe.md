@@ -8,7 +8,7 @@ To install dependencies using pipenv run ```pipenv install```.
 ## Running
 To run code from current directory : 
 
-		python Main.py \<path to folder containing required files\> 
+		python Main.py <path to folder containing required files> 
 <br>
 <br>
 The required files are as follows <br>
