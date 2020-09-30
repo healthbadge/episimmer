@@ -12,10 +12,7 @@ To run code from current directory :
 <br>
 <br>
 The required files are as follows <br>
-  -config.txt <br>
-  -agents.txt <br>
-  -interaction_files_list.txt <br>
-  -All files specified in interaction_files_list.txt <br>
+  -config.txt <br>  {Corresponding files denoted in config.txt}
   -Generate_model.py (user defined script) <br>
 <br>
 For example :  
