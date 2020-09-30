@@ -12,7 +12,7 @@ To run code from current directory :
 <br>
 <br>
 The required files are as follows <br>
-  -config.txt <br>  {Corresponding files denoted in config.txt}
+  -config.txt   {Corresponding files denoted in config.txt} <br>
   -Generate_model.py (user defined script) <br>
 <br>
 For example :  
