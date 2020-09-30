@@ -35,19 +35,19 @@ class StochasticModel():
 	def p_standard(self,p):
 		return partial(self.full_p_standard,p)
 
-	def full_p_infection(self,fn, p_inf_symp,p_inf_asymp,agent,agents):
+	def full_p_infection(self,fn, p_infected_states_list,agent,agents):
 			p_not_inf=1
 			for c_dict in agent.contact_list:
 				contact_index=c_dict['Interacting Agent Index']
 				contact_agent=agents[contact_index]
-				p_not_inf*=(1-fn(p_inf_symp,p_inf_asymp,contact_agent,c_dict))
+				p_not_inf*=(1-fn(p_infected_states_list,contact_agent,c_dict))
 				
 			for p in agent.event_probabilities:
 				p_not_inf*=(1-p)	
 			return 1 - p_not_inf
 
-	def p_infection(self,p1,p2,fn):  
-		return partial(self.full_p_infection,fn,p1,p2)
+	def p_infection(self,p_infected_states_list,fn):  
+		return partial(self.full_p_infection,fn,p_infected_states_list)
 
 	def set_transition(self,s1,s2,fn):
 		self.transmission_prob[s1][s2]= fn
@@ -109,16 +109,16 @@ class ScheduledModel():
 	def scheduled(self,new_states):
 		return partial(self.full_scheduled,new_states)
 
-	def p_infection(self,p1,p2,fn,new_states):
-		return partial(self.full_p_infection,fn,p1,p2,new_states)
+	def p_infection(self,p_infected_states_list,fn,new_states):
+		return partial(self.full_p_infection,fn,p_infected_states_list,new_states)
 
-	def full_p_infection(self,fn, p_inf_symp,p_inf_asymp,new_states,agent,agents):
+	def full_p_infection(self,fn, p_infected_states_list,new_states,agent,agents):
 			new_state=self.choose_one_state(new_states)
 			p_not_inf=1
 			for c_dict in agent.contact_list:
 				contact_index=c_dict['Interacting Agent Index']
 				contact_agent=agents[contact_index]
-				p_not_inf*=(1-fn(p_inf_symp,p_inf_asymp,contact_agent,c_dict))
+				p_not_inf*=(1-fn(p_infected_states_list,contact_agent,c_dict))
 				
 			for p in agent.event_probabilities:
 				p_not_inf*=(1-p)
