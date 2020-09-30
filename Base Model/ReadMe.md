@@ -31,7 +31,7 @@ The format is shown with an example with values given in \<...\> and comments in
 
     Number of worlds <30>   {Refers to the number of times simulation is avergaed on}
   
-    Number of Days <30>     {Refers to the duration of a single simulation}
+    Number of Time steps <30>     {Refers to the total duration of a single simulation}
   
     Starting Exposed Percentage <0.3>   {Starting percentage of population that is exposed} 
     
@@ -179,7 +179,7 @@ Example
 On calling function generate_model(), corresponding model object should be returned.
 <br>
 Note : User can use all parameters given in agents.txt and intercation files.  <br>
-Below is a n example of probabilityOfInfection_fn function. 
+Below is an example of probabilityOfInfection_fn function. 
 
    	#Example 1
 		if contact_agent.state=='Symptomatic':
