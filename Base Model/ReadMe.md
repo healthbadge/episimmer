@@ -17,7 +17,7 @@ The required files are as follows <br>
 <br>
 For example :  
 
-		python Main.py Examples/Example_1/ <br>
+		python Main.py Examples/Example_1/ 
 will result in simulation of 100 agents being cycled through a weekly schedule for 30 days and averaged 10 times.
 <br>
 
