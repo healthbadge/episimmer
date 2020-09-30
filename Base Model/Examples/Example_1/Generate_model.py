@@ -9,7 +9,9 @@ def generate_model():
 
 	#This function is user defined, based on the parameters the user has inputed in agents file and interaction/contact file
 	#This function represents the probability of getting infected during a single interaction/contact
-	def probabilityOfInfection_fn(p_inf_symp,p_inf_asymp,contact_agent,c_dict):
+	def probabilityOfInfection_fn(p_infected_states_list,contact_agent,c_dict):
+		
+		p_inf_symp,p_inf_asymp=p_infected_states_list[0],p_infected_states_list[1]
 		#EXAMPLE 1
 		if contact_agent.state=='Symptomatic':
 			return math.tanh(float(c_dict['Time Interval']))*p_inf_symp
@@ -29,7 +31,7 @@ def generate_model():
 	individual_types=['Susceptible','Exposed','Asymptomatic','Symptomatic','Recovered']
 	infected_states=['Asymptomatic','Symptomatic']
 	model=Model.StochasticModel(individual_types,infected_states)
-	model.set_transition('Susceptible', 'Exposed', model.p_infection(0.3,0.1,probabilityOfInfection_fn))
+	model.set_transition('Susceptible', 'Exposed', model.p_infection([0.3,0.1],probabilityOfInfection_fn))
 	model.set_transition('Exposed', 'Symptomatic', model.p_standard(0.15))
 	model.set_transition('Exposed', 'Asymptomatic', model.p_standard(0.2))
 	model.set_transition('Symptomatic', 'Recovered', model.p_standard(0.2))
