@@ -199,7 +199,6 @@ Below is an example of probabilityOfInfection_fn function.
 			return 0
 
 <br>
-<br>
 Contribution function refers to the amount of ambient infection an agent adds to a location during an event. <br>
 Recieve function refers to the proabbaility of getting infected from ambient infection at a location.
 
