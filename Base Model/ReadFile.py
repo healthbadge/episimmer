@@ -16,7 +16,9 @@ class ReadConfiguration():
 
 		self.worlds=(int)(self.get_value())
 		self.days=(int)(self.get_value())
-		self.starting_exposed_percentage=(float)(self.get_value())
+		self.default_state=self.get_value()
+		self.initial_variable_state=self.get_value()
+		self.starting_variable_state_percentage=(float)(self.get_value())
 		
 		self.agent_info_keys=self.get_value()
 		self.agents_filename=self.get_value()
@@ -53,8 +55,8 @@ class ReadConfiguration():
 			print('Event definition does not contain parameter \'Agents\'')
 
 
-		if self.starting_exposed_percentage>1:
-			print('Error! Not valid starting percentages')
+		if self.starting_variable_state_percentage>1:
+			print('Error! Not valid variable state starting percentage')
 
 	def get_value(self):
 		line=self.f.readline()
@@ -78,7 +80,7 @@ class ReadAgents():
 
 		for i in range(self.n):
 			info_dict=self.create_info_dict(self.get_value(f.readline()).split(':'))
-			state='Susceptible'
+			state=config_obj.default_state
 			agent=Agent.Agent(state,info_dict)
 			self.agents[agent.index]=agent
 
@@ -202,6 +204,8 @@ class ReadEvents():
 			
 			if key=='Agents':
 				info_dict[key]=list(set(parameter_list[i].split(',')))
+				if info_dict[key][-1]=='':
+					info_dict[key]=info_dict[:-1]
 			else:
 				info_dict[key]=parameter_list[i]
 
