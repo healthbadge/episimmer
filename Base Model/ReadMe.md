@@ -29,8 +29,12 @@ The format is shown with an example with values given in \<...\> and comments in
     Number of worlds <30>   {Refers to the number of times simulation is avergaed on}
   
     Number of Time steps <30>     {Refers to the total duration of a single simulation}
-  
-    Starting Exposed Percentage <0.3>   {Starting percentage of population that is exposed} 
+    
+    Default Statte <Susceptible> {Default State of all agents}
+    
+    Variable state <Exposed> {State which you want to vary initial percentage}
+    
+    Variable state initial percentage <0.01>   {Starting percentage of population that is Exposed} 
     
     Agent Parameter Keys <Agent Index:Type:Residence:HLA Type> 				{Refers to input parametrs in Agent}
 	
