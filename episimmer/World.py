@@ -20,20 +20,20 @@ class World():
 
 	def one_world(self):
 
-		days = self.config_obj.days
+		time_steps = self.config_obj.time_steps
 
 		sim_obj= Simulate.Simulate(self.config_obj,self.model,self.agents_filename,self.locations_filename)
 		sim_obj.onStartSimulation()
 
-		for i in range(days):
+		for i in range(time_steps):
 			if self.interactionFiles_list==[] or self.interactionFiles_list==None:
 				interactions_filename=None
 			else:
-				interactions_filename=self.interactionFiles_list[days%len(self.interactionFiles_list)]
+				interactions_filename=self.interactionFiles_list[time_steps%len(self.interactionFiles_list)]
 			if self.eventFiles_list==[] or self.eventFiles_list==None:
 				events_filename=None
 			else:
-				events_filename=self.eventFiles_list[days%len(self.eventFiles_list)]
+				events_filename=self.eventFiles_list[time_steps%len(self.eventFiles_list)]
 
 			sim_obj.onStartDay(interactions_filename,events_filename)
 			sim_obj.handleDayForAllAgents()
@@ -56,7 +56,7 @@ class World():
 
 		tdict={}
 		for state in self.model.individual_state_types:
-			tdict[state]=[0]*(self.config_obj.days+1)
+			tdict[state]=[0]*(self.config_obj.time_steps+1)
 
 		for i in range(self.config_obj.worlds):
 			sdict= self.one_world()

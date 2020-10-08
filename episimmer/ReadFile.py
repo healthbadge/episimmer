@@ -7,7 +7,7 @@ import time
 class ReadConfiguration():
 	def __init__(self,filename):
 		self.worlds=None
-		self.days=None
+		self.time_steps=None
 		self.starting_exposed_percentage=None
 		self.agent_info_keys=None
 		self.interaction_info_keys=None
@@ -15,7 +15,7 @@ class ReadConfiguration():
 		self.f = open(filename,"r")
 
 		self.worlds=(int)(self.get_value())
-		self.days=(int)(self.get_value())
+		self.time_steps=(int)(self.get_value())
 		self.default_state=self.get_value()
 		self.initial_variable_state=self.get_value()
 		self.starting_variable_state_percentage=(float)(self.get_value())
