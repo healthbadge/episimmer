@@ -7,7 +7,8 @@ To install dependencies using pipenv run ```pipenv install```.
 
 ## Running
 To run code from current directory : 
-
+		
+		cd episimmer
 		python Main.py <path to folder containing required files> 
 <br>
 <br>
