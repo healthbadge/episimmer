@@ -38,7 +38,7 @@ class Simulate():
 		#Store state list
 		self.store_state()
 
-	def onStartDay(self,interactions_filename,events_filename):
+	def onStartTimeStep(self,interactions_filename,events_filename):
 		for agent in self.agents_obj.agents.values():
 			agent.new_day()
 
@@ -59,17 +59,17 @@ class Simulate():
 					self.model.update_event_infection(event_info,location,self.agents_obj)
 
 
-	def handleDayForAllAgents(self):
+	def handleTimeStepForAllAgents(self):
 		#Too ensure concurrency we update agent.next_state in method handleDayAsAgent
 		#After every agent has updated next_state we update states of all agents in method handleDay() 
 
 		for agent in self.agents_obj.agents.values():
-			self.handleDayAsAgent(agent)
+			self.handleTimeStepAsAgent(agent)
 
 		for agent in self.agents_obj.agents.values():
 			self.convert_state(agent)
 
-	def handleDayAsAgent(self,agent):
+	def handleTimeStepAsAgent(self,agent):
 		#Too ensure concurrency we update agent.next_state in method handleDayAsAgent
 		#After every agent has updated next_state we update states of all agents in method handleDay()
 
@@ -77,7 +77,7 @@ class Simulate():
 		#Finding next_state
 		agent.set_next_state(self.model.find_next_state(agent,self.agents_obj.agents)) 
 
-	def endDay(self):
+	def endTimeStep(self):
 		self.store_state()
 
 	def endSimulation(self):
