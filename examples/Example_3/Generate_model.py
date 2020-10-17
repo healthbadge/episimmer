@@ -9,7 +9,7 @@ def generate_model():
 
 	#This function is user defined, based on the parameters the user has inputed in agents file and interaction/contact file
 	#This function represents the probability of getting infected during a single interaction/contact
-	def probabilityOfInfection_fn(p_infected_states_list,contact_agent,c_dict):
+	def probabilityOfInfection_fn(p_infected_states_list,contact_agent,c_dict,current_time_step):
 		
 		p_inf_symp,p_inf_asymp=p_infected_states_list[0],p_infected_states_list[1]
 		#EXAMPLE 1
