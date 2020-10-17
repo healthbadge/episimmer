@@ -7,7 +7,7 @@ class Location():
 		self.index=info_dict['Location Index']
 		self.events=[]
 
-	def new_day(self):
+	def new_time_step(self):
 		self.events=[]
 
 	def add_event(self,event_info):

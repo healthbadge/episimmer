@@ -1,3 +1,4 @@
+
 import random
 import copy
 import numpy as np
@@ -22,7 +23,7 @@ class Agent():
 	def add_event_result(self,p):
 		self.event_probabilities.append(p)
 
-	def new_day(self):
+	def new_time_step(self):
 		self.next_state=None
 		self.contact_list=[]
 		if self.schedule_time_left!=None:
