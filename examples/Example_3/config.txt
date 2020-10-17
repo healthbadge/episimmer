@@ -5,7 +5,7 @@ Variable initial state <Exposed>
 Variable state starting percentage <0.2>
 Agent Parameter Keys <Agent Index:Type:Susceptibility>
 Agent list filename <agents.txt>
-Interaction Info Keys <Agent Index:Interacting Agent Index:Room Ventilation>
+Interaction Info Keys <Agent Index:Interacting Agent Index:Time Interval>
 Interaction Files list filename <interaction_files_list.txt>
 Location Parameter Keys <>
 Location list filename <>
