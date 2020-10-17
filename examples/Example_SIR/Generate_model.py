@@ -26,12 +26,12 @@ def generate_model():
 	
 
 
-	def event_contribute_fn(agent,event_info,location):
+	def event_contribute_fn(agent,event_info,location,current_time_step):
 		if agent.state=='Infected':
 			return 1
 		return 0
 
-	def event_recieve_fn(agent,ambient_infection,event_info,location):
+	def event_recieve_fn(agent,ambient_infection,event_info,location,current_time_step):
 		#Example 1
 		beta=0.0001
 		return ambient_infection*beta
