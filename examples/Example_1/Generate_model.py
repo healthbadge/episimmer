@@ -9,7 +9,7 @@ def generate_model():
 
 	#This function is user defined, based on the parameters the user has inputed in agents file and interaction/contact file
 	#This function represents the probability of getting infected during a single interaction/contact
-	def probabilityOfInfection_fn(p_infected_states_list,contact_agent,c_dict):
+	def probabilityOfInfection_fn(p_infected_states_list,contact_agent,c_dict,current_time_step):
 		
 		p_inf_symp,p_inf_asymp=p_infected_states_list[0],p_infected_states_list[1]
 		#EXAMPLE 1
@@ -37,7 +37,7 @@ def generate_model():
 	model.set_transition('Symptomatic', 'Recovered', model.p_standard(0.2))
 	model.set_transition('Asymptomatic', 'Recovered', model.p_standard(0.2))
 
-	def event_contribute_fn(agent,event_info,location):
+	def event_contribute_fn(agent,event_info,location,current_time_step):
 		#Example 1
 		if agent.state=='Symptomatic':
 			return 1
@@ -56,7 +56,7 @@ def generate_model():
 		elif agent.state=='Asymptomatic':
 			return 0.3*math.tanh(float(event_info['Time Interval']))*(1-location.info['Ventilation'])*susceptibility
 
-	def event_recieve_fn(agent,ambient_infection,event_info,location):
+	def event_recieve_fn(agent,ambient_infection,event_info,location,current_time_step):
 		p=math.tanh(ambient_infection*0.3)
 		return p
 
