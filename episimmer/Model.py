@@ -35,7 +35,7 @@ class StochasticModel():
 	def p_standard(self,p):
 		return partial(self.full_p_standard,p)
 
-	def full_p_function(self,p,agent,agents,current_time_step):
+	def full_p_function(self,fn,agent,agents,current_time_step):
 		return fn(current_time_step)
 
 	def p_function(self,fn):
