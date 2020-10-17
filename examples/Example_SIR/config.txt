@@ -1,5 +1,5 @@
 Number of worlds <10>
-Number of Days <100>
+Number of Days <30>
 Default State <Susceptible>
 Variable initial state <Infected>
 Variable state starting percentage <0.01>
