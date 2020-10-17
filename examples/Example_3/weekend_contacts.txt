@@ -1,5 +1,5 @@
 200
-Agent Index:Interacting Agent Index:Room Ventilation
+Agent Index:Interacting Agent Index:Time Interval
 9:27:0.7285820490251275
 79:30:0.43643267663334784
 41:97:0.3154443198946647
