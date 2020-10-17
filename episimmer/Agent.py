@@ -26,6 +26,7 @@ class Agent():
 	def new_time_step(self):
 		self.next_state=None
 		self.contact_list=[]
+		self.event_probabilities=[]
 		if self.schedule_time_left!=None:
 			self.schedule_time_left-=1
 			if self.schedule_time_left <=0:
