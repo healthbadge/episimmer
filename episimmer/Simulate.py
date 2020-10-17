@@ -38,12 +38,14 @@ class Simulate():
 		#Store state list
 		self.store_state()
 
-	def onStartTimeStep(self,interactions_filename,events_filename):
+	def onStartTimeStep(self,interactions_filename,events_filename,current_time_step):
+		self.current_time_step=current_time_step
+
 		for agent in self.agents_obj.agents.values():
-			agent.new_day()
+			agent.new_time_step()
 
 		for location in self.locations_obj.locations.values():
-			location.new_day()
+			location.new_time_step()
 
 		#Add Interactions to agents
 		if interactions_filename!=None:
@@ -56,12 +58,12 @@ class Simulate():
 			#Update event info to agents from location
 			for location in self.locations_obj.locations.values():
 				for event_info in location.events:
-					self.model.update_event_infection(event_info,location,self.agents_obj)
+					self.model.update_event_infection(event_info,location,self.agents_obj,self.current_time_step)
 
 
 	def handleTimeStepForAllAgents(self):
-		#Too ensure concurrency we update agent.next_state in method handleDayAsAgent
-		#After every agent has updated next_state we update states of all agents in method handleDay() 
+		#Too ensure concurrency we update agent.next_state in method handleTimeStepAsAgent
+		#After every agent has updated next_state we update states of all agents in method handleTimeStep() 
 
 		for agent in self.agents_obj.agents.values():
 			self.handleTimeStepAsAgent(agent)
@@ -70,12 +72,12 @@ class Simulate():
 			self.convert_state(agent)
 
 	def handleTimeStepAsAgent(self,agent):
-		#Too ensure concurrency we update agent.next_state in method handleDayAsAgent
-		#After every agent has updated next_state we update states of all agents in method handleDay()
+		#Too ensure concurrency we update agent.next_state in method handleTimeStepAsAgent
+		#After every agent has updated next_state we update states of all agents in method handleTimeStep()
 
 
 		#Finding next_state
-		agent.set_next_state(self.model.find_next_state(agent,self.agents_obj.agents)) 
+		agent.set_next_state(self.model.find_next_state(agent,self.agents_obj.agents,self.current_time_step)) 
 
 	def endTimeStep(self):
 		self.store_state()

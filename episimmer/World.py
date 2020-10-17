@@ -35,7 +35,7 @@ class World():
 			else:
 				events_filename=self.eventFiles_list[time_steps%len(self.eventFiles_list)]
 
-			sim_obj.onStartTimeStep(interactions_filename,events_filename)
+			sim_obj.onStartTimeStep(interactions_filename,events_filename,i)
 			sim_obj.handleTimeStepForAllAgents()
 			sim_obj.endTimeStep()
 

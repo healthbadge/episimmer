@@ -18,29 +18,35 @@ class StochasticModel():
 			for t2 in self.individual_state_types:
 				self.transmission_prob[t1][t2]=self.p_standard(0)
 
-	def find_next_state(self,agent,agents):
+	def find_next_state(self,agent,agents,current_time_step):
 		scheduled_time=None
 		r=random.random()
 		p=0
 		for new_state in self.individual_state_types:
-			p+=self.transmission_prob[agent.state][new_state](agent,agents)
+			p+=self.transmission_prob[agent.state][new_state](agent,agents,current_time_step)
 			if r<p:
 				return new_state,scheduled_time
 				break
 		return agent.state,scheduled_time
 
-	def full_p_standard(self,p,agent,agents):
+	def full_p_standard(self,p,agent,agents,current_time_step):
 		return p
 
 	def p_standard(self,p):
 		return partial(self.full_p_standard,p)
 
-	def full_p_infection(self,fn, p_infected_states_list,agent,agents):
+	def full_p_function(self,p,agent,agents,current_time_step):
+		return fn(current_time_step)
+
+	def p_function(self,fn):
+		return partial(self.full_p_function,fn)
+
+	def full_p_infection(self,fn, p_infected_states_list,agent,agents,current_time_step):
 			p_not_inf=1
 			for c_dict in agent.contact_list:
 				contact_index=c_dict['Interacting Agent Index']
 				contact_agent=agents[contact_index]
-				p_not_inf*=(1-fn(p_infected_states_list,contact_agent,c_dict))
+				p_not_inf*=(1-fn(p_infected_states_list,contact_agent,c_dict,current_time_step))
 				
 			for p in agent.event_probabilities:
 				p_not_inf*=(1-p)	
@@ -58,15 +64,15 @@ class StochasticModel():
 	def set_event_recieve_fn(self,fn):
 		self.recieve_fn=fn
 
-	def update_event_infection(self,event_info,location,agents_obj):
+	def update_event_infection(self,event_info,location,agents_obj,current_time_step):
 		ambient_infection=0
 		for agent_index in event_info['Agents']:
 			agent=agents_obj.agents[agent_index]
-			ambient_infection+=self.contribute_fn(agent,event_info,location)
+			ambient_infection+=self.contribute_fn(agent,event_info,location,current_time_step)
 
 		for agent_index in event_info['Agents']:
 			agent=agents_obj.agents[agent_index]
-			p=self.recieve_fn(agent,ambient_infection,event_info,location)
+			p=self.recieve_fn(agent,ambient_infection,event_info,location,current_time_step)
 			agent.add_event_result(p)
 
 
@@ -95,13 +101,13 @@ class ScheduledModel():
 			scheduled_time= random.randint(mean-vary,mean+vary)
 		return scheduled_time
 
-	def find_next_state(self,agent,agents):
+	def find_next_state(self,agent,agents,current_time_step):
 		if agent.schedule_time_left==None:
-			return self.state_transition_fn[agent.state](agent,agents)
+			return self.state_transition_fn[agent.state](agent,agents,current_time_step)
 
 		return agent.state,agent.schedule_time_left
 
-	def full_scheduled(self,new_states, agent,agents):
+	def full_scheduled(self,new_states, agent,agents,current_time_step):
 		new_state=self.choose_one_state(new_states)
 		scheduled_time=self.find_scheduled_time(new_state)
 		return new_state,scheduled_time
@@ -112,13 +118,13 @@ class ScheduledModel():
 	def p_infection(self,p_infected_states_list,fn,new_states):
 		return partial(self.full_p_infection,fn,p_infected_states_list,new_states)
 
-	def full_p_infection(self,fn, p_infected_states_list,new_states,agent,agents):
+	def full_p_infection(self,fn, p_infected_states_list,new_states,agent,agents,current_time_step):
 			new_state=self.choose_one_state(new_states)
 			p_not_inf=1
 			for c_dict in agent.contact_list:
 				contact_index=c_dict['Interacting Agent Index']
 				contact_agent=agents[contact_index]
-				p_not_inf*=(1-fn(p_infected_states_list,contact_agent,c_dict))
+				p_not_inf*=(1-fn(p_infected_states_list,contact_agent,c_dict,current_time_step))
 				
 			for p in agent.event_probabilities:
 				p_not_inf*=(1-p)
@@ -151,15 +157,15 @@ class ScheduledModel():
 	def set_event_recieve_fn(self,fn):
 		self.recieve_fn=fn
 
-	def update_event_infection(self,event_info,location,agents_obj):
+	def update_event_infection(self,event_info,location,agents_obj,current_time_step):
 		ambient_infection=0
 		for agent_index in event_info['Agents']:
 			agent=agents_obj.agents[agent_index]
-			ambient_infection+=self.contribute_fn(agent,event_info,location)
+			ambient_infection+=self.contribute_fn(agent,event_info,location,current_time_step)
 
 		for agent_index in event_info['Agents']:
 			agent=agents_obj.agents[agent_index]
-			p=self.recieve_fn(agent,ambient_infection,event_info,location)
+			p=self.recieve_fn(agent,ambient_infection,event_info,location,current_time_step)
 			agent.add_event_result(p)
 
 
