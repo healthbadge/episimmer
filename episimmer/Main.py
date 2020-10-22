@@ -46,11 +46,12 @@ else:
 	if events_files_list==[]:
 		print('No Events inputted')
 
-#model=pickle.load(open(model_filename, "rb"))
 Generate_model = module_from_file("Generate_model", path+'Generate_model.py')
 model=Generate_model.generate_model()
+Generate_policy = module_from_file("Generate_policy", path+'Generate_policy.py')
+policy_list=Generate_policy.generate_policy()
 
-world_obj=World.World(config_obj,model,agents_filename,interactions_files_list,locations_filename,events_files_list)
+world_obj=World.World(config_obj,model,policy_list,agents_filename,interactions_files_list,locations_filename,events_files_list)
 world_obj.simulate_worlds()
 
 

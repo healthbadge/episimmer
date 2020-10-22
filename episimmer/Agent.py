@@ -16,14 +16,18 @@ class Agent():
 		self.schedule_time_left=None
 		self.testing_history=[] #tuple of (<testing time(Time tested)>, <testing type(Pool, Antigen,...)>, <test machine id(unique machine)>, <result(Positive, Negative, Viral Load...)>)
 		self.compliance = None #Can be a dictionary of Guideline compliance, Restriction compliancce, Governemnt Policy compliance
+		self.lock_down_state=False
 
 	def add_contact(self,contact_dict):
-		self.contact_list.append(contact_dict)
+		if not self.lock_down_state:
+			self.contact_list.append(contact_dict)
 
 	def add_event_result(self,p):
-		self.event_probabilities.append(p)
+		if not self.lock_down_state:
+			self.event_probabilities.append(p)
 
 	def new_time_step(self):
+		self.lock_down_state=False
 		self.next_state=None
 		self.contact_list=[]
 		self.event_probabilities=[]

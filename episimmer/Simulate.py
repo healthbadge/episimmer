@@ -4,10 +4,11 @@ import numpy as np
 import ReadFile
 
 class Simulate():
-	def __init__(self,config_obj,model,agents_filename,locations_filename):
+	def __init__(self,config_obj,model,policy_list,agents_filename,locations_filename):
 		self.agents_filename=agents_filename
 		self.locations_filename=locations_filename
 		self.model=model
+		self.policy_list=policy_list
 		self.config_obj=config_obj
 
 	def onStartSimulation(self):
@@ -47,6 +48,10 @@ class Simulate():
 		for location in self.locations_obj.locations.values():
 			location.new_time_step()
 
+		#Enact policies by updating agent and location states.
+		for policy in self.policy_list:
+			policy.enact_policy(self.current_time_step,self.agents_obj.agents.values(),self.locations_obj.locations.values())
+
 		#Add Interactions to agents
 		if interactions_filename!=None:
 			ReadFile.ReadInteractions(interactions_filename,self.config_obj,self.agents_obj)
@@ -59,7 +64,6 @@ class Simulate():
 			for location in self.locations_obj.locations.values():
 				for event_info in location.events:
 					self.model.update_event_infection(event_info,location,self.agents_obj,self.current_time_step)
-
 
 	def handleTimeStepForAllAgents(self):
 		#Too ensure concurrency we update agent.next_state in method handleTimeStepAsAgent
