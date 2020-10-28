@@ -4,19 +4,14 @@ import numpy as np
 import ReadFile
 
 class Simulate():
-	def __init__(self,config_obj,model,policy_list,agents_filename,locations_filename):
-		self.agents_filename=agents_filename
-		self.locations_filename=locations_filename
+	def __init__(self,config_obj,model,policy_list,agents_obj,locations_obj):
+		self.agents_obj=agents_obj
+		self.locations_obj=locations_obj
 		self.model=model
 		self.policy_list=policy_list
 		self.config_obj=config_obj
 
 	def onStartSimulation(self):
-		#Initialize agents
-		self.agents_obj=ReadFile.ReadAgents(self.agents_filename,self.config_obj)
-
-		#Intialize locations
-		self.locations_obj=ReadFile.ReadLocations(self.locations_filename,self.config_obj)
 
 		#Intitialize state list
 		self.state_list={}

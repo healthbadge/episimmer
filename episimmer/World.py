@@ -23,7 +23,13 @@ class World():
 
 		time_steps = self.config_obj.time_steps
 
-		sim_obj= Simulate.Simulate(self.config_obj,self.model,self.policy_list,self.agents_filename,self.locations_filename)
+		#Initialize agents
+		agents_obj=ReadFile.ReadAgents(self.agents_filename,self.config_obj)
+
+		#Intialize locations
+		locations_obj=ReadFile.ReadLocations(self.locations_filename,self.config_obj)
+
+		sim_obj= Simulate.Simulate(self.config_obj,self.model,self.policy_list,agents_obj,locations_obj)
 		sim_obj.onStartSimulation()
 
 		for i in range(time_steps):

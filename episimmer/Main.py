@@ -46,8 +46,12 @@ else:
 	if events_files_list==[]:
 		print('No Events inputted')
 
-Generate_model = module_from_file("Generate_model", path+'Generate_model.py')
+'''Generate_model = module_from_file("Generate_model", path+'Generate_model.py')
 model=Generate_model.generate_model()
+
+'''
+UserModel = module_from_file("Generate_model", path+'UserModel.py')
+model = UserModel.UserModel()
 Generate_policy = module_from_file("Generate_policy", path+'Generate_policy.py')
 policy_list=Generate_policy.generate_policy()
 
