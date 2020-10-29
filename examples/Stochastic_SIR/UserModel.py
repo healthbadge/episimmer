@@ -13,7 +13,7 @@ def event_recieve_fn(agent,ambient_infection,event_info,location,current_time_st
 
 class UserModel(Model.StochasticModel):
 	def __init__(self):
-		individual_types=['Susceptible','Infected','Recovered','ICU','Dead']
+		individual_types=['Susceptible','Infected','Recovered']
 		infected_states=['Infected']
 		state_proportion={
 							'Susceptible':0.99,
