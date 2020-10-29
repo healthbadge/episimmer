@@ -1,0 +1,10 @@
+Number of worlds <10>
+Number of Days <50>
+Agent Parameter Keys <Agent Index>
+Agent list filename <agents.txt>
+Interaction Info Keys <>
+Interaction Files list filename <>
+Location Parameter Keys <Location Index>
+Location list filename <locations.txt>
+Event Parameter Keys <Location Index:Agents>
+Event Files list filename <event_files_list.txt>
