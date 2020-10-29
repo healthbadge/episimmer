@@ -14,7 +14,7 @@ To run code from current directory :
 <br>
 The required files are as follows <br>
   -config.txt   {Corresponding files denoted in config.txt} <br>
-  -Generate_model.py (user defined script) <br>
+  -UserModel.py (user defined script) <br>
 <br>
 For example :  
 
@@ -131,7 +131,7 @@ The format of an event file has been shown wiht an example. An event must contai
 	...
 <br>
 
-### Generate_model.py <br>
+### UserModel.py <br>
 This will soon be changed. Models can be user defined here using library Model.py <br>
 There are two types of models that can currently be defined
 <br>
