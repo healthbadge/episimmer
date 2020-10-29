@@ -1,8 +1,5 @@
 Number of worlds <1>
 Number of Days <30>
-Default State <Susceptible>
-Variable initial state <Infected>
-Variable state starting percentage <0.01>
 Agent Parameter Keys <Agent Index>
 Agent list filename <agents.txt>
 Interaction Info Keys <>

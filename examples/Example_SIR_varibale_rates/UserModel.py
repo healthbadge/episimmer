@@ -29,7 +29,14 @@ class UserModel(Model.StochasticModel):
 	def __init__(self):
 		individual_types=['Susceptible','Infected','Recovered','ICU','Dead']
 		infected_states=['Infected']
-		Model.StochasticModel.__init__(self,individual_types,infected_states)
+		state_proportion={
+							'Susceptible':0.99,
+							'Infected':0.01,
+							'Recovered':0,
+							'ICU':0,
+							'Dead':0
+						}
+		Model.StochasticModel.__init__(self,individual_types,infected_states,state_proportion)
 		self.set_transition('Susceptible', 'Infected', self.p_infection(None,None))
 		self.set_transition('Infected', 'Recovered', self.p_standard(0.1))
 		self.set_transition('Infected', 'ICU', self.p_function(fn2))
