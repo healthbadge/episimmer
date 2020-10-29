@@ -16,9 +16,6 @@ class ReadConfiguration():
 
 		self.worlds=(int)(self.get_value())
 		self.time_steps=(int)(self.get_value())
-		self.default_state=self.get_value()
-		self.initial_variable_state=self.get_value()
-		self.starting_variable_state_percentage=(float)(self.get_value())
 		
 		self.agent_info_keys=self.get_value()
 		self.agents_filename=self.get_value()
@@ -55,9 +52,6 @@ class ReadConfiguration():
 			print('Event definition does not contain parameter \'Agents\'')
 
 
-		if self.starting_variable_state_percentage>1:
-			print('Error! Not valid variable state starting percentage')
-
 	def get_value(self):
 		line=self.f.readline()
 		l = re.findall("\<.*?\>", line)
@@ -80,7 +74,7 @@ class ReadAgents():
 
 		for i in range(self.n):
 			info_dict=self.create_info_dict(self.get_value(f.readline()).split(':'))
-			state=config_obj.default_state
+			state=None#config_obj.default_state
 			agent=Agent.Agent(state,info_dict)
 			self.agents[agent.index]=agent
 

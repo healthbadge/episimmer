@@ -1,11 +1,13 @@
 import random
 import Agent
+import copy
 from functools import partial
 
 class StochasticModel():
-	def __init__(self,individual_state_types,infected_states):
+	def __init__(self,individual_state_types,infected_states,state_proportion):
 		self.individual_state_types=individual_state_types
 		self.infected_states=infected_states
+		self.state_proportion=state_proportion
 
 		self.reset()
 
@@ -17,6 +19,26 @@ class StochasticModel():
 		for t1 in self.individual_state_types:
 			for t2 in self.individual_state_types:
 				self.transmission_prob[t1][t2]=self.p_standard(0)
+
+	def initalize_states(self,agents):
+		proportion_sum=0
+		for p in self.state_proportion.values():
+			proportion_sum+=p
+		if proportion_sum!=1:
+			print("Error! Starting state proportions don't add up to 1")
+			return None
+
+		list_agent_indices= list(agents.keys())
+		random.shuffle(list_agent_indices)
+		cum_proportion=0
+		for state in self.state_proportion.keys():
+			proportion=self.state_proportion[state]
+			for i in range(int(cum_proportion*len(list_agent_indices)),int((cum_proportion+proportion)*len(list_agent_indices))):
+				agent=agents[list_agent_indices[i]]
+				agent.state=state
+				agent.schedule_time_left=None
+			cum_proportion+=proportion
+
 
 	def find_next_state(self,agent,agents,current_time_step):
 		scheduled_time=None
@@ -83,14 +105,35 @@ class ScheduledModel():
 		self.state_mean={}
 		self.state_vary={}
 		self.infected_states=[]
+		self.state_proportion={}
 	
-	def insert_state(self, state, mean, vary, transition_fn,infected_state):
+	def insert_state(self, state, mean, vary, transition_fn,infected_state,proportion):
 		if infected_state:
 			self.infected_states.append(state)
 		self.individual_state_types.append(state)
 		self.state_transition_fn[state]=transition_fn
 		self.state_mean[state]=mean
 		self.state_vary[state]=vary
+		self.state_proportion[state]=proportion
+
+	def initalize_states(self,agents):
+		proportion_sum=0
+		for p in self.state_proportion.values():
+			proportion_sum+=p
+		if proportion_sum!=1:
+			print("Error! Starting state proportions don't add up to 1")
+			return None
+
+		list_agent_indices= list(agents.keys())
+		random.shuffle(list_agent_indices)
+		cum_proportion=0
+		for state in self.state_proportion.keys():
+			proportion=self.state_proportion[state]
+			for i in range(int(cum_proportion*len(list_agent_indices)),int((cum_proportion+proportion)*len(list_agent_indices))):
+				agent=agents[list_agent_indices[i]]
+				agent.state=state
+				agent.schedule_time_left=None
+			cum_proportion+=proportion
 
 	def find_scheduled_time(self,state):
 		mean=self.state_mean[state]

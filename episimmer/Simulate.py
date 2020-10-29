@@ -20,12 +20,8 @@ class Simulate():
 			self.state_list[state]=[]
 			self.state_history[state]=[]
 
-		#Starting Prevalence as described by config.txt
-		for agent in self.agents_obj.agents.values():
-			r=random.random()
-			if r<self.config_obj.starting_variable_state_percentage:
-				agent.state=self.config_obj.initial_variable_state
-				agent.scheduled_time_left=None
+		#Initialize states
+		self.model.initalize_states(self.agents_obj.agents)
 
 		#Update State list
 		for agent in self.agents_obj.agents.values():
