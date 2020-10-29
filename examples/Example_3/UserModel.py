@@ -19,11 +19,11 @@ def probabilityOfInfection_fn(p_infected_states_list,contact_agent,c_dict,curren
 class UserModel(Model.ScheduledModel):
 	def __init__(self):
 		Model.ScheduledModel.__init__(self)
-		self.insert_state('Susceptible',None, None,self.p_infection([0.3,0.1],probabilityOfInfection_fn,{'Exposed':1}),False)
-		self.insert_state('Exposed',5,2,self.scheduled({'Symptomatic':0.3,'Asymptomatic':0.7}),False)
-		self.insert_state('Symptomatic',11,5,self.scheduled({'Recovered':1}),True)
-		self.insert_state('Asymptomatic',6,3,self.scheduled({'Recovered':1}),True)
-		self.insert_state('Recovered',100, 0,self.scheduled({'Recovered':1}),False)
+		self.insert_state('Susceptible',None, None,self.p_infection([0.4,0.2],probabilityOfInfection_fn,{'Exposed':1}),False,0.9)
+		self.insert_state('Exposed',1,0,self.scheduled({'Symptomatic':0.4,'Asymptomatic':0.6}),False,0.1)
+		self.insert_state('Symptomatic',11,5,self.scheduled({'Recovered':1}),True,0)
+		self.insert_state('Asymptomatic',9,3,self.scheduled({'Recovered':1}),True,0)
+		self.insert_state('Recovered',100, 0,self.scheduled({'Recovered':1}),False,0)
 
 		self.set_event_contribution_fn(None)
 		self.set_event_recieve_fn(None)
