@@ -1,8 +1,5 @@
 Number of worlds <1>
 Number of Days <30>
-Default State <Susceptible>
-Variable initial state <Exposed>
-Variable state starting percentage <0.1>
 Agent Parameter Keys <Agent Index:Type:Residence:HLA Type>
 Agent list filename <agents.txt>
 Interaction Info Keys <Agent Index:Interacting Agent Index:Time Interval:Intensity>
