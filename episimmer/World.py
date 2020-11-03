@@ -76,6 +76,6 @@ class World():
 		for state in tdict.keys():
 			plt.plot(tdict[state])
 
-		plt.title('Averaged SEYAR plot')
+		plt.title(self.model.name+' plot')
 		plt.legend(list(tdict.keys()),loc='upper right', shadow=True)
 		plt.show()

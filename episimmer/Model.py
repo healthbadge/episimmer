@@ -8,6 +8,7 @@ class StochasticModel():
 		self.individual_state_types=individual_state_types
 		self.infected_states=infected_states
 		self.state_proportion=state_proportion
+		self.name='Stochastic Model'
 
 		self.reset()
 
@@ -106,6 +107,7 @@ class ScheduledModel():
 		self.state_vary={}
 		self.infected_states=[]
 		self.state_proportion={}
+		self.name='Scheduled Model'
 	
 	def insert_state(self, state, mean, vary, transition_fn,infected_state,proportion):
 		if infected_state:
