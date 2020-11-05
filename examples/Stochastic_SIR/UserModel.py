@@ -6,12 +6,12 @@ import Model
 #note that only infected agents contibute to the ambient infection
 def event_contribute_fn(agent,event_info,location,current_time_step):
 		if agent.state=='Infected':
-			return 1.2
+			return 1
 		return 0
 
 #This fucntion states the probability of an agent becoming infected fromt he ambient infection
 def event_recieve_fn(agent,ambient_infection,event_info,location,current_time_step):
-	beta=0.0015
+	beta=0.001
 	return ambient_infection*beta
 
 
