@@ -19,12 +19,14 @@ def write_events(filename,no_locations,no_agents):
 	header='Location Index:Agents'
 
 	f=open(filename,'w')
-	f.write(str(no_agents)+'\n')
+	f.write(str(1)+'\n')
 	f.write(header+'\n')
 
 	line=str(0)+':'
 	for i in range(no_agents):
-		line+=str(i)+','
+		line+=str(i)
+		if i!=no_agents-1:
+			line+=','
 
 	f.write(line)
 
