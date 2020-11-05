@@ -10,9 +10,10 @@ import math
 import ReadFile
 
 class World():
-	def __init__(self,config_obj,model,policy_list,agents_filename,interactionFiles_list,locations_filename,eventFiles_list):
+	def __init__(self,config_obj,model,policy_list,event_restriction_fn,agents_filename,interactionFiles_list,locations_filename,eventFiles_list):
 		self.config_obj=config_obj
 		self.policy_list=policy_list
+		self.event_restriction_fn=event_restriction_fn
 		self.agents_filename=agents_filename
 		self.locations_filename=locations_filename
 		self.model=model
@@ -29,7 +30,7 @@ class World():
 		#Intialize locations
 		locations_obj=ReadFile.ReadLocations(self.locations_filename,self.config_obj)
 
-		sim_obj= Simulate.Simulate(self.config_obj,self.model,self.policy_list,agents_obj,locations_obj)
+		sim_obj= Simulate.Simulate(self.config_obj,self.model,self.policy_list,self.event_restriction_fn,agents_obj,locations_obj)
 		sim_obj.onStartSimulation()
 
 		for i in range(time_steps):

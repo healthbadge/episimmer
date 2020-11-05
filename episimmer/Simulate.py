@@ -4,11 +4,12 @@ import numpy as np
 import ReadFile
 
 class Simulate():
-	def __init__(self,config_obj,model,policy_list,agents_obj,locations_obj):
+	def __init__(self,config_obj,model,policy_list,event_restriction_fn,agents_obj,locations_obj):
 		self.agents_obj=agents_obj
 		self.locations_obj=locations_obj
 		self.model=model
 		self.policy_list=policy_list
+		self.event_restriction_fn=event_restriction_fn
 		self.config_obj=config_obj
 
 	def onStartSimulation(self):
@@ -54,7 +55,7 @@ class Simulate():
 			#Update event info to agents from location
 			for location in self.locations_obj.locations.values():
 				for event_info in location.events:
-					self.model.update_event_infection(event_info,location,self.agents_obj,self.current_time_step)
+					self.model.update_event_infection(event_info,location,self.agents_obj,self.current_time_step, self.event_restriction_fn)
 
 	def handleTimeStepForAllAgents(self):
 		#Too ensure concurrency we update agent.next_state in method handleTimeStepAsAgent

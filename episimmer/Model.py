@@ -87,14 +87,18 @@ class StochasticModel():
 	def set_event_recieve_fn(self,fn):
 		self.recieve_fn=fn
 
-	def update_event_infection(self,event_info,location,agents_obj,current_time_step):
+	def update_event_infection(self,event_info,location,agents_obj,current_time_step,event_restriction_fn):
 		ambient_infection=0
 		for agent_index in event_info['Agents']:
 			agent=agents_obj.agents[agent_index]
+			if event_restriction_fn(agent,event_info,current_time_step):
+				continue
 			ambient_infection+=self.contribute_fn(agent,event_info,location,current_time_step)
 
 		for agent_index in event_info['Agents']:
 			agent=agents_obj.agents[agent_index]
+			if event_restriction_fn(agent,event_info,current_time_step):
+				continue
 			p=self.recieve_fn(agent,ambient_infection,event_info,location,current_time_step)
 			agent.add_event_result(p)
 
@@ -202,14 +206,18 @@ class ScheduledModel():
 	def set_event_recieve_fn(self,fn):
 		self.recieve_fn=fn
 
-	def update_event_infection(self,event_info,location,agents_obj,current_time_step):
+	def update_event_infection(self,event_info,location,agents_obj,current_time_step,event_restriction_fn):
 		ambient_infection=0
 		for agent_index in event_info['Agents']:
 			agent=agents_obj.agents[agent_index]
+			if event_restriction_fn(agent,event_info,current_time_step):
+				continue
 			ambient_infection+=self.contribute_fn(agent,event_info,location,current_time_step)
 
 		for agent_index in event_info['Agents']:
 			agent=agents_obj.agents[agent_index]
+			if event_restriction_fn(agent,event_info,current_time_step):
+				continue
 			p=self.recieve_fn(agent,ambient_infection,event_info,location,current_time_step)
 			agent.add_event_result(p)
 
