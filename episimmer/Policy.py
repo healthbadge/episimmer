@@ -17,24 +17,28 @@ class full_lockdown(Policy):
 				agent.lock_down_state=True
 
 class agent_lockdown(Policy):
-	def __init__(self,parameter,value_list):
+	def __init__(self,parameter,value_list,do_lockdown_fn):
+		self.do_lockdown_fn=do_lockdown_fn
 		self.parameter=parameter
 		self.value_list=value_list
 
 	def enact_policy(self,time_step,agents,locations):
-		for agent in agents:
-			if agent.info[self.parameter] in self.value_list:
-				agent.lock_down_state=True
+		if self.do_lockdown_fn(time_step):
+			for agent in agents:
+				if agent.info[self.parameter] in self.value_list:
+					agent.lock_down_state=True
 
 class location_lockdown(Policy):
 	def __init__(self,parameter,value_list):
+		self.do_lockdown_fn=do_lockdown_fn
 		self.parameter=parameter
 		self.value_list=value_list
 
 	def enact_policy(self,time_step,agents,locations):
-		for location in locations:
-			if location.info[self.parameter] in self.value_list:
-				location.lock_down_state=True
+		if self.do_lockdown_fn(time_step):
+			for location in locations:
+				if location.info[self.parameter] in self.value_list:
+					location.lock_down_state=True
 
 '''
 class Vaccination(Policy):
