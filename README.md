@@ -14,7 +14,6 @@ To run code from current directory :
 		cd examples
 		python ../episimmer/Main.py <Example name>
 <br>
-<br>
 The required files are as follows <br>
   -config.txt   {Corresponding files denoted in config.txt} <br>
   -UserModel.py (user defined script) <br>
