@@ -4,6 +4,8 @@ Episimmer is an Epidemic Simulation Platform. It is being developed by a group c
 
 Learn more from our [Current Progress Report](https://docs.google.com/document/d/1-4W61OvOQcZouYVZP51iwRYQ53K4C_WODENVxUgLiR8/edit?usp=sharing)! <br>
 
+If you are interested in helping us out please send an email to ibe214@nyu.edu <br>
+
 ## Dependencies
 
 To install dependencies using pipenv run ```pipenv install```.
