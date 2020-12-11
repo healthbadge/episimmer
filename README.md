@@ -1,4 +1,4 @@
-# Epidemic Simulation Platform
+# Episimmer : Epidemic Simulation Platform
 
 Episimmer is an Epidemic Simulation Platform. It is being developed by a group called [Corollary Health](https://www.corollary.com/) which aims to provide Software Tools for Decision Support to help answer your questions related to policies and restrictions during an epidemic. Using simulation techniques widely applied to other fields, we can help schools and colleges discover and hone the opportunities and optimizations they could make to their COVID-19 strategy. From the most simple decisions(Which days to be online or offline) to more complex strategies(What restrictions shoudl I put on library use?, How many times should I test?, Whom do I test?) Episimmer is the tool for the job. <br>
 
