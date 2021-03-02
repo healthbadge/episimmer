@@ -36,7 +36,7 @@ Tutorial 4 : Coming soon...
 
 ## UI
 Episimmer is currently Work in Progresss. Check out these point solutions built using Episimer codebase. <br>
-	- Optimizing Lockdowns : https://optimising-lockdowns.herokuapp.com
-	- Efficient Contact tracing : https://contact-tracing.herokuapp.com
+	- Optimizing Lockdowns : https://optimising-lockdowns.herokuapp.com <br>
+	- Efficient Contact tracing : https://contact-tracing.herokuapp.com <br>
 	- YACHT protocol : https://hb-yacht.herokuapp.com
 
