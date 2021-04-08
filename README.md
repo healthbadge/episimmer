@@ -13,8 +13,8 @@ For feedback or if you are interested in helping us out please send an email to 
 To install dependencies using pipenv run ```pipenv install```.
 
 ## Running Examples
-To run code from current directory : 
-		
+To run code from current directory :
+
 		cd examples
 		python ../episimmer/Main.py <Example name>
 <br>
@@ -24,7 +24,7 @@ The required files in an example are as follows <br>
   -generate_policy.py (User defined script) <br>
 <br>
 
-
+ 
 ## Getting started
 
 You can start using Episimmer by  using the following tutorials :
@@ -42,4 +42,3 @@ Episimmer is currently Work in Progresss. Check out these point solutions built 
 	- Efficient Contact tracing : https://contact-tracing.herokuapp.com <br>
 	- YACHT protocol : https://hb-yacht.herokuapp.com <br>
 	- Custom Stochastic Model on a complete graph : https://share.streamlit.io/inavamsi/custom_epidemic_model/main/Main.py
-
