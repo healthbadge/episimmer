@@ -16,17 +16,18 @@ class ReadConfiguration():
 
 		self.worlds=(int)(self.get_value())
 		self.time_steps=(int)(self.get_value())
-		
+
 		self.agent_info_keys=self.get_value()
 		self.agents_filename=self.get_value()
 		self.interaction_info_keys=self.get_value()
 		self.interactions_files_list=self.get_value()
-		
+
 		self.location_info_keys=self.get_value()
 		self.locations_filename=self.get_value()
 		self.event_info_keys=self.get_value()
 		self.events_files_list=self.get_value()
 
+		self.f.close()
 
 		if 'Agent Index' not in self.agent_info_keys.split(':'):
 			print("Error! Agent file  does not contain parameter \'Agent Index\'")
@@ -78,6 +79,8 @@ class ReadAgents():
 			agent=Agent.Agent(state,info_dict)
 			self.agents[agent.index]=agent
 
+		f.close()
+
 	def create_info_dict(self,info_list):
 		info_dict={}
 		for i,key in enumerate(self.parameter_keys):
@@ -100,7 +103,7 @@ class ReadFilesList():
 		l = re.findall("\<.*?\>", text)
 		for filename in l:
 			self.file_list.append(((filename)[1:])[:-1])
-
+		f.close()
 
 class ReadInteractions():
 	def __init__(self,filename,config_obj,agents_obj):
@@ -121,6 +124,8 @@ class ReadInteractions():
 			agent_index,info_dict=self.get_interaction(parameter_list)
 			agents_obj.agents[agent_index].add_contact(info_dict)
 
+		f.close()
+
 	def get_interaction(self,parameter_list):
 		info_dict={}
 		agent_index=None
@@ -128,7 +133,7 @@ class ReadInteractions():
 		for i,key in enumerate(self.parameter_keys):
 			if key=='Agent Index':
 				agent_index=parameter_list[i]
-			
+
 			info_dict[key]=parameter_list[i]
 
 		return agent_index,info_dict
@@ -156,6 +161,8 @@ class ReadLocations():
 			info_dict=self.create_info_dict(self.get_value(f.readline()).split(':'))
 			location=Location.Location(info_dict)
 			self.locations[location.index]=location
+
+		f.close()
 
 	def create_info_dict(self,info_list):
 		info_dict={}
@@ -189,13 +196,15 @@ class ReadEvents():
 			location_index,info_dict=self.get_event(parameter_list)
 			self.locations_obj.locations[location_index].add_event(info_dict)
 
+		f.close()
+
 	def get_event(self,parameter_list):
 		info_dict={}
 		location_index=None
 		for i,key in enumerate(self.parameter_keys):
 			if key=='Location Index':
 				location_index=parameter_list[i]
-			
+
 			if key=='Agents':
 				info_dict[key]=list(set(parameter_list[i].split(',')))
 				if info_dict[key][-1]=='':
@@ -211,11 +220,3 @@ class ReadEvents():
 		if line.endswith('\n'):
 			line=line[:-1]
 		return line
-
-
-		
-
-
-
-
-
