@@ -37,6 +37,10 @@ You can start using Episimmer by  using the following tutorials :
 [Tutorial 3 : Introduction to Intervention and Policy ... WIP](https://docs.google.com/document/d/121CdfYRg1144kZJoyJMq4xwfuM6vVdLn8bDnMIMMzoY/edit?usp=sharing) <br>
 Tutorial 4 : Coming soon...
 
+## Code Overview
+
+Click here for an overview of the [Episimmer codebase here](https://docs.google.com/document/d/1UmuzVt9S2Zo_DX7Ylq462Fl4U69mO954u2s3zJWOfpg/edit?usp=sharing).
+
 ## UI
 Episimmer is currently Work in Progresss. Check out these point solutions built using Episimmer codebase. <br>
 	- [Optimizing Lockdowns](https://optimising-lockdowns.herokuapp.com) <br>
