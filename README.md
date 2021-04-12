@@ -39,7 +39,7 @@ Tutorial 4 : Coming soon...
 
 ## UI
 Episimmer is currently Work in Progresss. Check out these point solutions built using Episimmer codebase. <br>
-	- [Optimizing Lockdowns]https://optimising-lockdowns.herokuapp.com) <br>
-	- [Efficient Contact tracing]https://contact-tracing.herokuapp.com) <br>
-	- [YACHT protocol]https://hb-yacht.herokuapp.com) <br>
+	- [Optimizing Lockdowns](https://optimising-lockdowns.herokuapp.com) <br>
+	- [Efficient Contact tracing](https://contact-tracing.herokuapp.com) <br>
+	- [YACHT protocol](https://hb-yacht.herokuapp.com) <br>
 	- [Custom Stochastic Model on a complete graph](https://share.streamlit.io/inavamsi/custom_epidemic_model/main/Main.py)
