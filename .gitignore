@@ -1,6 +1,6 @@
 # Added 
 /examples/*/__pycache__
-/episimmer/__pycache__
+/src/__pycache__
 .DS_Store
 
 # Byte-compiled / optimized / DLL files
