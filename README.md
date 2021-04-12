@@ -16,7 +16,7 @@ To install dependencies using pipenv run ```pipenv install```.
 To run code from current directory :
 
 		cd examples
-		python ../episimmer/Main.py <Example name>
+		python ../src/Main.py <Example name>
 <br>
 The required files in an example are as follows <br>
   -config.txt   {Along with corresponding files denoted in config.txt} <br>
