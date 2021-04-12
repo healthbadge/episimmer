@@ -39,7 +39,7 @@ Tutorial 4 : Coming soon...
 
 ## Code Overview
 
-Click here for an overview of the [Episimmer codebase here](https://docs.google.com/document/d/1UmuzVt9S2Zo_DX7Ylq462Fl4U69mO954u2s3zJWOfpg/edit?usp=sharing).
+[Basic overview of the Episimmer codebase](https://docs.google.com/document/d/1UmuzVt9S2Zo_DX7Ylq462Fl4U69mO954u2s3zJWOfpg/edit?usp=sharing).
 
 ## UI
 Episimmer is currently Work in Progresss. Check out these point solutions built using Episimmer codebase. <br>
