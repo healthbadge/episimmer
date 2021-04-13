@@ -3,6 +3,7 @@ import Location
 import random
 import re
 import time
+from csv import DictReader
 
 class ReadConfiguration():
 	def __init__(self,filename):
@@ -12,7 +13,7 @@ class ReadConfiguration():
 		self.agent_info_keys=None
 		self.interaction_info_keys=None
 
-		self.f = open(filename,"r")
+		self.f = open(filename,"r") # can be same for .csv?
 
 		self.worlds=(int)(self.get_value())
 		self.time_steps=(int)(self.get_value())
@@ -61,25 +62,64 @@ class ReadConfiguration():
 			return None
 		value=(((l[0])[1:])[:-1])
 		return value
+# in csv each row is separated by line breaks
 
 class ReadAgents():
 	def __init__(self,filename,config_obj):
+
 		f=open(filename,'r')
-		self.n=int(self.get_value(f.readline()))
-		agent_info_keys=self.get_value(f.readline())
-		if agent_info_keys != config_obj.agent_info_keys:
-			print("Error! Agent Information parameters donot match the config.txt file")
-			return None
-		self.parameter_keys=agent_info_keys.split(':')
-		self.agents={}
+		if filename.endswith('.txt'):
+			self.n=int(self.get_value(f.readline()))
+			agent_info_keys=self.get_value(f.readline())
+			if agent_info_keys != config_obj.agent_info_keys:
+				print("Error! Agent Information parameters donot match the config.txt file")
+				return None
 
-		for i in range(self.n):
-			info_dict=self.create_info_dict(self.get_value(f.readline()).split(':'))
-			state=None#config_obj.default_state
-			agent=Agent.Agent(state,info_dict)
-			self.agents[agent.index]=agent
+			self.parameter_keys=agent_info_keys.split(':')
+			self.agents={}
 
-		f.close()
+			for i in range(self.n):
+				info_dict=self.create_info_dict(self.get_value(f.readline()).split(':'))
+				state=None #config_obj.default_state
+				agent=Agent.Agent(state,info_dict)
+				self.agents[agent.index]=agent
+			f.close()
+
+		elif filename.endswith('.csv'):
+			with open(filename,'r') as read_obj:
+				csv_dict_reader=DictReader(read_obj)
+				csv_list=list(csv_dict_reader)
+				self.n=len(csv_list)
+				
+
+				# Assuming that we have a config file that is .txt file.
+				agent_info_keys = ':'.join(csv_dict_reader.fieldnames)
+				if agent_info_keys != config_obj.agent_info_keys:
+					print("Error! Agent Information parameters donot match the config.txt file")
+					return None
+
+
+
+				self.parameter_keys=csv_list
+				self.agents={}
+
+				for i in range(self.n):
+					info_dict=csv_list[i]
+					state=None #config_obj.default_state
+					agent=Agent.Agent(state,info_dict)
+					self.agents[agent.index]=agent
+			
+
+
+
+
+
+
+
+
+
+		
+
 
 	def create_info_dict(self,info_list):
 		info_dict={}
