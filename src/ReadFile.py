@@ -89,6 +89,8 @@ class ReadAgents():
 			with open(filename,'r') as read_obj:
 				csv_dict_reader=DictReader(read_obj)
 				csv_list=list(csv_dict_reader)
+				print(csv_dict_reader)
+				print(csv_list)
 				self.n=len(csv_list)
 				
 
