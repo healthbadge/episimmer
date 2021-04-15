@@ -32,4 +32,4 @@ class UserModel(Model.StochasticModel):
 		self.set_event_contribution_fn(event_contribute_fn)	#Setting the above defined fucntion into the model
 		self.set_event_recieve_fn(event_recieve_fn)	#Setting the above defined fucntion into the model
 
-		self.name='Stochastic SIR'
+		self.name='Stochastic SIR' 
