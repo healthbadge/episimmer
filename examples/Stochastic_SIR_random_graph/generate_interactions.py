@@ -5,7 +5,7 @@ number_of_agents=100
 p=0.3    
 
 def write_interactions(filename,no_agents,p):
-	#Agent ID enumerates from 0 to n-1
+
 	agent_list=[]
     interacting_agent_list=[]
     for i in range(no_agents-1):
