@@ -89,6 +89,7 @@ class ReadAgents():
 			with open(filename,'r') as read_obj:
 				csv_dict_reader=DictReader(read_obj)
 				csv_list=list(csv_dict_reader)
+				#print(csv_list)
 				self.n=len(csv_list)
 
 				# Assuming that we have a config file that is .txt file.
@@ -213,6 +214,10 @@ class ReadLocations():
 			self.locations[location.index]=location
 
 		f.close()
+
+
+
+
 
 
 	def create_info_dict(self,info_list):
