@@ -11,7 +11,7 @@ with open('LICENSE') as f:
 setup(
     name='episimmer',
     version='0.1.0',
-    description='Epidemic Simulation',
+    description='Epidemic Simulation Platform',
     long_description=readme,
     author='HealthBadge',
     author_email='episimmer@healthbadge.org',
