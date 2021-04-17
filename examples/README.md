@@ -9,7 +9,7 @@ To install dependencies using pipenv run ```pipenv install```.
 To run code from current directory : 
 		
 		cd examples
-		python ../episimmer/Main.py <Example name>
+		python ../src/Main.py <Example name>
 <br>
 <br>
 The required files are as follows <br>
@@ -18,7 +18,7 @@ The required files are as follows <br>
 <br>
 For example :  
 
-		python ../episimmer/Main.py Example_1/ 
+		python ../src/Main.py Example_1/ 
 will result in simulation of 100 agents being cycled through a weekly schedule for 30 days and averaged 10 times.
 <br>
 
