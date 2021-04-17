@@ -89,6 +89,7 @@ class ReadAgents():
 			with open(filename,'r') as read_obj:
 				csv_dict_reader=DictReader(read_obj)
 				csv_list=list(csv_dict_reader)
+				#print(csv_list)
 				self.n=len(csv_list)
 
 				# Assuming that we have a config file that is .txt file.
@@ -136,20 +137,44 @@ class ReadInteractions():
 		self.agents_obj=agents_obj
 		if filename=="" or filename==None:
 			return
-		f=open(filename,'r')
-		self.no_interactions=int(self.get_value(f.readline()))
-		interaction_info_keys=self.get_value(f.readline())
-		if interaction_info_keys != config_obj.interaction_info_keys:
-			print("Error! Interaction parameters donot match the config.txt file")
-			return None
-		self.parameter_keys=interaction_info_keys.split(':')
 
-		for i in range(self.no_interactions):
-			parameter_list=(self.get_value(f.readline())).split(':')
-			agent_index,info_dict=self.get_interaction(parameter_list)
-			agents_obj.agents[agent_index].add_contact(info_dict)
+		if filename.endswith('.txt'):
+			f=open(filename,'r')
+			self.no_interactions=int(self.get_value(f.readline()))
+			interaction_info_keys=self.get_value(f.readline())
+			if interaction_info_keys != config_obj.interaction_info_keys:
+				print("Error! Interaction parameters donot match the config.txt file")
+				return None
+			self.parameter_keys=interaction_info_keys.split(':')
 
-		f.close()
+			for i in range(self.no_interactions):
+				parameter_list=(self.get_value(f.readline())).split(':')
+				agent_index,info_dict=self.get_interaction(parameter_list)
+				agents_obj.agents[agent_index].add_contact(info_dict)
+
+			f.close()
+
+		elif filename.endswith('.csv'):
+			with open(filename,'r') as read_obj:
+				csv_dict_reader=DictReader(read_obj)
+				csv_list=list(csv_dict_reader)
+				self.n=len(csv_list)
+
+				# Assuming that we have a config file that is .txt file.
+				interaction_info_keys = ':'.join(csv_dict_reader.fieldnames)
+				if interaction_info_keys != config_obj.interaction_info_keys:
+
+					print("Error! Interaction Information parameters donot match the config.txt file")
+					return None
+
+				self.parameter_keys=csv_list
+				self.agents={}
+
+				for i in range(self.n):
+					info_dict=csv_list[i]
+					agent_index=info_dict['Agent Index']
+					agents_obj.agents[agent_index].add_contact(info_dict)
+
 
 	def get_interaction(self,parameter_list):
 		info_dict={}
@@ -175,6 +200,7 @@ class ReadLocations():
 		if filename=="" or filename==None:
 			return
 		f=open(filename,'r')
+
 		self.no_locations=int(self.get_value(f.readline()))
 		location_info_keys=self.get_value(f.readline())
 		if location_info_keys != config_obj.location_info_keys:
@@ -188,6 +214,11 @@ class ReadLocations():
 			self.locations[location.index]=location
 
 		f.close()
+
+
+
+
+
 
 	def create_info_dict(self,info_list):
 		info_dict={}

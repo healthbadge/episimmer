@@ -1,1 +1,1 @@
-<interactions_list.txt>
+<interactions_list.csv>
