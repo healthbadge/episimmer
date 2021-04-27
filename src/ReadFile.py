@@ -13,26 +13,25 @@ class ReadConfiguration():
 		self.agent_info_keys=None
 		self.interaction_info_keys=None
 
-		self.f = open(filename,"r")
+		f = open(filename,"r")
 
-		self.worlds=(int)(self.get_value())
-		self.time_steps=(int)(self.get_value())
+		self.worlds=(int)(self.get_value_config(f.readline()))
+		self.time_steps=(int)(self.get_value_config(f.readline()))
 
-		self.agent_info_keys=self.get_value()
-		self.agents_filename=self.get_value()
-		self.interaction_info_keys=self.get_value()
-		self.interactions_files_list=self.get_value()
+		self.agent_info_keys=self.get_value_config(f.readline())
+		self.agents_filename=self.get_value_config(f.readline())
+		self.interaction_info_keys=self.get_value_config(f.readline())
+		self.interactions_files_list=self.get_value_config(f.readline())
 
-		self.location_info_keys=self.get_value()
-		self.locations_filename=self.get_value()
-		self.event_info_keys=self.get_value()
-		self.events_files_list=self.get_value()
+		self.location_info_keys=self.get_value_config(f.readline())
+		self.locations_filename=self.get_value_config(f.readline())
+		self.event_info_keys=self.get_value_config(f.readline())
+		self.events_files_list=self.get_value_config(f.readline())
 
-		self.f.close()
+		f.close()
 
 		if 'Agent Index' not in self.agent_info_keys.split(':'):
-			print("Error! Agent file  does not contain parameter \'Agent Index\'")
-			return None
+			raise Exception("Error! Agent file  does not contain parameter \'Agent Index\'")
 
 		if 'Agent Index' not in self.interaction_info_keys.split(':'):
 			print("Interaction definition does not contain parameter \'Agent Index\'")
@@ -54,18 +53,39 @@ class ReadConfiguration():
 			print('Event definition does not contain parameter \'Agents\'')
 
 
-	def get_value(self):
-		line=self.f.readline()
-		l = re.findall("\<.*?\>", line)
-		if len(l)!=1:
-			print("Error! Invalid entry in config.txt")
-			return None
-		value=(((l[0])[1:])[:-1])
-		return value
+	def get_value_config(self, line):
+	    l = re.findall("\<.*?\>", line)
+	    if len(l)!=1:
+	        print("Error! Invalid entry in config.txt")
+	        return None
+	    value=(((l[0])[1:])[:-1])
+	    return value
 
+class ReadFilesList():
+	def __init__(self,filename):
+		self.file_list=[]
+		f=open(filename,'r')
+		lines=f.readlines()
+		separator=' '
+		text=separator.join(lines)
+		l = re.findall("\<.*?\>", text)
+		for filename in l:
+			self.file_list.append(((filename)[1:])[:-1])
+		f.close()
 
-class ReadAgents():
+class BaseReadFile():
+
+	def __init__(self):
+		pass
+
+	def get_value(self,line):
+	    if line.endswith('\n'):
+	        line=line[:-1]
+	    return line
+
+class ReadAgents(BaseReadFile):
 	def __init__(self,filename,config_obj):
+		super().__init__()
 
 		if filename.endswith('.txt'):
 			f=open(filename,'r')
@@ -114,25 +134,11 @@ class ReadAgents():
 
 		return info_dict
 
-	def get_value(self,line):
-		if line.endswith('\n'):
-			line=line[:-1]
-		return line
 
-class ReadFilesList():
-	def __init__(self,filename):
-		self.file_list=[]
-		f=open(filename,'r')
-		lines=f.readlines()
-		separator=' '
-		text=separator.join(lines)
-		l = re.findall("\<.*?\>", text)
-		for filename in l:
-			self.file_list.append(((filename)[1:])[:-1])
-		f.close()
 
-class ReadInteractions():
+class ReadInteractions(BaseReadFile):
 	def __init__(self,filename,config_obj,agents_obj):
+		super().__init__()
 		self.config_obj=config_obj
 		self.agents_obj=agents_obj
 		if filename=="" or filename==None:
@@ -188,13 +194,10 @@ class ReadInteractions():
 
 		return agent_index,info_dict
 
-	def get_value(self,line):
-		if line.endswith('\n'):
-			line=line[:-1]
-		return line
 
-class ReadLocations():
+class ReadLocations(BaseReadFile):
 	def __init__(self,filename,config_obj):
+		super().__init__()
 		self.config_obj=config_obj
 		self.locations={}
 		if filename=="" or filename==None:
@@ -216,10 +219,6 @@ class ReadLocations():
 		f.close()
 
 
-
-
-
-
 	def create_info_dict(self,info_list):
 		info_dict={}
 		for i,key in enumerate(self.parameter_keys):
@@ -227,14 +226,10 @@ class ReadLocations():
 
 		return info_dict
 
-	def get_value(self,line):
-		if line.endswith('\n'):
-			line=line[:-1]
-		return line
 
-
-class ReadEvents():
+class ReadEvents(BaseReadFile):
 	def __init__(self,filename,config_obj,locations_obj):
+		super().__init__()
 		self.config_obj=config_obj
 		self.locations_obj=locations_obj
 		if filename=="" or filename==None:
@@ -271,8 +266,3 @@ class ReadEvents():
 		if location_index==None:
 			print("Error! No event to read")
 		return location_index,info_dict
-
-	def get_value(self,line):
-		if line.endswith('\n'):
-			line=line[:-1]
-		return line
