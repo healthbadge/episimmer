@@ -26,13 +26,13 @@ class Agent():
 			self.policy_dict[policy_type]=temp
 
 	def get_policy_state(self,policy_type):
-		return self.policy_dict['State']
+		return self.policy_dict[policy_type]['State']
 
 	def set_policy_state(self,policy_type,new_state_value):
-		self.policy_dict['State']=new_state_value
+		self.policy_dict[policy_type]['State']=new_state_value
 
 	def get_policy_history(self,policy_type):
-		return self.policy_dict['History']
+		return self.policy_dict[policy_type]['History']
 
 	def add_contact(self,contact_dict):
 		self.contact_list.append(contact_dict)
