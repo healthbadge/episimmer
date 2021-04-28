@@ -1,59 +1,30 @@
-import random
-
-class Policy():
+class Agent_Policy():
 	def __init__(self):
-		self.policy_name=None
+		self.policy_type=None
 
-	def enact_policy(self,time_step,agents,locations):
+	def enact_policy(self,time_step,agents,locations,model):
 		pass
 
-class full_lockdown(Policy):
-	def __init__(self,do_lockdown_fn):
-		self.do_lockdown_fn=do_lockdown_fn
+	def update_agent_policy_history(self,agent,history_value):
+		agent.policy_state[self.policy_type]['History'].append(history_value)
 
-	def enact_policy(self,time_step,agents,locations):
-		if self.do_lockdown_fn(time_step):
-			for agent in agents:
-				agent.lock_down_state=True
+	def get_policy_history(self,agent):
+		return agent.policy_state[self.policy_type]['History']
 
-class agent_lockdown(Policy):
-	def __init__(self,parameter,value_list,do_lockdown_fn):
-		self.do_lockdown_fn=do_lockdown_fn
-		self.parameter=parameter
-		self.value_list=value_list
+def default_event_restriction_fn(agent,event_info,current_time_step):
+		return False
 
-	def enact_policy(self,time_step,agents,locations):
-		if self.do_lockdown_fn(time_step):
-			for agent in agents:
-				if agent.info[self.parameter] in self.value_list:
-					agent.lock_down_state=True
+class PolicyTemplate():
+	def __init__(self):
+		self.policy_list=[]
+		self.event_restriction_fn=default_event_restriction_fn
 
-class location_lockdown(Policy):
-	def __init__(self,parameter,value_list):
-		self.do_lockdown_fn=do_lockdown_fn
-		self.parameter=parameter
-		self.value_list=value_list
+	def add_policy(self,policy):
+		self.policy_list.append(policy)
 
-	def enact_policy(self,time_step,agents,locations):
-		if self.do_lockdown_fn(time_step):
-			for location in locations:
-				if location.info[self.parameter] in self.value_list:
-					location.lock_down_state=True
+	
 
-'''
-class Vaccination(Policy):
-	def __init__(self,vaccinations_per_time_step_fn,vaccination_state,scheduled_time,agents_obj):
-		self.vaccinations_per_time_step_fn=vaccinations_per_time_step_fn
-		self.agents=agents_obj.agents
-		self.not_vaccinated_index=[]
 
-		for agent_index in self.agents.keys():
-			self.not_vaccinated_index.append(agent_index)
-
-		random.shuffle(self.not_vaccinated_index)
-
-	def enact_policy(self,time_step,agents,locations):
-'''
 
 
 

@@ -69,7 +69,8 @@ class StochasticModel():
 			for c_dict in agent.contact_list:
 				contact_index=c_dict['Interacting Agent Index']
 				contact_agent=agents[contact_index]
-				p_not_inf*=(1-fn(p_infected_states_list,contact_agent,c_dict,current_time_step))
+				if contact_agent.can_contribute_infection and agent.can_recieve_infection:
+					p_not_inf*=(1-fn(p_infected_states_list,contact_agent,c_dict,current_time_step))
 				
 			for p in agent.event_probabilities:
 				p_not_inf*=(1-p)	
@@ -93,14 +94,16 @@ class StochasticModel():
 			agent=agents_obj.agents[agent_index]
 			if event_restriction_fn(agent,event_info,current_time_step):
 				continue
-			ambient_infection+=self.contribute_fn(agent,event_info,location,current_time_step)
+			if agent.can_contribute_infection:
+				ambient_infection+=self.contribute_fn(agent,event_info,location,current_time_step)
 
 		for agent_index in event_info['Agents']:
 			agent=agents_obj.agents[agent_index]
 			if event_restriction_fn(agent,event_info,current_time_step):
 				continue
-			p=self.recieve_fn(agent,ambient_infection,event_info,location,current_time_step)
-			agent.add_event_result(p)
+			if agent.can_recieve_infection:
+				p=self.recieve_fn(agent,ambient_infection,event_info,location,current_time_step)
+				agent.add_event_result(p)
 
 
 class ScheduledModel():
@@ -172,8 +175,10 @@ class ScheduledModel():
 			p_not_inf=1
 			for c_dict in agent.contact_list:
 				contact_index=c_dict['Interacting Agent Index']
-				contact_agent=agents[contact_index]
-				p_not_inf*=(1-fn(p_infected_states_list,contact_agent,c_dict,current_time_step))
+
+				if contact_agent.can_contribute_infection and agent.can_recieve_infection:
+					contact_agent=agents[contact_index]
+					p_not_inf*=(1-fn(p_infected_states_list,contact_agent,c_dict,current_time_step))
 				
 			for p in agent.event_probabilities:
 				p_not_inf*=(1-p)
@@ -212,14 +217,16 @@ class ScheduledModel():
 			agent=agents_obj.agents[agent_index]
 			if event_restriction_fn(agent,event_info,current_time_step):
 				continue
-			ambient_infection+=self.contribute_fn(agent,event_info,location,current_time_step)
+			if agent.can_contribute_infection:
+				ambient_infection+=self.contribute_fn(agent,event_info,location,current_time_step)
 
 		for agent_index in event_info['Agents']:
 			agent=agents_obj.agents[agent_index]
 			if event_restriction_fn(agent,event_info,current_time_step):
 				continue
-			p=self.recieve_fn(agent,ambient_infection,event_info,location,current_time_step)
-			agent.add_event_result(p)
+			if agent.can_recieve_infection:
+				p=self.recieve_fn(agent,ambient_infection,event_info,location,current_time_step)
+				agent.add_event_result(p)
 
 
 

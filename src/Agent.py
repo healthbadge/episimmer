@@ -14,20 +14,35 @@ class Agent():
 		self.event_probabilities=[]
 		
 		self.schedule_time_left=None
-		self.testing_history=[] #tuple of (<testing time(Time tested)>, <testing type(Pool, Antigen,...)>, <test machine id(unique machine)>, <result(Positive, Negative, Viral Load...)>)
-		self.compliance = None #Can be a dictionary of Guideline compliance, Restriction compliancce, Governemnt Policy compliance
-		self.lock_down_state=False
+		self.can_recieve_infection=True
+		self.can_contribute_infection=True
+
+		self.policy_dict={}	#Store all policy related status of agent
+		self.initialize_policy_dict()
+
+	def initialize_policy_dict(self):
+		for policy_type in ['Restrict','Testing','Vaccination']:
+			temp={'History':[], 'State':None}
+			self.policy_dict[policy_type]=temp
+
+	def get_policy_state(self,policy_type):
+		return self.policy_dict['State']
+
+	def set_policy_state(self,policy_type,new_state_value):
+		self.policy_dict['State']=new_state_value
+
+	def get_policy_history(self,policy_type):
+		return self.policy_dict['History']
 
 	def add_contact(self,contact_dict):
-		if not self.lock_down_state:
-			self.contact_list.append(contact_dict)
+		self.contact_list.append(contact_dict)
 
 	def add_event_result(self,p):
-		if not self.lock_down_state:
-			self.event_probabilities.append(p)
+		self.event_probabilities.append(p)
 
 	def new_time_step(self):
-		self.lock_down_state=False
+		self.can_recieve_infection=True
+		self.can_contribute_infection=True
 		self.next_state=None
 		self.contact_list=[]
 		self.event_probabilities=[]
@@ -47,3 +62,9 @@ class Agent():
 		next_state,schedule_time=state_info
 		self.next_state=next_state
 		self.schedule_time_left=schedule_time
+
+	def restrict_recieve_infection(self):
+		self.can_recieve_infection=False
+
+	def restrict_contribute_infection(self):
+		self.can_contribute_infection=False

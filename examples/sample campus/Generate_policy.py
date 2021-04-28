@@ -1,4 +1,4 @@
-import Policy
+import Lockdown_Policy
 
 def monday_online():
 	#This function ensures classes are online on Monday
@@ -9,7 +9,7 @@ def monday_online():
 			return True
 		return False
 
-	policy_list.append(Policy.full_lockdown(lockdown_fn))
+	policy_list.append(Lockdown_Policy.full_lockdown(lockdown_fn))
 
 	def event_restriction_fn(agent,event_info,current_time_step):
 		return False
@@ -25,7 +25,7 @@ def tuesday_thursday_online():
 			return True
 		return False
 
-	policy_list.append(Policy.full_lockdown(lockdown_fn))
+	policy_list.append(Lockdown_Policy.full_lockdown(lockdown_fn))
 
 	def event_restriction_fn(agent,event_info,current_time_step):
 		return False
@@ -41,7 +41,7 @@ def monday_tuesday_online():
 			return True
 		return False
 
-	policy_list.append(Policy.full_lockdown(lockdown_fn))
+	policy_list.append(Lockdown_Policy.full_lockdown(lockdown_fn))
 
 	def event_restriction_fn(agent,event_info,current_time_step):
 		return False
@@ -57,7 +57,7 @@ def monday_no_grade1():
 			return True
 		return False
 
-	policy_list.append(Policy.agent_lockdown('Grade',['Grade 1'],lockdown_fn))
+	policy_list.append(Lockdown_Policy.agent_lockdown('Grade',['Grade 1'],lockdown_fn))
 
 	def event_restriction_fn(agent,event_info,current_time_step):
 		return False
@@ -73,7 +73,7 @@ def wednesday_no_grade1_grade2():
 			return True
 		return False
 
-	policy_list.append(Policy.agent_lockdown('Grade',['Grade 1','Grade 2'],lockdown_fn))
+	policy_list.append(Lockdown_Policy.agent_lockdown('Grade',['Grade 1','Grade 2'],lockdown_fn))
 
 	def event_restriction_fn(agent,event_info,current_time_step):
 		return False
@@ -94,8 +94,8 @@ def mw_no_grade1_tf_no_grade3():
 			return True
 		return False
 
-	policy_list.append(Policy.agent_lockdown('Grade',['Grade 1'],lockdown_mw))
-	policy_list.append(Policy.agent_lockdown('Grade',['Grade 3'],lockdown_tf))
+	policy_list.append(Lockdown_Policy.agent_lockdown('Grade',['Grade 1'],lockdown_mw))
+	policy_list.append(Lockdown_Policy.agent_lockdown('Grade',['Grade 3'],lockdown_tf))
 
 	def event_restriction_fn(agent,event_info,current_time_step):
 		return False
@@ -116,8 +116,8 @@ def mt_no_grade2_wednesday_online():
 			return True
 		return False
 
-	policy_list.append(Policy.agent_lockdown('Grade',['Grade 1'],lockdown_mt))
-	policy_list.append(Policy.full_lockdown(lockdown_wednesday))
+	policy_list.append(Lockdown_Policy.agent_lockdown('Grade',['Grade 1'],lockdown_mt))
+	policy_list.append(Lockdown_Policy.full_lockdown(lockdown_wednesday))
 
 	def event_restriction_fn(agent,event_info,current_time_step):
 		return False
@@ -127,11 +127,11 @@ def mt_no_grade2_wednesday_online():
 
 def generate_policy():
 	#return monday_online()
-	#return tuesday_thursday_online()
+	return tuesday_thursday_online()
 	#return monday_tuesday_online()
 	#return monday_no_grade1()
 	#return wednesday_no_grade1_grade2()
 	#return mw_no_grade1_tf_no_grade3()
-	return mt_no_grade2_wednesday_online()
+	#return mt_no_grade2_wednesday_online()
 
 

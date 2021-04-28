@@ -42,7 +42,7 @@ class Simulate():
 
 		#Enact policies by updating agent and location states.
 		for policy in self.policy_list:
-			policy.enact_policy(self.current_time_step,self.agents_obj.agents.values(),self.locations_obj.locations.values())
+			policy.enact_policy(self.current_time_step,self.agents_obj.agents.values(),self.locations_obj.locations.values(), self.model)
 
 		#Add Interactions to agents
 		if interactions_filename!=None:
@@ -54,8 +54,9 @@ class Simulate():
 
 			#Update event info to agents from location
 			for location in self.locations_obj.locations.values():
-				for event_info in location.events:
-					self.model.update_event_infection(event_info,location,self.agents_obj,self.current_time_step, self.event_restriction_fn)
+				if not location.lock_down_state:
+					for event_info in location.events:
+						self.model.update_event_infection(event_info,location,self.agents_obj,self.current_time_step, self.event_restriction_fn)
 
 	def handleTimeStepForAllAgents(self):
 		#Too ensure concurrency we update agent.next_state in method handleTimeStepAsAgent
