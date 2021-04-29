@@ -209,12 +209,12 @@ class Test_Policy(Agent_Policy):
 		self.register_agent_testtube_func = fn
 
 
-	def random_agents(self, num_agents_testtube=1, num_testtubes_per_agent=1, attribute=None, value_list=[]):
+	def random_agents(self, num_agents_per_testtube=1, num_testtubes_per_agent=1, attribute=None, value_list=[]):
 		assert isinstance(value_list,list)
-		return partial(self.full_random_agents, num_agents_testtube, num_testtubes_per_agent, attribute, value_list)
+		return partial(self.full_random_agents, num_agents_per_testtube, num_testtubes_per_agent, attribute, value_list)
 
 
-	def full_random_agents(self, num_agents_testtube, num_testtubes_per_agent, attribute, value_list, agents, time_step):
+	def full_random_agents(self, num_agents_per_testtube, num_testtubes_per_agent, attribute, value_list, agents, time_step):
 		agents_copy = copy.copy(list(agents))
 		random.shuffle(agents_copy)
 
@@ -229,7 +229,7 @@ class Test_Policy(Agent_Policy):
 				agents_to_test.append(agent)
 
 		# Create testtubes based on formula - int((ntpa x no. of agents + napt -1)/napt)
-		num_testtubes = int((num_testtubes_per_agent*self.num_agents_to_test + num_agents_testtube -1)/num_agents_testtube)
+		num_testtubes = int((num_testtubes_per_agent*self.num_agents_to_test + num_agents_per_testtube -1)/num_agents_per_testtube)
 		for _ in range(num_testtubes):
 			testtube = Testtube()
 			self.cur_testtubes.append(testtube)
@@ -242,7 +242,7 @@ class Test_Policy(Agent_Policy):
 				for testtube in cur_list:
 					testtube.register_agent(agent)
 
-					if(len(testtube.agents_test)>=num_agents_testtube):
+					if(len(testtube.agents_test)>=num_agents_per_testtube):
 						self.ready_queue.append(testtube)
 						self.cur_testtubes.remove(testtube)
 			else:
@@ -250,13 +250,13 @@ class Test_Policy(Agent_Policy):
 
 
 	def add_partial_to_ready_queue(self):
-		copy_testtubes = copy.deepcopy(self.cur_testtubes)
+		#copy_testtubes = copy.deepcopy(self.cur_testtubes)
 		for testtube in self.cur_testtubes:
 			if(not testtube.is_empty()):
 				self.ready_queue.append(testtube)
-				copy_testtubes.remove(testtube)
+				#copy_testtubes.remove(testtube)
 
-		self.cur_testtubes = copy_testtubes
+		# self.cur_testtubes = copy_testtubes
 
 	def register_testtubes_to_machines(self,time_step):
 		for machine in self.machine_list:
