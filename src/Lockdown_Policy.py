@@ -26,6 +26,22 @@ class agent_lockdown(Agent_Policy):
 					agent.restrict_recieve_infection()
 					agent.restrict_contribute_infection()
 
+
+class agent_policy_based_lockdown(Agent_Policy):
+	def __init__(self,policy_to_consider,value_list,do_lockdown_fn):
+		self.policy_type='Restrict'
+		self.policy_to_consider = policy_to_consider
+		self.do_lockdown_fn=do_lockdown_fn
+		self.value_list=value_list
+
+	def enact_policy(self,time_step,agents,locations,model=None):
+		if self.do_lockdown_fn(time_step):
+			for agent in agents:
+				history = agent.get_policy_history(self.policy_to_consider)
+				if(len(history) and history[-1].result in self.value_list):
+					agent.restrict_recieve_infection()
+					agent.restrict_contribute_infection()
+
 '''
 class location_lockdown(Policy):
 	def __init__(self,parameter,value_list):
