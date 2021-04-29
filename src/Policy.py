@@ -6,10 +6,10 @@ class Agent_Policy():
 		pass
 
 	def update_agent_policy_history(self,agent,history_value):
-		agent.policy_state[self.policy_type]['History'].append(history_value)
+		agent.policy_dict[self.policy_type]['History'].append(history_value)
 
 	def get_policy_history(self,agent):
-		return agent.policy_state[self.policy_type]['History']
+		return agent.policy_dict[self.policy_type]['History']
 
 	def get_agent_policy_state(self):
 		return agent.policy_dict[self.policy_type]['State']
