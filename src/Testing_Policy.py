@@ -157,6 +157,7 @@ class Test_Policy(Agent_Policy):
 		self.machine_list = []
 		self.statistics = {}
 		self.current_machines = {}
+		self.total_cost=0
 
 		assert callable(agents_per_step_fn)
 		self.agents_per_step_fn = agents_per_step_fn
@@ -194,6 +195,7 @@ class Test_Policy(Agent_Policy):
 
 				for i in range(num):
 					self.machine_list.append(Machine(machine_name, cost, false_positive_rate, false_negative_rate, turnaround_time, capacity))
+					self.total_cost+=cost
 
 			else:
 				print("Error! Machine name with different parameters already exists")
@@ -203,6 +205,7 @@ class Test_Policy(Agent_Policy):
 
 			for i in range(num):
 				self.machine_list.append(Machine(machine_name, cost, false_positive_rate, false_negative_rate, turnaround_time, capacity))
+				self.total_cost+=cost
 
 
 	def set_register_agent_testtube_func(self,fn):
