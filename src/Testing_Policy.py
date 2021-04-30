@@ -173,19 +173,9 @@ class Test_Policy(Agent_Policy):
 		self.end_time_step(time_step)
 
 
-	def initialize_statistics_logs(self,time_step):
-		self.statistics[time_step] = {'Total Tests':0, 'Total Positive Results':0,\
-		 								'Total Negative Results':0, 'Total Agents Tested':0}
+	def set_register_agent_testtube_func(self,fn):
+		self.register_agent_testtube_func = fn
 
-		for machine_name in self.current_machines.keys():
-			self.statistics[time_step][machine_name] = {'Number of Tests':0, 'Number of Positive Results':0,\
-														'Number of Negative Results':0, 'Number of Agents Tested':0}
-
-	def new_time_step(self,time_step):
-		self.initialize_statistics_logs(time_step)
-		self.initialize_process_logs(time_step)
-		self.cur_testtubes = []
-		self.num_agents_to_test = self.agents_per_step_fn(time_step)
 
 	def add_machine(self, machine_name, cost, false_positive_rate, false_negative_rate, turnaround_time, capacity, num=1):
 		if(machine_name in self.current_machines.keys()):
@@ -207,13 +197,34 @@ class Test_Policy(Agent_Policy):
 				self.total_cost+=cost
 
 
-	def set_register_agent_testtube_func(self,fn):
-		self.register_agent_testtube_func = fn
+	def initialize_statistics_logs(self,time_step):
+		self.statistics[time_step] = {'Total Tests':0, 'Total Positive Results':0,\
+		 								'Total Negative Results':0, 'Total Agents Tested':0}
 
+		for machine_name in self.current_machines.keys():
+			self.statistics[time_step][machine_name] = {'Number of Tests':0, 'Number of Positive Results':0,\
+														'Number of Negative Results':0, 'Number of Agents Tested':0}
 
-	def random_agents(self, num_agents_per_testtube=1, num_testtubes_per_agent=1, attribute=None, value_list=[]):
-		assert isinstance(value_list,list)
-		return partial(self.full_random_agents, num_agents_per_testtube, num_testtubes_per_agent, attribute, value_list)
+	def initialize_process_logs(self,time_step):
+		self.statistics[time_step]["Process"] = {}
+		for machine_name in self.current_machines.keys():
+			self.statistics[time_step]["Process"][machine_name] = {}
+
+		for machine in self.machine_list:
+			machine_name = machine.get_machine_name()
+			self.statistics[time_step]["Process"][machine_name][machine.__str__()] = {'Running Status':'On Standby', 'Filled Status':'Empty'}
+
+		self.statistics[time_step]["Process"]["All Testubes filled"] = 'Default'
+		self.statistics[time_step]["Process"]["All Testubes in machine"] = 'Default'
+		self.statistics[time_step]["Process"]["All Machines running"] = 'Default'
+		self.statistics[time_step]["Process"]['Ready Queue Length'] = -1
+
+	def new_time_step(self,time_step):
+		self.initialize_statistics_logs(time_step)
+		self.initialize_process_logs(time_step)
+		self.cur_testtubes = []
+		self.num_agents_to_test = self.agents_per_step_fn(time_step)
+
 
 
 	def full_random_agents(self, num_agents_per_testtube, num_testtubes_per_agent, attribute, value_list, agents, time_step):
@@ -250,6 +261,10 @@ class Test_Policy(Agent_Policy):
 			else:
 				break
 
+	def random_agents(self, num_agents_per_testtube=1, num_testtubes_per_agent=1, attribute=None, value_list=[]):
+		assert isinstance(value_list,list)
+		return partial(self.full_random_agents, num_agents_per_testtube, num_testtubes_per_agent, attribute, value_list)
+
 
 	def add_partial_to_ready_queue(self):
 		for testtube in self.cur_testtubes:
@@ -270,7 +285,6 @@ class Test_Policy(Agent_Policy):
 		for machine in self.machine_list:
 			if(not machine.is_empty() and not machine.is_running()):
 				machine.run_tests(model.infected_states,time_step)
-
 
 
 	def populate_results_in_machine(self, time_step):
@@ -311,20 +325,6 @@ class Test_Policy(Agent_Policy):
 		self.release_results_to_agents(results)
 		self.release_results_to_policy(results, time_step)
 
-
-	def initialize_process_logs(self,time_step):
-		self.statistics[time_step]["Process"] = {}
-		for machine_name in self.current_machines.keys():
-			self.statistics[time_step]["Process"][machine_name] = {}
-
-		for machine in self.machine_list:
-			machine_name = machine.get_machine_name()
-			self.statistics[time_step]["Process"][machine_name][machine.__str__()] = {'Running Status':'On Standby', 'Filled Status':'Empty'}
-
-		self.statistics[time_step]["Process"]["All Testubes filled"] = 'Default'
-		self.statistics[time_step]["Process"]["All Testubes in machine"] = 'Default'
-		self.statistics[time_step]["Process"]["All Machines running"] = 'Default'
-		self.statistics[time_step]["Process"]['Ready Queue Length'] = -1
 
 
 	def update_process_logs(self, time_step):
