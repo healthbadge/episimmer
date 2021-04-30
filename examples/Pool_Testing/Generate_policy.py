@@ -6,10 +6,10 @@ def generate_policy():
 	policy_list=[]
 
 	# Normal Testing
-	# Normal_Test = Testing_Policy.Test_Policy(lambda x:60)
-	# Normal_Test.add_machine('Simple_Machine', 200, 0.0, 0.0, 0, 50, 2)
-	# Normal_Test.set_register_agent_testtube_func(Normal_Test.random_agents(1,1))
-	# policy_list.append(Normal_Test)
+	#Normal_Test = Testing_Policy.Test_Policy(lambda x:60)
+	#Normal_Test.add_machine('Simple_Machine', 200, 0.0, 0.0, 0, 50, 2)
+	#Normal_Test.set_register_agent_testtube_func(Normal_Test.random_agents(1,1))
+	#policy_list.append(Normal_Test)
 
 	# Group/Pool Testing
 	Pool_Testing = Testing_Policy.Test_Policy(lambda x:150)

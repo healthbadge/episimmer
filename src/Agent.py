@@ -28,9 +28,6 @@ class Agent():
 	def get_policy_state(self,policy_type):
 		return self.policy_dict[policy_type]['State']
 
-	def set_policy_state(self,policy_type,new_state_value):
-		self.policy_dict[policy_type]['State']=new_state_value
-
 	def get_policy_history(self,policy_type):
 		return self.policy_dict[policy_type]['History']
 
