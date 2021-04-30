@@ -12,7 +12,7 @@ def generate_policy():
 
 	policy_list.append(TP)
 
-	ATP = Lockdown_Policy.agent_policy_based_lockdown("Testing",["Positive"],lambda x:random.random()<0.95)
+	ATP = Lockdown_Policy.agent_policy_based_lockdown("Testing",["Positive"],lambda x:random.random()<0.95,10)
 	policy_list.append(ATP)
 
 	def event_restriction_fn(agent,event_info,current_time_step):
