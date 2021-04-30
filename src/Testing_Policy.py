@@ -164,9 +164,8 @@ class Test_Policy(Agent_Policy):
 
 	def enact_policy(self,time_step,agents,locations,model):
 		self.new_time_step(time_step)
-		if(len(self.cur_testtubes)<1):
-			self.register_agent_testtube_func(agents, time_step)
-			self.add_partial_to_ready_queue()
+		self.register_agent_testtube_func(agents, time_step)
+		self.add_partial_to_ready_queue()
 		self.register_testtubes_to_machines(time_step)
 		self.run_tests(model,time_step)
 		self.populate_results_in_machine(time_step)
@@ -253,13 +252,9 @@ class Test_Policy(Agent_Policy):
 
 
 	def add_partial_to_ready_queue(self):
-		#copy_testtubes = copy.deepcopy(self.cur_testtubes)
 		for testtube in self.cur_testtubes:
 			if(not testtube.is_empty()):
 				self.ready_queue.append(testtube)
-				#copy_testtubes.remove(testtube)
-
-		# self.cur_testtubes = copy_testtubes
 
 	def register_testtubes_to_machines(self,time_step):
 		for machine in self.machine_list:
@@ -352,8 +347,11 @@ class Test_Policy(Agent_Policy):
 		all_testtubes_in_machines = True
 		all_machines_running = True
 
-		if(len(self.cur_testtubes)!=0):
-			all_testtubes_filled = False
+
+		for testtube in self.cur_testtubes:
+			if(testtube.is_empty()):
+				all_testtubes_filled = False
+				break
 
 		if(self.ready_queue):
 			all_testtubes_in_machines = False
