@@ -14,7 +14,7 @@ class Agent_Policy():
 	def get_agent_policy_state(self,agent):
 		return agent.policy_dict[self.policy_type]['State']
 
-	def set_agent_policy_state(self,new_state_value):
+	def update_agent_policy_state(self,agent,new_state_value):
 		agent.policy_dict[self.policy_type]['State']=new_state_value
 
 def default_event_restriction_fn(agent,event_info,current_time_step):
@@ -27,10 +27,3 @@ class PolicyTemplate():
 
 	def add_policy(self,policy):
 		self.policy_list.append(policy)
-
-	
-
-
-
-
-
