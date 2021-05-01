@@ -48,7 +48,7 @@ class World():
 			sim_obj.endTimeStep()
 
 		end_state=sim_obj.endSimulation()
-		return end_state
+		return end_state, agents_obj, locations_obj
 
 	#Average number time series
 	def average(self,tdict,number):
@@ -67,7 +67,7 @@ class World():
 			tdict[state]=[0]*(self.config_obj.time_steps+1)
 
 		for i in range(self.config_obj.worlds):
-			sdict= self.one_world()
+			sdict,_,_ = self.one_world()
 			for state in self.model.individual_state_types:
 				for j in range(len(tdict[state])):
 					tdict[state][j]+=sdict[state][j]
