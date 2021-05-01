@@ -48,7 +48,7 @@ class World():
 			sim_obj.endTimeStep()
 
 		end_state=sim_obj.endSimulation()
-		return end_state
+		return end_state, agents_obj, locations_obj
 
 	#Average number time series
 	def average(self,tdict,number):
@@ -60,23 +60,26 @@ class World():
 		return tdict
 
 	#Averages multiple simulations and plots a single plot
-	def simulate_worlds(self):
+	def simulate_worlds(self,plot=True):
 
 		tdict={}
 		for state in self.model.individual_state_types:
 			tdict[state]=[0]*(self.config_obj.time_steps+1)
 
 		for i in range(self.config_obj.worlds):
-			sdict= self.one_world()
+			sdict,_,_ = self.one_world()
 			for state in self.model.individual_state_types:
 				for j in range(len(tdict[state])):
 					tdict[state][j]+=sdict[state][j]
 
 		tdict=self.average(tdict,self.config_obj.worlds)
 
-		for state in tdict.keys():
-			plt.plot(tdict[state])
+		if(plot):
+			for state in tdict.keys():
+				plt.plot(tdict[state])
 
-		plt.title(self.model.name+' plot')
-		plt.legend(list(tdict.keys()),loc='upper right', shadow=True)
-		plt.show()
+			plt.title(self.model.name+' plot')
+			plt.legend(list(tdict.keys()),loc='upper right', shadow=True)
+			plt.show()
+		else:
+			return tdict
