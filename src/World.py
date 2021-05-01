@@ -60,7 +60,7 @@ class World():
 		return tdict
 
 	#Averages multiple simulations and plots a single plot
-	def simulate_worlds(self):
+	def simulate_worlds(self,plot=True):
 
 		tdict={}
 		for state in self.model.individual_state_types:
@@ -74,9 +74,12 @@ class World():
 
 		tdict=self.average(tdict,self.config_obj.worlds)
 
-		for state in tdict.keys():
-			plt.plot(tdict[state])
+		if(plot):
+			for state in tdict.keys():
+				plt.plot(tdict[state])
 
-		plt.title(self.model.name+' plot')
-		plt.legend(list(tdict.keys()),loc='upper right', shadow=True)
-		plt.show()
+			plt.title(self.model.name+' plot')
+			plt.legend(list(tdict.keys()),loc='upper right', shadow=True)
+			plt.show()
+		else:
+			return tdict
