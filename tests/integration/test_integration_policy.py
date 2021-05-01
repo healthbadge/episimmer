@@ -48,5 +48,4 @@ class TestIntegrationPolicy(unittest.TestCase):
 
 
 if __name__ == '__main__':
-    # random.seed(10) # Doesn't work
     unittest.main()
