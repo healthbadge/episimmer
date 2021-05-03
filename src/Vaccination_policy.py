@@ -26,10 +26,7 @@ class Vaccine_type():
         # vaccinate agents
         result=self.inject_agent(agent)
         result_obj= Result(self.vaccine_name,agent,result,time_step,self.efficacy,self.decay_days)
-        print(result_obj.agent.index)
-        print(result_obj.time_stamp)
-        print(result_obj.result)
-        
+       
         return result_obj  
 
 
@@ -67,9 +64,7 @@ class Vaccination_policy(Agent_Policy):
         self.populate_results()
         self.restrict_agents(agents)
         self.get_stats()
-        print(self.statistics,"\n")
-
-
+    
 
     def newday(self,time_step):
 
@@ -122,9 +117,7 @@ class Vaccination_policy(Agent_Policy):
             else:
 
                 history[-1].protection-=1
-                print(history[-1].agent.index)
-                print(history[-1].protection)
-                print("\n")
+
                 
     def populate_results(self):
         for result_obj in self.results:
