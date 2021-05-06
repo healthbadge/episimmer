@@ -228,6 +228,9 @@ class Test_Policy(Agent_Policy):
 
 
 	def full_random_agents(self, num_agents_per_testtube, num_testtubes_per_agent, attribute, value_list, agents, time_step):
+
+		assert len(list(agents))>=self.num_agents_to_test, "Not enough agents to test! Change the agent_per_step_fn"
+
 		agents_copy = copy.copy(list(agents))
 		random.shuffle(agents_copy)
 
