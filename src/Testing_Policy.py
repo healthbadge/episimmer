@@ -286,7 +286,7 @@ class Test_Policy(Agent_Policy):
                     if len(history)==0 or time_step - history[-1].time_step>=min_steps_since_last_test:
                         if attribute is None or friend_obj.info[attribute] in value_list:
                             testtube = Testtube()
-                            testtube.register_agent(agent)
+                            testtube.register_agent(friend_obj)
                             self.ready_queue.append(testtube)
                             cur_agents_to_test-=1
                             break
