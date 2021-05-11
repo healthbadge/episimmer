@@ -40,14 +40,14 @@ class Simulate():
 		for location in self.locations_obj.locations.values():
 			location.new_time_step()
 
+		#Add Interactions to agents
+		if interactions_filename!=None:
+			ReadFile.ReadInteractions(interactions_filename,self.config_obj,self.agents_obj)
+
 		#Enact policies by updating agent and location states.
 		for policy in self.policy_list:
 			policy.enact_policy(self.current_time_step,self.agents_obj.agents.values(),self.locations_obj.locations.values(), self.model)
 
-		#Add Interactions to agents
-		if interactions_filename!=None:
-			ReadFile.ReadInteractions(interactions_filename,self.config_obj,self.agents_obj)
-		
 		#Add events to locations
 		if events_filename!=None:
 			ReadFile.ReadEvents(events_filename,self.config_obj,self.locations_obj)
@@ -60,7 +60,7 @@ class Simulate():
 
 	def handleTimeStepForAllAgents(self):
 		#Too ensure concurrency we update agent.next_state in method handleTimeStepAsAgent
-		#After every agent has updated next_state we update states of all agents in method handleTimeStep() 
+		#After every agent has updated next_state we update states of all agents in method handleTimeStep()
 
 		for agent in self.agents_obj.agents.values():
 			self.handleTimeStepAsAgent(agent)
@@ -74,7 +74,7 @@ class Simulate():
 
 
 		#Finding next_state
-		agent.set_next_state(self.model.find_next_state(agent,self.agents_obj.agents,self.current_time_step)) 
+		agent.set_next_state(self.model.find_next_state(agent,self.agents_obj.agents,self.current_time_step))
 
 	def endTimeStep(self):
 		self.store_state()
