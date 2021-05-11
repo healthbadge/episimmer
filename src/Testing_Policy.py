@@ -265,6 +265,37 @@ class Test_Policy(Agent_Policy):
 		assert isinstance(value_list,list)
 		return partial(self.full_random_agents, num_agents_per_testtube, num_testtubes_per_agent, attribute, value_list)
 
+	def full_friendship_testing(self, min_steps_since_last_test, attribute, value_list, agents, time_step):
+		agents_copy = copy.copy(list(agents))
+		random.shuffle(agents_copy)
+
+		cur_agents_to_test = self.num_agents_to_test
+		for agent in agents_copy:
+			if(cur_agents_to_test<=0):
+				break
+
+			if(agent.contact_list):
+				contact_list_copy = copy.copy(agent.contact_list)
+				random.shuffle(contact_list_copy)
+
+				for contact in contact_list_copy:
+					agent_friend = contact['Interacting Agent Index']
+					friend_obj = next(f_agent for f_agent in list(agents) if f_agent.index == agent_friend)
+
+					history = agent.get_policy_history("Testing")
+					if len(history)==0 or time_step - history[-1].time_step>=min_steps_since_last_test:
+						if attribute is None or friend_obj.info[attribute] in value_list:
+							testtube = Testtube()
+							testtube.register_agent(agent)
+							self.ready_queue.append(testtube)
+							cur_agents_to_test-=1
+							break
+
+	def friendship_testing(self, min_steps_since_last_test=1, attribute=None, value_list=[]):
+
+		assert isinstance(value_list,list)
+		return partial(self.full_friendship_testing, min_steps_since_last_test, attribute, value_list)
+
 
 	def add_partial_to_ready_queue(self):
 		for testtube in self.cur_testtubes:
