@@ -34,10 +34,12 @@ class Machine():
 		self.true_negative_rate = 1 - self.false_positive_rate
 		self.turnaround_time = turnaround_time
 		self.capacity = capacity
+
 		self.testtubes = []
 		self.results = []
 		self.available = True
 		self.start_step = None
+		self.machine_cost = 0
 
 
 	def is_running(self):
@@ -72,6 +74,7 @@ class Machine():
 	def register_testtube(self,testtube):
 		testtube.set_in_machine(True)
 		self.testtubes.append(testtube)
+		self.machine_cost+=self.cost
 
 	def run_tests(self, infected_states, time_step):
 		self.available = False
@@ -165,6 +168,12 @@ class Test_Policy(Agent_Policy):
 	def reset(self):
 		self.statistics = {}
 		self.ready_queue = deque()
+		for machine in self.machine_list:
+			machine.machine_cost = 0
+			machine.testtubes = []
+			machine.results = []
+			machine.available = True
+			machine.start_step = None
 
 	def enact_policy(self,time_step,agents,locations,model):
 		self.new_time_step(time_step)
@@ -188,7 +197,6 @@ class Test_Policy(Agent_Policy):
 
 				for i in range(num):
 					self.machine_list.append(Machine(machine_name, cost, false_positive_rate, false_negative_rate, turnaround_time, capacity))
-					self.total_cost+=cost
 
 			else:
 				print("Error! Machine name with different parameters already exists")
@@ -198,7 +206,6 @@ class Test_Policy(Agent_Policy):
 
 			for i in range(num):
 				self.machine_list.append(Machine(machine_name, cost, false_positive_rate, false_negative_rate, turnaround_time, capacity))
-				self.total_cost+=cost
 
 
 	def initialize_statistics_logs(self,time_step):
