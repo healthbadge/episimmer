@@ -78,7 +78,7 @@ class Machine():
 		self.start_step = time_step
 
 		for testtube in self.testtubes:
-		    self.run_single_test(testtube,infected_states)
+			self.run_single_test(testtube,infected_states)
 
 	def run_single_test(self, testtube, infected_states):
 		result = "Negative"
@@ -162,6 +162,10 @@ class Test_Policy(Agent_Policy):
 		assert callable(agents_per_step_fn)
 		self.agents_per_step_fn = agents_per_step_fn
 
+	def reset(self):
+		self.statistics = {}
+		self.ready_queue = deque()
+
 	def enact_policy(self,time_step,agents,locations,model):
 		self.new_time_step(time_step)
 		self.register_agent_testtube_func(agents, time_step)
@@ -199,7 +203,7 @@ class Test_Policy(Agent_Policy):
 
 	def initialize_statistics_logs(self,time_step):
 		self.statistics[time_step] = {'Total Tests':0, 'Total Positive Results':0,\
-		 								'Total Negative Results':0, 'Total Agents Tested':0}
+										'Total Negative Results':0, 'Total Agents Tested':0}
 
 		for machine_name in self.current_machines.keys():
 			self.statistics[time_step][machine_name] = {'Number of Tests':0, 'Number of Positive Results':0,\
