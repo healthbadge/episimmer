@@ -44,10 +44,6 @@ class Simulate():
 		for location in self.locations_obj.locations.values():
 			location.new_time_step()
 
-		#Enact policies by updating agent and location states.
-		for policy in self.policy_list:
-			policy.enact_policy(self.current_time_step,self.agents_obj.agents.values(),self.locations_obj.locations.values(), self.model)
-
 		#Add Interactions to agents
 		if interactions_filename!=None:
 			ReadFile.ReadInteractions(interactions_filename,self.config_obj,self.agents_obj)
