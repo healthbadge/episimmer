@@ -5,6 +5,9 @@ class Agent_Policy():
 	def enact_policy(self,time_step,agents,locations,model):
 		pass
 
+	def reset(self):
+		pass
+
 	def update_agent_policy_history(self,agent,history_value):
 		agent.policy_dict[self.policy_type]['History'].append(history_value)
 
