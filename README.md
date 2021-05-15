@@ -48,3 +48,4 @@ Episimmer is currently Work in Progresss. Check out these point solutions built 
 	- [YACHT protocol](https://hb-yacht.herokuapp.com) <br>
 	- [Custom Stochastic Model on a complete graph](https://share.streamlit.io/inavamsi/custom_epidemic_model/main/Main.py) <br>
 	- [Testing strategies (Pool testing, Friendship testing)](https://testing-policy.herokuapp.com/)
+	- [Vaccination with multiple vaccine types]()
