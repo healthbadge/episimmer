@@ -47,5 +47,5 @@ Episimmer is currently Work in Progresss. Check out these point solutions built 
 	- [Efficient Contact tracing](https://contact-tracing.herokuapp.com) <br>
 	- [YACHT protocol](https://hb-yacht.herokuapp.com) <br>
 	- [Custom Stochastic Model on a complete graph](https://share.streamlit.io/inavamsi/custom_epidemic_model/main/Main.py) <br>
-	- [Testing strategies (Pool testing, Friendship testing)](https://testing-policy.herokuapp.com/) <br>
+	- [Testing strategies (Pool testing, Friendship testing)](https://share.streamlit.io/suryadheeshjith/epidemic-testing-ui/main.py) <br>
 	- [Vaccination with multiple vaccine types](https://share.streamlit.io/ruthushankar/vaccination_ui/main/vac.py)
