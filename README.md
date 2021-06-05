@@ -49,3 +49,4 @@ Episimmer is currently Work in Progresss. Check out these point solutions built 
 	- [Custom Stochastic Model on a complete graph](https://share.streamlit.io/inavamsi/custom_epidemic_model/main/Main.py) <br>
 	- [Testing strategies (Pool testing, Friendship testing)](https://share.streamlit.io/suryadheeshjith/epidemic-testing-ui/main.py) <br>
 	- [Vaccination with multiple vaccine types](https://share.streamlit.io/ruthushankar/vaccination_ui/main/vac.py)
+	- [Episimmer Partial UI](https://share.streamlit.io/suryadheeshjith/epidemic-simulator-ui/app.py)
