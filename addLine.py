@@ -3,6 +3,7 @@ import argparse
 import os
 os.chdir("examples")
 
+
 def add_line(s):
     dirs = [x[0] for x in os.walk(os.getcwd())]
     for folder in dirs[1:]:
@@ -16,6 +17,7 @@ def add_line(s):
         config_file.close()
         checker.close()
 
+
 def delete_line():
     dirs = [x[0] for x in os.walk(os.getcwd())]
     for folder in dirs[1:]:
@@ -26,6 +28,7 @@ def delete_line():
         for line in lines[:-1]:
             f.write(line)
         f.close()
+
 
 def makescript():
     dirname = [x[1] for x in os.walk(os.getcwd())]
@@ -38,20 +41,23 @@ def makescript():
     f.close()
     os.chdir("examples")
 
+
 if __name__ == "__main__":
     arg_parser = argparse.ArgumentParser(
         description="Adds lines to config files in examples. Needs input line to be written. ")
 
     # options
-    arg_parser.add_argument("--line", "-l", help="Line to be written in config file", required=False)
-    arg_parser.add_argument("--delete", "-d", help="Delete Last Line", required=False)
+    arg_parser.add_argument(
+        "--line", "-l", help="Line to be written in config file", required=False)
+    arg_parser.add_argument(
+        "--delete", "-d", help="Delete Last Line", required=False)
     args = arg_parser.parse_args()
 
     if args.delete is not None:
-        if(args.delete!='0'):
+        if(args.delete != '0'):
             delete_line()
 
     if args.line is not None:
         add_line(args.line)
 
-    #makescript() #make script to check all examples
+    #makescript()  # make script to check all examples
