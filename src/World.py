@@ -74,6 +74,12 @@ class World():
 
 		tdict=self.average(tdict,self.config_obj.worlds)
 
+		# check for random seed working
+		"""
+		for x in tdict:
+			print(tdict[x])
+		"""
+
 		if(plot):
 			for state in tdict.keys():
 				plt.plot(tdict[state])

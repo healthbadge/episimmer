@@ -28,6 +28,10 @@ class ReadConfiguration():
 		self.event_info_keys=self.get_value_config(f.readline())
 		self.events_files_list=self.get_value_config(f.readline())
 
+		self.random_seed=(self.get_value_config(f.readline()))
+		if(self.random_seed != ""):
+      			random.seed((int)(self.random_seed))
+
 		f.close()
 
 		if 'Agent Index' not in self.agent_info_keys.split(':'):
