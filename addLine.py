@@ -9,7 +9,6 @@ def add_line(s):
     for folder in dirs[1:]:
         config_file = open(folder + "/" + "config.txt", "a")
         checker = open(folder + "/" + "config.txt", "rb+")
-        print(folder)
         checker.seek(checker.tell() - 1, 2)
         if(checker.read() == b'\n'):
             config_file.write(s + "\n")
