@@ -22,9 +22,14 @@ class World():
         self.eventFiles_list = eventFiles_list
 
     def takej(self, l, j):
-        if(len(l) > j):
+        if(self.length(l) > j):
             return l[j]
         return []
+
+    def length(self, l):
+        if l == None:
+            return 0
+        return len(l)
 
     def one_world(self):
 
@@ -42,7 +47,7 @@ class World():
         sim_obj.onStartSimulation()
 
         for i in range(time_steps):
-            for j in range(max(len(self.interactionFiles_list), len(self.eventFiles_list))):
+            for j in range(max(self.length(self.interactionFiles_list), self.length(self.eventFiles_list))):
                 if self.takej(self.interactionFiles_list, j) == [] or self.takej(self.interactionFiles_list, j) == None:
                     interactions_filename = None
                 else:
