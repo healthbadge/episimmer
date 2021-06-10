@@ -1,3 +1,4 @@
+Random Seed <3>
 Number of worlds <10>
 Number of Days <30>
 Agent Parameter Keys <Agent Index>
@@ -8,4 +9,3 @@ Location Parameter Keys <Location Index>
 Location list filename <locations.txt>
 Event Parameter Keys <>
 Event Files list filename <>
-Random Seed <3>

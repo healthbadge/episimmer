@@ -15,6 +15,10 @@ class ReadConfiguration():
 
 		f = open(filename,"r")
 
+		self.random_seed = (self.get_value_config(f.readline()))
+		if(self.random_seed != ""):
+			random.seed((int)(self.random_seed))
+
 		self.worlds=(int)(self.get_value_config(f.readline()))
 		self.time_steps=(int)(self.get_value_config(f.readline()))
 
@@ -27,10 +31,6 @@ class ReadConfiguration():
 		self.locations_filename=self.get_value_config(f.readline())
 		self.event_info_keys=self.get_value_config(f.readline())
 		self.events_files_list=self.get_value_config(f.readline())
-
-		self.random_seed=(self.get_value_config(f.readline()))
-		if(self.random_seed != ""):
-      			random.seed((int)(self.random_seed))
 
 		f.close()
 

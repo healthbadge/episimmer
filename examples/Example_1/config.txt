@@ -1,3 +1,4 @@
+Random Seed <3>
 Number of worlds <10>
 Number of Days <30>
 Agent Parameter Keys <Agent Index:Type:Residence:HLA Type>
@@ -8,4 +9,3 @@ Location Parameter Keys <Location Index:Type:Ventilation:Roomsize:Capacity>
 Location list filename <locations.txt>
 Event Parameter Keys <Location Index:Agents:Time Interval>
 Event Files list filename <event_files_list.txt>
-Random Seed <3>
