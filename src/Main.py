@@ -24,8 +24,8 @@ def get_file_paths(example_path,config_obj):
     # File Names
     locations_filename=None
     agents_filename=osp.join(example_path,config_obj.agents_filename)
-    interactions_FilesList_filename=osp.join(example_path,config_obj.interactions_files_list)
-    events_FilesList_filename=osp.join(example_path,config_obj.events_files_list)
+    interactions_FilesList_filename = [osp.join(example_path, interactions_files_list) for interactions_files_list in config_obj.interactions_files_list_list]
+    events_FilesList_filename = [osp.join(example_path, events_files_list) for events_files_list in config_obj.events_files_list_list]
     if config_obj.locations_filename=="":
     	locations_filename=None
     else:
@@ -40,21 +40,21 @@ def get_file_names_list(example_path,interactions_FilesList_filename,events_File
     interactions_files_list=None
     events_files_list=None
 
-    if config_obj.interactions_files_list=='':
+    if config_obj.interactions_files_list_list==['']:
     	print('No Interaction files uploaded!')
     else:
-    	interactionFiles_obj=ReadFile.ReadFilesList(interactions_FilesList_filename)
-    	interactions_files_list=list(map(lambda x : osp.join(example_path,x) ,interactionFiles_obj.file_list))
-    	if interactions_files_list==[]:
+    	interactionFiles_obj = [ReadFile.ReadFilesList(file) for file in interactions_FilesList_filename]
+    	interactions_files_list = [list(map(lambda x: osp.join(example_path, x), obj.file_list)) for obj in interactionFiles_obj]
+    	if interactions_files_list==[[]]:
     		print('No Interactions inputted')
 
 
-    if config_obj.events_files_list=='':
+    if config_obj.events_files_list_list==['']:
     	print('No Event files uploaded!')
     else:
-    	eventFiles_obj=ReadFile.ReadFilesList(events_FilesList_filename)
-    	events_files_list=list(map(lambda x : osp.join(example_path,x) ,eventFiles_obj.file_list))
-    	if events_files_list==[]:
+    	eventFiles_obj = [ReadFile.ReadFilesList(file) for file in events_FilesList_filename]
+    	events_files_list = [list(map(lambda x: osp.join(example_path, x), obj.file_list)) for obj in eventFiles_obj]
+    	if events_files_list==[[]]:
     		print('No Events inputted')
 
     return interactions_files_list, events_files_list

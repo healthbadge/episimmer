@@ -25,12 +25,12 @@ class ReadConfiguration():
 		self.agent_info_keys=self.get_value_config(f.readline())
 		self.agents_filename=self.get_value_config(f.readline())
 		self.interaction_info_keys=self.get_value_config(f.readline())
-		self.interactions_files_list=self.get_value_config(f.readline())
+		self.interactions_files_list_list=(self.get_value_config(f.readline())).split(',')
 
 		self.location_info_keys=self.get_value_config(f.readline())
 		self.locations_filename=self.get_value_config(f.readline())
 		self.event_info_keys=self.get_value_config(f.readline())
-		self.events_files_list=self.get_value_config(f.readline())
+		self.events_files_list_list=(self.get_value_config(f.readline())).split(',')
 
 		f.close()
 
