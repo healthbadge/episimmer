@@ -3,7 +3,6 @@ import argparse
 import os
 os.chdir("examples")
 
-
 def add_line(s):
     dirs = [x[0] for x in os.walk(os.getcwd())]
     for folder in dirs[1:]:
@@ -95,11 +94,9 @@ if __name__ == "__main__":
 
     if args.topdelete is not None:
         try:
-            print(args.delete)
             for i in range((int)(args.delete)):
                 delete_top_line()
         except:
             pass
 
     #makescript()  # make script to check all examples
-
