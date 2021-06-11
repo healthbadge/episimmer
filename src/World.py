@@ -60,7 +60,7 @@ class World():
 
                 sim_obj.onStartTimeStep(interactions_filename, events_filename, i)
                 sim_obj.handleTimeStepForAllAgents()
-                sim_obj.endTimeStep()
+            sim_obj.endTimeStep()
 
         end_state = sim_obj.endSimulation()
         return end_state, agents_obj, locations_obj
