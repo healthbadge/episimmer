@@ -3,7 +3,7 @@ import Model
 
 def probabilityOfInfection_fn(p_infected_states_list, contact_agent, c_dict, current_time_step):
 	if contact_agent.state == 'Infected':
-		return 0.1
+		return 0.5
 	return 0
 
 

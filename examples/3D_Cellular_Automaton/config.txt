@@ -1,6 +1,6 @@
 Random Seed <2>
-Number of worlds <50>
-Number of Days <50>
+Number of worlds <30>
+Number of Days <30>
 Agent Parameter Keys <Agent Index>
 Agent list filename <agents.txt>
 Interaction Info Keys <Agent Index:Interacting Agent Index>

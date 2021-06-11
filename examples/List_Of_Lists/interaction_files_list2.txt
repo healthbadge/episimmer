@@ -1,1 +1,2 @@
-<monday_contacts.csv>
+<odd_contacts.csv>
+<even_contacts.csv>

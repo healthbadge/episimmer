@@ -1,2 +1,2 @@
-<thursday_events.txt>
-<friday_events.txt>
+<odd_events.txt>
+<even_events.txt>
