@@ -31,6 +31,7 @@ class ReadConfiguration():
 		self.locations_filename=self.get_value_config(f.readline())
 		self.event_info_keys=self.get_value_config(f.readline())
 		self.events_files_list_list=(self.get_value_config(f.readline())).split(',')
+		self.one_time_event_file=self.get_value_config(f.readline())
 
 		f.close()
 
@@ -239,7 +240,7 @@ class ReadEvents(BaseReadFile):
 		if filename=="" or filename==None:
 			return
 		f=open(filename,'r')
-		self.no_events=int(self.get_value(f.readline()))
+		self.no_events = int(self.get_value(f.readline()))
 		event_info_keys=self.get_value(f.readline())
 		if event_info_keys != config_obj.event_info_keys:
 			print("Error! Event parameters donot match the config.txt file")
@@ -270,3 +271,21 @@ class ReadEvents(BaseReadFile):
 		if location_index==None:
 			print("Error! No event to read")
 		return location_index,info_dict
+
+
+class ReadOneTimeEvents(BaseReadFile):
+	def __init__(self, filename):
+		if filename == "" or filename == None:
+			return
+		f = open(filename, 'r')
+		lines = f.readlines()
+		headers = lines[:2]
+		lines = lines[2:]
+		if(lines!=[] and lines[-1][-1]!='\n'):
+			lines[-1] = lines[-1] + "\n"
+		f.close()
+		lines.sort(key = lambda x: (int)((x.split(':'))[0]))
+		f = open(filename, 'w')
+		f.writelines(headers)
+		f.writelines(lines)
+		f.close()
