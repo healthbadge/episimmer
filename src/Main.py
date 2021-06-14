@@ -71,7 +71,7 @@ def get_policy(example_path):
 if __name__=="__main__":
 
     plot = True
-    if len(sys.argv) > 1 and sys.argv[2] == '-noplot':
+    if len(sys.argv) > 2 and sys.argv[2] == '-noplot':
         plot = False
 
     example_path = get_example_path()
