@@ -5,7 +5,7 @@ Episimmer is an Epidemic Simulation Platform. It aims to provide Decision and Re
 
 Here is a short video describing Episimmer : [Video link](https://drive.google.com/file/d/1Oo-eG7pNIzaqf1uJ9rIf7DAc7MZwNRVY/view?usp=sharing) <br>
 
-For feedback or if you are interested in helping us out please send an email to ibe214@nyu.edu <br>
+We are currently focusing on [Vulnerability Detection](https://docs.google.com/document/d/1x6ovo5wwkKDPtH1OEvd3zCNwzOBNIbE0qTsA5bs8pOI/edit?usp=sharing). If you are interested please do reach out to us. <br>
 
 ## Dependencies
 
