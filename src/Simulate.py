@@ -35,7 +35,7 @@ class Simulate():
 		#Store state list
 		self.store_state()
 
-	def onStartTimeStep(self,interactions_filename,events_filename,current_time_step):
+	def onStartTimeStep(self, interactionFiles_listOfList, eventFiles_listOfList, current_time_step):
 		self.current_time_step=current_time_step
 
 		for agent in self.agents_obj.agents.values():
@@ -44,24 +44,31 @@ class Simulate():
 		for location in self.locations_obj.locations.values():
 			location.new_time_step()
 
-		#Add Interactions to agents
-		if interactions_filename!=None:
-			ReadFile.ReadInteractions(interactions_filename,self.config_obj,self.agents_obj)
+		# Initialize filenames
+		interactions_filename = events_filename = None
 
-		#Add events to locations
-		if events_filename!=None:
-			ReadFile.ReadEvents(events_filename,self.config_obj,self.locations_obj)
+		# Load interactions
+		for interactionFiles_list in interactionFiles_listOfList:
+			if interactionFiles_list != []:
+				interactions_filename = interactionFiles_list[current_time_step % len(interactionFiles_list)]
+				ReadFile.ReadInteractions(interactions_filename,self.config_obj,self.agents_obj)
+
+		# Load Events
+		for eventFiles_list in eventFiles_listOfList:
+			if eventFiles_list != []:
+				events_filename = eventFiles_list[current_time_step % len(eventFiles_list)]
+				ReadFile.ReadEvents(events_filename,self.config_obj,self.locations_obj)
 
 		#Enact policies by updating agent and location states.
 		for policy in self.policy_list:
-			policy.enact_policy(self.current_time_step,self.agents_obj.agents.values(),self.locations_obj.locations.values(), self.model)
+			policy.enact_policy(self.current_time_step, self.agents_obj.agents.values(), self.locations_obj.locations.values(), self.model)
 
-		if events_filename!=None:
+		if events_filename != None:
 			#Update event info to agents from location
 			for location in self.locations_obj.locations.values():
 				if not location.lock_down_state:
 					for event_info in location.events:
-						self.model.update_event_infection(event_info,location,self.agents_obj,self.current_time_step, self.event_restriction_fn)
+						self.model.update_event_infection(event_info, location, self.agents_obj, self.current_time_step, self.event_restriction_fn)
 
 	def handleTimeStepForAllAgents(self):
 		#Too ensure concurrency we update agent.next_state in method handleTimeStepAsAgent

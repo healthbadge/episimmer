@@ -15,18 +15,22 @@ class ReadConfiguration():
 
 		f = open(filename,"r")
 
+		self.random_seed = (self.get_value_config(f.readline()))
+		if(self.random_seed != ""):
+			random.seed((int)(self.random_seed))
+
 		self.worlds=(int)(self.get_value_config(f.readline()))
 		self.time_steps=(int)(self.get_value_config(f.readline()))
 
 		self.agent_info_keys=self.get_value_config(f.readline())
 		self.agents_filename=self.get_value_config(f.readline())
 		self.interaction_info_keys=self.get_value_config(f.readline())
-		self.interactions_files_list=self.get_value_config(f.readline())
+		self.interactions_files_list_list=(self.get_value_config(f.readline())).split(',')
 
 		self.location_info_keys=self.get_value_config(f.readline())
 		self.locations_filename=self.get_value_config(f.readline())
 		self.event_info_keys=self.get_value_config(f.readline())
-		self.events_files_list=self.get_value_config(f.readline())
+		self.events_files_list_list=(self.get_value_config(f.readline())).split(',')
 
 		f.close()
 
@@ -235,7 +239,7 @@ class ReadEvents(BaseReadFile):
 		if filename=="" or filename==None:
 			return
 		f=open(filename,'r')
-		self.no_events=int(self.get_value(f.readline()))
+		self.no_events = int(self.get_value(f.readline()))
 		event_info_keys=self.get_value(f.readline())
 		if event_info_keys != config_obj.event_info_keys:
 			print("Error! Event parameters donot match the config.txt file")
@@ -266,3 +270,22 @@ class ReadEvents(BaseReadFile):
 		if location_index==None:
 			print("Error! No event to read")
 		return location_index,info_dict
+
+
+class ReadOneTimeEvents(BaseReadFile):
+	def __init__(self, filename):
+		if filename == "" or filename == None:
+			return
+		self.oneTimeEventAt = {}
+		f = open(filename, 'r')
+		size = f.readline()
+		header = f.readline()
+		lines = f.readlines()
+		if(lines!=[] and lines[-1][-1]!='\n'):
+			lines[-1] = lines[-1] + "\n"
+		f.close()
+		lines.sort(key = lambda x: (int)((x.split(':'))[0]))
+		f = open(filename, 'w')
+		f.writelines(headers)
+		f.writelines(lines)
+		f.close()
