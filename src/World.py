@@ -11,7 +11,7 @@ import ReadFile
 import os
 
 class World():
-    def __init__(self, config_obj, model, policy_list, event_restriction_fn, agents_filename, interactionFiles_list, locations_filename, eventFiles_list, one_time_event_file):
+    def __init__(self, config_obj, model, policy_list, event_restriction_fn, agents_filename, interactionFiles_list, locations_filename, eventFiles_list):
         self.config_obj = config_obj
         self.policy_list = policy_list
         self.event_restriction_fn = event_restriction_fn
@@ -20,7 +20,6 @@ class World():
         self.model = model
         self.interactionFiles_list = interactionFiles_list
         self.eventFiles_list = eventFiles_list
-        self.one_time_event_file = one_time_event_file
 
     def one_world(self):
 
@@ -36,22 +35,10 @@ class World():
         sim_obj = Simulate.Simulate(self.config_obj, self.model, self.policy_list, self.event_restriction_fn, agents_obj, locations_obj)
         sim_obj.onStartSimulation()
 
-        ReadFile.ReadOneTimeEvents(self.one_time_event_file)
-        f = None
-        temp_header = firstline = ""
-        if self.one_time_event_file != "" and self.one_time_event_file != None:
-            f = open(self.one_time_event_file, 'r')
-            temp_header = f.readline()
-            temp_header = f.readline()
-            firstline = f.readline()
-
         for i in range(time_steps):
-            sim_obj.onStartTimeStep(self.interactionFiles_list, self.eventFiles_list, f, temp_header, firstline, i)
+            sim_obj.onStartTimeStep(self.interactionFiles_list, self.eventFiles_list, i)
             sim_obj.handleTimeStepForAllAgents()
             sim_obj.endTimeStep()
-
-        if os.path.exists("temp.txt"):
-            os.remove("temp.txt")
 
         end_state = sim_obj.endSimulation()
         return end_state, agents_obj, locations_obj

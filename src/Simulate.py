@@ -35,7 +35,7 @@ class Simulate():
 		#Store state list
 		self.store_state()
 
-	def onStartTimeStep(self, interactionFiles_list, eventFiles_list, oneTimeFileReader, temp_header, firstline, current_time_step):
+	def onStartTimeStep(self, interactionFiles_list, eventFiles_list, current_time_step):
 		self.current_time_step=current_time_step
 
 		for agent in self.agents_obj.agents.values():
@@ -44,45 +44,30 @@ class Simulate():
 		for location in self.locations_obj.locations.values():
 			location.new_time_step()
 
-		for j in range(max(self.length(interactionFiles_list), self.length(eventFiles_list))):
-			if self.takej(interactionFiles_list, j) == [] or self.takej(interactionFiles_list, j) == None:
-				interactions_filename = None
-			else:
-				interactions_filename = interactionFiles_list[j][current_time_step % len(interactionFiles_list[j])]
-			if self.takej(eventFiles_list, j) == [] or self.takej(eventFiles_list, j) == None:
-				events_filename = None
-			else:
-				events_filename = eventFiles_list[j][current_time_step % len(eventFiles_list[j])]
+		# Initialize filenames
+		interactions_filename = events_filename = None
 
-			#Add Interactions to agents
-			if interactions_filename!=None:
-				ReadFile.ReadInteractions(interactions_filename,self.config_obj,self.agents_obj)
+		# Load interactions
+		if interactionFiles_list != None:
+			for j in range(len(interactionFiles_list)):
+				if interactionFiles_list[j] == [] or interactionFiles_list[j] == None:
+					interactions_filename = None
+				else:
+					interactions_filename = interactionFiles_list[j][current_time_step % len(interactionFiles_list[j])]
+				#Add Interactions to agents
+				if interactions_filename!=None:
+					ReadFile.ReadInteractions(interactions_filename,self.config_obj,self.agents_obj)
 
-			#Add events to locations
-			if events_filename!=None:
-				ReadFile.ReadEvents(events_filename,self.config_obj,self.locations_obj)
-
-			"""#Enact policies by updating agent and location states.
-			for policy in self.policy_list:
-				policy.enact_policy(self.current_time_step,self.agents_obj.agents.values(),self.locations_obj.locations.values(), self.model)
-
-			if events_filename!=None:
-				#Update event info to agents from location
-				for location in self.locations_obj.locations.values():
-					if not location.lock_down_state:
-						for event_info in location.events:
-							self.model.update_event_infection(event_info,location,self.agents_obj,self.current_time_step, self.event_restriction_fn)"""
-
-		if(oneTimeFileReader != None):
-			# Handle One Time Event
-			tempWriter = open("temp.txt", 'w')
-			self.prepareTempFile(oneTimeFileReader, tempWriter, temp_header, firstline, current_time_step)
-			tempWriter.close()
-			interactions_filename = None
-			events_filename = "temp.txt"
-
-			#Add events to locations
-			ReadFile.ReadEvents(events_filename, self.config_obj, self.locations_obj)
+		# Load Events
+		if eventFiles_list != None:
+			for j in range(len(eventFiles_list)):
+				if eventFiles_list[j] == [] or eventFiles_list[j] == None:
+					events_filename = None
+				else:
+					events_filename = eventFiles_list[j][current_time_step % len(eventFiles_list[j])]
+				#Add events to locations
+				if events_filename!=None:
+					ReadFile.ReadEvents(events_filename,self.config_obj,self.locations_obj)
 
 		#Enact policies by updating agent and location states.
 		for policy in self.policy_list:
@@ -93,8 +78,7 @@ class Simulate():
 			for location in self.locations_obj.locations.values():
 				if not location.lock_down_state:
 					for event_info in location.events:
-						self.model.update_event_infection(
-							event_info, location, self.agents_obj, self.current_time_step, self.event_restriction_fn)
+						self.model.update_event_infection(event_info, location, self.agents_obj, self.current_time_step, self.event_restriction_fn)
 
 	def handleTimeStepForAllAgents(self):
 		#Too ensure concurrency we update agent.next_state in method handleTimeStepAsAgent
@@ -128,20 +112,3 @@ class Simulate():
 		self.state_list[agent.state].remove(agent.index)
 		agent.update_state()
 		self.state_list[agent.state].append(agent.index)
-
-	def takej(self, l, j):
-		if(self.length(l) > j):
-			return l[j]
-		return []
-
-	def length(self, l):
-		if l == None:
-			return 0
-		return len(l)
-
-	def prepareTempFile(self, f, temp, temp_header, line, i):
-		lines = []
-		while(line != "" and i == (int)((line.split(':'))[0])):
-			lines.append(':'.join((line.split(':'))[1:]))
-			line = f.readline()
-		temp.writelines([str(len(lines)) + "\n", ':'.join((temp_header.split(':'))[1:])] + lines)

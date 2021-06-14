@@ -31,7 +31,6 @@ class ReadConfiguration():
 		self.locations_filename=self.get_value_config(f.readline())
 		self.event_info_keys=self.get_value_config(f.readline())
 		self.events_files_list_list=(self.get_value_config(f.readline())).split(',')
-		self.one_time_event_file=self.get_value_config(f.readline())
 
 		f.close()
 
@@ -277,10 +276,11 @@ class ReadOneTimeEvents(BaseReadFile):
 	def __init__(self, filename):
 		if filename == "" or filename == None:
 			return
+		self.oneTimeEventAt = {}
 		f = open(filename, 'r')
+		size = f.readline()
+		header = f.readline()
 		lines = f.readlines()
-		headers = lines[:2]
-		lines = lines[2:]
 		if(lines!=[] and lines[-1][-1]!='\n'):
 			lines[-1] = lines[-1] + "\n"
 		f.close()

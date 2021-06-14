@@ -9,4 +9,3 @@ Location Parameter Keys <Location Index>
 Location list filename <locations.txt>
 Event Parameter Keys <>
 Event Files list filename <>
-One Time Event <>

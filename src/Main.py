@@ -27,16 +27,12 @@ def get_file_paths(example_path,config_obj):
     agents_filename=osp.join(example_path,config_obj.agents_filename)
     interactions_FilesList_filename = [osp.join(example_path, interactions_files_list) for interactions_files_list in config_obj.interactions_files_list_list]
     events_FilesList_filename = [osp.join(example_path, events_files_list) for events_files_list in config_obj.events_files_list_list]
-    if config_obj.one_time_event_file == "":
-    	one_time_event_file = None
-    else:
-    	one_time_event_file = osp.join(example_path, config_obj.one_time_event_file)
     if config_obj.locations_filename=="":
     	locations_filename=None
     else:
     	locations_filename=osp.join(example_path,config_obj.locations_filename)
 
-    return agents_filename, interactions_FilesList_filename, events_FilesList_filename, locations_filename, one_time_event_file
+    return agents_filename, interactions_FilesList_filename, events_FilesList_filename, locations_filename
 
 
 def get_file_names_list(example_path,interactions_FilesList_filename,events_FilesList_filename,config_obj):
@@ -83,7 +79,7 @@ if __name__=="__main__":
     config_obj=ReadFile.ReadConfiguration(config_filename)
 
     agents_filename, interactions_FilesList_filename,\
-    events_FilesList_filename, locations_filename, one_time_event_file = get_file_paths(example_path, config_obj)
+    events_FilesList_filename, locations_filename = get_file_paths(example_path, config_obj)
     interactions_files_list, events_files_list = get_file_names_list(example_path,interactions_FilesList_filename,events_FilesList_filename,config_obj)
 
     # User Model and Policy
@@ -91,5 +87,5 @@ if __name__=="__main__":
     policy_list, event_restriction_fn=get_policy(example_path)
 
     # Creation of World object
-    world_obj = World.World(config_obj, model, policy_list, event_restriction_fn, agents_filename, interactions_files_list, locations_filename, events_files_list, one_time_event_file)
+    world_obj = World.World(config_obj, model, policy_list, event_restriction_fn, agents_filename, interactions_files_list, locations_filename, events_files_list)
     world_obj.simulate_worlds()
