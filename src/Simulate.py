@@ -48,26 +48,16 @@ class Simulate():
 		interactions_filename = events_filename = None
 
 		# Load interactions
-		if interactionFiles_list != None:
-			for j in range(len(interactionFiles_list)):
-				if interactionFiles_list[j] == [] or interactionFiles_list[j] == None:
-					interactions_filename = None
-				else:
-					interactions_filename = interactionFiles_list[j][current_time_step % len(interactionFiles_list[j])]
-				#Add Interactions to agents
-				if interactions_filename!=None:
-					ReadFile.ReadInteractions(interactions_filename,self.config_obj,self.agents_obj)
+		for j in range(len(interactionFiles_list)):
+			if interactionFiles_list[j] != []:
+				interactions_filename = interactionFiles_list[j][current_time_step % len(interactionFiles_list[j])]
+				ReadFile.ReadInteractions(interactions_filename,self.config_obj,self.agents_obj)
 
 		# Load Events
-		if eventFiles_list != None:
-			for j in range(len(eventFiles_list)):
-				if eventFiles_list[j] == [] or eventFiles_list[j] == None:
-					events_filename = None
-				else:
-					events_filename = eventFiles_list[j][current_time_step % len(eventFiles_list[j])]
-				#Add events to locations
-				if events_filename!=None:
-					ReadFile.ReadEvents(events_filename,self.config_obj,self.locations_obj)
+		for j in range(len(eventFiles_list)):
+			if eventFiles_list[j] != []:
+				events_filename = eventFiles_list[j][current_time_step % len(eventFiles_list[j])]
+				ReadFile.ReadEvents(events_filename,self.config_obj,self.locations_obj)
 
 		#Enact policies by updating agent and location states.
 		for policy in self.policy_list:

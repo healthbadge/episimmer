@@ -38,25 +38,20 @@ def get_file_paths(example_path,config_obj):
 def get_file_names_list(example_path,interactions_FilesList_filename,events_FilesList_filename,config_obj):
     # Reading through a file (for interactions/events) that contain file names which contain interactions and event details for a time step
 
-    interactions_files_list=None
-    events_files_list=None
+    interactions_files_list=[]
+    events_files_list=[]
 
     if config_obj.interactions_files_list_list==['']:
     	print('No Interaction files uploaded!')
     else:
     	interactionFiles_obj = [ReadFile.ReadFilesList(file) for file in interactions_FilesList_filename]
     	interactions_files_list = [list(map(lambda x: osp.join(example_path, x), obj.file_list)) for obj in interactionFiles_obj]
-    	if interactions_files_list==[[]]:
-    		print('No Interactions inputted')
-
 
     if config_obj.events_files_list_list==['']:
     	print('No Event files uploaded!')
     else:
     	eventFiles_obj = [ReadFile.ReadFilesList(file) for file in events_FilesList_filename]
     	events_files_list = [list(map(lambda x: osp.join(example_path, x), obj.file_list)) for obj in eventFiles_obj]
-    	if events_files_list==[[]]:
-    		print('No Events inputted')
 
     return interactions_files_list, events_files_list
 
