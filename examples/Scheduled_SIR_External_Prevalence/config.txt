@@ -1,0 +1,11 @@
+Random Seed <>
+Number of worlds <10>
+Number of Days <50>
+Agent Parameter Keys <Agent Index:Compliance>
+Agent list filename <agents.txt>
+Interaction Info Keys <>
+Interaction Files list filename <>
+Location Parameter Keys <>
+Location list filename <>
+Event Parameter Keys <>
+Event Files list filename <>
