@@ -41,7 +41,7 @@ Tutorial 4 : Coming soon...
 [Basic overview of the Episimmer codebase](https://docs.google.com/document/d/1UmuzVt9S2Zo_DX7Ylq462Fl4U69mO954u2s3zJWOfpg/edit?usp=sharing).
 
 ## UI
-Episimmer is currently Work in Progresss. Check out these point solutions built using Episimmer codebase. <br>
+Episimmer is currently Work in Progresss. Check out these point solutions built using the Episimmer codebase. <br>
 	- [Optimizing Lockdowns](https://optimising-lockdowns.herokuapp.com) <br>
 	- [Efficient Contact tracing](https://contact-tracing.herokuapp.com) <br>
 	- [YACHT protocol](https://hb-yacht.herokuapp.com) <br>
