@@ -1,0 +1,1002 @@
+1000
+Agent Index:Residence
+0:Teacher Dorm
+1:Dorm B
+2:Outside
+3:Teacher Dorm
+4:Dorm A
+5:Teacher Dorm
+6:Dorm B
+7:Teacher Dorm
+8:Teacher Dorm
+9:Dorm A
+10:Outside
+11:Dorm B
+12:Dorm A
+13:Dorm A
+14:Outside
+15:Teacher Dorm
+16:Outside
+17:Dorm B
+18:Outside
+19:Teacher Dorm
+20:Outside
+21:Teacher Dorm
+22:Dorm A
+23:Teacher Dorm
+24:Outside
+25:Dorm A
+26:Dorm A
+27:Dorm B
+28:Teacher Dorm
+29:Dorm B
+30:Dorm A
+31:Dorm B
+32:Teacher Dorm
+33:Dorm A
+34:Dorm B
+35:Dorm B
+36:Dorm A
+37:Outside
+38:Dorm A
+39:Dorm B
+40:Dorm B
+41:Dorm B
+42:Dorm A
+43:Teacher Dorm
+44:Teacher Dorm
+45:Dorm A
+46:Dorm A
+47:Teacher Dorm
+48:Dorm B
+49:Outside
+50:Outside
+51:Dorm B
+52:Dorm B
+53:Dorm B
+54:Dorm B
+55:Dorm A
+56:Dorm A
+57:Outside
+58:Outside
+59:Teacher Dorm
+60:Teacher Dorm
+61:Dorm B
+62:Dorm B
+63:Dorm A
+64:Outside
+65:Dorm B
+66:Outside
+67:Teacher Dorm
+68:Dorm B
+69:Outside
+70:Dorm B
+71:Teacher Dorm
+72:Teacher Dorm
+73:Dorm B
+74:Dorm A
+75:Teacher Dorm
+76:Outside
+77:Outside
+78:Outside
+79:Dorm A
+80:Dorm A
+81:Dorm B
+82:Dorm A
+83:Outside
+84:Dorm B
+85:Outside
+86:Outside
+87:Dorm A
+88:Teacher Dorm
+89:Outside
+90:Outside
+91:Outside
+92:Teacher Dorm
+93:Outside
+94:Dorm B
+95:Dorm A
+96:Dorm A
+97:Teacher Dorm
+98:Teacher Dorm
+99:Outside
+100:Outside
+101:Outside
+102:Dorm A
+103:Teacher Dorm
+104:Teacher Dorm
+105:Dorm A
+106:Outside
+107:Teacher Dorm
+108:Teacher Dorm
+109:Dorm A
+110:Outside
+111:Dorm A
+112:Dorm A
+113:Dorm B
+114:Teacher Dorm
+115:Outside
+116:Dorm A
+117:Dorm A
+118:Dorm B
+119:Dorm A
+120:Teacher Dorm
+121:Dorm A
+122:Outside
+123:Dorm B
+124:Dorm B
+125:Dorm B
+126:Outside
+127:Dorm A
+128:Dorm A
+129:Dorm B
+130:Dorm A
+131:Dorm B
+132:Dorm A
+133:Outside
+134:Dorm B
+135:Outside
+136:Dorm B
+137:Teacher Dorm
+138:Outside
+139:Dorm B
+140:Dorm B
+141:Dorm A
+142:Teacher Dorm
+143:Dorm A
+144:Dorm B
+145:Teacher Dorm
+146:Outside
+147:Teacher Dorm
+148:Dorm B
+149:Dorm A
+150:Dorm B
+151:Outside
+152:Dorm B
+153:Outside
+154:Outside
+155:Dorm A
+156:Teacher Dorm
+157:Teacher Dorm
+158:Dorm A
+159:Dorm A
+160:Teacher Dorm
+161:Teacher Dorm
+162:Dorm B
+163:Outside
+164:Dorm A
+165:Teacher Dorm
+166:Dorm A
+167:Outside
+168:Dorm A
+169:Dorm A
+170:Dorm B
+171:Dorm B
+172:Dorm B
+173:Outside
+174:Dorm A
+175:Teacher Dorm
+176:Dorm B
+177:Outside
+178:Teacher Dorm
+179:Outside
+180:Outside
+181:Outside
+182:Dorm B
+183:Teacher Dorm
+184:Teacher Dorm
+185:Outside
+186:Outside
+187:Dorm B
+188:Teacher Dorm
+189:Outside
+190:Outside
+191:Dorm B
+192:Teacher Dorm
+193:Dorm B
+194:Dorm A
+195:Dorm A
+196:Dorm A
+197:Outside
+198:Dorm A
+199:Dorm A
+200:Outside
+201:Teacher Dorm
+202:Teacher Dorm
+203:Dorm B
+204:Dorm B
+205:Dorm B
+206:Dorm A
+207:Dorm B
+208:Outside
+209:Teacher Dorm
+210:Dorm B
+211:Teacher Dorm
+212:Dorm B
+213:Dorm B
+214:Teacher Dorm
+215:Dorm A
+216:Outside
+217:Dorm B
+218:Outside
+219:Dorm A
+220:Dorm A
+221:Outside
+222:Dorm B
+223:Outside
+224:Dorm B
+225:Dorm B
+226:Outside
+227:Outside
+228:Outside
+229:Outside
+230:Outside
+231:Outside
+232:Dorm B
+233:Dorm B
+234:Teacher Dorm
+235:Dorm A
+236:Dorm A
+237:Dorm A
+238:Outside
+239:Dorm A
+240:Teacher Dorm
+241:Teacher Dorm
+242:Dorm A
+243:Teacher Dorm
+244:Outside
+245:Dorm A
+246:Outside
+247:Dorm A
+248:Dorm A
+249:Dorm A
+250:Teacher Dorm
+251:Dorm A
+252:Teacher Dorm
+253:Outside
+254:Dorm A
+255:Dorm B
+256:Teacher Dorm
+257:Dorm B
+258:Teacher Dorm
+259:Outside
+260:Outside
+261:Outside
+262:Teacher Dorm
+263:Outside
+264:Outside
+265:Outside
+266:Outside
+267:Dorm A
+268:Dorm A
+269:Teacher Dorm
+270:Dorm A
+271:Dorm A
+272:Teacher Dorm
+273:Outside
+274:Outside
+275:Teacher Dorm
+276:Teacher Dorm
+277:Dorm A
+278:Dorm A
+279:Teacher Dorm
+280:Teacher Dorm
+281:Teacher Dorm
+282:Outside
+283:Dorm A
+284:Outside
+285:Teacher Dorm
+286:Teacher Dorm
+287:Dorm B
+288:Dorm B
+289:Dorm B
+290:Outside
+291:Dorm B
+292:Teacher Dorm
+293:Dorm A
+294:Dorm B
+295:Teacher Dorm
+296:Dorm A
+297:Dorm B
+298:Dorm A
+299:Teacher Dorm
+300:Dorm A
+301:Outside
+302:Dorm B
+303:Dorm B
+304:Dorm A
+305:Dorm B
+306:Dorm B
+307:Dorm B
+308:Teacher Dorm
+309:Dorm A
+310:Dorm B
+311:Outside
+312:Teacher Dorm
+313:Teacher Dorm
+314:Outside
+315:Dorm B
+316:Outside
+317:Dorm A
+318:Dorm B
+319:Outside
+320:Dorm B
+321:Dorm A
+322:Outside
+323:Dorm A
+324:Dorm B
+325:Dorm A
+326:Outside
+327:Outside
+328:Teacher Dorm
+329:Dorm A
+330:Dorm B
+331:Dorm B
+332:Dorm B
+333:Teacher Dorm
+334:Outside
+335:Dorm B
+336:Teacher Dorm
+337:Dorm B
+338:Outside
+339:Outside
+340:Dorm B
+341:Outside
+342:Dorm A
+343:Dorm A
+344:Dorm B
+345:Dorm B
+346:Dorm B
+347:Outside
+348:Dorm A
+349:Teacher Dorm
+350:Outside
+351:Dorm A
+352:Dorm A
+353:Outside
+354:Teacher Dorm
+355:Teacher Dorm
+356:Dorm A
+357:Dorm A
+358:Dorm A
+359:Outside
+360:Dorm B
+361:Dorm A
+362:Outside
+363:Teacher Dorm
+364:Outside
+365:Outside
+366:Outside
+367:Dorm A
+368:Dorm B
+369:Teacher Dorm
+370:Dorm A
+371:Dorm A
+372:Dorm B
+373:Outside
+374:Dorm A
+375:Dorm A
+376:Dorm A
+377:Dorm B
+378:Dorm A
+379:Dorm B
+380:Teacher Dorm
+381:Teacher Dorm
+382:Dorm B
+383:Dorm A
+384:Dorm A
+385:Dorm A
+386:Dorm A
+387:Outside
+388:Outside
+389:Outside
+390:Teacher Dorm
+391:Outside
+392:Teacher Dorm
+393:Dorm A
+394:Teacher Dorm
+395:Outside
+396:Teacher Dorm
+397:Outside
+398:Dorm A
+399:Dorm B
+400:Teacher Dorm
+401:Outside
+402:Dorm A
+403:Dorm B
+404:Dorm B
+405:Dorm B
+406:Teacher Dorm
+407:Teacher Dorm
+408:Dorm A
+409:Dorm A
+410:Teacher Dorm
+411:Dorm A
+412:Teacher Dorm
+413:Dorm A
+414:Dorm B
+415:Teacher Dorm
+416:Teacher Dorm
+417:Outside
+418:Outside
+419:Dorm A
+420:Outside
+421:Outside
+422:Dorm B
+423:Outside
+424:Dorm A
+425:Outside
+426:Dorm A
+427:Dorm A
+428:Dorm B
+429:Teacher Dorm
+430:Dorm A
+431:Outside
+432:Dorm B
+433:Dorm B
+434:Teacher Dorm
+435:Teacher Dorm
+436:Dorm B
+437:Outside
+438:Dorm B
+439:Outside
+440:Dorm A
+441:Teacher Dorm
+442:Dorm A
+443:Dorm B
+444:Dorm B
+445:Outside
+446:Outside
+447:Dorm B
+448:Teacher Dorm
+449:Outside
+450:Dorm A
+451:Outside
+452:Outside
+453:Dorm A
+454:Outside
+455:Dorm A
+456:Dorm A
+457:Dorm B
+458:Teacher Dorm
+459:Dorm A
+460:Outside
+461:Dorm A
+462:Dorm B
+463:Dorm A
+464:Dorm A
+465:Dorm B
+466:Teacher Dorm
+467:Dorm B
+468:Dorm B
+469:Dorm A
+470:Dorm A
+471:Dorm A
+472:Dorm A
+473:Outside
+474:Outside
+475:Dorm B
+476:Outside
+477:Dorm A
+478:Dorm B
+479:Outside
+480:Teacher Dorm
+481:Outside
+482:Dorm B
+483:Outside
+484:Dorm B
+485:Dorm A
+486:Outside
+487:Dorm A
+488:Dorm A
+489:Dorm B
+490:Teacher Dorm
+491:Dorm A
+492:Outside
+493:Dorm A
+494:Dorm A
+495:Dorm A
+496:Teacher Dorm
+497:Outside
+498:Dorm A
+499:Dorm B
+500:Dorm A
+501:Outside
+502:Outside
+503:Dorm B
+504:Outside
+505:Dorm B
+506:Teacher Dorm
+507:Dorm B
+508:Dorm A
+509:Outside
+510:Outside
+511:Teacher Dorm
+512:Teacher Dorm
+513:Dorm B
+514:Dorm A
+515:Teacher Dorm
+516:Teacher Dorm
+517:Dorm A
+518:Dorm B
+519:Dorm B
+520:Teacher Dorm
+521:Dorm A
+522:Teacher Dorm
+523:Dorm A
+524:Teacher Dorm
+525:Dorm B
+526:Dorm A
+527:Dorm A
+528:Outside
+529:Dorm B
+530:Dorm B
+531:Dorm B
+532:Outside
+533:Dorm B
+534:Dorm A
+535:Dorm A
+536:Outside
+537:Dorm A
+538:Dorm B
+539:Dorm A
+540:Dorm B
+541:Outside
+542:Dorm A
+543:Dorm B
+544:Outside
+545:Teacher Dorm
+546:Outside
+547:Outside
+548:Dorm A
+549:Dorm A
+550:Dorm B
+551:Teacher Dorm
+552:Dorm B
+553:Outside
+554:Outside
+555:Dorm B
+556:Outside
+557:Dorm A
+558:Outside
+559:Dorm A
+560:Outside
+561:Dorm A
+562:Teacher Dorm
+563:Teacher Dorm
+564:Teacher Dorm
+565:Dorm A
+566:Dorm A
+567:Dorm B
+568:Outside
+569:Dorm A
+570:Dorm A
+571:Dorm B
+572:Outside
+573:Dorm B
+574:Dorm A
+575:Dorm A
+576:Outside
+577:Teacher Dorm
+578:Dorm B
+579:Teacher Dorm
+580:Outside
+581:Outside
+582:Outside
+583:Outside
+584:Teacher Dorm
+585:Teacher Dorm
+586:Teacher Dorm
+587:Teacher Dorm
+588:Outside
+589:Dorm A
+590:Dorm B
+591:Teacher Dorm
+592:Dorm B
+593:Dorm B
+594:Dorm B
+595:Dorm A
+596:Dorm B
+597:Outside
+598:Dorm A
+599:Teacher Dorm
+600:Teacher Dorm
+601:Dorm B
+602:Dorm A
+603:Outside
+604:Outside
+605:Teacher Dorm
+606:Dorm B
+607:Dorm B
+608:Dorm B
+609:Dorm B
+610:Outside
+611:Outside
+612:Teacher Dorm
+613:Teacher Dorm
+614:Dorm A
+615:Dorm B
+616:Outside
+617:Teacher Dorm
+618:Teacher Dorm
+619:Dorm B
+620:Dorm A
+621:Dorm A
+622:Dorm B
+623:Dorm B
+624:Outside
+625:Teacher Dorm
+626:Teacher Dorm
+627:Dorm A
+628:Dorm A
+629:Dorm B
+630:Dorm A
+631:Dorm B
+632:Dorm A
+633:Teacher Dorm
+634:Dorm A
+635:Dorm B
+636:Outside
+637:Outside
+638:Teacher Dorm
+639:Dorm A
+640:Dorm B
+641:Dorm A
+642:Dorm A
+643:Dorm B
+644:Outside
+645:Teacher Dorm
+646:Dorm B
+647:Teacher Dorm
+648:Outside
+649:Dorm B
+650:Dorm A
+651:Dorm A
+652:Outside
+653:Teacher Dorm
+654:Outside
+655:Dorm A
+656:Dorm A
+657:Dorm A
+658:Outside
+659:Teacher Dorm
+660:Dorm B
+661:Dorm A
+662:Dorm B
+663:Outside
+664:Outside
+665:Dorm B
+666:Outside
+667:Outside
+668:Dorm A
+669:Outside
+670:Dorm A
+671:Outside
+672:Dorm B
+673:Teacher Dorm
+674:Outside
+675:Outside
+676:Dorm A
+677:Outside
+678:Dorm A
+679:Teacher Dorm
+680:Dorm A
+681:Outside
+682:Dorm A
+683:Dorm B
+684:Outside
+685:Outside
+686:Dorm B
+687:Outside
+688:Dorm B
+689:Outside
+690:Teacher Dorm
+691:Dorm A
+692:Teacher Dorm
+693:Dorm B
+694:Dorm A
+695:Teacher Dorm
+696:Dorm A
+697:Teacher Dorm
+698:Dorm A
+699:Teacher Dorm
+700:Dorm B
+701:Dorm A
+702:Dorm B
+703:Teacher Dorm
+704:Teacher Dorm
+705:Dorm A
+706:Teacher Dorm
+707:Dorm A
+708:Dorm B
+709:Outside
+710:Outside
+711:Teacher Dorm
+712:Outside
+713:Outside
+714:Dorm B
+715:Dorm B
+716:Teacher Dorm
+717:Dorm A
+718:Outside
+719:Outside
+720:Outside
+721:Dorm A
+722:Teacher Dorm
+723:Teacher Dorm
+724:Teacher Dorm
+725:Dorm A
+726:Dorm A
+727:Dorm A
+728:Dorm A
+729:Dorm B
+730:Dorm A
+731:Dorm A
+732:Dorm B
+733:Outside
+734:Teacher Dorm
+735:Dorm B
+736:Outside
+737:Dorm B
+738:Dorm A
+739:Dorm A
+740:Teacher Dorm
+741:Dorm A
+742:Dorm A
+743:Dorm B
+744:Dorm A
+745:Outside
+746:Teacher Dorm
+747:Dorm A
+748:Teacher Dorm
+749:Dorm A
+750:Outside
+751:Dorm B
+752:Dorm B
+753:Dorm A
+754:Outside
+755:Dorm A
+756:Teacher Dorm
+757:Teacher Dorm
+758:Outside
+759:Dorm B
+760:Outside
+761:Dorm A
+762:Outside
+763:Outside
+764:Teacher Dorm
+765:Dorm B
+766:Dorm A
+767:Dorm A
+768:Dorm A
+769:Dorm B
+770:Teacher Dorm
+771:Teacher Dorm
+772:Dorm B
+773:Teacher Dorm
+774:Teacher Dorm
+775:Outside
+776:Dorm B
+777:Dorm B
+778:Dorm A
+779:Dorm A
+780:Dorm A
+781:Teacher Dorm
+782:Dorm A
+783:Dorm B
+784:Dorm A
+785:Dorm A
+786:Outside
+787:Dorm B
+788:Outside
+789:Dorm A
+790:Dorm B
+791:Teacher Dorm
+792:Outside
+793:Dorm B
+794:Outside
+795:Dorm A
+796:Outside
+797:Dorm B
+798:Dorm A
+799:Dorm A
+800:Outside
+801:Teacher Dorm
+802:Dorm A
+803:Dorm B
+804:Dorm B
+805:Outside
+806:Dorm A
+807:Dorm B
+808:Teacher Dorm
+809:Dorm B
+810:Dorm B
+811:Dorm B
+812:Dorm A
+813:Dorm B
+814:Teacher Dorm
+815:Outside
+816:Teacher Dorm
+817:Dorm B
+818:Dorm A
+819:Dorm B
+820:Teacher Dorm
+821:Outside
+822:Dorm A
+823:Teacher Dorm
+824:Dorm B
+825:Dorm B
+826:Dorm A
+827:Outside
+828:Dorm A
+829:Dorm B
+830:Teacher Dorm
+831:Teacher Dorm
+832:Outside
+833:Teacher Dorm
+834:Teacher Dorm
+835:Teacher Dorm
+836:Outside
+837:Teacher Dorm
+838:Dorm B
+839:Dorm A
+840:Dorm A
+841:Teacher Dorm
+842:Teacher Dorm
+843:Dorm B
+844:Dorm B
+845:Dorm B
+846:Teacher Dorm
+847:Outside
+848:Outside
+849:Dorm B
+850:Teacher Dorm
+851:Outside
+852:Teacher Dorm
+853:Outside
+854:Dorm A
+855:Dorm B
+856:Dorm A
+857:Outside
+858:Teacher Dorm
+859:Outside
+860:Teacher Dorm
+861:Teacher Dorm
+862:Dorm A
+863:Dorm A
+864:Outside
+865:Outside
+866:Dorm A
+867:Dorm B
+868:Dorm A
+869:Teacher Dorm
+870:Teacher Dorm
+871:Outside
+872:Dorm B
+873:Teacher Dorm
+874:Dorm B
+875:Outside
+876:Teacher Dorm
+877:Teacher Dorm
+878:Outside
+879:Teacher Dorm
+880:Outside
+881:Outside
+882:Dorm A
+883:Dorm A
+884:Dorm B
+885:Outside
+886:Teacher Dorm
+887:Outside
+888:Dorm A
+889:Dorm A
+890:Dorm B
+891:Outside
+892:Dorm A
+893:Dorm A
+894:Dorm A
+895:Dorm B
+896:Dorm B
+897:Outside
+898:Dorm A
+899:Outside
+900:Teacher Dorm
+901:Teacher Dorm
+902:Teacher Dorm
+903:Outside
+904:Dorm A
+905:Teacher Dorm
+906:Outside
+907:Teacher Dorm
+908:Dorm A
+909:Dorm A
+910:Outside
+911:Dorm B
+912:Teacher Dorm
+913:Dorm B
+914:Dorm A
+915:Dorm A
+916:Outside
+917:Outside
+918:Outside
+919:Outside
+920:Dorm B
+921:Outside
+922:Dorm A
+923:Dorm B
+924:Outside
+925:Dorm B
+926:Outside
+927:Dorm B
+928:Teacher Dorm
+929:Dorm A
+930:Dorm A
+931:Dorm A
+932:Dorm A
+933:Dorm B
+934:Teacher Dorm
+935:Teacher Dorm
+936:Outside
+937:Teacher Dorm
+938:Dorm A
+939:Dorm A
+940:Dorm A
+941:Outside
+942:Dorm A
+943:Outside
+944:Dorm A
+945:Teacher Dorm
+946:Teacher Dorm
+947:Dorm A
+948:Dorm B
+949:Dorm A
+950:Teacher Dorm
+951:Dorm A
+952:Dorm B
+953:Outside
+954:Teacher Dorm
+955:Dorm A
+956:Dorm B
+957:Dorm B
+958:Outside
+959:Dorm B
+960:Outside
+961:Teacher Dorm
+962:Outside
+963:Teacher Dorm
+964:Teacher Dorm
+965:Outside
+966:Teacher Dorm
+967:Dorm A
+968:Dorm A
+969:Teacher Dorm
+970:Outside
+971:Dorm B
+972:Dorm B
+973:Dorm B
+974:Teacher Dorm
+975:Dorm A
+976:Outside
+977:Dorm A
+978:Outside
+979:Outside
+980:Dorm B
+981:Dorm B
+982:Outside
+983:Outside
+984:Dorm B
+985:Teacher Dorm
+986:Dorm A
+987:Dorm B
+988:Outside
+989:Outside
+990:Outside
+991:Teacher Dorm
+992:Outside
+993:Teacher Dorm
+994:Teacher Dorm
+995:Teacher Dorm
+996:Dorm B
+997:Dorm B
+998:Dorm A
+999:Dorm B
