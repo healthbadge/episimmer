@@ -118,6 +118,7 @@ class ScheduledModel():
 		self.state_vary={}
 		self.infected_states=[]
 		self.state_proportion={}
+		self.external_prev_fn = lambda x,y:0.0
 		self.name='Scheduled Model'
 
 	def insert_state(self, state, mean, vary, transition_fn,infected_state,proportion):
@@ -187,7 +188,7 @@ class ScheduledModel():
 				p_not_inf*=(1-p)
 
 			r=random.random()
-			if r>=1 - p_not_inf:
+			if r>=(1 - p_not_inf) +  self.external_prev_fn(agent, current_time_step):
 				new_state = agent.state
 
 			scheduled_time=self.find_scheduled_time(new_state)
@@ -213,6 +214,9 @@ class ScheduledModel():
 
 	def set_event_recieve_fn(self,fn):
 		self.recieve_fn=fn
+
+	def set_external_prevalence_fn(self,fn):
+		self.external_prev_fn = fn
 
 	def update_event_infection(self,event_info,location,agents_obj,current_time_step,event_restriction_fn):
 		ambient_infection=0
