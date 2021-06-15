@@ -7,7 +7,7 @@ def write_agents(filename,n):
 	info_dict={}
 	#ID enumerates from 0 to n-1
 	header='Agent Index:Compliance'
-	info_dict['Residence']=['High','Low','Medium']
+	info_dict['Compliance']=['High','Low','Medium']
 
 	f=open(filename,'w')
 	f.write(str(n)+'\n')
