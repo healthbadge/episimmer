@@ -130,7 +130,7 @@ class ScheduledModel():
 		self.state_proportion[state]=proportion
 		self.state_fn[state]=None
 
-	def insert_state_func(self,state,fn,transition_fn,infected_state,proportion):
+	def insert_state_custom(self,state,fn,transition_fn,infected_state,proportion):
 		if infected_state:
 
 			self.infected_states.append(state)

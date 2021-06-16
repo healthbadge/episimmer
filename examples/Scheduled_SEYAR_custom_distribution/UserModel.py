@@ -1,4 +1,5 @@
 import Model
+import random
 
 def event_contribute_fn(agent,event_info,location,current_time_step):
 		if agent.state=='Symptomatic':
@@ -8,12 +9,17 @@ def event_contribute_fn(agent,event_info,location,current_time_step):
 		return 0
 
 def event_recieve_fn(agent,ambient_infection,event_info,location,current_time_step):
-	#Example 1
 	beta=0.001
 	return ambient_infection*beta
 
 def fn1(current_time_step):
-	return 3
+	r=random.random()
+	if r<0.2:
+		return 2
+	elif r<0.8:
+		return 3
+	else:
+		return 4
 
 
 class UserModel(Model.ScheduledModel):
@@ -23,7 +29,7 @@ class UserModel(Model.ScheduledModel):
 		self.insert_state('Exposed',5,2,self.scheduled({'Symptomatic':0.3,'Asymptomatic':0.7}),False,0.02)
 		self.insert_state('Symptomatic',11,5,self.scheduled({'Recovered':1}),True,0.02)
 		self.insert_state('Asymptomatic',6,3,self.scheduled({'Recovered':1}),True,0.01)
-		self.insert_state_func('Recovered',fn1,self.p_function({'Recovered':1}),False,0)
+		self.insert_state_custom('Recovered',fn1,self.p_function({'Recovered':1}),False,0)
 
 		self.set_event_contribution_fn(event_contribute_fn)
 		self.set_event_recieve_fn(event_recieve_fn)
