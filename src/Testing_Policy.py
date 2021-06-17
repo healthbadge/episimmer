@@ -7,11 +7,13 @@ import json
 
 class Result():
 
-	def __init__(self, result, agents, machine_name, time_step):
+	def __init__(self, result, agent, machine_name, time_step, machine_start_step, time_step_done):
 		self.result = result
-		self.agents = agents
+		self.agent = agent
 		self.machine_name = machine_name
 		self.time_step = time_step
+		self.machine_start_step = machine_start_step
+		self.time_step_done = time_step_done
 
 	def get_machine_name(self):
 		return self.machine_name
@@ -19,8 +21,6 @@ class Result():
 	def get_result(self):
 		return self.result
 
-	def get_num_agents(self):
-		return len(self.agents)
 
 
 class Machine():
@@ -34,7 +34,8 @@ class Machine():
 		self.true_negative_rate = 1 - self.false_positive_rate
 		self.turnaround_time = turnaround_time
 		self.capacity = capacity
-
+		# In a time_step, a machine can run only once. EDGE CASE : If turnaround_time = 0 and the number of agents to test
+		# is greater than capacity, then the machine runs only once in that time step.
 		self.testtubes = []
 		self.results = []
 		self.available = True
@@ -86,8 +87,8 @@ class Machine():
 	def run_single_test(self, testtube, infected_states):
 		result = "Negative"
 
-		for agent in testtube.agents_test:
-			if(agent.state in infected_states):
+		for agent in testtube.testtube_agent_dict.keys():
+			if(testtube.testtube_agent_dict[agent]["state"] in infected_states):
 				result="Positive"
 				break
 
@@ -101,11 +102,19 @@ class Machine():
 		testtube.set_result(result)
 
 	def populate_machine_results(self,time_step):
-		if(time_step - self.start_step>=self.turnaround_time):
+		if(self.run_completed(time_step)):
 			for testtube_with_result in self.testtubes:
-				result_obj = Result(testtube_with_result.testtube_result, testtube_with_result.agents_test, self.machine_name, time_step)
+				self.save_results(testtube_with_result,time_step)
 				testtube_with_result.set_in_machine(False)
-				self.results.append(result_obj)
+
+	def run_completed(self,time_step):
+		return time_step - self.start_step>=self.turnaround_time
+
+	def save_results(self, testtube,time_step):
+		for agent in testtube.testtube_agent_dict.keys():
+			time_step_entered = testtube.testtube_agent_dict[agent]["time_step"]
+			result_obj = Result(testtube.testtube_result, agent, self.machine_name, time_step_entered, self.start_step, time_step)
+			self.results.append(result_obj)
 
 	def get_results(self):
 		return self.results
@@ -118,15 +127,15 @@ class Machine():
 class Testtube():
 
 	def __init__(self):
-		self.agents_test = []
+		self.testtube_agent_dict = {}
 		self.testtube_result = None
 		self.in_machine = False
 
-	def register_agent(self,agent):
-		self.agents_test.append(agent)
+	def register_agent(self,agent,time_step):
+		self.testtube_agent_dict[agent] = {"state":agent.state, "time_step":time_step}
 
 	def get_num_agents(self):
-		return len(self.agents_test)
+		return len(self.testtube_agent_dict)
 
 	def set_result(self, result):
 		self.testtube_result = result
@@ -136,11 +145,11 @@ class Testtube():
 			self.in_machine = bool_val
 		else:
 			self.in_machine = bool_val
-			self.agents_test = []
+			self.testtube_agent_dict = {}
 			self.testtube_result = None
 
 	def is_empty(self):
-		if(len(self.agents_test)==0):
+		if(len(self.testtube_agent_dict)==0):
 			return True
 
 		return False
@@ -176,15 +185,24 @@ class Test_Policy(Agent_Policy):
 			machine.start_step = None
 
 	def enact_policy(self,time_step,agents,locations,model):
+
 		self.new_time_step(time_step)
+		self.populate_results_in_machine(time_step)
+		self.release_results(time_step)
 		self.register_agent_testtube_func(agents, time_step)
 		self.add_partial_to_ready_queue()
 		self.register_testtubes_to_machines(time_step)
 		self.run_tests(model,time_step)
-		self.populate_results_in_machine(time_step)
-		self.release_results(time_step)
+		self.run_edge_case(time_step)
 		self.end_time_step(time_step)
 
+	def run_edge_case(self,time_step):
+		# For the case when turnaround_time = 0
+		for machine in self.machine_list:
+			if machine.run_completed(time_step):
+				self.populate_results_in_machine(time_step)
+				self.release_results(time_step)
+				break
 
 	def set_register_agent_testtube_func(self,fn):
 		self.register_agent_testtube_func = fn
@@ -264,9 +282,9 @@ class Test_Policy(Agent_Policy):
 				cur_list = random.sample(self.cur_testtubes, min(num_testtubes_per_agent,len(self.cur_testtubes)))
 
 				for testtube in cur_list:
-					testtube.register_agent(agent)
+					testtube.register_agent(agent,time_step)
 
-					if(len(testtube.agents_test)>=num_agents_per_testtube):
+					if(testtube.get_num_agents()>=num_agents_per_testtube):
 						self.ready_queue.append(testtube)
 						self.cur_testtubes.remove(testtube)
 			else:
@@ -305,8 +323,7 @@ class Test_Policy(Agent_Policy):
 
 	def release_results_to_agents(self,results):
 		for result_obj in results:
-			for agent in result_obj.agents:
-				self.update_agent_policy_history(agent,result_obj)
+			self.update_agent_policy_history(result_obj.agent,result_obj)
 
 	def release_results_to_policy(self,results,time_step):
 		for result_obj in results:
@@ -322,8 +339,8 @@ class Test_Policy(Agent_Policy):
 				self.statistics[time_step][machine_name]['Number of Negative Results'] +=1
 				self.statistics[time_step]['Total Negative Results'] += 1
 
-			self.statistics[time_step][machine_name]['Number of Agents Tested'] += result_obj.get_num_agents()
-			self.statistics[time_step]['Total Agents Tested'] += result_obj.get_num_agents()
+			self.statistics[time_step][machine_name]['Number of Agents Tested'] += 1
+			self.statistics[time_step]['Total Agents Tested'] += 1
 
 
 	def release_results(self,time_step):

@@ -41,7 +41,7 @@ class agent_policy_based_lockdown(Agent_Policy):
 				history = agent.get_policy_history(self.policy_to_consider)
 				if(len(history)):
 					last_time_step = history[-1].time_step
-					if(time_step - last_time_step <=self.time_period):
+					if(time_step - last_time_step < self.time_period):
 						result = self.get_accumulated_result(history,last_time_step)
 						if(result in self.value_list):
 							agent.restrict_recieve_infection()
