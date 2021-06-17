@@ -10,6 +10,7 @@ class StochasticModel():
 		self.infected_states=infected_states
 		self.state_proportion=state_proportion
 		self.name='Stochastic Model'
+		self.external_prev_fn = lambda x,y:0.0
 
 		self.reset()
 
@@ -76,7 +77,7 @@ class StochasticModel():
 
 			for p in agent.event_probabilities:
 				p_not_inf*=(1-p)
-			return 1 - p_not_inf
+			return (1 - p_not_inf) +  self.external_prev_fn(agent, current_time_step)
 
 	def p_infection(self,p_infected_states_list,fn):
 		return partial(self.full_p_infection,fn,p_infected_states_list)
@@ -89,6 +90,9 @@ class StochasticModel():
 
 	def set_event_recieve_fn(self,fn):
 		self.recieve_fn=fn
+
+	def set_external_prevalence_fn(self,fn):
+		self.external_prev_fn = fn
 
 	def update_event_infection(self,event_info,location,agents_obj,current_time_step,event_restriction_fn):
 		ambient_infection=0
@@ -116,6 +120,7 @@ class ScheduledModel():
 		self.state_vary={}
 		self.infected_states=[]
 		self.state_proportion={}
+		self.external_prev_fn = lambda x,y:0.0
 		self.name='Scheduled Model'
 		self.state_fn={}
 
@@ -207,16 +212,15 @@ class ScheduledModel():
 			p_not_inf=1
 			for c_dict in agent.contact_list:
 				contact_index=c_dict['Interacting Agent Index']
-
+				contact_agent=agents[contact_index]
 				if contact_agent.can_contribute_infection and agent.can_recieve_infection:
-					contact_agent=agents[contact_index]
 					p_not_inf*=(1-fn(p_infected_states_list,contact_agent,c_dict,current_time_step))
 
 			for p in agent.event_probabilities:
 				p_not_inf*=(1-p)
 
 			r=random.random()
-			if r>=1 - p_not_inf:
+			if r>=(1 - p_not_inf) +  self.external_prev_fn(agent, current_time_step):
 				new_state = agent.state
 
 			scheduled_time=self.find_scheduled_time(new_state)
@@ -242,6 +246,9 @@ class ScheduledModel():
 
 	def set_event_recieve_fn(self,fn):
 		self.recieve_fn=fn
+
+	def set_external_prevalence_fn(self,fn):
+		self.external_prev_fn = fn
 
 	def update_event_infection(self,event_info,location,agents_obj,current_time_step,event_restriction_fn):
 		ambient_infection=0
