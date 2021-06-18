@@ -287,8 +287,7 @@ class ReadOneTimeEvents(BaseReadFile):
 		for i in range(self.no_events):
 			line = (self.get_value(f.readline())).split(':')
 			for time in line[0].split(','):
-				self.eventsAt[int(time)] = self.eventsAt.get(
-					int(time), []) + [':'.join(line[1:])]
+				self.eventsAt[int(time)] = self.eventsAt.get(int(time), []) + [':'.join(line[1:])]
 		f.close()
 
 	def ReadOneTimeEvents(self, config_obj, locations_obj, current_time_step):

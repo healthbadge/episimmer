@@ -33,7 +33,7 @@ def get_file_paths(example_path,config_obj):
     if config_obj.events_files_list_list != ['']:
         events_FilesList_filename = [osp.join(example_path, events_files_list) for events_files_list in config_obj.events_files_list_list]
 
-    if config_obj.locations_filename != "":
+    if config_obj.locations_filename != '':
     	locations_filename=osp.join(example_path,config_obj.locations_filename)
 
     if config_obj.one_time_event_file != '':

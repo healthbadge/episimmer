@@ -30,8 +30,7 @@ class World():
         agents_obj = ReadFile.ReadAgents(self.agents_filename, self.config_obj)
 
         # Intialize locations
-        locations_obj = ReadFile.ReadLocations(
-            self.locations_filename, self.config_obj)
+        locations_obj = ReadFile.ReadLocations(self.locations_filename, self.config_obj)
 
         # Initialize one time events
         oneTimeEvent_obj = ReadFile.ReadOneTimeEvents(self.one_time_event_file)
