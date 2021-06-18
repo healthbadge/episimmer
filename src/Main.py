@@ -22,7 +22,7 @@ def get_config_path(path):
 
 def get_file_paths(example_path,config_obj):
     # File Names
-    locations_filename = None
+    locations_filename = one_time_event_file = None
     events_FilesList_filename = interactions_FilesList_filename = []
 
     agents_filename=osp.join(example_path, config_obj.agents_filename)
