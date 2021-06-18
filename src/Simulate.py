@@ -35,7 +35,7 @@ class Simulate():
 		#Store state list
 		self.store_state()
 
-	def onStartTimeStep(self, interactionFiles_listOfList, eventFiles_listOfList, current_time_step):
+	def onStartTimeStep(self, interactionFiles_listOfList, eventFiles_listOfList, oneTimeEvent_obj, current_time_step):
 		self.current_time_step=current_time_step
 
 		for agent in self.agents_obj.agents.values():
@@ -58,6 +58,9 @@ class Simulate():
 			if eventFiles_list != []:
 				events_filename = eventFiles_list[current_time_step % len(eventFiles_list)]
 				ReadFile.ReadEvents(events_filename,self.config_obj,self.locations_obj)
+
+		# Load One Time Events
+		oneTimeEvent_obj.ReadOneTimeEvents(self.config_obj, self.locations_obj, current_time_step)
 
 		#Enact policies by updating agent and location states.
 		for policy in self.policy_list:
