@@ -57,7 +57,7 @@ class Simulate():
 		for eventFiles_list in eventFiles_listOfList:
 			if eventFiles_list != []:
 				events_filename = eventFiles_list[current_time_step % len(eventFiles_list)]
-				ReadFile.ReadEvents(events_filename,self.config_obj,self.locations_obj)
+				ReadFile.ReadEvents(events_filename,self.config_obj,self.locations_obj, self.agents_obj)
 
 		#Enact policies by updating agent and location states.
 		for policy in self.policy_list:
