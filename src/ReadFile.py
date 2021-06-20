@@ -31,7 +31,7 @@ class ReadConfiguration():
 		self.locations_filename=self.get_value_config(f.readline())
 		self.event_info_keys=self.get_value_config(f.readline())
 		self.events_files_list_list=(self.get_value_config(f.readline())).split(',')
-
+		self.one_time_event_file = self.get_value_config(f.readline())
 		f.close()
 
 		if 'Agent Index' not in self.agent_info_keys.split(':'):
@@ -291,18 +291,49 @@ class ReadEvents(BaseReadFile):
 
 class ReadOneTimeEvents(BaseReadFile):
 	def __init__(self, filename):
-		if filename == "" or filename == None:
+		super().__init__()
+		self.filename = filename
+		if self.filename == "" or self.filename == None:
 			return
-		self.oneTimeEventAt = {}
-		f = open(filename, 'r')
-		size = f.readline()
-		header = f.readline()
-		lines = f.readlines()
-		if(lines!=[] and lines[-1][-1]!='\n'):
-			lines[-1] = lines[-1] + "\n"
+		f = open(self.filename, 'r')
+		self.no_events = int(self.get_value(f.readline()))
+		self.event_info_keys = self.get_value(f.readline())
+		self.one_time_parameter_keys = self.event_info_keys.split(':')
+		self.parameter_keys = self.one_time_parameter_keys[1:]
+		self.eventsAt = {}
+		for i in range(self.no_events):
+			line = (self.get_value(f.readline())).split(':')
+			for time in line[0].split(','):
+				self.eventsAt[int(time)] = self.eventsAt.get(int(time), []) + [':'.join(line[1:])]
 		f.close()
-		lines.sort(key = lambda x: (int)((x.split(':'))[0]))
-		f = open(filename, 'w')
-		f.writelines(headers)
-		f.writelines(lines)
-		f.close()
+
+	def ReadOneTimeEvents(self, config_obj, locations_obj, current_time_step):
+		if self.filename == "" or self.filename == None:
+			return
+		self.config_obj = config_obj
+		self.locations_obj = locations_obj
+		if self.event_info_keys != 'Time Step:' + config_obj.event_info_keys:
+			print("Error! One Time Event parameters donot match the config.txt file")
+			return None
+		for event in self.eventsAt.get(current_time_step, []):
+			parameter_list = (self.get_value(event)).split(':')
+			location_index, info_dict = self.get_event(parameter_list)
+			self.locations_obj.locations[location_index].add_event(info_dict)
+
+	def get_event(self, parameter_list):
+		info_dict = {}
+		location_index = None
+		for i, key in enumerate(self.parameter_keys):
+			if key == 'Location Index':
+				location_index = parameter_list[i]
+
+			if key == 'Agents':
+				info_dict[key] = list(set(parameter_list[i].split(',')))
+				if info_dict[key][-1] == '':
+					info_dict[key] = info_dict[:-1]
+			else:
+				info_dict[key] = parameter_list[i]
+
+		if location_index == None:
+			print("Error! No event to read")
+		return location_index, info_dict
