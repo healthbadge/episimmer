@@ -183,7 +183,7 @@ class ReadInteractions(BaseReadFile):
 
 				for i in range(self.n):
 					info_dict=csv_list[i]
-					if(info_dict['Agent Index'] in list(self.agents_obj.agents) and info_dict['Interacting Agent Index'] in list(self.agents_obj.agents)):
+					if(info_dict['Agent Index'] in set(self.agents_obj.agents) and info_dict['Interacting Agent Index'] in set(self.agents_obj.agents)):
 						agent_index=info_dict['Agent Index']
 						agents_obj.agents[agent_index].add_contact(info_dict)
 
@@ -198,7 +198,7 @@ class ReadInteractions(BaseReadFile):
 
 			info_dict[key]=parameter_list[i]
 
-		if(agent_index not in list(self.agents_obj.agents) or info_dict['Interacting Agent Index'] not in list(self.agents_obj.agents)):
+		if(agent_index not in set(self.agents_obj.agents) or info_dict['Interacting Agent Index'] not in set(self.agents_obj.agents)):
 			agent_index,info_dict = None, None
 
 		return agent_index,info_dict
