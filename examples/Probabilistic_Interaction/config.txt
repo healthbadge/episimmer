@@ -3,7 +3,7 @@ Number of worlds <10>
 Number of Days <10>
 Agent Parameter Keys <Agent Index>
 Agent list filename <agents.txt>
-Interaction Info Keys <Agent Index:Interacting Agent Index>
+Interaction Info Keys <Probability:Agents>
 Interaction Files list filename <>
 Probabilistic Interaction Files list filename <probabilistic_interaction_files_list.txt>
 Location Parameter Keys <Location Index>

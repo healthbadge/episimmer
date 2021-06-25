@@ -26,7 +26,6 @@ class ReadConfiguration():
 		self.agent_info_keys=self.get_value_config(f.readline())
 		self.agents_filename=self.get_value_config(f.readline())
 		self.interaction_info_keys=self.get_value_config(f.readline())
-		print(self.interaction_info_keys)
 		self.interactions_files_list_list=(self.get_value_config(f.readline())).split(',')
 		self.probabilistic_interactions_files_list_list=(self.get_value_config(f.readline())).split(',')
 
@@ -174,14 +173,11 @@ class ReadInteractions(BaseReadFile):
 				csv_list=list(csv_dict_reader)
 				self.n=len(csv_list)
 
-				interaction_info_keys = ':'.join(csv_dict_reader.fieldnames)
-				if interaction_info_keys != config_obj.interaction_info_keys:
+				self.parameter_keys = ':'.join(csv_dict_reader.fieldnames)
+				if self.parameter_keys != config_obj.interaction_info_keys:
 
 					print("Error! Interaction Information parameters donot match the config.txt file")
 					return None
-
-				self.parameter_keys=csv_list
-				self.agents={}
 
 				for i in range(self.n):
 					info_dict=csv_list[i]
@@ -214,16 +210,15 @@ class ReadProbabilisticInteractions(BaseReadFile):
 		if filename=="" or filename==None:
 			return
 
-		#TODO .csv
 		if filename.endswith('.txt'):
 			f=open(filename,'r')
 			self.no_interaction_sets=int(self.get_value(f.readline()))
-			interaction_info_keys=self.get_value(f.readline())
-			#TODO : Setup check system
-			#if interaction_info_keys != config_obj.interaction_info_keys:
-			#	print("Error! Probabilistic Interaction parameters donot match the config.txt file")
-			#	return None
-			self.parameter_keys=interaction_info_keys.split(':')
+			self.parameter_keys=self.get_value(f.readline()).split(':')
+			config_interaction_info_keys_list=config_obj.interaction_info_keys.split(':')
+
+			if self.parameter_keys != config_interaction_info_keys_list and  self.parameter_keys[2:] != config_interaction_info_keys_list and self.parameter_keys[2:] != config_interaction_info_keys_list[2:]:
+				print("Error! Probabilistic Interaction parameters donot match the config.txt file")
+				return None
 
 			for i in range(self.no_interaction_sets):
 				parameter_list=(self.get_value(f.readline())).split(':')
