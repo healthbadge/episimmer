@@ -35,7 +35,7 @@ class Simulate():
 		#Store state list
 		self.store_state()
 
-	def onStartTimeStep(self, interactionFiles_listOfList, eventFiles_listOfList, oneTimeEvent_obj, current_time_step):
+	def onStartTimeStep(self, interactionFiles_listOfList, eventFiles_listOfList, probabilistic_interactionFiles_listOfList, oneTimeEvent_obj, current_time_step):
 		self.current_time_step=current_time_step
 
 		for agent in self.agents_obj.agents.values():
@@ -52,6 +52,12 @@ class Simulate():
 			if interactionFiles_list != []:
 				interactions_filename = interactionFiles_list[current_time_step % len(interactionFiles_list)]
 				ReadFile.ReadInteractions(interactions_filename,self.config_obj,self.agents_obj)
+
+		# Load probabilistic interactions
+		for probabilistic_interactionFiles_list in probabilistic_interactionFiles_listOfList:
+			if probabilistic_interactionFiles_list != []:
+				probabilistic_interactions_filename = probabilistic_interactionFiles_list[current_time_step % len(probabilistic_interactionFiles_list)]
+				ReadFile.ReadProbabilisticInteractions(probabilistic_interactions_filename,self.config_obj,self.agents_obj)
 
 		# Load Events
 		for eventFiles_list in eventFiles_listOfList:

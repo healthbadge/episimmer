@@ -1,6 +1,7 @@
 import Agent
 import Location
 import random
+import copy
 import re
 import time
 from csv import DictReader
@@ -25,7 +26,9 @@ class ReadConfiguration():
 		self.agent_info_keys=self.get_value_config(f.readline())
 		self.agents_filename=self.get_value_config(f.readline())
 		self.interaction_info_keys=self.get_value_config(f.readline())
+		print(self.interaction_info_keys)
 		self.interactions_files_list_list=(self.get_value_config(f.readline())).split(',')
+		self.probabilistic_interactions_files_list_list=(self.get_value_config(f.readline())).split(',')
 
 		self.location_info_keys=self.get_value_config(f.readline())
 		self.locations_filename=self.get_value_config(f.readline())
@@ -171,7 +174,6 @@ class ReadInteractions(BaseReadFile):
 				csv_list=list(csv_dict_reader)
 				self.n=len(csv_list)
 
-				# Assuming that we have a config file that is .txt file.
 				interaction_info_keys = ':'.join(csv_dict_reader.fieldnames)
 				if interaction_info_keys != config_obj.interaction_info_keys:
 
@@ -202,6 +204,72 @@ class ReadInteractions(BaseReadFile):
 			agent_index,info_dict = None, None
 
 		return agent_index,info_dict
+
+
+class ReadProbabilisticInteractions(BaseReadFile):
+	def __init__(self,filename,config_obj,agents_obj):
+		super().__init__()
+		self.config_obj=config_obj
+		self.agents_obj=agents_obj
+		if filename=="" or filename==None:
+			return
+
+		#TODO .csv
+		if filename.endswith('.txt'):
+			f=open(filename,'r')
+			self.no_interaction_sets=int(self.get_value(f.readline()))
+			interaction_info_keys=self.get_value(f.readline())
+			#TODO : Setup check system
+			#if interaction_info_keys != config_obj.interaction_info_keys:
+			#	print("Error! Probabilistic Interaction parameters donot match the config.txt file")
+			#	return None
+			self.parameter_keys=interaction_info_keys.split(':')
+
+			for i in range(self.no_interaction_sets):
+				parameter_list=(self.get_value(f.readline())).split(':')
+				interactions_list=self.get_interactions(parameter_list)
+				for (agent_index,info_dict) in interactions_list:
+					agents_obj.agents[agent_index].add_contact(info_dict)
+
+			f.close()
+
+	def get_interactions(self,parameter_list):
+		info_dict={}
+		agent_indexes=[]
+		interactions_list=[]
+		interaction_probability=0
+
+		for i,key in enumerate(self.parameter_keys):
+			if key=='Probability':
+				try:
+					interaction_probability=float(parameter_list[i])
+					if interaction_probability<0 or interaction_probability>1:
+						return []
+				except:
+					return []
+
+			elif key=='Agents':
+				agent_indexes=list(set(parameter_list[i].split(',')))
+				list(set(agent_indexes) & set(self.agents_obj.agents))
+
+			else:
+				info_dict[key]=parameter_list[i]
+
+		for indx,agent_index1 in enumerate(agent_indexes):
+			for agent_index2 in agent_indexes[indx+1:]:
+				if random.random() < interaction_probability:
+
+					temp_info_dict=copy.deepcopy(info_dict)
+					temp_info_dict['Agent Index']=agent_index1
+					temp_info_dict['Interacting Agent Index']=agent_index2
+					interactions_list.append((agent_index1,temp_info_dict))
+
+					temp_info_dict=copy.deepcopy(info_dict)
+					temp_info_dict['Agent Index']=agent_index2
+					temp_info_dict['Interacting Agent Index']=agent_index1
+					interactions_list.append((agent_index2,temp_info_dict))
+
+		return interactions_list
 
 
 class ReadLocations(BaseReadFile):

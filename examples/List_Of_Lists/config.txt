@@ -5,6 +5,7 @@ Agent Parameter Keys <Agent Index:Type:Residence:HLA Type>
 Agent list filename <agents.csv>
 Interaction Info Keys <Agent Index:Interacting Agent Index:Time Interval:Intensity>
 Interaction Files list filename <interaction_files_list.txt,interaction_files_list2.txt>
+Probabilistic Interaction Files list filename <>
 Location Parameter Keys <Location Index:Type:Ventilation:Roomsize:Capacity>
 Location list filename <locations.txt>
 Event Parameter Keys <Location Index:Agents:Time Interval>
