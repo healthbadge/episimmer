@@ -39,13 +39,16 @@ def get_file_paths(example_path,config_obj):
     if config_obj.one_time_event_file != '':
     	one_time_event_file = osp.join(example_path, config_obj.one_time_event_file)
 
-    return agents_filename, interactions_FilesList_filename, events_FilesList_filename, locations_filename, one_time_event_file
+    if config_obj.probabilistic_interactions_files_list_list != '':
+    	probabilistic_interactions_FilesList_filename = [osp.join(example_path, interactions_files_list) for interactions_files_list in config_obj.probabilistic_interactions_files_list_list]
+
+    return agents_filename, interactions_FilesList_filename, events_FilesList_filename, locations_filename, one_time_event_file, probabilistic_interactions_FilesList_filename
 
 
-def get_file_names_list(example_path,interactions_FilesList_filename,events_FilesList_filename,config_obj):
+def get_file_names_list(example_path,interactions_FilesList_filename,events_FilesList_filename,probabilistic_interactions_FilesList_filename,config_obj):
     # Reading through a file (for interactions/events) that contain file names which contain interactions and event details for a time step
 
-    interactions_files_list = events_files_list = []
+    interactions_files_list = events_files_list = probabilistic_interactions_files_list = []
 
     if config_obj.interactions_files_list_list==['']:
     	print('No Interaction files uploaded!')
@@ -53,13 +56,19 @@ def get_file_names_list(example_path,interactions_FilesList_filename,events_File
     	interactionFiles_obj = [ReadFile.ReadFilesList(file) for file in interactions_FilesList_filename]
     	interactions_files_list = [list(map(lambda x: osp.join(example_path, x), obj.file_list)) for obj in interactionFiles_obj]
 
+    if config_obj.probabilistic_interactions_files_list_list==['']:
+    	print('No Probabilistic Interaction files uploaded!')
+    else:
+    	probabilistic_interactionFiles_obj = [ReadFile.ReadFilesList(file) for file in probabilistic_interactions_FilesList_filename]
+    	probabilistic_interactions_files_list = [list(map(lambda x: osp.join(example_path, x), obj.file_list)) for obj in probabilistic_interactionFiles_obj]
+
     if config_obj.events_files_list_list==['']:
     	print('No Event files uploaded!')
     else:
     	eventFiles_obj = [ReadFile.ReadFilesList(file) for file in events_FilesList_filename]
     	events_files_list = [list(map(lambda x: osp.join(example_path, x), obj.file_list)) for obj in eventFiles_obj]
 
-    return interactions_files_list, events_files_list
+    return interactions_files_list, events_files_list, probabilistic_interactions_files_list
 
 def get_model(example_path):
     UserModel = module_from_file("Generate_model", osp.join(example_path,'UserModel.py'))
@@ -84,13 +93,13 @@ if __name__=="__main__":
     config_obj=ReadFile.ReadConfiguration(config_filename)
 
     agents_filename, interactions_FilesList_filename,\
-        events_FilesList_filename, locations_filename, one_time_event_file = get_file_paths(example_path, config_obj)
-    interactions_files_list, events_files_list = get_file_names_list(example_path,interactions_FilesList_filename,events_FilesList_filename,config_obj)
+        events_FilesList_filename, locations_filename, one_time_event_file, probabilistic_interactions_FilesList_filename = get_file_paths(example_path, config_obj)
+    interactions_files_list, events_files_list, probabilistic_interactions_files_list = get_file_names_list(example_path,interactions_FilesList_filename,events_FilesList_filename,probabilistic_interactions_FilesList_filename,config_obj)
 
     # User Model and Policy
     model = get_model(example_path)
     policy_list, event_restriction_fn=get_policy(example_path)
 
     # Creation of World object
-    world_obj = World.World(config_obj, model, policy_list, event_restriction_fn, agents_filename, interactions_files_list, locations_filename, events_files_list, one_time_event_file)
+    world_obj = World.World(config_obj, model, policy_list, event_restriction_fn, agents_filename, interactions_files_list,probabilistic_interactions_files_list, locations_filename, events_files_list, one_time_event_file)
     world_obj.simulate_worlds(plot)

@@ -32,7 +32,6 @@ class StochasticModel():
 			return None
 
 		list_agent_indices= list(agents.keys())
-		# print(agents.keys)
 		random.shuffle(list_agent_indices)
 		cum_proportion=0
 		for state in self.state_proportion.keys():

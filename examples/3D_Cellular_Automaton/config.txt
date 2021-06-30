@@ -5,6 +5,7 @@ Agent Parameter Keys <Agent Index>
 Agent list filename <agents.txt>
 Interaction Info Keys <Agent Index:Interacting Agent Index>
 Interaction Files list filename <interactions_files_list.txt>
+Probabilistic Interaction Files list filename <>
 Location Parameter Keys <Location Index>
 Location list filename <locations.txt>
 Event Parameter Keys <>
