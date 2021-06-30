@@ -13,6 +13,7 @@ class ReadConfiguration():
 		self.starting_exposed_percentage=None
 		self.agent_info_keys=None
 		self.interaction_info_keys=None
+		self.example_path=filename.partition('/')[0]
 
 		f = open(filename,"r")
 

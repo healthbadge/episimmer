@@ -77,12 +77,19 @@ class World():
             print(tdict[x])
 		"""
 
-        if(plot):
-            for state in tdict.keys():
-                plt.plot(tdict[state])
+        for state in tdict.keys():
+            plt.plot(tdict[state])
 
-            plt.title(self.model.name+' plot')
-            plt.legend(list(tdict.keys()), loc='upper right', shadow=True)
+        plt.title(self.model.name+' plot')
+        plt.legend(list(tdict.keys()), loc='upper right', shadow=True)
+        plt.ylabel('Population')
+        plt.xlabel('Time Steps (in unit steps)')
+        plt.grid(b=True, which='major', color='#666666', linestyle='-')
+        plt.minorticks_on()
+        plt.grid(b=True, which='minor', color='#999999',linestyle='-', alpha=0.2)
+
+        if plot:
             plt.show()
         else:
+            plt.savefig(self.config_obj.example_path + '/results.jpg')
             return tdict
