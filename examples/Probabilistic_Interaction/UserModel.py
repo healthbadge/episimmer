@@ -12,8 +12,8 @@ class UserModel(Model.StochasticModel):
 		infected_states=['Infected']	#These are the states that can infect
 		state_proportion={				#This is the starting proportions of each state
 							'Susceptible':0.8,
-							'Infected':0.2,
-							'Recovered':0
+							'Infected':0.1,
+							'Recovered':0.1
 						}
 		Model.StochasticModel.__init__(self,individual_types,infected_states,state_proportion)  #We use the inbuilt model in the package
 		self.set_transition('Susceptible', 'Infected', self.p_infection(None,probabilityOfInfection_fn))	#Adding S-> I transition which is based on probability)fInfection_fn

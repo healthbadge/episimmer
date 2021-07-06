@@ -31,16 +31,19 @@ class StochasticModel():
 			print("Error! Starting state proportions don't add up to 1")
 			return None
 
-		list_agent_indices= list(agents.keys())
-		random.shuffle(list_agent_indices)
-		cum_proportion=0
+		prob_list=[]
+		cum_prob=0
 		for state in self.state_proportion.keys():
-			proportion=self.state_proportion[state]
-			for i in range(int(cum_proportion*len(list_agent_indices)),int((cum_proportion+proportion)*len(list_agent_indices))):
-				agent=agents[list_agent_indices[i]]
-				agent.state=state
-				agent.schedule_time_left=None
-			cum_proportion+=proportion
+			cum_prob+=self.state_proportion[state]
+			prob_list.append(cum_prob)
+
+		for agent in agents.values():
+			r=random.random()
+			for indx,value in enumerate(prob_list):
+				if r<value:
+					state=list(self.state_proportion.keys())[indx]
+					agent.initialize_state(state)
+					break
 
 
 	def find_next_state(self,agent,agents,current_time_step):
