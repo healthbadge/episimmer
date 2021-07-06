@@ -40,12 +40,19 @@ class ReadConfiguration():
 			raise Exception("Error! Agent file  does not contain parameter \'Agent Index\'")
 
 		if self.interaction_info_keys.split(':') != ['']:
-			if 'Agent Index' not in self.interaction_info_keys.split(':'):
-				print("Interaction definition does not contain parameter \'Agent Index\'")
+			if self.probabilistic_interactions_files_list_list ==['']:
+				if 'Agent Index' not in self.interaction_info_keys.split(':'):
+					print("Interaction definition does not contain parameter \'Agent Index\'")
 
+				if 'Interacting Agent Index' not in self.interaction_info_keys.split(':'):
+					print("Interaction definition does not contain parameter \'Interacting Agent Index\'")
 
-			if 'Interacting Agent Index' not in self.interaction_info_keys.split(':'):
-				print("Interaction definition does not contain parameter \'Interacting Agent Index\'")
+			if self.interactions_files_list_list==['']:
+				if 'Agents' not in self.interaction_info_keys.split(':'):
+					print("Interaction definition does not contain parameter \'Agents\'")
+
+				if 'Probability' not in self.interaction_info_keys.split(':'):
+					print("Interaction definition does not contain parameter \'Probability\'")
 
 		if self.event_info_keys.split(':') != ['']:
 			if 'Location Index' not in self.location_info_keys.split(':'):
