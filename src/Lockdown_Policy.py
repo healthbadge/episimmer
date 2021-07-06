@@ -1,5 +1,4 @@
 from Policy import Agent_Policy
-import random
 
 class full_lockdown(Agent_Policy):
 	def __init__(self,do_lockdown_fn):

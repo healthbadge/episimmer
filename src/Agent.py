@@ -1,8 +1,3 @@
-
-import random
-import copy
-import numpy as np
-
 class Agent():
 	def __init__(self,state,info_dict):
 		self.state=state
@@ -12,7 +7,7 @@ class Agent():
 		self.info=info_dict
 		self.index=info_dict['Agent Index']
 		self.event_probabilities=[]
-		
+
 		self.schedule_time_left=None
 		self.can_recieve_infection=True
 		self.can_contribute_infection=True

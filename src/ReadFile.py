@@ -3,7 +3,6 @@ import Location
 import random
 import copy
 import re
-import time
 from csv import DictReader
 
 class ReadConfiguration():
