@@ -1,8 +1,6 @@
 import argparse
 from csv import DictWriter
 
-# python events.py events.txt -ag1 "1,2" -ag2 "3,4"
-
 def readAgents(agents):
     agList = ""
     if agents.endswith('.txt'):

@@ -2,7 +2,6 @@ import argparse
 import ast
 from csv import DictWriter
 
-
 def makeLocation(filename, n, titles=None, pdicts=None):
     k = len(titles)
     div = []

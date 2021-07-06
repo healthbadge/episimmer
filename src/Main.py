@@ -3,6 +3,16 @@ import World
 import argparse
 from Utility import *
 
+def get_model(example_path):
+    UserModel = module_from_file("Generate_model", osp.join(example_path, 'UserModel.py'))
+    model = UserModel.UserModel()
+    return model
+
+def get_policy(example_path):
+    Generate_policy = module_from_file("Generate_policy", osp.join(example_path, 'Generate_policy.py'))
+    policy_list, event_restriction_fn = Generate_policy.generate_policy()
+    return policy_list, event_restriction_fn
+
 if __name__=="__main__":
 
     arg_parser = argparse.ArgumentParser(prog='Main.py', usage='%(prog)s example_path [options]')
@@ -23,8 +33,9 @@ if __name__=="__main__":
     config_obj=ReadFile.ReadConfiguration(config_filename)
 
     agents_filename, interactions_FilesList_filename,\
-        events_FilesList_filename, locations_filename, one_time_event_file, probabilistic_interactions_FilesList_filename = get_file_paths(example_path, config_obj)
-    interactions_files_list, events_files_list, probabilistic_interactions_files_list = get_file_names_list(example_path,interactions_FilesList_filename,events_FilesList_filename,probabilistic_interactions_FilesList_filename,config_obj)
+        events_FilesList_filename, locations_filename, one_time_event_file, probabilistic_interactions_FilesList_filename = config_obj.get_file_paths(example_path)
+    interactions_files_list, events_files_list, probabilistic_interactions_files_list = config_obj.get_file_names_list(
+        example_path, interactions_FilesList_filename, events_FilesList_filename, probabilistic_interactions_FilesList_filename)
 
     # User Model and Policy
     model = get_model(example_path)
