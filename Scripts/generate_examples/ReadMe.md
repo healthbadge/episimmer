@@ -1,7 +1,7 @@
-# Utility files 
-Python commands with flags and working examples.
+# Utility Files For Generating Examples 
 
 ## 1. agents.py
+Creates a *agent_file.txt/csv* file for the user with input specifications.
 
 -n *no_of_agents*<br>
 Example : creates a new file *filename* with 10 agents.<br>
@@ -26,13 +26,19 @@ Example : clears the file *filename*
 python3 agents.py filename -c
 ```
 
+---
+
 ## 2. config.py
 Creates a config.txt template file for the user.
 ```python
 python3 config.py
 ```
 
+---
+
 ## 3. locations.py
+Creates a *location_file.txt/csv* file for the user with input specifications.
+
 -n *no_of_locations*<br>
 Example : creates a new file *filename* with 10 locations.<br>
 ```python
@@ -47,7 +53,11 @@ python3 locations.py filename -n 10 -p Ventilation "{'Good': 0.1, 'Average': 0.7
 
 > -a *"add_line"* and -c function as mentioned in agents.py.
 
+---
+
 ## 4. events.py
+Creates a *events_file.txt/csv* file for the user with input specifications.
+
 -ag *agent_indices* -loc *location_indices*<br>
 Example : appends to file *filename* events where all *agent_indices* were present in the event at all *location_indices*<br>
 ```python
@@ -68,7 +78,11 @@ python3 events.py filename.csv -ag "1,3,4" -loc "0,1,2"
 python3 events.py filename.csv -ag agents.csv -loc "10" -nh
 ```
 
+---
+
 ## 5. interactions.py
+Creates a *interactions_file.txt/csv* file for the user with input specifications.
+
 -from *agent1_indices* -to *agent2_indices*<br>
 Example : appends to file *filename* interactions from all *agent1_indices* to *agent2_indices*<br>
 ```python
@@ -91,3 +105,4 @@ python3 interactions.py filename.csv -from agents.csv -to "10" -nh
 ```python
 python3 interactions.py filename.csv -from "1,3,4" -to "0,1,2" -b
 ```
+---
