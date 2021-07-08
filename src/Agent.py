@@ -12,13 +12,17 @@ class Agent():
 		self.info=info_dict
 		self.index=info_dict['Agent Index']
 		self.event_probabilities=[]
-		
+
 		self.schedule_time_left=None
 		self.can_recieve_infection=True
 		self.can_contribute_infection=True
 
 		self.policy_dict={}	#Store all policy related status of agent
 		self.initialize_policy_dict()
+
+	def initialize_state(self,state,schedule_time_left=None):
+		self.state=state
+		self.schedule_time_left=schedule_time_left
 
 	def initialize_policy_dict(self):
 		for policy_type in ['Restrict','Testing','Vaccination']:
