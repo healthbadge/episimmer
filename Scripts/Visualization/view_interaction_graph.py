@@ -1,5 +1,5 @@
 from pyvis.network import Network
-
+import argparse
 def get_interaction_graph_from_file(number_of_agents, interaction_file_path):
 
     fp = open(interaction_file_path,'r')
@@ -35,4 +35,14 @@ def get_interaction_graph_from_file(number_of_agents, interaction_file_path):
     fp.close()
     net.show_buttons(filter_=['physics'])
     net.show(outpath)
-    return outpath
+
+if __name__ == "__main__":
+    arg_parser = argparse.ArgumentParser(
+        description="Utility function for generating interaction graph", usage='% (prog)s filename [options]')
+
+    arg_parser.add_argument("--number", "-n", required = True)
+    arg_parser.add_argument("--filename", "-f", required = True)
+
+    args = arg_parser.parse_args()
+
+    get_interaction_graph_from_file(int(args.number), args.filename)

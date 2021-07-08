@@ -1,7 +1,19 @@
-from pyvis.network import Network
+import sys
+sys.path.insert(1, '../../src/')
 
-def get_model_graph(model):
-    outpath = "dummy_model.html"
+from pyvis.network import Network
+import argparse
+from Utility import module_from_file
+
+def get_model(filename):
+    UserModel = module_from_file("Generate_model", filename)
+    model = UserModel.UserModel()
+    return model
+
+def get_model_graph(filename):
+
+    model = get_model(filename)
+    outpath = filename[:-2]+"html"
     net = Network(directed=True)
     states = model.individual_state_types
     infected_states = model.infected_states
@@ -25,6 +37,14 @@ def get_model_graph(model):
 
 
     net.show(outpath)
-    HtmlFile = open(outpath, 'r', encoding='utf-8')
-    source_code = HtmlFile.read()
-    components.html(source_code, height = 600,width=1200)
+
+
+if __name__ == "__main__":
+    arg_parser = argparse.ArgumentParser(
+        description="Utility function for generating disease model graph", usage='% (prog)s filename [options]')
+
+    arg_parser.add_argument("--filename", "-f", required = True)
+
+    args = arg_parser.parse_args()
+
+    get_model_graph(args.filename)
