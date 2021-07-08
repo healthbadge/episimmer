@@ -13,6 +13,10 @@ def get_policy(example_path):
     policy_list, event_restriction_fn = Generate_policy.generate_policy()
     return policy_list, event_restriction_fn
 
+def get_config_path(path):
+    config_filepath = osp.join(path, 'config.txt')
+    return config_filepath
+
 if __name__=="__main__":
 
     arg_parser = argparse.ArgumentParser(prog='Main.py', usage='%(prog)s example_path [options]')

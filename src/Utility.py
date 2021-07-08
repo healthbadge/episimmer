@@ -46,9 +46,3 @@ def module_from_file(module_name, file_path):
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
-
-
-def get_config_path(path):
-    config_filepath = osp.join(path, 'config.txt')
-    return config_filepath
-
