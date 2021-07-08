@@ -8,7 +8,7 @@ def write_agents(filename,n):
 	f.write(header+'\n')
 
 	for i in range(1, n + 1):
-		f.write(str(i)+'\n')
+		f.write(str(i-1)+'\n')
 
 def write_interactions(filename, n):
 	header = 'Agent Index:Interacting Agent Index'
@@ -18,25 +18,25 @@ def write_interactions(filename, n):
 	f.write(header+'\n')
 
 	for i in range(1, n*n + 1):
-		f.write(str(2*i) + ':' + str(2*i - 1) + '\n')
-		f.write(str(2*i - 1) + ':' + str(2*i) + '\n')
+		f.write(str(2*i-1) + ':' + str(2*i - 2) + '\n')
+		f.write(str(2*i - 2) + ':' + str(2*i-1) + '\n')
 
 		if i%n != 1:
-			f.write(str(2*i) + ':' + str(2*i - 2) + '\n')
-			f.write(str(2*i - 1) + ':' + str(2*i - 3) + '\n')
+			f.write(str(2*i-1) + ':' + str(2*i - 3) + '\n')
+			f.write(str(2*i - 2) + ':' + str(2*i - 4) + '\n')
 
 		if i%n != 0:
-			f.write(str(2*i) + ':' + str(2*i + 2) + '\n')
-			f.write(str(2*i - 1) + ':' + str(2*i + 1) + '\n')
+			f.write(str(2*i-1) + ':' + str(2*i + 1) + '\n')
+			f.write(str(2*i - 2) + ':' + str(2*i) + '\n')
 
 		if 1 <= 2*i - 2*n <= 2*n*n:
-			f.write(str(2*i) + ':' + str(2*i - 2*n) + '\n')
+			f.write(str(2*i-1) + ':' + str(2*i - 2*n-1) + '\n')
 		if 1 <= 2*i + 2*n <= 2*n*n:
-			f.write(str(2*i) + ':' + str(2*i + 2*n) + '\n')
+			f.write(str(2*i-1) + ':' + str(2*i + 2*n-1) + '\n')
 		if 1 <= 2*i - 1 - 2*n <= 2*n*n:
-			f.write(str(2*i-1) + ':' + str(2*i - 1 - 2*n) + '\n')
+			f.write(str(2*i-2) + ':' + str(2*i - 2 - 2*n) + '\n')
 		if 1 <= 2*i - 1 + 2*n <= 2*n*n:
-			f.write(str(2*i - 1) + ':' + str(2*i - 1 + 2*n) + '\n')
+			f.write(str(2*i - 2) + ':' + str(2*i - 2 + 2*n) + '\n')
 
 	f.close()
 
