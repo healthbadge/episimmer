@@ -1,5 +1,6 @@
 import Simulate
 import ReadFile
+import os
 from Utility import *
 
 class World():
@@ -54,11 +55,13 @@ class World():
 
         # Average number time series
         tdict = average(tdict, self.config_obj.worlds)
-
+        # make a results directory
+        if not os.path.isdir(self.config_obj.example_path + '/results'):
+            os.mkdir(self.config_obj.example_path + '/results')
         plottor = plotResults(self.model.name, tdict, plot)
-        plottor.savefig(self.config_obj.example_path + '/results.jpg')
+        plottor.savefig(self.config_obj.example_path + '/results/results.jpg')
         if anim:
             animator = animateResults(self.model.name, tdict)
-            animator.save(self.config_obj.example_path + '/results.gif')
+            animator.save(self.config_obj.example_path + '/results/results.gif')
 
         return tdict
