@@ -10,7 +10,7 @@ class TestExamples(unittest.TestCase):
         for i,example in enumerate(examples_list):
             main_path = osp.join("src","Main.py")
             example_path = osp.join("examples",example)
-            process = subprocess.run("python3 {0} {1} -noplot".format(main_path,example_path),shell=True,stdout=subprocess.DEVNULL)
+            process = subprocess.run("python3 {0} {1} -np".format(main_path,example_path),shell=True,stdout=subprocess.DEVNULL)
             if(process.returncode):
                 raise Exception('Example {0} could not be run!'.format(example))
             print("{0}/{1} - {2} - complete".format(i+1,len(examples_list),example))
