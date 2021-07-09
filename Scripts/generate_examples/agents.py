@@ -1,17 +1,21 @@
 import argparse
 import ast
+import random
 from csv import DictWriter
 
-def makeAgents(filename, n, titles = None, pdicts = None):
+def makeAgents(filename, n, titles = "", pdicts = []):
     k = len(titles)
     div = []
-    j = [0]*k
     for pdict in pdicts:
         if sum(pdict.values()) != 1:
             print("ERROR: Proportions don't add up to 1.")
             exit()
         else:
             div.append([[key, int(pdict[key]*n)] for key in pdict])
+            for li in div:
+                for i in range(len(li)):
+                    if li[i][1] == 0 and len(li) != 1:
+                        li.pop(i)
 
     if filename.endswith('.txt'):
         f = open(filename, 'w')
@@ -21,10 +25,11 @@ def makeAgents(filename, n, titles = None, pdicts = None):
             for i in range(n):
                 f.write(str(i))
                 for t in range(k):
-                    while(j[t] < len(div[t]) - 1 and div[t][j[t]][1] == 0):
-                        j[t] += 1
-                    f.write(':' + div[t][j[t]][0])
-                    div[t][j[t]][1] -= 1
+                    index = random.randint(0, len(div[t]) - 1)
+                    f.write(':' + div[t][index][0])
+                    div[t][index][1] -= 1
+                    if(div[t][index][1] == 0 and len(div[t]) != 1):
+                        div[t].pop(index)
                 f.write('\n')
         else:
             f.write(str(n) + '\n')
@@ -42,10 +47,11 @@ def makeAgents(filename, n, titles = None, pdicts = None):
                 for i in range(n):
                     tdict = {'Agent Index': i}
                     for t in range(k):
-                        while(j[t] < len(div[t]) - 1 and div[t][j[t]][1] == 0):
-                            j[t] += 1
-                        tdict[titles[t]] = div[t][j[t]][0]
-                        div[t][j[t]][1] -= 1
+                        index = random.randint(0, len(div[t]) - 1)
+                        tdict[titles[t]] = div[t][index][0]
+                        div[t][index][1] -= 1
+                        if(div[t][index][1] == 0 and len(div[t]) != 1):
+                            div[t].pop(index)
                     writer.writerow(tdict)
             else:
                 fieldnames = ['Agent Index']

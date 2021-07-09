@@ -31,7 +31,10 @@ def makeEvents(filename, agents1, agents2, noHead, both):
     if filename.endswith('.txt'):
         f = open(filename, 'a')
         if not noHead:
-            f.write(str(len(ag1)*len(ag2)) + '\n')
+            if both:
+                f.write(str(2*len(ag1)*len(ag2)) + '\n')
+            else:
+                f.write(str(len(ag1)*len(ag2)) + '\n')
             f.write('Agent Index:Interacting Agent Index\n')
         for a1 in ag1:
             for a2 in ag2:
@@ -74,8 +77,8 @@ if __name__ == "__main__":
 
     # options
     arg_parser.add_argument("filename")
-    arg_parser.add_argument("--agents1", "-from", required=True)
-    arg_parser.add_argument("--agents2", "-to", required=True)
+    arg_parser.add_argument("--agents1", "-from", required=False)
+    arg_parser.add_argument("--agents2", "-to", required=False)
     arg_parser.add_argument("--addLine", "-a", required=False)
     arg_parser.add_argument("--clean", "-c", action="store_true", required=False)
     arg_parser.add_argument("--both", "-b", action="store_true", required=False)

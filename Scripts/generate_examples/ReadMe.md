@@ -86,11 +86,11 @@ Creates a *interactions_file.txt/csv* file for the user with input specification
 -from *agent1_indices* -to *agent2_indices*<br>
 Example : appends to file *filename* interactions from all *agent1_indices* to *agent2_indices*<br>
 ```python
-python3 events.py filename -from "1,2" -to "3,4"
+python3 interactions.py filename -from "1,2" -to "3,4"
 ```
 >NOTE : you may put agents/location files made above as arguments as well. 
 ```python
-python3 events.py filename -from agents1.txt -to agents2.csv
+python3 interactions.py filename -from agents1.txt -to agents2.csv
 ```
 >-a *"ADD_LINE"* and -c function as mentioned in agents.py 
 
