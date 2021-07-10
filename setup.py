@@ -11,11 +11,11 @@ with open('LICENSE') as f:
 setup(
     name='episimmer',
     version='0.1.0',
-    description='Epidemic Simulation',
+    description='Epidemic Simulation Platform',
     long_description=readme,
-    author='Corollary',
-    author_email='team@corollary.com',
-    url='https://github.com/corollary-health/episimmer',
+    author='HealthBadge',
+    author_email='episimmer@healthbadge.org',
+    url='https://github.com/healthbadge/episimmer',
     license=license,
     packages=find_packages(exclude=('tests', 'docs', 'examples'))
 )
