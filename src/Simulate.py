@@ -1,6 +1,3 @@
-import random
-import copy
-import numpy as np
 import ReadFile
 
 class Simulate():

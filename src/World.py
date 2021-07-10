@@ -1,14 +1,7 @@
-import random
-import copy
-import sys
-import matplotlib.pyplot as plt
-from matplotlib import colors
-import numpy as np
-import Agent
 import Simulate
-import math
 import ReadFile
 import os
+from Utility import *
 
 class World():
     def __init__(self, config_obj, model, policy_list, event_restriction_fn, agents_filename, interactionFiles_list, probabilistic_interactionFiles_list, locations_filename, eventFiles_list, one_time_event_file):
@@ -47,17 +40,8 @@ class World():
         end_state = sim_obj.endSimulation()
         return end_state, agents_obj, locations_obj
 
-    # Average number time series
-    def average(self, tdict, number):
-        for k in tdict.keys():
-            l = tdict[k]
-            for i in range(len(l)):
-                tdict[k][i] /= number
-
-        return tdict
-
     # Averages multiple simulations and plots a single plot
-    def simulate_worlds(self, plot=True):
+    def simulate_worlds(self, plot, anim):
 
         tdict = {}
         for state in self.model.individual_state_types:
@@ -69,20 +53,15 @@ class World():
                 for j in range(len(tdict[state])):
                     tdict[state][j] += sdict[state][j]
 
-        tdict = self.average(tdict, self.config_obj.worlds)
+        # Average number time series
+        tdict = average(tdict, self.config_obj.worlds)
+        # make a results directory
+        if not os.path.isdir(self.config_obj.example_path + '/results'):
+            os.mkdir(self.config_obj.example_path + '/results')
+        plottor = plotResults(self.model.name, tdict, plot)
+        plottor.savefig(self.config_obj.example_path + '/results/results.jpg')
+        if anim:
+            animator = animateResults(self.model.name, tdict)
+            animator.save(self.config_obj.example_path + '/results/results.gif')
 
-        # check for random seed working
-        """
-        for x in tdict:
-            print(tdict[x])
-		"""
-
-        if(plot):
-            for state in tdict.keys():
-                plt.plot(tdict[state])
-
-            plt.title(self.model.name+' plot')
-            plt.legend(list(tdict.keys()), loc='upper right', shadow=True)
-            plt.show()
-        else:
-            return tdict
+        return tdict

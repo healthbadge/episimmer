@@ -1,6 +1,3 @@
-import random
-import copy
-
 class Location():
 	def __init__(self,info_dict):
 		self.info=info_dict

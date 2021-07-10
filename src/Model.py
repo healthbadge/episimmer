@@ -1,8 +1,5 @@
 import random
-import Agent
-import copy
 from functools import partial
-import numpy as np
 
 class StochasticModel():
 	def __init__(self,individual_state_types,infected_states,state_proportion):

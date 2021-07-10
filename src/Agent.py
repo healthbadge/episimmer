@@ -1,8 +1,3 @@
-
-import random
-import copy
-import numpy as np
-
 class Agent():
 	def __init__(self,state,info_dict):
 		self.state=state
