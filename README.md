@@ -5,8 +5,6 @@ Episimmer is an Epidemic Simulation Platform. It aims to provide Decision and Re
 
 Here is a short video describing Episimmer : [Video link](https://drive.google.com/file/d/1Oo-eG7pNIzaqf1uJ9rIf7DAc7MZwNRVY/view?usp=sharing) <br>
 
-We are currently focusing on [Vulnerability Detection](https://docs.google.com/document/d/1x6ovo5wwkKDPtH1OEvd3zCNwzOBNIbE0qTsA5bs8pOI/edit?usp=sharing). If you are interested please do reach out to us. <br>
-
 ## Dependencies
 
 To install dependencies using pipenv run ```pipenv install```.
@@ -17,7 +15,7 @@ To run code from current directory :
 		cd examples
 		python ../src/Main.py <Example name>
 
- 
+
 ## Getting started
 
 You can start using Episimmer by  using the following tutorials :
@@ -28,11 +26,7 @@ You can start using Episimmer by  using the following tutorials :
 [Tutorial 2.2 : Modifications to interaction spaces](https://docs.google.com/document/d/17QNw3BUEclqjtuoN6bd3pFNHsbzNIu2Bo0L1BCPS_A4/edit?usp=sharing) <br>
 [Tutorial 2.3 : Adding additional parameters ... WIP](https://docs.google.com/document/d/11OJXQdKm2kwAN_-QRslisa_5kyQSCzwqelwdP0nrIiY/edit?usp=sharing) <br>
 [Tutorial 3 : Introduction to Intervention and Policy](https://docs.google.com/document/d/121CdfYRg1144kZJoyJMq4xwfuM6vVdLn8bDnMIMMzoY/edit?usp=sharing) <br>
-Tutorial 4 : Coming soon...
 
-## Code Overview
-
-[Basic overview of the Episimmer codebase](https://docs.google.com/document/d/1UmuzVt9S2Zo_DX7Ylq462Fl4U69mO954u2s3zJWOfpg/edit?usp=sharing).
 
 ## UI
 Episimmer is currently Work in Progresss. Check out these point solutions built using the Episimmer codebase. <br>
