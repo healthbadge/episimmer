@@ -3,11 +3,13 @@ Powered by [HealthBadge](https://www.healthbadge.org/) <br>
 
 Episimmer is an Epidemic Simulation Platform. It aims to provide Decision and Recommendation Support to help answer your questions related to policies and restrictions during an epidemic. Using simulation techniques widely applied to other fields, we can help schools and colleges discover and hone the opportunities and optimizations they could make to their COVID-19 strategy. From the most simple decisions(Which days to be online or offline) to more complex strategies(What restrictions should I put on library use?, How many times should I test?, Whom do I test?) Episimmer is the tool for the job. <br>
 
-Here is a short video describing Episimmer : [Video link](https://drive.google.com/file/d/1Oo-eG7pNIzaqf1uJ9rIf7DAc7MZwNRVY/view?usp=sharing) <br>
+Episimmer is highly flexible and can be used by both researchers and policymakers. Episimmer is designed to handle virtually an infinite amount of data as input only at the cost of computation and time.
 
-## Dependencies
+## Requirements
 
-To install dependencies using pipenv run ```pipenv install```.
+Run the following command
+
+		pip3 install -r requirements.txt
 
 ## Running Examples
 To run code from current directory :
@@ -29,7 +31,7 @@ You can start using Episimmer by  using the following tutorials :
 
 
 ## UI
-Episimmer is currently Work in Progresss. Check out these point solutions built using the Episimmer codebase. <br>
+Episimmer is currently Work in Progress. Check out these point solutions built using the Episimmer codebase. <br>
 	- [Optimizing Lockdowns](https://optimising-lockdowns.herokuapp.com) <br>
 	- [Efficient Contact tracing](https://contact-tracing.herokuapp.com) <br>
 	- [YACHT protocol](https://hb-yacht.herokuapp.com) <br>
