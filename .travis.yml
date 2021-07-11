@@ -10,3 +10,5 @@ script:
 branches:
   only:
   - master
+os:
+  - windows
