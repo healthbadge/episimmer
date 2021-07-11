@@ -5,6 +5,7 @@ import copy
 import re
 import os.path as osp
 from csv import DictReader
+import Time
 
 class ReadConfiguration():
 	def __init__(self,filename):
@@ -13,7 +14,7 @@ class ReadConfiguration():
 		self.starting_exposed_percentage=None
 		self.agent_info_keys=None
 		self.interaction_info_keys=None
-		self.example_path=filename.partition('/')[0]
+		self.example_path=osp.dirname(filename)
 
 		f = open(filename,"r")
 
@@ -432,7 +433,7 @@ class ReadOneTimeEvents(BaseReadFile):
 				self.eventsAt[int(time)] = self.eventsAt.get(int(time), []) + [':'.join(line[1:])]
 		f.close()
 
-	def ReadOneTimeEvents(self, config_obj, locations_obj, current_time_step):
+	def ReadOneTimeEvents(self, config_obj, locations_obj):
 		if self.filename == "" or self.filename == None:
 			return
 		self.config_obj = config_obj
@@ -440,7 +441,7 @@ class ReadOneTimeEvents(BaseReadFile):
 		if self.event_info_keys != 'Time Step:' + config_obj.event_info_keys:
 			print("Error! One Time Event parameters donot match the config.txt file")
 			return None
-		for event in self.eventsAt.get(current_time_step, []):
+		for event in self.eventsAt.get(Time.Time.get_current_time_step(), []):
 			parameter_list = (self.get_value(event)).split(':')
 			location_index, info_dict = self.get_event(parameter_list)
 			self.locations_obj.locations[location_index].add_event(info_dict)
