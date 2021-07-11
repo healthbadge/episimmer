@@ -1,5 +1,6 @@
 import random
 from functools import partial
+import Time
 
 class StochasticModel():
 	def __init__(self,individual_state_types,infected_states,state_proportion):
@@ -43,40 +44,40 @@ class StochasticModel():
 					break
 
 
-	def find_next_state(self,agent,agents,current_time_step):
+	def find_next_state(self,agent,agents):
 		scheduled_time=None
 		r=random.random()
 		p=0
 		for new_state in self.individual_state_types:
-			p+=self.transmission_prob[agent.state][new_state](agent,agents,current_time_step)
+			p+=self.transmission_prob[agent.state][new_state](agent,agents)
 			if r<p:
 				return new_state,scheduled_time
 				break
 		return agent.state,scheduled_time
 
-	def full_p_standard(self,p,agent,agents,current_time_step):
+	def full_p_standard(self,p,agent,agents):
 		return p
 
 	def p_standard(self,p):
 		return partial(self.full_p_standard,p)
 
-	def full_p_function(self,fn,agent,agents,current_time_step):
-		return fn(current_time_step)
+	def full_p_function(self,fn,agent,agents):
+		return fn(Time.Time.get_current_time_step())
 
 	def p_function(self,fn):
 		return partial(self.full_p_function,fn)
 
-	def full_p_infection(self,fn, p_infected_states_list,agent,agents,current_time_step):
+	def full_p_infection(self,fn, p_infected_states_list,agent,agents):
 			p_not_inf=1
 			for c_dict in agent.contact_list:
 				contact_index=c_dict['Interacting Agent Index']
 				contact_agent=agents[contact_index]
 				if contact_agent.can_contribute_infection and agent.can_recieve_infection:
-					p_not_inf*=(1-fn(p_infected_states_list,contact_agent,c_dict,current_time_step))
+					p_not_inf*=(1-fn(p_infected_states_list,contact_agent,c_dict,Time.Time.get_current_time_step()))
 
 			for p in agent.event_probabilities:
 				p_not_inf*=(1-p)
-			return (1 - p_not_inf) +  self.external_prev_fn(agent, current_time_step)
+			return (1 - p_not_inf) +  self.external_prev_fn(agent, Time.Time.get_current_time_step())
 
 	def p_infection(self,p_infected_states_list,fn):
 		return partial(self.full_p_infection,fn,p_infected_states_list)
@@ -93,21 +94,21 @@ class StochasticModel():
 	def set_external_prevalence_fn(self,fn):
 		self.external_prev_fn = fn
 
-	def update_event_infection(self,event_info,location,agents_obj,current_time_step,event_restriction_fn):
+	def update_event_infection(self,event_info,location,agents_obj,event_restriction_fn):
 		ambient_infection=0
 		for agent_index in event_info['Agents']:
 			agent=agents_obj.agents[agent_index]
-			if event_restriction_fn(agent,event_info,current_time_step):
+			if event_restriction_fn(agent,event_info,Time.Time.get_current_time_step()):
 				continue
 			if agent.can_contribute_infection:
-				ambient_infection+=self.contribute_fn(agent,event_info,location,current_time_step)
+				ambient_infection+=self.contribute_fn(agent,event_info,location,Time.Time.get_current_time_step())
 
 		for agent_index in event_info['Agents']:
 			agent=agents_obj.agents[agent_index]
-			if event_restriction_fn(agent,event_info,current_time_step):
+			if event_restriction_fn(agent,event_info,Time.Time.get_current_time_step()):
 				continue
 			if agent.can_recieve_infection:
-				p=self.recieve_fn(agent,ambient_infection,event_info,location,current_time_step)
+				p=self.recieve_fn(agent,ambient_infection,event_info,location,Time.Time.get_current_time_step())
 				agent.add_event_result(p)
 
 
@@ -165,7 +166,7 @@ class ScheduledModel():
 					agent.initialize_state(state)
 					break
 
-	def find_scheduled_time(self,state,current_time_step=None):
+	def find_scheduled_time(self,state):
 
 		if(self.state_fn[state]==None):
 			mean=self.state_mean[state]
@@ -177,17 +178,17 @@ class ScheduledModel():
 
 		else:
 
-			scheduled_time=self.state_fn[state](current_time_step)
+			scheduled_time=self.state_fn[state](Time.Time.get_current_time_step())
 		return scheduled_time
 
 
-	def find_next_state(self,agent,agents,current_time_step):
+	def find_next_state(self,agent,agents):
 		if agent.schedule_time_left==None:
-			return self.state_transition_fn[agent.state](agent,agents,current_time_step)
+			return self.state_transition_fn[agent.state](agent,agents)
 
 		return agent.state,agent.schedule_time_left
 
-	def full_scheduled(self,new_states, agent,agents,current_time_step):
+	def full_scheduled(self,new_states, agent,agents):
 		new_state=self.choose_one_state(new_states)
 		scheduled_time=self.find_scheduled_time(new_state)
 		return new_state,scheduled_time
@@ -196,10 +197,10 @@ class ScheduledModel():
 		return partial(self.full_scheduled,new_states)
 
 
-	def full_p_function(self,new_states,agent,agents,current_time_step):
+	def full_p_function(self,new_states,agent,agents):
 
 		new_state=self.choose_one_state(new_states)
-		scheduled_time=self.find_scheduled_time(new_state,current_time_step)
+		scheduled_time=self.find_scheduled_time(new_state)
 
 		return new_state,scheduled_time
 
@@ -209,20 +210,20 @@ class ScheduledModel():
 	def p_infection(self,p_infected_states_list,fn,new_states):
 		return partial(self.full_p_infection,fn,p_infected_states_list,new_states)
 
-	def full_p_infection(self,fn, p_infected_states_list,new_states,agent,agents,current_time_step):
+	def full_p_infection(self,fn, p_infected_states_list,new_states,agent,agents):
 			new_state=self.choose_one_state(new_states)
 			p_not_inf=1
 			for c_dict in agent.contact_list:
 				contact_index=c_dict['Interacting Agent Index']
 				contact_agent=agents[contact_index]
 				if contact_agent.can_contribute_infection and agent.can_recieve_infection:
-					p_not_inf*=(1-fn(p_infected_states_list,contact_agent,c_dict,current_time_step))
+					p_not_inf*=(1-fn(p_infected_states_list,contact_agent,c_dict,Time.Time.get_current_time_step()))
 
 			for p in agent.event_probabilities:
 				p_not_inf*=(1-p)
 
 			r=random.random()
-			if r>=(1 - p_not_inf) +  self.external_prev_fn(agent, current_time_step):
+			if r>=(1 - p_not_inf) +  self.external_prev_fn(agent, Time.Time.get_current_time_step()):
 				new_state = agent.state
 
 			scheduled_time=self.find_scheduled_time(new_state)
@@ -252,19 +253,19 @@ class ScheduledModel():
 	def set_external_prevalence_fn(self,fn):
 		self.external_prev_fn = fn
 
-	def update_event_infection(self,event_info,location,agents_obj,current_time_step,event_restriction_fn):
+	def update_event_infection(self,event_info,location,agents_obj,event_restriction_fn):
 		ambient_infection=0
 		for agent_index in event_info['Agents']:
 			agent=agents_obj.agents[agent_index]
-			if event_restriction_fn(agent,event_info,current_time_step):
+			if event_restriction_fn(agent,event_info,Time.Time.get_current_time_step()):
 				continue
 			if agent.can_contribute_infection:
-				ambient_infection+=self.contribute_fn(agent,event_info,location,current_time_step)
+				ambient_infection+=self.contribute_fn(agent,event_info,location,Time.Time.get_current_time_step())
 
 		for agent_index in event_info['Agents']:
 			agent=agents_obj.agents[agent_index]
-			if event_restriction_fn(agent,event_info,current_time_step):
+			if event_restriction_fn(agent,event_info,Time.Time.get_current_time_step()):
 				continue
 			if agent.can_recieve_infection:
-				p=self.recieve_fn(agent,ambient_infection,event_info,location,current_time_step)
+				p=self.recieve_fn(agent,ambient_infection,event_info,location,Time.Time.get_current_time_step())
 				agent.add_event_result(p)
