@@ -1,7 +1,6 @@
 import matplotlib.pyplot as plt
 import matplotlib.animation as ani
 import importlib.util
-import os.path as osp
 
 def average(tdict, number):
     for k in tdict.keys():

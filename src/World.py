@@ -2,6 +2,7 @@ import Simulate
 import ReadFile
 import os
 from Utility import *
+import Time
 
 class World():
     def __init__(self, config_obj, model, policy_list, event_restriction_fn, agents_filename, interactionFiles_list, probabilistic_interactionFiles_list, locations_filename, eventFiles_list, one_time_event_file):
@@ -20,6 +21,8 @@ class World():
 
         time_steps = self.config_obj.time_steps
 
+        Time.Time.new_world()
+
         # Initialize agents
         agents_obj = ReadFile.ReadAgents(self.agents_filename, self.config_obj)
 
@@ -33,9 +36,10 @@ class World():
         sim_obj.onStartSimulation()
 
         for current_time_step in range(time_steps):
-            sim_obj.onStartTimeStep(self.interactionFiles_list, self.eventFiles_list, self.probabilistic_interactionsFiles_list, oneTimeEvent_obj, current_time_step)
+            sim_obj.onStartTimeStep(self.interactionFiles_list, self.eventFiles_list, self.probabilistic_interactionsFiles_list, oneTimeEvent_obj)
             sim_obj.handleTimeStepForAllAgents()
             sim_obj.endTimeStep()
+            Time.Time.increment_current_time_step()
 
         end_state = sim_obj.endSimulation()
         return end_state, agents_obj, locations_obj
@@ -56,12 +60,12 @@ class World():
         # Average number time series
         tdict = average(tdict, self.config_obj.worlds)
         # make a results directory
-        if not os.path.isdir(self.config_obj.example_path + '/results'):
-            os.mkdir(self.config_obj.example_path + '/results')
+        if not os.path.isdir(os.path.join(self.config_obj.example_path,'results')):
+            os.mkdir(os.path.join(self.config_obj.example_path,'results'))
         plottor = plotResults(self.model.name, tdict, plot)
-        plottor.savefig(self.config_obj.example_path + '/results/results.jpg')
+        plottor.savefig(os.path.join(self.config_obj.example_path,'results','results.jpg'))
         if anim:
             animator = animateResults(self.model.name, tdict)
-            animator.save(self.config_obj.example_path + '/results/results.gif')
+            animator.save(os.path.join(self.config_obj.example_path,'results','results.gif'))
 
         return tdict
