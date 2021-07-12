@@ -3,9 +3,9 @@ Powered by [HealthBadge](https://www.healthbadge.org/) <br>
 
 Episimmer is an Epidemic Simulation Platform. It aims to provide Decision and Recommendation Support to help answer your questions related to policies and restrictions during an epidemic. Using simulation techniques widely applied to other fields, we can help schools and colleges discover and hone the opportunities and optimizations they could make to their COVID-19 strategy. From the most simple decisions(Which days to be online or offline) to more complex strategies(What restrictions should I put on library use?, How many times should I test?, Whom do I test?) Episimmer is the tool for the job. <br>
 
-Here is a short video describing Episimmer : [Video link](https://drive.google.com/file/d/1Oo-eG7pNIzaqf1uJ9rIf7DAc7MZwNRVY/view?usp=sharing) <br>
+Episimmer is highly flexible and can be used by both researchers and policymakers. Episimmer is designed to handle virtually an infinite amount of data as input only at the cost of computation and time. <br>
 
-We are currently focusing on [Vulnerability Detection](https://docs.google.com/document/d/1x6ovo5wwkKDPtH1OEvd3zCNwzOBNIbE0qTsA5bs8pOI/edit?usp=sharing). If you are interested please do reach out to us. <br>
+Official page : https://www.healthbadge.org/playground
 
 ## Requirements
 
@@ -19,7 +19,7 @@ To run code from current directory :
 		cd examples
 		python ../src/Main.py <Example name>
 
- 
+
 ## Getting started
 
 You can start using Episimmer by  using the following tutorials :
@@ -30,11 +30,7 @@ You can start using Episimmer by  using the following tutorials :
 [Tutorial 2.2 : Modifications to interaction spaces](https://docs.google.com/document/d/17QNw3BUEclqjtuoN6bd3pFNHsbzNIu2Bo0L1BCPS_A4/edit?usp=sharing) <br>
 [Tutorial 2.3 : Adding additional parameters ... WIP](https://docs.google.com/document/d/11OJXQdKm2kwAN_-QRslisa_5kyQSCzwqelwdP0nrIiY/edit?usp=sharing) <br>
 [Tutorial 3 : Introduction to Intervention and Policy](https://docs.google.com/document/d/121CdfYRg1144kZJoyJMq4xwfuM6vVdLn8bDnMIMMzoY/edit?usp=sharing) <br>
-Tutorial 4 : Coming soon...
 
-## Code Overview
-
-[Basic overview of the Episimmer codebase](https://docs.google.com/document/d/1UmuzVt9S2Zo_DX7Ylq462Fl4U69mO954u2s3zJWOfpg/edit?usp=sharing).
 
 ## UI
 Our current UI can be found at https://episimmer.herokuapp.com/. Note that it has minimal functionality as compared to running the codebase directly. Yet it competes with the current state of the art systems with multiple novel features. <br>
