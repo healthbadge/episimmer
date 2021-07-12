@@ -6,6 +6,7 @@ testing_stats.json
 /examples/testing_stats.json
 /examples/performance.txt
 .vscode
+/examples/*/results
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
