@@ -33,7 +33,7 @@ You can start using Episimmer by  using the following tutorials :
 
 
 ## UI
-Our current UI can be found at https://episimmer.herokuapp.com/. Note that it has minimal functionality as compared to running the codebase directly. Yet it competes with the current state of the art systems with multiple novel features. <br>
+Our current UI can be found at https://episimmer.herokuapp.com/. <br>
 
 Episimmer is currently Work in Progress. Check out these point solutions built using the Episimmer codebase. <br>
 
