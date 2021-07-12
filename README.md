@@ -7,9 +7,11 @@ Here is a short video describing Episimmer : [Video link](https://drive.google.c
 
 We are currently focusing on [Vulnerability Detection](https://docs.google.com/document/d/1x6ovo5wwkKDPtH1OEvd3zCNwzOBNIbE0qTsA5bs8pOI/edit?usp=sharing). If you are interested please do reach out to us. <br>
 
-## Dependencies
+## Requirements
 
-To install dependencies using pipenv run ```pipenv install```.
+Run the following command
+
+		pip3 install -r requirements.txt
 
 ## Running Examples
 To run code from current directory :
