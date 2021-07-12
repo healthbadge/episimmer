@@ -35,11 +35,13 @@ Tutorial 4 : Coming soon...
 [Basic overview of the Episimmer codebase](https://docs.google.com/document/d/1UmuzVt9S2Zo_DX7Ylq462Fl4U69mO954u2s3zJWOfpg/edit?usp=sharing).
 
 ## UI
-Episimmer is currently Work in Progresss. Check out these point solutions built using the Episimmer codebase. <br>
-	- [Optimizing Lockdowns](https://optimising-lockdowns.herokuapp.com) <br>
-	- [Efficient Contact tracing](https://contact-tracing.herokuapp.com) <br>
-	- [YACHT protocol](https://hb-yacht.herokuapp.com) <br>
-	- [Custom Stochastic Model on a complete graph](https://share.streamlit.io/inavamsi/custom_epidemic_model/main/Main.py) <br>
-	- [Testing strategies (Pool testing, Friendship testing)](https://share.streamlit.io/suryadheeshjith/epidemic-testing-ui/main.py) <br>
-	- [Vaccination with multiple vaccine types](https://share.streamlit.io/ruthushankar/vaccination_ui/main/vac.py) <br>
-	- [Episimmer Partial UI](https://share.streamlit.io/suryadheeshjith/epidemic-simulator-ui/app.py)
+Our current UI can be found at https://episimmer.herokuapp.com/. Note that it has minimal functionality as compared to running the codebase directly. Yet it competes with the current state of the art systems with multiple novel features. <br>
+
+Episimmer is currently Work in Progress. Check out these point solutions built using the Episimmer codebase. <br>
+
+- [Optimizing Lockdowns](https://optimising-lockdowns.herokuapp.com) <br>
+- [Efficient Contact tracing](https://contact-tracing.herokuapp.com) <br>
+- [YACHT protocol](https://hb-yacht.herokuapp.com) <br>
+- [Custom Stochastic Model on a complete graph](https://share.streamlit.io/inavamsi/custom_epidemic_model/main/Main.py) <br>
+- [Testing strategies (Pool testing, Friendship testing)](https://share.streamlit.io/suryadheeshjith/epidemic-testing-ui/main.py) <br>
+- [Vaccination with multiple vaccine types](https://share.streamlit.io/ruthushankar/vaccination_ui/main/vac.py) <br>
