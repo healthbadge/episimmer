@@ -7,11 +7,11 @@ Episimmer is highly flexible and can be used by both researchers and policymaker
 
 Official page : https://www.healthbadge.org/playground
 
-## Requirements
+## Setup
 
 Run the following command
 
-		pip3 install -r requirements.txt
+		python setup.py install
 
 ## Running Examples
 To run code from current directory :
