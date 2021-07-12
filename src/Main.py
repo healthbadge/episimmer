@@ -1,15 +1,16 @@
 import ReadFile
 import World
 import argparse
-from Utility import *
+import Utility
+import os.path as osp
 
 def get_model(example_path):
-    UserModel = module_from_file("Generate_model", osp.join(example_path, 'UserModel.py'))
+    UserModel = Utility.module_from_file("Generate_model", osp.join(example_path, 'UserModel.py'))
     model = UserModel.UserModel()
     return model
 
 def get_policy(example_path):
-    Generate_policy = module_from_file("Generate_policy", osp.join(example_path, 'Generate_policy.py'))
+    Generate_policy = Utility.module_from_file("Generate_policy", osp.join(example_path, 'Generate_policy.py'))
     policy_list, event_restriction_fn = Generate_policy.generate_policy()
     return policy_list, event_restriction_fn
 
