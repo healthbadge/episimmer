@@ -1,7 +1,7 @@
 import ReadFile
 import World
-import argparse
 import Utility
+import os
 import os.path as osp
 
 def get_model(example_path):
@@ -18,18 +18,10 @@ def get_config_path(path):
     config_filepath = osp.join(path, 'config.txt')
     return config_filepath
 
+
 if __name__=="__main__":
 
-    arg_parser = argparse.ArgumentParser(prog='Main.py', usage='%(prog)s example_path [options]')
-
-    # input argument options
-    arg_parser.add_argument("example_path")
-    arg_parser.add_argument("-np", "--noplot", help="doesn't show plot after simulation", required=False, action="store_true")
-    arg_parser.add_argument("-an", "--animate", help="creates gif animation in the example folder", required=False, action="store_true")
-    args = arg_parser.parse_args()
-
-    plot = not args.noplot
-    anim = args.animate
+    args = Utility.parse_args()
 
     example_path = args.example_path
     config_filename = get_config_path(example_path)
@@ -46,6 +38,10 @@ if __name__=="__main__":
     model = get_model(example_path)
     policy_list, event_restriction_fn=get_policy(example_path)
 
+    # make a results directory
+    if not osp.isdir(osp.join(config_obj.example_path,'results')):
+        os.mkdir(osp.join(config_obj.example_path,'results'))
+
     # Creation of World object
     world_obj = World.World(config_obj, model, policy_list, event_restriction_fn, agents_filename, interactions_files_list,probabilistic_interactions_files_list, locations_filename, events_files_list, one_time_event_file)
-    world_obj.simulate_worlds(plot, anim)
+    world_obj.simulate_worlds()

@@ -1,7 +1,7 @@
 import Simulate
 import ReadFile
-import os
-from Utility import *
+import os.path as osp
+import Utility
 import Time
 
 class World():
@@ -45,7 +45,11 @@ class World():
         return end_state, agents_obj, locations_obj
 
     # Averages multiple simulations and plots a single plot
-    def simulate_worlds(self, plot, anim):
+    def simulate_worlds(self):
+
+        args = Utility.parse_args()
+        plot = args.noplot
+        anim = args.animate
 
         tdict = {}
         for state in self.model.individual_state_types:
@@ -58,14 +62,11 @@ class World():
                     tdict[state][j] += sdict[state][j]
 
         # Average number time series
-        tdict = average(tdict, self.config_obj.worlds)
-        # make a results directory
-        if not os.path.isdir(os.path.join(self.config_obj.example_path,'results')):
-            os.mkdir(os.path.join(self.config_obj.example_path,'results'))
-        plottor = plotResults(self.model.name, tdict, plot)
-        plottor.savefig(os.path.join(self.config_obj.example_path,'results','results.jpg'))
+        tdict = Utility.average(tdict, self.config_obj.worlds)
+        plottor = Utility.plotResults(self.model.name, tdict, plot)
+        plottor.savefig(osp.join(self.config_obj.example_path,'results','results.jpg'))
         if anim:
-            animator = animateResults(self.model.name, tdict)
-            animator.save(os.path.join(self.config_obj.example_path,'results','results.gif'))
+            animator = Utility.animateResults(self.model.name, tdict)
+            animator.save(osp.join(self.config_obj.example_path,'results','results.gif'))
 
         return tdict

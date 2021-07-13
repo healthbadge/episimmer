@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import matplotlib.animation as ani
 import importlib.util
+import argparse
 
 def average(tdict, number):
     for k in tdict.keys():
@@ -45,3 +46,14 @@ def module_from_file(module_name, file_path):
     module = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(module)
     return module
+
+def parse_args():
+    arg_parser = argparse.ArgumentParser(prog='Main.py', usage='%(prog)s example_path [options]')
+
+    # input argument options
+    arg_parser.add_argument(dest="example_path", type = str, help="Pass the path to your data folder")
+    arg_parser.add_argument("-np", "--noplot", dest="noplot", action="store_false", default=True, help="doesn't show plot after simulation")
+    arg_parser.add_argument("-an", "--animate", dest="animate", action="store_true", default=False, help="creates gif animation in the example folder")
+    arg_parser.add_argument("-s", "--stats", dest="stats", action="store_true", default=False, help="Choose to store statistics. Default = False")
+    args = arg_parser.parse_args()
+    return args
