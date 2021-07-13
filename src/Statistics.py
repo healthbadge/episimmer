@@ -3,6 +3,7 @@ import pprint
 import copy
 import Utility
 import os
+import Time
 
 is_obj = lambda obj : hasattr(obj, '__dict__')
 is_iter = lambda obj : hasattr(obj, '__iter__')
@@ -98,7 +99,9 @@ def save_stats(obj_lev_tuples, group, text_filename, final_level_properties = "A
                     dict = expand_levels(obj, levels) # Generate nested dict
                     dict = copy.deepcopy(dict)
                     dict = process_dict(dict, final_level_properties, levels) # Process dict based on desired properties
-                    str += get_pretty_print_str(dict) # Pretty printing
+                    print(Time.Time.get_current_world(), Time.Time.get_current_time_step())
+                    final_dict = {"World" : Time.Time.get_current_world(), "Timestep" : Time.Time.get_current_time_step(), "Contents" : dict}
+                    str += get_pretty_print_str(final_dict) # Pretty printing
                 save_to_text_file(str, example_path, text_filename)
 
         return wrapper
