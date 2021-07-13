@@ -4,6 +4,7 @@ import copy
 import Utility
 import os
 import Time
+import pickle
 
 is_obj = lambda obj : hasattr(obj, '__dict__')
 is_iter = lambda obj : hasattr(obj, '__iter__')
@@ -73,11 +74,13 @@ def get_pretty_print_str(dict):
     val_string += "\n"
     return val_string
 
-def save_to_csv(dict, csv_filename_template, obj_str):
+def save_to_csv():
     pass
 
-def save_pickle():
-    pass
+def save_pickle(example_path,obj_str,levels,dict):
+    filename = obj_str+str(levels)+".pickle"
+    with open(os.path.join(example_path,'results', filename), 'wb') as handle:
+        pickle.dump(dict, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 def save_to_text_file(str, example_path, text_filename):
     fp = open(os.path.join(example_path,'results', text_filename), "a")
@@ -93,16 +96,16 @@ def save_stats(obj_lev_tuples, group, text_filename, final_level_properties = "A
             stats = args.stats
             example_path = args.example_path
             if(stats):
-                str = ""
                 for obj_str,levels in obj_lev_tuples:
+                    str = ""
                     obj = getattr(ref, obj_str)
                     dict = expand_levels(obj, levels) # Generate nested dict
                     dict = copy.deepcopy(dict)
                     dict = process_dict(dict, final_level_properties, levels) # Process dict based on desired properties
-                    print(Time.Time.get_current_world(), Time.Time.get_current_time_step())
                     final_dict = {"World" : Time.Time.get_current_world(), "Timestep" : Time.Time.get_current_time_step(), "Contents" : dict}
+                    # save_pickle(example_path,obj_str,levels,final_dict)
                     str += get_pretty_print_str(final_dict) # Pretty printing
-                save_to_text_file(str, example_path, text_filename)
+                    save_to_text_file(str, example_path, text_filename)
 
         return wrapper
 

@@ -20,7 +20,8 @@ def get_config_path(path):
 
 
 if __name__=="__main__":
-
+    import time
+    start = time.time()
     args = Utility.parse_args()
 
     example_path = args.example_path
@@ -45,3 +46,4 @@ if __name__=="__main__":
     # Creation of World object
     world_obj = World.World(config_obj, model, policy_list, event_restriction_fn, agents_filename, interactions_files_list,probabilistic_interactions_files_list, locations_filename, events_files_list, one_time_event_file)
     world_obj.simulate_worlds()
+    print("--- %s seconds ---" % (time.time() - start))
