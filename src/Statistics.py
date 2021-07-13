@@ -96,8 +96,8 @@ def save_stats(obj_lev_tuples, group, text_filename, final_level_properties = "A
             stats = args.stats
             example_path = args.example_path
             if(stats):
+                str = ""
                 for obj_str,levels in obj_lev_tuples:
-                    str = ""
                     obj = getattr(ref, obj_str)
                     dict = expand_levels(obj, levels) # Generate nested dict
                     dict = copy.deepcopy(dict)
@@ -105,7 +105,7 @@ def save_stats(obj_lev_tuples, group, text_filename, final_level_properties = "A
                     final_dict = {"World" : Time.Time.get_current_world(), "Timestep" : Time.Time.get_current_time_step(), "Contents" : dict}
                     # save_pickle(example_path,obj_str,levels,final_dict)
                     str += get_pretty_print_str(final_dict) # Pretty printing
-                    save_to_text_file(str, example_path, text_filename)
+                save_to_text_file(str, example_path, text_filename)
 
         return wrapper
 
