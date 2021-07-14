@@ -34,7 +34,7 @@ class Simulate():
 		#Store state list
 		self.store_state()
 
-	@Statistics.save_stats([("agents_obj",3)], "Agents", "agent_log.txt", ["can_recieve_infection", "info"])
+	@Statistics.save_stats([("agents_obj",3)], "Agents", ["state"])
 	def onStartTimeStep(self, interactionFiles_listOfList, eventFiles_listOfList, probabilistic_interactionFiles_listOfList, oneTimeEvent_obj):
 
 		for agent in self.agents_obj.agents.values():

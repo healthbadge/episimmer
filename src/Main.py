@@ -1,6 +1,7 @@
 import ReadFile
 import World
 import Utility
+import Statistics
 import os
 import os.path as osp
 
@@ -18,8 +19,8 @@ def get_config_path(path):
     config_filepath = osp.join(path, 'config.txt')
     return config_filepath
 
-
-if __name__=="__main__":
+@Statistics.write_stats("stats.pickle", "stats.txt")
+def main():
     args = Utility.parse_args()
 
     example_path = args.example_path
@@ -44,3 +45,6 @@ if __name__=="__main__":
     # Creation of World object
     world_obj = World.World(config_obj, model, policy_list, event_restriction_fn, agents_filename, interactions_files_list,probabilistic_interactions_files_list, locations_filename, events_files_list, one_time_event_file)
     world_obj.simulate_worlds()
+
+if __name__=="__main__":
+    main()

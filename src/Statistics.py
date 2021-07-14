@@ -13,6 +13,29 @@ is_dict = lambda obj : isinstance(obj, dict)
 
 expand_obj = lambda obj : vars(obj)
 
+class Stats():
+    d = {}
+
+    @staticmethod
+    def add_content(K, C):
+        W = Time.Time.get_current_world()
+        T = Time.Time.get_current_time_step()
+        if(W not in Stats.d.keys()):
+            Stats.d[W] = {}
+
+        if(T not in Stats.d[W].keys()):
+            Stats.d[W][T] = {}
+
+        if(K not in Stats.d[W][T].keys()):
+            Stats.d[W][T][K] = []
+
+        Stats.d[W][T][K].append(C)
+
+    @staticmethod
+    def get_dict():
+        return Stats.d
+
+
 def expand_levels_recursion(obj, levels, cur_level):
 
     if cur_level==levels:
@@ -74,63 +97,46 @@ def get_pretty_print_str(dict):
     val_string += "\n"
     return val_string
 
-def save_to_csv():
-    pass
+def save_pickle(example_path,pickle_file,final_dict):
+    with open(os.path.join(example_path,'results', pickle_file), 'wb') as handle:
+        pickle.dump(final_dict, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
-def save_pickle(example_path,obj_str,levels,dict):
-    filename = obj_str+str(levels)+".pickle"
-    with open(os.path.join(example_path,'results', filename), 'wb') as handle:
-        pickle.dump(dict, handle, protocol=pickle.HIGHEST_PROTOCOL)
-
-def save_to_text_file(str, example_path, text_filename):
-    fp = open(os.path.join(example_path,'results', text_filename), "a")
+def save_to_text_file(example_path, str, text_filename):
+    fp = open(os.path.join(example_path,'results', text_filename), "w")
     fp.write(str)
     fp.close()
 
-def save_stats(obj_lev_tuples, group, text_filename, final_level_properties = "All"):
+def save_stats(obj_lev_tuples, key, final_level_properties = "All"):
     def decorator(func):
         @functools.wraps(func)
         def wrapper(ref, *args,**kwargs) :
             func(ref, *args, **kwargs)
             args = Utility.parse_args()
             stats = args.stats
-            example_path = args.example_path
             if(stats):
-                str = ""
                 for obj_str,levels in obj_lev_tuples:
                     obj = getattr(ref, obj_str)
                     dict = expand_levels(obj, levels) # Generate nested dict
                     dict = copy.deepcopy(dict)
                     dict = process_dict(dict, final_level_properties, levels) # Process dict based on desired properties
-                    final_dict = {"World" : Time.Time.get_current_world(), "Timestep" : Time.Time.get_current_time_step(), "Contents" : dict}
-                    # save_pickle(example_path,obj_str,levels,final_dict)
-                    str += get_pretty_print_str(final_dict) # Pretty printing
-                save_to_text_file(str, example_path, text_filename)
-
+                    Stats.add_content(key, dict)
         return wrapper
 
     return decorator
 
+def write_stats(pickle_file, text_file):
+    def decorator(func):
+        @functools.wraps(func)
+        def wrapper(*args,**kwargs) :
+            func(*args, **kwargs)
+            args = Utility.parse_args()
+            stats = args.stats
+            if(stats):
+                example_path = args.example_path
+                final_dict = Stats.get_dict()
+                save_pickle(example_path,pickle_file,final_dict)
+                # str = get_pretty_print_str(final_dict)
+                # save_to_text_file(example_path, str, text_file)
+        return wrapper
 
-if __name__ == "__main__":
-    class A():
-        def __init__(self):
-            self.a = 0
-            self.ls = [1,2,3,4]
-            self.b = None
-
-    class B():
-        def __init__(self):
-            self.b0 = 0
-            self.bls = [1,2,3,4]
-            self.c = None
-
-    a = A()
-    b = B()
-    a.b = b
-    a0 = A()
-    a1 = A()
-    a2 = A()
-    b.c = {'1':a0, '2':a1, '3':a2}
-
-    print(expand_levels(a,4))
+    return decorator
