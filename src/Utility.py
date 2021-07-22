@@ -114,7 +114,6 @@ def viz_single_graph(obj):
     else:
         webbrowser.open(filename, new=0)
         time.sleep(1)
-    #input_val=input('    Press Enter for next snapshot!')
 
 def viz_dynamic_graph():
     def decorator(func):
