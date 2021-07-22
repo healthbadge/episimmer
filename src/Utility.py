@@ -94,15 +94,8 @@ def get_interaction_graph_from_object(obj):
                     net.add_edge(event_info["Location Index"]+"_event", agent,color="black")
 
     net.toggle_physics(False)
-    #net.toggle_stabilization(False)
-    #net.force_atlas_2based()
-    # net.hrepulsion()
     net.show(outpath)
-
-
     return outpath
-
-
 
 def viz_single_graph(obj):
     path = get_interaction_graph_from_object(obj)
