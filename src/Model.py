@@ -163,7 +163,11 @@ class ScheduledModel():
 			for indx,value in enumerate(prob_list):
 				if r<value:
 					state=list(self.state_proportion.keys())[indx]
-					agent.initialize_state(state)
+					try :
+						schedule_time_left=random.randint(0,int(self.state_mean[state]))
+					except:
+						schedule_time_left=None
+					agent.initialize_state(state,schedule_time_left)
 					break
 
 	def find_scheduled_time(self,state):
@@ -174,7 +178,7 @@ class ScheduledModel():
 			if mean==None or vary==None:
 				scheduled_time=None
 			else:
-				scheduled_time=random.randint(mean-vary,mean+vary)
+				scheduled_time=max(0,int(np.random.normal(mean,vary)))
 
 		else:
 
