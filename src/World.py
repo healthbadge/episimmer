@@ -3,6 +3,7 @@ import ReadFile
 import os.path as osp
 import Utility
 import Time
+import math
 
 class World():
     def __init__(self, config_obj, model, policy_list, event_restriction_fn, agents_filename, interactionFiles_list, probabilistic_interactionFiles_list, locations_filename, eventFiles_list, one_time_event_file):
@@ -52,21 +53,31 @@ class World():
         anim = args.animate
 
         tdict = {}
+        t2_dict = {}
+        maxdict={}
+        mindict={}
         for state in self.model.individual_state_types:
             tdict[state] = [0]*(self.config_obj.time_steps+1)
+            t2_dict[state] = [0]*(self.config_obj.time_steps+1)
+            maxdict[state] = [0]*(self.config_obj.time_steps+1)
+            mindict[state] = [math.inf]*(self.config_obj.time_steps+1)
 
         for i in range(self.config_obj.worlds):
             sdict, _, _ = self.one_world()
             for state in self.model.individual_state_types:
                 for j in range(len(tdict[state])):
                     tdict[state][j] += sdict[state][j]
+                    t2_dict[state][j] += sdict[state][j]**2
+                    maxdict[state][j] =max(maxdict[state][j],sdict[state][j])
+                    mindict[state][j] =min(mindict[state][j],sdict[state][j])
 
         # Average number time series
-        tdict = Utility.average(tdict, self.config_obj.worlds)
-        plottor = Utility.plotResults(self.model.name, tdict, plot)
+        avg_dict = Utility.average(tdict, self.config_obj.worlds)
+        stddev_dict = Utility.stddev(tdict, t2_dict, self.config_obj.worlds)
+        plottor = Utility.plotResults(self.model, avg_dict,stddev_dict, maxdict, mindict, plot)
         plottor.savefig(osp.join(self.config_obj.example_path,'results','results.jpg'))
         if anim:
-            animator = Utility.animateResults(self.model.name, tdict)
+            animator = Utility.animateResults(self.model.name, avg_dict)
             animator.save(osp.join(self.config_obj.example_path,'results','results.gif'))
 
-        return tdict
+        return avg_dict

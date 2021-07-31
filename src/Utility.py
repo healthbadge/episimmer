@@ -10,19 +10,34 @@ from pyvis.network import Network
 import time
 import math
 import Time
+import numpy as np
+import copy
 
 def average(tdict, number):
-    for k in tdict.keys():
-        l = tdict[k]
+    avg_dict=copy.deepcopy(tdict)
+    for k in avg_dict.keys():
+        l = avg_dict[k]
         for i in range(len(l)):
-            tdict[k][i] /= number
-    return tdict
+            avg_dict[k][i] /= number
+    return avg_dict
 
-def plotResults(model_name, tdict, plot):
-    for state in tdict.keys():
-        plt.plot(tdict[state])
-    plt.title(model_name + ' Plot')
-    plt.legend(list(tdict.keys()), loc='upper right', shadow=True)
+def stddev(tdict, t2_dict, number):
+    stddev_dict=copy.deepcopy(tdict)
+    for k in stddev_dict.keys():
+        l = stddev_dict[k]
+        for i in range(len(l)):
+            stddev_dict[k][i] = np.sqrt(t2_dict[k][i]/number - (tdict[k][i]/number)**2)
+    return stddev_dict
+
+def plotResults(model, avg_dict, stddev_dict, maxdict, mindict, plot):
+    for state in avg_dict.keys():
+        x=np.arange(0,len(avg_dict[state]))
+        plt.plot(avg_dict[state], color=model.colors[state])
+        #y=np.array(avg_dict[state])
+        #error=np.array(stddev_dict[state])
+        plt.fill_between(x, mindict[state], maxdict[state], alpha=0.2, facecolor=model.colors[state],linewidth=0)
+    plt.title(model.name + ' Plot')
+    plt.legend(list(avg_dict.keys()), loc='upper right', shadow=True)
     plt.ylabel('Population')
     plt.xlabel('Time Steps (in unit steps)')
     plt.grid(b=True, which='major', color='#666666', linestyle='-')

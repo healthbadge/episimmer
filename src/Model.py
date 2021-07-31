@@ -3,6 +3,9 @@ from functools import partial
 import Time
 import numpy as np
 
+infectious_colors=['red','pink','orange','purple']
+normal_colors=['blue','green','black','yellow','brown','white']
+
 class StochasticModel():
 	def __init__(self,individual_state_types,infected_states,state_proportion):
 		self.individual_state_types=individual_state_types
@@ -10,6 +13,16 @@ class StochasticModel():
 		self.state_proportion=state_proportion
 		self.name='Stochastic Model'
 		self.external_prev_fn = lambda x,y:0.0
+
+		self.colors={}
+		self.color_index=[0,0]
+		for state in individual_state_types:
+			if state in infected_states:
+				self.colors[state]=infectious_colors[self.color_index[0]%len(infectious_colors)]
+				self.color_index[0]+=1
+			else:
+				self.colors[state]=normal_colors[self.color_index[1]%len(normal_colors)]
+				self.color_index[1]+=1
 
 		self.reset()
 
@@ -125,6 +138,9 @@ class ScheduledModel():
 		self.name='Scheduled Model'
 		self.state_fn={}
 
+		self.colors={}
+		self.color_index=[0,0]
+
 
 	def insert_state(self, state, mean, vary, transition_fn,infected_state,proportion):
 		if infected_state:
@@ -136,6 +152,13 @@ class ScheduledModel():
 		self.state_proportion[state]=proportion
 		self.state_fn[state]=None
 
+		if infected_state:
+			self.colors[state]=infectious_colors[self.color_index[0]%len(infectious_colors)]
+			self.color_index[0]+=1
+		else:
+			self.colors[state]=normal_colors[self.color_index[1]%len(normal_colors)]
+			self.color_index[1]+=1
+
 	def insert_state_custom(self,state,fn,transition_fn,infected_state,proportion):
 		if infected_state:
 
@@ -144,6 +167,13 @@ class ScheduledModel():
 		self.state_transition_fn[state]=transition_fn
 		self.state_proportion[state]=proportion
 		self.state_fn[state]=fn
+
+		if infected_state:
+			self.colors[state]=infectious_colors[self.color_index[0]%len(infectious_colors)]
+			self.color_index[0]+=1
+		else:
+			self.colors[state]=normal_colors[self.color_index[1]%len(normal_colors)]
+			self.color_index[1]+=1
 
 	def initalize_states(self,agents):
 		proportion_sum=0
