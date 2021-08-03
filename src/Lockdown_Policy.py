@@ -25,6 +25,22 @@ class agent_lockdown(Agent_Policy):
 					agent.restrict_recieve_infection()
 					agent.restrict_contribute_infection()
 
+class agent_lockdown_CR(Agent_Policy):
+	def __init__(self,do_lockdown_fn,student_attendence_table):
+		self.policy_type='Restrict'
+		self.do_lockdown_fn=do_lockdown_fn
+		self.student_attendence_table = student_attendence_table
+
+	def enact_policy(self,time_step,agents,locations,model=None):
+		# fp = open("logs.txt","a")
+		if self.do_lockdown_fn(time_step):
+			for agent in agents:
+				if self.student_attendence_table[int(agent.index),time_step] == 0.0:
+					# fp.write("{0}, {1}\n".format(time_step,agent.index))
+					agent.restrict_recieve_infection()
+					agent.restrict_contribute_infection()
+		# fp.close()
+
 
 class agent_policy_based_lockdown(Agent_Policy):
 	def __init__(self,policy_to_consider,value_list,do_lockdown_fn,time_period):

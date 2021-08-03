@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import random
+import pickle
 
 def get_student_present_list(prev_students, num_students, cur_student_o_set, cur_student_i_set):
 	# print(prev_students, num_students, len(cur_student_o_set), len(cur_student_i_set))
@@ -75,7 +76,10 @@ def main():
 
 	update_full_attendance(df_val, df_hostel_name, hostel_student_dict, bin_student_attendance)
 	validate_table(bin_student_attendance, df_val)
-	np.savetxt('student_attendance.txt', bin_student_attendance)
+	# np.savetxt('student_attendance.txt', bin_student_attendance)
+	np.save('student_attendance.npy', bin_student_attendance)
+	with open('hostel_student_dict.pickle', 'wb') as handle:
+		pickle.dump(hostel_student_dict, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 
 if __name__ == "__main__":
