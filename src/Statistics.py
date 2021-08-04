@@ -135,8 +135,8 @@ def write_stats(pickle_file, text_file):
                 example_path = args.example_path
                 final_dict = Stats.get_dict()
                 save_pickle(example_path,pickle_file,final_dict)
-                # str = get_pretty_print_str(final_dict)
-                # save_to_text_file(example_path, str, text_file)
+                str = get_pretty_print_str(final_dict)
+                save_to_text_file(example_path, str, text_file)
         return wrapper
 
     return decorator

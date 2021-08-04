@@ -36,7 +36,7 @@ class Simulate():
 		self.store_state()
 
 	@Utility.viz_dynamic_graph()
-	@Statistics.save_stats([("agents_obj",3)], "Agents", ["state"])
+	@Statistics.save_stats([("agents_obj",3)], "Agents", ["policy_dict"])
 	def onStartTimeStep(self, interactionFiles_listOfList, eventFiles_listOfList, probabilistic_interactionFiles_listOfList, oneTimeEvent_obj):
 
 		for agent in self.agents_obj.agents.values():

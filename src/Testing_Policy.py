@@ -199,7 +199,7 @@ class Test_Policy(Agent_Policy):
 	def run_edge_case(self,time_step):
 		# For the case when turnaround_time = 0
 		for machine in self.machine_list:
-			if machine.run_completed(time_step):
+			if not machine.has_empty_results() and machine.run_completed(time_step):
 				self.populate_results_in_machine(time_step)
 				self.release_results(time_step)
 				break
@@ -294,6 +294,48 @@ class Test_Policy(Agent_Policy):
 		assert isinstance(value_list,list)
 		return partial(self.full_random_agents, num_agents_per_testtube, num_testtubes_per_agent, attribute, value_list)
 
+	def full_random_agents_CR(self, num_agents_per_testtube, num_testtubes_per_agent, attribute, value_list, agents, time_step):
+		agents_copy = copy.copy(list(agents))
+		random.shuffle(agents_copy)
+
+		# Get agents for test
+		agents_to_test = []
+		for agent in agents_copy:
+			# print(time_step, self.num_agents_to_test)
+
+			if(len(agents_to_test)==self.num_agents_to_test):
+				break
+
+			# elif(attribute is None or agent.info[attribute] in value_list):
+			# 	agents_to_test.append(agent)
+
+			elif(agent.can_contribute_infection and agent.can_recieve_infection):
+				agents_to_test.append(agent)
+
+		# Create testtubes based on formula - int((ntpa x no. of agents + napt -1)/napt)
+		num_testtubes = int((num_testtubes_per_agent*self.num_agents_to_test + num_agents_per_testtube -1)/num_agents_per_testtube)
+		for _ in range(num_testtubes):
+			testtube = Testtube()
+			self.cur_testtubes.append(testtube)
+
+		# Assign agents to testtubes
+		for agent in agents_to_test:
+			if(len(self.cur_testtubes)>0):
+				cur_list = random.sample(self.cur_testtubes, min(num_testtubes_per_agent,len(self.cur_testtubes)))
+
+				for testtube in cur_list:
+					testtube.register_agent(agent,time_step)
+
+					if(testtube.get_num_agents()>=num_agents_per_testtube):
+						self.ready_queue.append(testtube)
+						self.cur_testtubes.remove(testtube)
+			else:
+				break
+
+	def random_agents_CR(self, num_agents_per_testtube=1, num_testtubes_per_agent=1, attribute=None, value_list=[]):
+		assert isinstance(value_list,list)
+		return partial(self.full_random_agents_CR, num_agents_per_testtube, num_testtubes_per_agent, attribute, value_list)
+
 
 	def add_partial_to_ready_queue(self):
 		for testtube in self.cur_testtubes:
@@ -324,6 +366,7 @@ class Test_Policy(Agent_Policy):
 	def release_results_to_agents(self,results):
 		for result_obj in results:
 			self.update_agent_policy_history(result_obj.agent,result_obj)
+			print("BRUH")
 
 	def release_results_to_policy(self,results,time_step):
 		for result_obj in results:
