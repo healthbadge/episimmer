@@ -20,8 +20,8 @@ class UserModel(Model.StochasticModel):
 		individual_types=['Susceptible','Infected','Recovered']	#These are the states that will be used by the compartmental model
 		infected_states=['Infected']	#These are the states that can infect
 		state_proportion={				#This is the starting proportions of each state
-							'Susceptible':0.96,
-							'Infected':0.04,
+							'Susceptible':0.99,
+							'Infected':0.01,
 							'Recovered':0
 						}
 		Model.StochasticModel.__init__(self,individual_types,infected_states,state_proportion)  #We use the inbuilt model in the package

@@ -12,11 +12,14 @@ def get_num_agents_from_pickle(time_step):
 	else:
 		return 0
 
+def event_restriction_fn(agent,event_info,current_time_step):
+	return False
+
+def lockdown_fn(time_step):
+	return True
+
 def generate_policy():
 	policy_list=[]
-
-	def lockdown_fn(time_step):
-		return True
 
 	bin_student_attendance = np.load('Stochastic_SIR_CR/student_attendance.npy')
 	policy_list.append(Lockdown_Policy.agent_lockdown_CR(lockdown_fn, bin_student_attendance))
@@ -29,7 +32,7 @@ def generate_policy():
 	# ATP = Lockdown_Policy.agent_policy_based_lockdown("Testing",["Positive"],lambda x:True,10)
 	# policy_list.append(ATP)
 
-	def event_restriction_fn(agent,event_info,current_time_step):
-		return False
+	# policy_list.append(Lockdown_Policy.agent_lockdown_CR2(lockdown_fn))
+
 
 	return policy_list,event_restriction_fn

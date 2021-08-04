@@ -199,7 +199,7 @@ class Test_Policy(Agent_Policy):
 	def run_edge_case(self,time_step):
 		# For the case when turnaround_time = 0
 		for machine in self.machine_list:
-			if not machine.has_empty_results() and machine.run_completed(time_step):
+			if not machine.is_empty() and machine.run_completed(time_step):
 				self.populate_results_in_machine(time_step)
 				self.release_results(time_step)
 				break
@@ -295,6 +295,7 @@ class Test_Policy(Agent_Policy):
 		return partial(self.full_random_agents, num_agents_per_testtube, num_testtubes_per_agent, attribute, value_list)
 
 	def full_random_agents_CR(self, num_agents_per_testtube, num_testtubes_per_agent, attribute, value_list, agents, time_step):
+		print(time_step, self.num_agents_to_test)
 		agents_copy = copy.copy(list(agents))
 		random.shuffle(agents_copy)
 
@@ -366,7 +367,6 @@ class Test_Policy(Agent_Policy):
 	def release_results_to_agents(self,results):
 		for result_obj in results:
 			self.update_agent_policy_history(result_obj.agent,result_obj)
-			print("BRUH")
 
 	def release_results_to_policy(self,results,time_step):
 		for result_obj in results:

@@ -85,12 +85,16 @@ def get_interaction_graph_from_object(obj):
 
     net = Network()
 
+    for i,state in enumerate(model.individual_state_types):
+        net.add_node(state, x=100*root_num+200, y = 100*i, color = model.colors[state], shape='square')
+
     # Agent Nodes
     for i,agent in enumerate(agents_dict.values()):
-        if(agent.state in infected_states):
-            net.add_node(agent.index, x=100*(i%root_num), y = 100*(i/root_num), color = "red")
-        else:
-            net.add_node(agent.index, x=100*(i%root_num), y = 100*(i/root_num))
+        #if(agent.state in infected_states):
+        #    net.add_node(agent.index, x=100*(i%root_num), y = 100*(i/root_num), color = "red")
+        #else:
+        net.add_node(agent.index, x=100*(i%root_num), y = 100*(i/root_num), color = model.colors[agent.state])
+
 
     # Interactions
     for agent in agents_dict.values():
@@ -106,7 +110,8 @@ def get_interaction_graph_from_object(obj):
             for i,event_info in enumerate(location.events):
                 net.add_node(event_info["Location Index"]+"_event",x=-300 - 100*j,y=100*i,shape="triangle")
                 for agent in event_info["Agents"]:
-                    net.add_edge(event_info["Location Index"]+"_event", agent,color="black")
+                    if(agents_obj.agents[agent].can_recieve_infection):
+                        net.add_edge(event_info["Location Index"]+"_event", agent,color="black")
 
     net.toggle_physics(False)
     net.show(outpath)
