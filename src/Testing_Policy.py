@@ -295,7 +295,6 @@ class Test_Policy(Agent_Policy):
 		return partial(self.full_random_agents, num_agents_per_testtube, num_testtubes_per_agent, attribute, value_list)
 
 	def full_random_agents_CR(self, num_agents_per_testtube, num_testtubes_per_agent, attribute, value_list, agents, time_step):
-		print(time_step, self.num_agents_to_test)
 		agents_copy = copy.copy(list(agents))
 		random.shuffle(agents_copy)
 
@@ -384,6 +383,7 @@ class Test_Policy(Agent_Policy):
 
 			self.statistics[time_step][machine_name]['Number of Agents Tested'] += 1
 			self.statistics[time_step]['Total Agents Tested'] += 1
+		print(time_step, self.statistics[time_step]['Total Agents Tested'], self.statistics[time_step]['Total Positive Results'])
 
 
 	def release_results(self,time_step):

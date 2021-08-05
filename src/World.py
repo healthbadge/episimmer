@@ -73,6 +73,7 @@ class World():
 
         # Average number time series
         avg_dict = Utility.average(tdict, self.config_obj.worlds)
+        print(avg_dict)
         stddev_dict = Utility.stddev(tdict, t2_dict, self.config_obj.worlds)
         plottor = Utility.plotResults(self.model, avg_dict,stddev_dict, maxdict, mindict, plot)
         plottor.savefig(osp.join(self.config_obj.example_path,'results','results.jpg'))

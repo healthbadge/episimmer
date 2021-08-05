@@ -1,7 +1,0 @@
-<monday_contacts.csv>
-<tuesday_contacts.csv>
-<wednesday_contacts.csv>
-<thursday_contacts.csv>
-<friday_contacts.csv>
-<saturday_contacts.csv>
-<sunday_contacts.csv>

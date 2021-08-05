@@ -41,20 +41,6 @@ class agent_lockdown_CR(Agent_Policy):
 					agent.restrict_contribute_infection()
 		# fp.close()
 
-class agent_lockdown_CR2(Agent_Policy):
-	def __init__(self,do_lockdown_fn):
-		self.policy_type='Restrict'
-		self.do_lockdown_fn=do_lockdown_fn
-
-	def enact_policy(self,time_step,agents,locations,model=None):
-		if self.do_lockdown_fn(time_step):
-			for agent in agents:
-				history = agent.get_policy_history("Testing")
-				if(len(history)):
-					agent.restrict_recieve_infection()
-					agent.restrict_contribute_infection()
-
-
 class agent_policy_based_lockdown(Agent_Policy):
 	def __init__(self,policy_to_consider,value_list,do_lockdown_fn,time_period):
 		self.policy_type='Restrict'
@@ -64,7 +50,7 @@ class agent_policy_based_lockdown(Agent_Policy):
 		self.time_period = time_period
 
 	def enact_policy(self,time_step,agents,locations,model=None):
-		fp = open("logs.txt","a")
+		# fp = open("logs.txt","a")
 		if self.do_lockdown_fn(time_step):
 			for agent in agents:
 				history = agent.get_policy_history(self.policy_to_consider)
@@ -73,10 +59,10 @@ class agent_policy_based_lockdown(Agent_Policy):
 					if(time_step - last_time_step < self.time_period):
 						result = self.get_accumulated_result(history,last_time_step)
 						if(result in self.value_list):
-							fp.write("{0}, {1}, {2}\n".format(time_step,agent.index, result))
+							# fp.write("{0}, {1}, {2}\n".format(time_step,agent.index, result))
 							agent.restrict_recieve_infection()
 							agent.restrict_contribute_infection()
-		fp.close()
+		# fp.close()
 
 	def get_accumulated_result(self,history,last_time_step):
 

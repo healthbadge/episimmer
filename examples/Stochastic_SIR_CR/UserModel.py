@@ -11,7 +11,10 @@ def event_contribute_fn(agent,event_info,location,current_time_step):
 
 #This fucntion states the probability of an agent becoming infected fromt he ambient infection
 def event_recieve_fn(agent,ambient_infection,event_info,location,current_time_step):
-	beta=0.01
+	if event_info["Type"] == "Hostel":
+		beta= 0.0015
+	elif event_info["Type"] == "Campus":
+		beta= 0.00002
 	return ambient_infection*beta
 
 
@@ -26,7 +29,7 @@ class UserModel(Model.StochasticModel):
 						}
 		Model.StochasticModel.__init__(self,individual_types,infected_states,state_proportion)  #We use the inbuilt model in the package
 		self.set_transition('Susceptible', 'Infected', self.p_infection(None,None))	#Adding S-> I transition which is redundant in this case as we use the event_contribute and event_recieve function
-		self.set_transition('Infected', 'Recovered', self.p_standard(0.2))	#Adding the I->R transition
+		self.set_transition('Infected', 'Recovered', self.p_standard(0.055))	#Adding the I->R transition
 
 
 		self.set_event_contribution_fn(event_contribute_fn)	#Setting the above defined fucntion into the model

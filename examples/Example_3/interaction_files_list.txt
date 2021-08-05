@@ -1,8 +1,0 @@
-<weekday_contacts.txt>
-<weekday_contacts.txt>
-<weekday_contacts.txt>
-<weekday_contacts.txt>
-<weekday_contacts.txt>
-<weekend_contacts.txt>
-<weekend_contacts.txt>
-

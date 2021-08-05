@@ -1,7 +1,0 @@
-<monday_contacts.txt>
-<tuesday_contacts.txt>
-<wednesday_contacts.txt>
-<thursday_contacts.txt>
-<friday_contacts.txt>
-<saturday_contacts.txt>
-<sunday_contacts.txt>

@@ -1,7 +1,0 @@
-<monday_events.txt>
-<tuesday_events.txt>
-<wednesday_events.txt>
-<thursday_events.txt>
-<friday_events.txt>
-<saturday_events.txt>
-<sunday_events.txt>
