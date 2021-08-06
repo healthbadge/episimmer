@@ -1,0 +1,13 @@
+Random Seed <3>
+Number of worlds <1>
+Number of Days <30>
+Agent Parameter Keys <Agent Index:age:hostel:mess:dept_id>
+Agent list filename <agents.csv>
+Interaction Info Keys <>
+Interaction Files list filename <>
+Probabilistic Interaction Files list filename <>
+Location Parameter Keys <Location Index:Name>
+Location list filename <locations.txt>
+Event Parameter Keys <Location Index:Event ID:Agents:Type>
+Event Files list filename <event_files_fixed.txt,event_files_periodic.txt>
+One Time Event filename <>
