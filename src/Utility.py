@@ -108,10 +108,10 @@ def get_interaction_graph_from_object(obj):
     for j,location in enumerate(locations_obj.locations.values()):
         if not location.lock_down_state:
             for i,event_info in enumerate(location.events):
-                net.add_node(event_info["Location Index"]+"_event",x=-300 - 100*j,y=100*i,shape="triangle")
+                net.add_node(event_info["Location Index"]+"_event"+str(i),x=-300 - 100*j,y=100*i,shape="triangle")
                 for agent in event_info["Agents"]:
                     if(agents_obj.agents[agent].can_recieve_infection):
-                        net.add_edge(event_info["Location Index"]+"_event", agent,color="black")
+                        net.add_edge(event_info["Location Index"]+"_event"+str(i), agent,color="black")
 
     net.toggle_physics(False)
     net.show(outpath)
