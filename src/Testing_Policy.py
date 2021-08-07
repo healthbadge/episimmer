@@ -199,7 +199,7 @@ class Test_Policy(Agent_Policy):
 	def run_edge_case(self,time_step):
 		# For the case when turnaround_time = 0
 		for machine in self.machine_list:
-			if machine.run_completed(time_step):
+			if not machine.is_empty() and machine.run_completed(time_step):
 				self.populate_results_in_machine(time_step)
 				self.release_results(time_step)
 				break
