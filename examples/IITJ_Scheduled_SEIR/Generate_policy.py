@@ -5,7 +5,7 @@ import numpy as np
 
 
 def get_num_agents_from_pickle(time_step):
-	fp = open('Stochastic_SIR_CR/tests_dict.pickle', 'rb')
+	fp = open('IITJ_Scheduled_SEIR/tests_dict.pickle', 'rb')
 	tests_dict = pickle.load(fp)
 	if time_step in tests_dict.keys():
 		return tests_dict[time_step]['num_st_tested']
@@ -21,7 +21,7 @@ def lockdown_fn(time_step):
 def generate_policy():
 	policy_list=[]
 
-	bin_student_attendance = np.load('Stochastic_SIR_CR/student_attendance.npy')
+	bin_student_attendance = np.load('IITJ_Scheduled_SEIR/student_attendance.npy')
 	policy_list.append(Lockdown_Policy.agent_lockdown_CR(lockdown_fn, bin_student_attendance))
 
 	Normal_Test = Testing_Policy.Test_Policy(get_num_agents_from_pickle)

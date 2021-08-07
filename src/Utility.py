@@ -114,6 +114,7 @@ def get_interaction_graph_from_object(obj):
                         net.add_edge(event_info["Location Index"]+"_event"+str(i), agent,color="black")
 
     net.toggle_physics(False)
+    # net.show_buttons(filter_=['physics'])
     net.show(outpath)
     return outpath
 
