@@ -10,10 +10,14 @@ def event_contribute_fn(agent,event_info,location,current_time_step):
 
 def event_recieve_fn(agent,ambient_infection,event_info,location,current_time_step):
 	if event_info["Type"] == "Hostel":
-		beta= 0.0015
+		beta= 0.0002
+	elif event_info["Type"] == "Mess":
+		beta= 0.0002
+	elif event_info["Type"] == "Class":
+		beta= 0.0002
 	elif event_info["Type"] == "Campus":
-		beta= 0.00003
-	return beta*ambient_infection
+		beta= 0.00002
+	return ambient_infection*beta
 
 def incubation_fn(time_step):
 	return np.random.lognormal(1.8, 0.52, 1)[0]
