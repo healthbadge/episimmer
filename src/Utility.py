@@ -122,12 +122,12 @@ def viz_single_graph(obj):
     path = get_interaction_graph_from_object(obj)
     filename = 'file:'+os.sep+os.sep+osp.join(os.getcwd(),path)
     print("Timestep = "+str(Time.Time.get_current_time_step()))
-    if Time.Time.get_current_time_step()==0:
+    if Time.Time.get_current_time_step() in [0,15,30,45,90]:
         webbrowser.open_new(filename)
         time.sleep(3)
-    else:
-        webbrowser.open(filename, new=0)
-        time.sleep(1)
+    #else:
+    #    webbrowser.open(filename, new=0)
+    #    time.sleep(1)
 
 def viz_dynamic_graph():
     def decorator(func):

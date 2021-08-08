@@ -131,6 +131,8 @@ class World():
         # print(avg_dict)
 
         avg_positives = avg_pos(self.positives, self.config_obj.time_steps)
+        for el in avg_positives:
+            print(el)
         maxls, minls = get_bounds_dict(self.positives, self.config_obj.time_steps, len(avg_positives))
         plotResults(avg_positives, maxls, minls)
 

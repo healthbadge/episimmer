@@ -12,7 +12,7 @@ def event_recieve_fn(agent,ambient_infection,event_info,location,current_time_st
 	if event_info["Type"] == "Hostel":
 		beta= 0.0015
 	elif event_info["Type"] == "Campus":
-		beta= 0.00003
+		beta= 0.00005
 	return beta*ambient_infection
 
 def incubation_fn(time_step):
