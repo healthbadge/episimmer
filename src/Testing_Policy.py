@@ -383,7 +383,6 @@ class Test_Policy(Agent_Policy):
 
 			self.statistics[time_step][machine_name]['Number of Agents Tested'] += 1
 			self.statistics[time_step]['Total Agents Tested'] += 1
-		print(time_step, self.statistics[time_step]['Total Agents Tested'], self.statistics[time_step]['Total Positive Results'])
 
 
 	def release_results(self,time_step):
