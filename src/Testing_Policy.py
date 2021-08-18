@@ -306,11 +306,9 @@ class Test_Policy(Agent_Policy):
 			if(len(agents_to_test)==self.num_agents_to_test):
 				break
 
-			# elif(attribute is None or agent.info[attribute] in value_list):
-			# 	agents_to_test.append(agent)
-
-			elif(agent.can_contribute_infection and agent.can_recieve_infection):
-				agents_to_test.append(agent)
+			elif(attribute is None or agent.info[attribute] in value_list):
+				if(agent.can_contribute_infection and agent.can_recieve_infection):
+					agents_to_test.append(agent)
 
 		# Create testtubes based on formula - int((ntpa x no. of agents + napt -1)/napt)
 		num_testtubes = int((num_testtubes_per_agent*self.num_agents_to_test + num_agents_per_testtube -1)/num_agents_per_testtube)

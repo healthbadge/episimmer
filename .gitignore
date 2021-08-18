@@ -8,6 +8,8 @@ testing_stats.json
 .vscode
 /examples/*/results
 *.html
+/examples/IITJ_Full_Stochastic_SIR
+/examples/IITJ_Full_Scheduled_SEIR
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

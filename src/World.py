@@ -6,6 +6,15 @@ import Time
 import math
 import matplotlib.pyplot as plt
 import numpy as np
+import pickle
+
+def print_no_infections(avg_dict, time_steps):
+
+    fp = open('IITJ_Stochastic_SIR/tests_dict.pickle', 'rb')
+    tests_dict = pickle.load(fp)
+    for time_step in range(time_steps):
+        if time_step in tests_dict.keys():
+            print(avg_dict['Infected'][time_step])
 
 def avg_pos(dict, time_steps):
     avg_list = []
@@ -131,8 +140,9 @@ class World():
         # print(avg_dict)
 
         avg_positives = avg_pos(self.positives, self.config_obj.time_steps)
-        for el in avg_positives:
-            print(el)
+        # for el in avg_positives:
+        #     print(el)
+        # print_no_infections(avg_dict, self.config_obj.time_steps)
         maxls, minls = get_bounds_dict(self.positives, self.config_obj.time_steps, len(avg_positives))
         plotResults(avg_positives, maxls, minls)
 
