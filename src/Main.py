@@ -48,14 +48,10 @@ def main():
     world_obj = World.World(config_obj, model, policy_list, event_restriction_fn, agents_filename, interactions_files_list, probabilistic_interactions_files_list, locations_filename, events_files_list, one_time_event_file)
 
     if vuldetect:
-        # vd_config_filename = get_config_path(example_path, 'vd_config.txt')
-        # vd_config_obj=ReadFile.Read_VD_Configuration(vd_config_filename)
-        # VD_obj = VD(vd_config_obj, world_obj)
-        # VD_obj.run_vul_detection()
-
-        # Testing
-        VD_obj = VD(None, world_obj)
-        VD_obj.test_run_vul_detection()
+        vd_config_filename = get_config_path(example_path, 'vd_config.txt')
+        vd_config_obj=ReadFile.Read_VD_Configuration(vd_config_filename)
+        VD_obj = VD(vd_config_obj, world_obj)
+        VD_obj.run_vul_detection()
 
     else:
         world_obj.simulate_worlds()

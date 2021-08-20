@@ -1,6 +1,6 @@
 VD Target <Agent>
-VD Algorithm <Vulnerable_Agent_MC1>
-Algorithm Parameter Values <:>
+VD Algorithm <BanditAlgos>
+Algorithm Parameter Values <states=Infected,Recovered:num_runs=100:mode=UCB>
 Pre Processing <>
 Post Processing <>
 Output Mode <Default>
