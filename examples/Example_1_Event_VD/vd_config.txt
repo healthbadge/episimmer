@@ -1,0 +1,6 @@
+VD Target <Event>
+VD Algorithm <Event_Vulnerabilities_MC>
+Algorithm Parameter Values <states=Exposed,Asymptomatic,Symptomatic,Recovered:num_runs=5000:num_events_to_restrict=1>
+Pre Processing <>
+Post Processing <>
+Output Mode <Default>
