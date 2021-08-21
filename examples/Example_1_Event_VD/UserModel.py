@@ -1,71 +1,35 @@
 import Model
-import math
 
-#User defined functions
-#This function is user defined, based on the parameters the user has inputed in agents file and interaction/contact file
-#This function represents the probability of getting infected during a single interaction/contact
-def probabilityOfInfection_fn(p_infected_states_list,contact_agent,c_dict,current_time_step):
-	
-	p_inf_symp,p_inf_asymp=p_infected_states_list[0],p_infected_states_list[1]
-	#EXAMPLE 1
-	if contact_agent.state=='Symptomatic':
-		return math.tanh(float(c_dict['Time Interval']))*p_inf_symp
-	elif contact_agent.state=='Asymptomatic':
-		return math.tanh(float(c_dict['Time Interval']))*p_inf_asymp
-	else:
-		return 0
+#The two fucntions event_contribute_fn and event_recieve_fn together control the spread of infection
 
-	#Example 2
-	if contact_agent.state=='Symptomatic':
-		return math.tanh(float(c_dict['Time Interval'])*float(c_dict['Intensity']))*p_inf_symp
-	elif contact_agent.state=='Asymptomatic':
-		return math.tanh(float(c_dict['Time Interval'])*float(c_dict['Intensity']))*p_inf_asymp
-	else:
-		return 0
-
+# This function states the amount an agent contributes to ambient infection in the region
+#note that only infected agents contibute to the ambient infection
 def event_contribute_fn(agent,event_info,location,current_time_step):
-		#Example 1
-		if agent.state=='Symptomatic':
+		if agent.state=='Infected':
 			return 1
-		elif agent.state=='Asymptomatic':
-			return 0.3
-		else:
-			return 0
+		return 0
 
-		#Example 2
-		susceptibility=1
-		if agent.info['HLA Type']=='A':
-			susceptibility=0.9
-
-		if agent.state=='Symptomatic':
-			return math.tanh(float(event_info['Time Interval']))*(1-location.info['Ventilation'])*susceptibility
-		elif agent.state=='Asymptomatic':
-			return 0.3*math.tanh(float(event_info['Time Interval']))*(1-location.info['Ventilation'])*susceptibility
-
+#This fucntion states the probability of an agent becoming infected fromt he ambient infection
 def event_recieve_fn(agent,ambient_infection,event_info,location,current_time_step):
-	p=math.tanh(ambient_infection*0.3)
-	return p
-
-
+	beta=0.001
+	return ambient_infection*beta
 
 
 class UserModel(Model.StochasticModel):
 	def __init__(self):
-		individual_types=['Susceptible','Exposed','Asymptomatic','Symptomatic','Recovered']
-		infected_states=['Asymptomatic','Symptomatic']
-		state_proportion={
+		individual_types=['Susceptible','Infected','Recovered']	#These are the states that will be used by the compartmental model
+		infected_states=['Infected']	#These are the states that can infect
+		state_proportion={				#This is the starting proportions of each state
 							'Susceptible':0.99,
-							'Exposed':0.01,
-							'Recovered':0,
-							'Asymptomatic':0,
-							'Symptomatic':0
+							'Infected':0.01,
+							'Recovered':0
 						}
-		Model.StochasticModel.__init__(self,individual_types,infected_states,state_proportion)
-		self.set_transition('Susceptible', 'Exposed', self.p_infection([0.3,0.1],probabilityOfInfection_fn))
-		self.set_transition('Exposed', 'Symptomatic', self.p_standard(0.15))
-		self.set_transition('Exposed', 'Asymptomatic', self.p_standard(0.2))
-		self.set_transition('Symptomatic', 'Recovered', self.p_standard(0.2))
-		self.set_transition('Asymptomatic', 'Recovered', self.p_standard(0.2))
+		Model.StochasticModel.__init__(self,individual_types,infected_states,state_proportion)  #We use the inbuilt model in the package
+		self.set_transition('Susceptible', 'Infected', self.p_infection(None,None))	#Adding S-> I transition which is redundant in this case as we use the event_contribute and event_recieve function
+		self.set_transition('Infected', 'Recovered', self.p_standard(0.2))	#Adding the I->R transition
 
-		self.set_event_contribution_fn(event_contribute_fn)
-		self.set_event_recieve_fn(event_recieve_fn)
+
+		self.set_event_contribution_fn(event_contribute_fn)	#Setting the above defined fucntion into the model
+		self.set_event_recieve_fn(event_recieve_fn)	#Setting the above defined fucntion into the model
+
+		self.name='Stochastic SIR' 
