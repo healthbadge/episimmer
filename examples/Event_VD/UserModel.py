@@ -11,7 +11,7 @@ def event_contribute_fn(agent,event_info,location,current_time_step):
 
 #This fucntion states the probability of an agent becoming infected fromt he ambient infection
 def event_recieve_fn(agent,ambient_infection,event_info,location,current_time_step):
-	beta=0.001
+	beta=0.035
 	return ambient_infection*beta
 
 
@@ -32,4 +32,4 @@ class UserModel(Model.StochasticModel):
 		self.set_event_contribution_fn(event_contribute_fn)	#Setting the above defined fucntion into the model
 		self.set_event_recieve_fn(event_recieve_fn)	#Setting the above defined fucntion into the model
 
-		self.name='Stochastic SIR' 
+		self.name='Stochastic SIR'
