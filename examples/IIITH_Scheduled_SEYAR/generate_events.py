@@ -55,6 +55,9 @@ Staff
 Total Staff = 80 (Taken from vaccination data.)
 20 on-campus, 60 off-campus
 Total members = 80
+
+Others
+Total sum = 230 (Taken from vaccination data.)
 """
 
 def add_faculty_events():
