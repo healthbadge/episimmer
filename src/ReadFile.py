@@ -130,6 +130,49 @@ class ReadConfiguration():
 
 		return interactions_files_list, events_files_list, probabilistic_interactions_files_list
 
+
+class Read_VD_Configuration():
+	def __init__(self,filename):
+		self.target=None
+		self.algorithm=None
+		self.parameter_dict={}
+		self.pre_process=None
+		self.post_process=None
+		self.output_mode=None
+
+		f = open(filename,"r")
+
+		self.target = (self.get_value_config(f.readline()))
+		self.algorithm = (self.get_value_config(f.readline()))
+		parameters = (self.get_value_config(f.readline())).split(':')
+		for parameter in parameters:
+			key,val = parameter.split('=')
+			self.parameter_dict[key] = val
+
+		self.pre_process=self.get_value_config(f.readline())
+		self.post_process=self.get_value_config(f.readline())
+		self.output_mode=self.get_value_config(f.readline())
+
+		f.close()
+
+		if(self.target == ""):
+			raise Exception("Error! Target required in vd_config.txt")
+
+		if(self.algorithm == ""):
+			raise Exception("Error! Algorithm required in vd_config.txt")
+
+		if(not self.parameter_dict):
+			print("No parameters provided in vd_config.txt")
+
+
+	def get_value_config(self, line):
+	    l = re.findall("\<.*?\>", line)
+	    if len(l)!=1:
+	        print("Error! Invalid entry in vd_config.txt")
+	        return None
+	    value=(((l[0])[1:])[:-1])
+	    return value
+
 class ReadFilesList():
 	def __init__(self,filename):
 		self.file_list=[]

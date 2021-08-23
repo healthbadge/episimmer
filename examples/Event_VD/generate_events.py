@@ -2,23 +2,27 @@ import random
 import copy
 import numpy as np
 
+e_indx = 0
 def write_to_file(filename,no_locations,no_agents):
+	global e_indx
 	info_dict={}
 	#ID enumerates from 0 to n-1
-	header='Location Index:Agents:Time Interval'
+	header='Event Index:Location Index:Agents:Time Interval'
 	n=random.randint(10,20)
 	f=open(filename,'w')
 	f.write(str(n)+'\n')
 	f.write(header+'\n')
 
 	for i in range(n):
-		line=str(random.randint(0,no_locations-1))+':'
+		line = str(e_indx)+':'
+		line +=str(random.randint(0,no_locations-1))+':'
 		for i in range(random.randint(0,20)):
 			line+=str(random.randint(0,no_agents-1))+','
 		line+=str(random.randint(0,no_agents-1))
 		line+=':'+str(random.choice([10,30,45,60]))+'\n'
 
 		f.write(line)
+		e_indx+=1
 
 write_to_file('monday_events.txt',10,100)
 write_to_file('tuesday_events.txt',10,100)
