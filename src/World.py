@@ -41,12 +41,19 @@ def get_bounds_dict(dict, time_steps, len_ls):
     return maxls, minls
 
 
-def plotResults(avg_list, maxls, minls, plot=True):
-
+def plotPosResults(avg_list, maxls, minls, plot=True):
+    """
+    ### IITJ
     target_ls = [2,2,3,10,12,15,9,8,3,8,5,27,1,4,13,6,25,6,2,4,1,6,3,2,0,1,2]
     date_ls = ["3/10/2021","3/18/2021","3/22/2021","3/28/2021","3/30/2021","3/31/2021","4/1/2021","4/6/2021","4/7/2021"\
                 ,"4/10/2021","4/14/2021","4/19/2021","4/21/2021","4/22/2021","4/28/2021","5/5/2021","5/7/2021","5/10/2021"\
                 ,"5/12/2021","5/14/2021","5/17/2021","5/19/2021","5/21/2021","5/24/2021","5/26/2021","5/28/2021","5/31/2021"]
+    """
+    ### IIITH
+    target_ls = [0,0,0,0,0,0,0,0,0,4,3,3,20,6,10,0,0,0,0,0,1]
+    date_ls = ["03.02.2021","08.02.2021","15.02.2021","22.02.2021","01.03.2021","08.03.2021","15.03.2021","22.03.2021",\
+                "28.03.2021","05.04.2021","11.04.2021","12.04.2021","19.04.2021","26.04.2021","06.05.2021","11.05.2021",\
+                "16.05.2021","23.05.2021","30.05.2021","07.06.2021","14.06.2021"]
     x=np.arange(0,len(avg_list))
     plt.plot(avg_list, label="Predicted")
     plt.plot(target_ls, label="Target")
@@ -126,8 +133,9 @@ class World():
             mindict[state] = [math.inf]*(self.config_obj.time_steps+1)
 
         for i in range(self.config_obj.worlds):
+            print("Running World : ",i+1)
             sdict, _, _ = self.one_world()
-            self.positives[i] = self.policy_list[1].statistics
+            self.positives[i] = self.policy_list[0].statistics
             for state in self.model.individual_state_types:
                 for j in range(len(tdict[state])):
                     tdict[state][j] += sdict[state][j]
@@ -140,11 +148,11 @@ class World():
         # print(avg_dict)
 
         avg_positives = avg_pos(self.positives, self.config_obj.time_steps)
-        # for el in avg_positives:
-        #     print(el)
+        for el in avg_positives:
+            print(el)
         # print_no_infections(avg_dict, self.config_obj.time_steps)
         maxls, minls = get_bounds_dict(self.positives, self.config_obj.time_steps, len(avg_positives))
-        plotResults(avg_positives, maxls, minls)
+        plotPosResults(avg_positives, maxls, minls)
 
         stddev_dict = Utility.stddev(tdict, t2_dict, self.config_obj.worlds)
         plottor = Utility.plotResults(self.model, avg_dict,stddev_dict, maxdict, mindict, plot)

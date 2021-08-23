@@ -8,10 +8,54 @@ def event_contribute_fn(agent,event_info,location,current_time_step):
 		return 0
 
 def event_recieve_fn(agent,ambient_infection,event_info,location,current_time_step):
-	#Example 1
-	beta=0.001
-	return ambient_infection*beta
+	"""
+	All levels : ["Campus_Level", "Student_Level", "Hostel_Level", "Floor_Level", "Room_Level", "Mess_Level",\
+					"Flat_Level", "Quarter_Level", "Staff_Level", "Others_Level"]
+	"""
+	if event_info["Level"] == "Campus_Level":
+		beta= 0.0
 
+	elif event_info["Level"] == "Student_Level":
+		beta= 0.0
+	elif event_info["Level"] == "Hostel_Level":
+		beta= 0.0000005
+	elif event_info["Level"] == "Floor_Level":
+		beta= 0.000005
+	elif event_info["Level"] == "Room_Level":
+		beta= 0.00005
+	elif event_info["Level"] == "Mess_Level":
+		beta= 0.00005
+
+	elif event_info["Level"] == "Flat_Level":
+		beta= 0.000005
+	elif event_info["Level"] == "Quarter_Level":
+		beta= 0.0000005
+
+	elif event_info["Level"] == "Staff_Level":
+		beta= 0.000005
+	elif event_info["Level"] == "Others_Level":
+		beta= 0.000005
+	return beta*ambient_infection
+
+def external_prevalence(agent, current_time_step):
+	"""
+	Type : ["Student", "Faculty", "Staff", "Others"]
+	Pre-Lockdown : current_time_step<=71 ; Post-Lockdown : current_time_step>71
+	"""
+	if current_time_step <=71:
+		if(agent.info['Type'] == 'Faculty'):
+			return 0.001
+		elif(agent.info['Type'] in ['Others', 'Staff']):
+			return 0.0035
+		elif(agent.info['Type'] == 'Student'):
+			return 0.002
+	else:
+		if(agent.info['Type'] == 'Faculty'):
+			return 0.001
+		elif(agent.info['Type'] in ['Others', 'Staff']):
+			return 0.0035
+		elif(agent.info['Type'] == 'Student'):
+			return 0.002
 
 class UserModel(Model.ScheduledModel):
 	def __init__(self):
@@ -25,5 +69,4 @@ class UserModel(Model.ScheduledModel):
 		self.set_event_contribution_fn(event_contribute_fn)
 		self.set_event_recieve_fn(event_recieve_fn)
 
-
-
+		self.set_external_prevalence_fn(external_prevalence)

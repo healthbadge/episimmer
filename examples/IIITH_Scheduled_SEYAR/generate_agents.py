@@ -39,14 +39,18 @@ def write_agents_txt(filename, union_students):
 	Total Staff = 80 (Taken from vaccination data.)
 	20 on-campus, 60 off-campus
 	Total members = 80
+
+	Others
+	Total sum = 230 (Taken from vaccination data.)
 	"""
 	num_faculty = 175
 	num_staff = 80
+	num_others = 230
 
 	header='Agent Index:Type'
 
 	f=open(filename,'w')
-	f.write(str(num_students+num_faculty+num_staff)+'\n')
+	f.write(str(num_students+num_faculty+num_staff+num_others)+'\n')
 	f.write(header+'\n')
 
 	for st_roll in union_students:
@@ -57,6 +61,9 @@ def write_agents_txt(filename, union_students):
 
 	for i in range(num_staff):
 		f.write(str(i)+'S:Staff\n')
+
+	for i in range(num_others):
+		f.write(str(i)+'O:Others\n')
 
 	f.close()
 

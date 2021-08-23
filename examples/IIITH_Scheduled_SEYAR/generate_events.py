@@ -101,6 +101,19 @@ def add_staff_events():
 	return event_list
 
 
+def add_others_events():
+	event_list = []
+	num_others = 230
+
+	# Others level
+	ls1 = []
+	for i in range(num_others):
+		ls1.append(str(i)+"O")
+	event_list.append({"level":"Others_Level", "Agents":ls1})
+
+	return event_list
+
+
 def write_events(filename, mode, df):
 
 
@@ -108,6 +121,7 @@ def write_events(filename, mode, df):
 	event_list += add_agent_events(df)
 	event_list += add_faculty_events()
 	event_list += add_staff_events()
+	event_list += add_others_events()
 
 	all_agents = []
 	for event in event_list:
