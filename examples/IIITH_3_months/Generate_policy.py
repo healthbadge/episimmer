@@ -3,7 +3,7 @@ import Testing_Policy
 import pickle
 
 def get_num_agents_from_pickle(time_step):
-	fp = open('IIITH_Scheduled_SEYAR/tests_dict.pickle', 'rb')
+	fp = open('IIITH_3_months/tests_dict.pickle', 'rb')
 	tests_dict = pickle.load(fp)
 	if time_step in tests_dict.keys():
 		return tests_dict[time_step]['num_st_tested']
@@ -12,10 +12,10 @@ def get_num_agents_from_pickle(time_step):
 
 def event_restriction_fn(agent,event_info,current_time_step):
 	"""
-	Total days from 03.02.2021 to 14.06.2021 = 132 days.
-	Total days from 03.02.2021 to 15.04.2021 = 72 days.
+	Total days = 80 days.
+	Total days = 20 days.
 	"""
-	if(current_time_step <= 71):
+	if(current_time_step <= 19):
 		if(event_info["Period"] == "Post-Lockdown"):
 			return True
 	else:
@@ -34,7 +34,7 @@ def generate_policy():
 	Normal_Test.set_register_agent_testtube_func(Normal_Test.random_agents_CR2(1,1,["Symptomatic"]))
 	policy_list.append(Normal_Test)
 
-	ATP = Lockdown_Policy.agent_policy_based_lockdown("Testing",["Positive"],lambda x:True,10)
+	ATP = Lockdown_Policy.agent_policy_based_lockdown("Testing",["Positive"],lambda x:True,12)
 	policy_list.append(ATP)
 
 	return policy_list,event_restriction_fn
