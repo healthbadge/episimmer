@@ -6,7 +6,7 @@ import webbrowser
 import functools
 import os
 import os.path as osp
-from pyvis.network import Network
+#from pyvis.network import Network
 import time
 import math
 import Time
@@ -82,7 +82,7 @@ def get_interaction_graph_from_object(obj):
     root_num = int(math.sqrt(number_of_agents))
     agents_dict = agents_obj.agents
     infected_states = model.infected_states
-
+    '''
     net = Network()
 
     # Agent Nodes
@@ -110,6 +110,7 @@ def get_interaction_graph_from_object(obj):
 
     net.toggle_physics(False)
     net.show(outpath)
+    '''
     return outpath
 
 def viz_single_graph(obj):
