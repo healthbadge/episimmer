@@ -1,6 +1,6 @@
-VD Target <Event>
-VD Algorithm <Event_Vulnerabilities_MC>
-Algorithm Parameter Values <states=Infected,Recovered:num_runs=1110>
+VD Target <Agent>
+VD Algorithm <Vulnerable_Agent_MC2>
+Algorithm Parameter Values <states=Exposed:num_runs=10000>
 Pre Processing <>
 Post Processing <>
 Output Mode <Default>
