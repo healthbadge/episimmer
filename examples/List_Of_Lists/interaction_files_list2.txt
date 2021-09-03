@@ -1,2 +1,0 @@
-<odd_contacts.csv>
-<even_contacts.csv>

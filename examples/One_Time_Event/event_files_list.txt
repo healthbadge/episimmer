@@ -1,2 +1,0 @@
-<non_empty_event.txt>
-<empty_event.txt>

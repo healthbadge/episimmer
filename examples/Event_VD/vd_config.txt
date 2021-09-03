@@ -1,6 +1,0 @@
-VD Target <Event>
-VD Algorithm <Event_Vulnerabilities_MC>
-Algorithm Parameter Values <states=Infected,Recovered:num_runs=1110>
-Pre Processing <>
-Post Processing <>
-Output Mode <Default>
