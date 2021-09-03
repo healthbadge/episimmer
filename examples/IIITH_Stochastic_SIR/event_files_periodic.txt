@@ -1,7 +1,0 @@
-<Monday.txt>
-<Tuesday.txt>
-<Wednesday.txt>
-<Thursday.txt>
-<Friday.txt>
-<Saturday.txt>
-<Sunday.txt>

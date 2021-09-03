@@ -57,9 +57,9 @@ def plotPosResults(avg_list, maxls, minls, plot=True):
                 "16.05.2021","23.05.2021","30.05.2021","07.06.2021","14.06.2021"]
     """
     ### IIITH_3_months
-    target_ls = [0,4,2,4,20,6,10,0,0,0,0,0,1]
-    date_ls = ["28.03.2021","05.04.2021","11.04.2021","12.04.2021","19.04.2021","26.04.2021","06.05.2021","11.05.2021",\
-                "16.05.2021","23.05.2021","30.05.2021","07.06.2021","14.06.2021"]
+    #target_ls = [0,4,2,4,20,6,10,0,0,0,0,0,1]
+    #date_ls = ["28.03.2021","05.04.2021","11.04.2021","12.04.2021","19.04.2021","26.04.2021","06.05.2021","11.05.2021",\
+    #            "16.05.2021","23.05.2021","30.05.2021","07.06.2021","14.06.2021"]
     x=np.arange(0,len(avg_list))
     plt.plot(avg_list, label="Predicted")
     plt.plot(target_ls, label="Target")
@@ -151,14 +151,14 @@ class World():
 
         # Average number time series
         avg_dict = Utility.average(tdict, self.config_obj.worlds)
-        # print(avg_dict)
+        print(avg_dict)
 
-        avg_positives = avg_pos(self.positives, self.config_obj.time_steps)
-        for el in avg_positives:
-            print(el)
+        #avg_positives = avg_pos(self.positives, self.config_obj.time_steps)
+        #for el in avg_positives:
+        #    print(el)
         # print_no_infections(avg_dict, self.config_obj.time_steps)
         maxls, minls = get_bounds_dict(self.positives, self.config_obj.time_steps, len(avg_positives))
-        plotPosResults(avg_positives, maxls, minls)
+        #plotPosResults(avg_positives, maxls, minls)
 
         stddev_dict = Utility.stddev(tdict, t2_dict, self.config_obj.worlds)
         plottor = Utility.plotResults(self.model, avg_dict,stddev_dict, maxdict, mindict, plot)

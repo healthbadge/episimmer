@@ -10,14 +10,14 @@ def event_contribute_fn(agent,event_info,location,current_time_step):
 
 def event_recieve_fn(agent,ambient_infection,event_info,location,current_time_step):
 	if event_info["Type"] == "Hostel":
-		beta= 0.0002
+		beta= 0.001
 	elif event_info["Type"] == "Mess":
-		beta= 0.0002
+		beta= 0.0005
 	elif event_info["Type"] == "Class":
-		beta= 0.0002
+		beta= 0.0005
 	elif event_info["Type"] == "Campus":
-		beta= 0.00002
-	return ambient_infection*beta
+		beta= 0.00005
+	return 0.3*ambient_infection*beta
 
 def incubation_fn(time_step):
 	return np.random.lognormal(1.8, 0.52, 1)[0]
@@ -28,7 +28,7 @@ class UserModel(Model.ScheduledModel):
 		Model.ScheduledModel.__init__(self)
 		self.insert_state('Susceptible', None, None, self.p_infection([None],None,{'Exposed':1}),False,0.98)
 		self.insert_state_custom('Exposed', incubation_fn, self.p_function({'Infected':1}),False,0.01)
-		self.insert_state('Infected',14,1,self.scheduled({'Recovered':1}),True,0.01)
+		self.insert_state('Infected',18.8,2,self.scheduled({'Recovered':1}),True,0.01)
 		self.insert_state('Recovered',0,0,self.scheduled({'Recovered':1}),False,0)
 
 		self.set_event_contribution_fn(event_contribute_fn)
