@@ -8,8 +8,6 @@ def event_restriction_fn(agent,event_info,current_time_step):
 	return False
 
 def lockdown_fn(time_step):
-	if time_step%7==1:
-		return True
 	return False
 
 def generate_policy():
