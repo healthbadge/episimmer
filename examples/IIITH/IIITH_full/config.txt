@@ -1,5 +1,5 @@
 Random Seed <3>
-Number of worlds <10>
+Number of worlds <30>
 Number of Days <50>
 Agent Parameter Keys <Agent Index:age:hostel:mess:dept_id>
 Agent list filename <agents.csv>

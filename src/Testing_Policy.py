@@ -294,6 +294,27 @@ class Test_Policy(Agent_Policy):
 		assert isinstance(value_list,list)
 		return partial(self.full_random_agents, num_agents_per_testtube, num_testtubes_per_agent, attribute, value_list)
 
+
+		# Create testtubes based on formula - int((ntpa x no. of agents + napt -1)/napt)
+		num_testtubes = int((num_testtubes_per_agent*self.num_agents_to_test + num_agents_per_testtube -1)/num_agents_per_testtube)
+		for _ in range(num_testtubes):
+			testtube = Testtube()
+			self.cur_testtubes.append(testtube)
+
+		# Assign agents to testtubes
+		for agent in agents_to_test:
+			if(len(self.cur_testtubes)>0):
+				cur_list = random.sample(self.cur_testtubes, min(num_testtubes_per_agent,len(self.cur_testtubes)))
+
+				for testtube in cur_list:
+					testtube.register_agent(agent,time_step)
+
+					if(testtube.get_num_agents()>=num_agents_per_testtube):
+						self.ready_queue.append(testtube)
+						self.cur_testtubes.remove(testtube)
+			else:
+				break
+
 	def full_random_agents_CR(self, num_agents_per_testtube, num_testtubes_per_agent, attribute, value_list, agents, time_step):
 		agents_copy = copy.copy(list(agents))
 		random.shuffle(agents_copy)
