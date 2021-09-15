@@ -1,5 +1,5 @@
-VD Target <Event>
-VD Algorithm <Event_Vulnerabilities_MC>
+VD Target <Agent>
+VD Algorithm <Vulnerable_Agent_MC1>
 Algorithm Parameter File <parameter.json>
 Pre Processing <>
 Post Processing <>
