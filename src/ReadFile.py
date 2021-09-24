@@ -5,6 +5,7 @@ import copy
 import re
 import os.path as osp
 from csv import DictReader
+import json
 import Time
 
 class ReadConfiguration():
@@ -70,12 +71,12 @@ class ReadConfiguration():
 
 
 	def get_value_config(self, line):
-	    l = re.findall("\<.*?\>", line)
-	    if len(l)!=1:
-	        print("Error! Invalid entry in config.txt")
-	        return None
-	    value=(((l[0])[1:])[:-1])
-	    return value
+		l = re.findall("\<.*?\>", line)
+		if len(l)!=1:
+			print("Error! Invalid entry in config.txt")
+			return None
+		value=(((l[0])[1:])[:-1])
+		return value
 
 
 	def get_file_paths(self, example_path):
@@ -139,16 +140,13 @@ class Read_VD_Configuration():
 		self.pre_process=None
 		self.post_process=None
 		self.output_mode=None
+		self.example_path=osp.dirname(filename)
 
 		f = open(filename,"r")
 
 		self.target = (self.get_value_config(f.readline()))
 		self.algorithm = (self.get_value_config(f.readline()))
-		parameters = (self.get_value_config(f.readline())).split(':')
-		for parameter in parameters:
-			key,val = parameter.split('=')
-			self.parameter_dict[key] = val
-
+		self.read_parameter_file(self.get_value_config(f.readline()))
 		self.pre_process=self.get_value_config(f.readline())
 		self.post_process=self.get_value_config(f.readline())
 		self.output_mode=self.get_value_config(f.readline())
@@ -166,12 +164,19 @@ class Read_VD_Configuration():
 
 
 	def get_value_config(self, line):
-	    l = re.findall("\<.*?\>", line)
-	    if len(l)!=1:
-	        print("Error! Invalid entry in vd_config.txt")
-	        return None
-	    value=(((l[0])[1:])[:-1])
-	    return value
+		l = re.findall("\<.*?\>", line)
+		if len(l)!=1:
+			print("Error! Invalid entry in vd_config.txt")
+			return None
+		value=(((l[0])[1:])[:-1])
+		return value
+
+	def read_parameter_file(self, filename):
+		f=open(osp.join(self.example_path, filename),'r')
+		data = json.load(f)
+		self.parameter_dict = data
+		f.close()
+
 
 class ReadFilesList():
 	def __init__(self,filename):
@@ -191,9 +196,9 @@ class BaseReadFile():
 		pass
 
 	def get_value(self,line):
-	    if line.endswith('\n'):
-	        line=line[:-1]
-	    return line
+		if line.endswith('\n'):
+			line=line[:-1]
+		return line
 
 class ReadAgents(BaseReadFile):
 	def __init__(self,filename,config_obj):
