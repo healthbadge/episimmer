@@ -25,7 +25,7 @@ Flags :
 		-vul or --vuldetect : Run Vulnerability Detection on data folder based on VD_config.txt
 		-an or --animate : Creates gif animation in the example folder
 	    	-s or --stats : Choose to store statistics
-    		-vd or --vizdyn : Choose to vizualize simulation dynamically
+		-vd or --vizdyn : Choose to vizualize simulation dynamically
 
 
  
