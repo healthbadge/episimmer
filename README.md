@@ -18,6 +18,15 @@ To run code from current directory :
 
 		cd examples
 		python ../src/Main.py <Example name>
+		
+Flags : 
+
+		-np or --noplot : Doesn't show plot after simulation
+		-vul or --vuldetect : Run Vulnerability Detection on data folder based on VD_config.txt
+		-an or --animate : Creates gif animation in the example folder
+	    	-s or --stats : Choose to store statistics
+    		-vd or --vizdyn : Choose to vizualize simulation dynamically
+
 
  
 ## Getting started
