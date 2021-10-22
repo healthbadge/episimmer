@@ -151,7 +151,7 @@ class World():
 
         # Average number time series
         avg_dict = Utility.average(tdict, self.config_obj.worlds)
-        print(avg_dict)
+        print(avg_dict['Susceptible'][-1])
 
         #avg_positives = avg_pos(self.positives, self.config_obj.time_steps)
         #for el in avg_positives:
