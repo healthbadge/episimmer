@@ -4,6 +4,34 @@ import os.path as osp
 import Utility
 import Time
 import math
+import concurrent.futures
+
+def one_world(config_obj, agents_filename, locations_filename, one_time_event_file, model, policy_list, event_restriction_fn, interactionFiles_list, eventFiles_list, probabilistic_interactionsFiles_list):
+
+    time_steps = config_obj.time_steps
+
+    Time.Time.new_world()
+
+    # Initialize agents
+    agents_obj = ReadFile.ReadAgents(agents_filename, config_obj)
+
+    # Intialize locations
+    locations_obj = ReadFile.ReadLocations(locations_filename, config_obj)
+
+    # Initialize one time events
+    oneTimeEvent_obj = ReadFile.ReadOneTimeEvents(one_time_event_file)
+
+    sim_obj = Simulate.Simulate(config_obj, model, policy_list, event_restriction_fn, agents_obj, locations_obj)
+    sim_obj.onStartSimulation()
+
+    for current_time_step in range(time_steps):
+        sim_obj.onStartTimeStep(interactionFiles_list, eventFiles_list, probabilistic_interactionsFiles_list, oneTimeEvent_obj)
+        sim_obj.handleTimeStepForAllAgents()
+        sim_obj.endTimeStep()
+        Time.Time.increment_current_time_step()
+
+    end_state = sim_obj.endSimulation()
+    return end_state, agents_obj, locations_obj
 
 class World():
     def __init__(self, config_obj, model, policy_list, event_restriction_fn, agents_filename, interactionFiles_list, probabilistic_interactionFiles_list, locations_filename, eventFiles_list, one_time_event_file):
@@ -62,14 +90,35 @@ class World():
             maxdict[state] = [0]*(self.config_obj.time_steps+1)
             mindict[state] = [math.inf]*(self.config_obj.time_steps+1)
 
-        for i in range(self.config_obj.worlds):
-            sdict, _, _ = self.one_world()
-            for state in self.model.individual_state_types:
-                for j in range(len(tdict[state])):
-                    tdict[state][j] += sdict[state][j]
-                    t2_dict[state][j] += sdict[state][j]**2
-                    maxdict[state][j] =max(maxdict[state][j],sdict[state][j])
-                    mindict[state][j] =min(mindict[state][j],sdict[state][j])
+        ### Normal Run
+        # for i in range(self.config_obj.worlds):
+        #     sdict, _, _ = self.one_world()
+        #     print(sdict)
+        #     for state in self.model.individual_state_types:
+        #         for j in range(len(tdict[state])):
+        #             tdict[state][j] += sdict[state][j]
+        #             t2_dict[state][j] += sdict[state][j]**2
+        #             maxdict[state][j] =max(maxdict[state][j],sdict[state][j])
+        #             mindict[state][j] =min(mindict[state][j],sdict[state][j])
+
+        ### Concurrent.Futures Run
+        with concurrent.futures.ThreadPoolExecutor(max_workers=5) as executor:
+            futures = []
+            for i in range(self.config_obj.worlds):
+                futures.append(executor.submit(one_world, self.config_obj, self.agents_filename, self.locations_filename,\
+                                self.one_time_event_file, self.model, self.policy_list, self.event_restriction_fn,\
+                                self.interactionFiles_list, self.eventFiles_list, self.probabilistic_interactionsFiles_list))
+
+            for future in concurrent.futures.as_completed(futures):
+                sdict, _, _ = future.result()
+                print(sdict)
+
+                for state in self.model.individual_state_types:
+                    for j in range(len(tdict[state])):
+                        tdict[state][j] += sdict[state][j]
+                        t2_dict[state][j] += sdict[state][j]**2
+                        maxdict[state][j] =max(maxdict[state][j],sdict[state][j])
+                        mindict[state][j] =min(mindict[state][j],sdict[state][j])
 
         # Average number time series
         avg_dict = Utility.average(tdict, self.config_obj.worlds)
