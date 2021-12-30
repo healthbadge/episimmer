@@ -12,12 +12,23 @@ def generate_policy():
 
 
 	vp= Vaccination_policy.Vaccination_policy(agents_per_step_fn)
-	# vp.add_vaccination("cov",250,30,0.7,50)
-	vp.add_vaccination("cov2",500,40,0.5,20)
 
-	vp.add_vaccination("cov22",500,40,1,20)
-	vp.add_vaccination("cov32",500,40,0.5,20)
+	vaccines = {
+		"cov2": {"cost": 40, "count": 25, "efficacy": 0.4, "decay": [15, 14, 8], "dose": 3, "interval": [3, 2]},
+		"cov3": {"cost": 30, "count": 40, "efficacy": 0.7, "decay": [20, 25, 17, 5], "dose": 4, "interval": [12, 26, 14]},
+		"cov4": {"cost": 30, "count": 15, "efficacy": 0.7, "decay": [8], "dose": 1, "interval": []}
+	}
 
+	# vaccines2 = {
+	# 	"cov": {"cost": 40, "count": 20, "efficacy": 0.9, "decay": 40},
+	# 	"cov2": {"cost": 50, "count": 15, "efficacy": 0.5, "decay": 30},
+	# 	"cov3": {"cost": 60, "count": 10, "efficacy": 0.8, "decay": 35},
+	# }
+
+	vp.add_vaccines(vaccines, "Multi")
+	vp.set_register_agent_vaccine_func(vp.multi_dose_vaccines())
+	# vp.add_vaccines(vaccines2, "Single")
+	# vp.set_register_agent_vaccine_func(vp.random_vaccination())
 	policy_list.append(vp)
 
 	def event_restriction_fn(agent,event_info,current_time_step):
