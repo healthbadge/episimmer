@@ -12,7 +12,7 @@ class Result():
         self.time_stamp=time_step
         self.protection= decay_days
         self.current_dose = current_dose
-    
+
 
 class Vaccine_type():
     def __init__(self, name, cost, decay, efficacy, dosage=None, interval=None):
@@ -34,7 +34,7 @@ class Vaccine_type():
             decay_days = 0
         result_obj = Result(self.vaccine_name, agent, result, time_step, self.efficacy, decay_days, dose)
 
-        return result_obj  
+        return result_obj
 
 
     def inject_agent(self,agent):
@@ -60,9 +60,9 @@ class Vaccination_policy(Agent_Policy):
         assert callable(agents_per_step_fn)
         self.agents_per_step_fn = agents_per_step_fn
 
-            
+
     def enact_policy(self,time_step,agents,locations,model=None):
-        
+
         self.newday(time_step)
         self.set_protection(agents)
         self.registered_agent_vaccine_func(agents, time_step)
@@ -124,15 +124,17 @@ class Vaccination_policy(Agent_Policy):
             if curr_agents_to_vaccinate <= 0:
                 break
 
-            history = self.get_agent_policy_history(agent)
-            lh = history[-1] if history else None
             if parameter is None or agent.info[parameter] in value_list:
+                history = self.get_agent_policy_history(agent)
+                lh = history[-1] if history else None
+
                 if agent.get_policy_state('Vaccination') is None and self.vaccines:
                     current_vaccine = random.choice(self.vaccines)
                     result = current_vaccine.vaccinate(agent, time_step)
                     self.results.append(result)
                     self.vaccines.remove(current_vaccine)
                     curr_agents_to_vaccinate -= 1
+
                 elif (lh is not None
                       and lh.current_dose < self.available_vaccines[lh.vaccine_name]["dose"]
                       and time_step - lh.time_stamp >=
@@ -173,13 +175,13 @@ class Vaccination_policy(Agent_Policy):
             else:
                 history[-1].protection-=1
 
-                
+
     def populate_results(self):
         for result_obj in self.results:
             agent= result_obj.agent
             self.update_agent_policy_history(agent,result_obj)
             self.update_agent_policy_state(agent,result_obj.result)
-            
+
 
     def restrict_agents(self,agents):
         for agent in agents:
@@ -187,7 +189,7 @@ class Vaccination_policy(Agent_Policy):
             if (len(history)!=0):
                 if(history[-1].result=="Successful"):
                     if(history[-1].protection>=1):
-                        agent.restrict_recieve_infection() 
+                        agent.restrict_recieve_infection()
 
 
     def get_stats(self):
@@ -198,7 +200,7 @@ class Vaccination_policy(Agent_Policy):
             self.statistics[name]['Total Vaccination'].append(0)
             self.statistics[name]['Total Successful'].append(0)
             self.statistics[name]['Total Unsuccessful'].append(0)
-        
+
         for result_obj in self.results:
             self.statistics_total['Total Vaccination'][-1]+=1
             name=result_obj.vaccine_name
