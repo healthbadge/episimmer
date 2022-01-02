@@ -1,7 +1,7 @@
 # Scheduled_SEYAR
-Disease transmission is represented between states using the concept of schedule change in states, the states being: Susceptible, Exposed, Asymptomatic, Symptomatic and Recovered.
+This example has been built by introducing two additional states, "Asymptomatic" and "Symptomatic", to the Scheduled SIR disease model. 
 
-This example includes one event where the agents either contribute to or receive from ambient infection.   
+It includes one event where the agents either contribute to or receive from ambient infection.   
 
 
 ## Significance of Scheduled_SEYAR
