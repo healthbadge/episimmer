@@ -1,5 +1,5 @@
 # Stochastic_SIR_complete_graph
-This example is a modification of the Stochastic SIR model.
+This example is a variation of the Stochastic SIR model.
 
 Here, each agent interacts with every other agent bidirectionally and all of these interactions are listed in the complete_interactions_list.txt file.
 
