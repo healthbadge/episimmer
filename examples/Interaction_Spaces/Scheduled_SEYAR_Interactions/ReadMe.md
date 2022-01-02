@@ -1,5 +1,5 @@
 # Scheduled_SEYAR_Interactions
-This example builds over the Scheduled SEYAR model. It uses interactions, which is a construct in Episimmeer to define contact between two agents, to influence the transmission of disease between states.
+This example builds over the Scheduled SEYAR model. It uses interactions, constructs in Episimmeer to define contact between two agents, to influence the transmission of disease between states.
 
 The interactions are unidirectional, hence we have to specify two interactions to depict bidirectional contact between any two agents.
 
