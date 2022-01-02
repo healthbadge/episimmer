@@ -1,5 +1,5 @@
 # Scheduled_SEYAR
-This example has been built by introducing two additional states, "Asymptomatic" and "Symptomatic", to the Scheduled SIR disease model. 
+This example has been built by introducing two additional states to the Scheduled SIR disease model- "Asymptomatic" and "Symptomatic". 
 
 It includes one event where the agents either contribute to or receive from ambient infection.   
 
