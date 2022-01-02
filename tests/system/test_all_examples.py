@@ -7,6 +7,7 @@ class TestExamples(unittest.TestCase):
 
     # Classic Testing
     def test_examples(self):
+        '''
         examples_list = [p for p in os.listdir("examples") if osp.isdir(osp.join("examples",p)) and osp.isfile(osp.join("examples",p,"config.txt"))]
         for i,example in enumerate(examples_list):
             main_path = osp.join("src","Main.py")
@@ -14,10 +15,22 @@ class TestExamples(unittest.TestCase):
             process = subprocess.run("python3 {0} {1} -np".format(main_path,example_path),shell=True,stdout=subprocess.DEVNULL)
             if(process.returncode):
                 raise Exception('Example {0} could not be run!'.format(example))
-            print("Classic Testing : {0}/{1} - {2} - complete".format(i+1,len(examples_list),example))
+            print("Classic Testing : {0}/{1} - {2} - complete".format(i+1,len(examples_list),example))'''
+
+        sub_examples_list = [s for s in os.listdir("examples") if osp.isdir(osp.join("examples", s))]
+        for j in sub_examples_list:
+            examples_list = [p for p in os.listdir(j) if osp.isdir(osp.join(j,p)) and osp.isfile(osp.join(j,p,"config.txt"))]
+            for i,example in enumerate(examples_list):
+                main_path = osp.join("src","Main.py")
+                example_path = osp.join(j,example)
+                process = subprocess.run("python3 {0} {1} -np".format(main_path,example_path),shell=True,stdout=subprocess.DEVNULL)
+                if(process.returncode):
+                    raise Exception('Example {0} could not be run!'.format(example))
+                print("Classic Testing : {0}/{1} - {2} - complete".format(i+1,len(examples_list),example))
 
     # Vulnerability Detection Testing
     def test_VD_examples(self):
+        '''
         examples_list = [p for p in os.listdir("examples") if osp.isdir(osp.join("examples",p)) and osp.isfile(osp.join("examples",p,"vd_config.txt"))]
 
         for i,example in enumerate(examples_list):
@@ -26,7 +39,18 @@ class TestExamples(unittest.TestCase):
             process = subprocess.run("python3 {0} {1} -vul".format(main_path,example_path),shell=True,stdout=subprocess.DEVNULL)
             if(process.returncode):
                 raise Exception('Example {0} could not be run!'.format(example))
-            print("Vulnerability Detection Testing : {0}/{1} - {2} - complete".format(i+1,len(examples_list),example))
+            print("Vulnerability Detection Testing : {0}/{1} - {2} - complete".format(i+1,len(examples_list),example))'''
+        
+        sub_examples_list = [s for s in os.listdir("examples") if osp.isdir(osp.join("examples", s))]
+        for j in sub_examples_list:
+            examples_list = [p for p in os.listdir(j) if osp.isdir(osp.join(j,p)) and osp.isfile(osp.join(j,p,"vd_config.txt"))]
+            for i,example in enumerate(examples_list):
+                main_path = osp.join("src","Main.py")
+                example_path = osp.join(j,example)
+                process = subprocess.run("python3 {0} {1} -np".format(main_path,example_path),shell=True,stdout=subprocess.DEVNULL)
+                if(process.returncode):
+                    raise Exception('Example {0} could not be run!'.format(example))
+                print("Vulnerability Detection Testing : {0}/{1} - {2} - complete".format(i+1,len(examples_list),example))
 
 if __name__ == '__main__':
     unittest.main()
