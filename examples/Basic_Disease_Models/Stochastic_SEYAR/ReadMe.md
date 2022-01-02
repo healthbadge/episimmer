@@ -1,11 +1,11 @@
 # Stochastic_SEYAR
 This example has been built by extending the Stochastic SIR model by introducing the additional states "Asymptomatic" and "Symptomatic". 
 
-The agents are allowed to interact in an event at a location where they can contribute to or receive from an ambient infection.
-
 
 ## Significance of Stochastic_SEYAR
-Episimmer uses this fundamental Stochastic model for scenarios in which the rate at which an agent changes its state can be probabilistically determined. By the end of the specified number of time steps, the total population remains unchanged.
+Episimmer uses this example to explore a different type of compartmentalised model. This helps ascertain the fact that the simulation works for more complex state transitions as well (Exposed to Asymptomatic and Symptomatic).
+
+This example proves that we can have multiple transitions from a single state and each of these transitions can be chosen with a certain probability. 
 
 
 ## Running Stochastic_SEYAR
