@@ -1,5 +1,0 @@
-{
-    "states":["Infected","Recovered"],
-    "num_runs":100,
-    "mode":"UCB"
-}
