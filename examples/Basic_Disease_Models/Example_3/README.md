@@ -5,6 +5,6 @@ Here, the interactions have been broadly classified as weekday interactions and 
 
 
 ## Additional Information
-This example helps to guage the disease transmission (influenced by time of contact) as generalised over the weekdays and weekends.
+This example helps to gauge the disease transmission by generalising contacts over the weekdays and weekends.
 
 Users who do not have valid data about the interactions and events taking place every single day throughout the week may use this example to get an approximate idea about infection spread.

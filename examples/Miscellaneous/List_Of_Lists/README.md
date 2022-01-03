@@ -1,8 +1,5 @@
 # List Of Lists
-By now you wouldve realised that episimmer accounts for its infection via interactions and events. These events can not just be defined one at a time for a timestep for one location. In episimmer users have the privilege of defining multiple locations at multiple timestamps based off of different events.
 
-# Running 
-To run code from current directory :
+Episimmer can handle a list of File lists in the config file and run them concurrently. This is to provide the ability to simulate timetable-like simulation environments. For example, Student Timetables for each class are different but the classes are conducted at the same time.
 
-		cd examples/Miscellaneous
-		python ../../src/Main.py List_Of_Lists
+Thus, Events, Interactions and Probabilistic Interactions can pass multiple file_lists in the config file as shown in this example.

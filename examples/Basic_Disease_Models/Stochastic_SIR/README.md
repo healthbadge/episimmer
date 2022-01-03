@@ -7,4 +7,4 @@ As output, it plots a graph that helps us visualize disease spread over a specif
 
 
 ## Additional Information
-Episimmer has used this example as a fundamental Stochastic model which uses the SIR compartmentalised representation.
+This example is the fundamental Stochastic model in Episummer which uses the SIR compartmentalised representation.

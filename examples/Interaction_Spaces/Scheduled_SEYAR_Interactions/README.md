@@ -1,22 +1,8 @@
 # Scheduled_SEYAR_Interactions
-This example builds over the Scheduled SEYAR model. It uses interactions, constructs in Episimmeer to define contact between two agents, to influence the transmission of disease between states.
+This example builds over the Scheduled SEYAR model. It uses interaction constructs in Episimmer to define contact between two agents, to influence the transmission of disease between states.
 
+The file interactions_list.txt contains all the interactions between the agents.
+
+
+## Additional Information
 The interactions are unidirectional, hence we have to specify two interactions to depict bidirectional contact between any two agents.
-
-
-## interactions_list.txt
-Contains the number of interactions followed by the interactions themselves specified as:
-        Agent: Interacting Agent
-
-
-## Running Scheduled_SEYAR_Interactions
-To run code from current directory :
-
-		cd examples/Interaction_Spaces
-		python ../src/Main.py Scheduled_SEYAR_Interactions
-
-
-
-
-
-

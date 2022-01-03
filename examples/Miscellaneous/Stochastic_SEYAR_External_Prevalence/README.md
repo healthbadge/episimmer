@@ -1,11 +1,3 @@
 # Stochastic_SEYAR_External_Prevalence
-This example builds over the basic Stochastic SEYAR model by introducing the concept of external prevalence. 
 
-The implementation is the same as that of Scheduled_SIR_External_Prevalence.
-
-
-## Running Stochastic_SEYAR_External_Prevalence
-To run code from current directory :
-
-		cd examples/Miscellaneous
-		python ../src/Main.py Stochastic_SEYAR_External_Prevalence
+The implementation is similar to that of Scheduled_SIR_External_Prevalence except we use a Stochastic model and here, instead of compliance, we take into account the student's place of residence.
