@@ -1,10 +1,10 @@
 # Interaction Spaces
-The examples covered under this sub-directory cover clear cut examples on how much flexibility episimmer gives the user on how agents in the user can interact with each other in the environment.Users in epsimmer can interact via interactions and events.For Further details on such models refer to Tutorial 2.2
+The examples covered under this sub-directory cover clear cut examples on how much flexibility episimmer gives the user on how agents in the user can interact with each other in the environment. Users in epsimmer can interact via interactions and events.For Further details on such models refer to Tutorial 2.2
 
 ## Running
 To run code from current directory :
 
-		cd examples/Example
+		cd examples/Interaction_Spaces
 		python ../../src/Main.py <Example name>
 <br>
 <br>
