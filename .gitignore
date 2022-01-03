@@ -9,6 +9,7 @@ results
 *.html
 /tests/unit/
 /tests/integration/
+Event_VD
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
