@@ -8,7 +8,6 @@ testing_stats.json
 .vscode
 /examples/*/results
 *.html
-/tests/integration
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
