@@ -1,15 +1,8 @@
 # Basic_Disease_Models
-These are the most basic models that episimmer provides to the user. These models usually are the bases for the more complex models that episimmer provides to the user. The user can use various disease models such as the SIR,SEYAR,SIRID models. For Further details on these models refer to [Tutorial 2.1](https://docs.google.com/document/d/1vn8xc95bCQ7K09lMuc3ijHfSeDPa6Nd28tko-19SlnQ/edit?usp=sharing)
+These are the most basic models that episimmer provides to the user. These models are the bases for more complex models that episimmer can provide to the user. Episimmer currently provides two kinds of disease models namely, Stochastic and Scheduled models. Both these modelling types are variants of the well known [compartmental models](https://en.wikipedia.org/wiki/Compartmental_models_in_epidemiology) that exist today. Some of them implemented here are the SIR, SEYAR, SIRID models. For further details on these models refer to [Tutorial 2.1](https://docs.google.com/document/d/1vn8xc95bCQ7K09lMuc3ijHfSeDPa6Nd28tko-19SlnQ/edit?usp=sharing).
 
 ## Running
-To run code from current directory :
+To run an example :
 
 		cd examples/Basic_Disease_Models
-		python ../../src/Main.py <Example name>
-<br>
-<br>
-For example :  
-		cd examples/Basic_Disease_Models
-		python ../../src/Main.py Example_1/
-will result in simulation of 100 agents being cycled through a weekly schedule for 30 days and averaged 10 times.
-<br>
+		python ../../src/Main.py Stochastic_SIR
