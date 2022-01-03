@@ -1,5 +1,5 @@
 # Basic_Disease_Models
-These are the most basic models that episimmer provides to the user. These models usually are the bases for the more complex models that episimmer provides to the user. The user can use various disease models such as the SIR,SEYAR,SIRID models. For Further details on these models refer to Tutorial 2.1
+These are the most basic models that episimmer provides to the user. These models usually are the bases for the more complex models that episimmer provides to the user. The user can use various disease models such as the SIR,SEYAR,SIRID models. For Further details on these models refer to [Tutorial 2.1](https://docs.google.com/document/d/1vn8xc95bCQ7K09lMuc3ijHfSeDPa6Nd28tko-19SlnQ/edit?usp=sharing)
 
 ## Running
 To run code from current directory :

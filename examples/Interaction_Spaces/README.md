@@ -1,5 +1,5 @@
 # Interaction Spaces
-The examples covered under this sub-directory cover clear cut examples on how much flexibility episimmer gives the user on how agents in the user can interact with each other in the environment. Users in epsimmer can interact via interactions and events.For Further details on such models refer to Tutorial 2.2
+The examples covered under this sub-directory cover clear cut examples on how much flexibility episimmer gives the user on how agents in the user can interact with each other in the environment. Users in epsimmer can interact via interactions and events.For Further details on such models refer to [Tutorial 2.2](https://docs.google.com/document/d/17QNw3BUEclqjtuoN6bd3pFNHsbzNIu2Bo0L1BCPS_A4/edit?usp=sharing)
 
 ## Running
 To run code from current directory :
