@@ -9,4 +9,4 @@ Episimmer has used this example as a fundamental Scheduled model which uses the 
 
 In some populations, the agents might show a recovery period of 10 days on an average with a deviation of say 3 days, instead of the whole population recovering at some constant rate. In other words, the transition between states may be symmetric about some mean. In such situations, the transition between the states can be scheduled with some mean and standard deviation.
 
-This model provides a more realistic method of transition in the way the population reacts to disease spread.
+This model provides a more realistic method of transitioning between states with respect to how the general population reacts to disease spread.

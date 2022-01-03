@@ -3,7 +3,7 @@ This subdirectory in Episimmer showcases the mitigation policies that can be enf
 
 Current policies in Episimmer include :
 
-1. Lockdown Policy :
+1. Lockdown Policy
 2. Testing Policy
 3. Vaccination Policy
 
