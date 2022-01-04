@@ -1,10 +1,11 @@
 import functools
 import pprint
 import copy
-import Utility
 import os
-import Time
 import pickle
+
+from utils import Time
+from utils.Arg_Parse import parse_args
 
 is_obj = lambda obj : hasattr(obj, '__dict__')
 is_iter = lambda obj : hasattr(obj, '__iter__')
@@ -111,7 +112,7 @@ def save_stats(obj_lev_tuples, key, final_level_properties = "All"):
         @functools.wraps(func)
         def wrapper(ref, *args,**kwargs) :
             func(ref, *args, **kwargs)
-            args = Utility.parse_args()
+            args = parse_args()
             stats = args.stats
             if(stats):
                 for obj_str,levels in obj_lev_tuples:
@@ -129,14 +130,14 @@ def write_stats(pickle_file, text_file):
         @functools.wraps(func)
         def wrapper(*args,**kwargs) :
             func(*args, **kwargs)
-            args = Utility.parse_args()
+            args = parse_args()
             stats = args.stats
             if(stats):
                 example_path = args.example_path
                 final_dict = Stats.get_dict()
                 save_pickle(example_path,pickle_file,final_dict)
-                # str = get_pretty_print_str(final_dict)
-                # save_to_text_file(example_path, str, text_file)
+                str = get_pretty_print_str(final_dict)
+                save_to_text_file(example_path, str, text_file)
         return wrapper
 
     return decorator

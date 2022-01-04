@@ -6,7 +6,7 @@ import re
 import os.path as osp
 from csv import DictReader
 import json
-import Time
+from utils import Time
 
 class ReadConfiguration():
 	def __init__(self,filename):

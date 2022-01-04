@@ -1,6 +1,6 @@
 import random
 import copy
-from Policy import Agent_Policy
+from policy.Policy import Agent_Policy
 from functools import partial
 
 

@@ -1,18 +1,19 @@
 import ReadFile
 import World
-import Utility
-import Statistics
+from utils.Arg_Parse import parse_args
+from utils.Module_Handling import module_from_file
+from utils import Statistics
 from vulnerability_detection.VD import VD
 import os
 import os.path as osp
 
 def get_model(example_path):
-    UserModel = Utility.module_from_file("Generate_model", osp.join(example_path, 'UserModel.py'))
+    UserModel = module_from_file("Generate_model", osp.join(example_path, 'UserModel.py'))
     model = UserModel.UserModel()
     return model
 
 def get_policy(example_path):
-    Generate_policy = Utility.module_from_file("Generate_policy", osp.join(example_path, 'Generate_policy.py'))
+    Generate_policy = module_from_file("Generate_policy", osp.join(example_path, 'Generate_policy.py'))
     policy_list, event_restriction_fn = Generate_policy.generate_policy()
     return policy_list, event_restriction_fn
 
@@ -22,7 +23,7 @@ def get_config_path(path, filename):
 
 @Statistics.write_stats("stats.pickle", "stats.txt")
 def main():
-    args = Utility.parse_args()
+    args = parse_args()
 
     example_path = args.example_path
     vuldetect = args.vuldetect

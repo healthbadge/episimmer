@@ -1,4 +1,4 @@
-from Policy import Agent_Policy
+from policy.Policy import Agent_Policy
 
 class full_lockdown(Agent_Policy):
 	def __init__(self,do_lockdown_fn):
