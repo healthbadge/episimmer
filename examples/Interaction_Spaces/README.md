@@ -1,5 +1,5 @@
 # Interaction Spaces
-The examples covered under this sub-directory cover clear cut examples on episimmer's flexibility and potential on how agents can interact with each other in the simulation environment.
+The examples covered under this sub-directory cover clear cut examples of Episimmer's flexibility on how agents can interact with each other in the simulation environment.
 
 Currently, Episimmer can model the following modules for agent interactions :
 
