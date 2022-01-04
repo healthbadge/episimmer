@@ -1,5 +1,4 @@
-import Vaccination_policy
-import Lockdown_Policy
+from policy import Lockdown_Policy, Vaccination_policy
 
 def agents_per_step_fn(time_step):
 

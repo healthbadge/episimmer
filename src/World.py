@@ -1,9 +1,9 @@
 import Simulate
 import ReadFile
 import os.path as osp
-import Utility
-import Time
-import math
+from utils.Arg_Parse import parse_args
+from utils import Time, Math, Visualize
+import numpy as np
 
 class World():
     def __init__(self, config_obj, model, policy_list, event_restriction_fn, agents_filename, interactionFiles_list, probabilistic_interactionFiles_list, locations_filename, eventFiles_list, one_time_event_file):
@@ -48,7 +48,7 @@ class World():
     # Averages multiple simulations and plots a single plot
     def simulate_worlds(self):
 
-        args = Utility.parse_args()
+        args = parse_args()
         plot = args.noplot
         anim = args.animate
 
@@ -60,7 +60,7 @@ class World():
             tdict[state] = [0]*(self.config_obj.time_steps+1)
             t2_dict[state] = [0]*(self.config_obj.time_steps+1)
             maxdict[state] = [0]*(self.config_obj.time_steps+1)
-            mindict[state] = [math.inf]*(self.config_obj.time_steps+1)
+            mindict[state] = [np.inf]*(self.config_obj.time_steps+1)
 
         for i in range(self.config_obj.worlds):
             sdict, _, _ = self.one_world()
@@ -72,12 +72,12 @@ class World():
                     mindict[state][j] =min(mindict[state][j],sdict[state][j])
 
         # Average number time series
-        avg_dict = Utility.average(tdict, self.config_obj.worlds)
-        stddev_dict = Utility.stddev(tdict, t2_dict, self.config_obj.worlds)
-        plottor = Utility.plotResults(self.model, avg_dict,stddev_dict, maxdict, mindict, plot)
+        avg_dict = Math.average(tdict, self.config_obj.worlds)
+        stddev_dict = Math.stddev(tdict, t2_dict, self.config_obj.worlds)
+        plottor = Visualize.plotResults(self.model, avg_dict,stddev_dict, maxdict, mindict, plot)
         plottor.savefig(osp.join(self.config_obj.example_path,'results','results.jpg'))
         if anim:
-            animator = Utility.animateResults(self.model.name, avg_dict)
+            animator = Visualize.animateResults(self.model.name, avg_dict)
             animator.save(osp.join(self.config_obj.example_path,'results','results.gif'))
 
         return avg_dict

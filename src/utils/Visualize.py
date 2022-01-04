@@ -1,7 +1,5 @@
 import matplotlib.pyplot as plt
 import matplotlib.animation as ani
-import importlib.util
-import argparse
 import webbrowser
 import functools
 import os
@@ -9,25 +7,11 @@ import os.path as osp
 from pyvis.network import Network
 import time
 import math
-import Time
+from utils import Time
 import numpy as np
-import copy
 
-def average(tdict, number):
-    avg_dict=copy.deepcopy(tdict)
-    for k in avg_dict.keys():
-        l = avg_dict[k]
-        for i in range(len(l)):
-            avg_dict[k][i] /= number
-    return avg_dict
+from utils.Arg_Parse import parse_args
 
-def stddev(tdict, t2_dict, number):
-    stddev_dict=copy.deepcopy(tdict)
-    for k in stddev_dict.keys():
-        l = stddev_dict[k]
-        for i in range(len(l)):
-            stddev_dict[k][i] = np.sqrt(t2_dict[k][i]/number - (tdict[k][i]/number)**2)
-    return stddev_dict
 
 def plotResults(model, avg_dict, stddev_dict, maxdict, mindict, plot):
     for state in avg_dict.keys():
@@ -62,14 +46,6 @@ def animateResults(model_name, tdict):
             plt.plot(tdict[state][:i], label=state)
         plt.legend(loc='upper left', shadow=True)
     return ani.FuncAnimation(fig, buildmebarchart, interval=150)
-
-
-def module_from_file(module_name, file_path):
-    spec = importlib.util.spec_from_file_location(module_name, file_path)
-    module = importlib.util.module_from_spec(spec)
-    spec.loader.exec_module(module)
-    return module
-
 
 def get_interaction_graph_from_object(obj):
 
@@ -134,16 +110,3 @@ def viz_dynamic_graph():
         return wrapper
 
     return decorator
-
-def parse_args():
-    arg_parser = argparse.ArgumentParser(prog='Main.py', usage='%(prog)s example_path [options]')
-
-    # input argument options
-    arg_parser.add_argument(dest="example_path", type = str, help="Pass the path to your data folder")
-    arg_parser.add_argument("-np", "--noplot", dest="noplot", action="store_false", default=True, help="Doesn't show plot after simulation")
-    arg_parser.add_argument("-vul", "--vuldetect", dest="vuldetect", action="store_true", default=False, help="Run Vulnerability Detection on data folder based on VD_config.txt")
-    arg_parser.add_argument("-an", "--animate", dest="animate", action="store_true", default=False, help="Creates gif animation in the example folder")
-    arg_parser.add_argument("-s", "--stats", dest="stats", action="store_true", default=False, help="Choose to store statistics. Default = False")
-    arg_parser.add_argument("-vd", "--vizdyn", dest="viz_dyn", action="store_true", default=False, help="Choose to vizualize simulation dynamically. Default = False")
-    args = arg_parser.parse_args()
-    return args

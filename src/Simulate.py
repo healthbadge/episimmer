@@ -1,7 +1,5 @@
 import ReadFile
-import Time
-import Statistics
-import Utility
+from utils import Time, Statistics, Visualize
 
 class Simulate():
 	def __init__(self,config_obj,model,policy_list,event_restriction_fn,agents_obj,locations_obj):
@@ -35,7 +33,7 @@ class Simulate():
 		#Store state list
 		self.store_state()
 
-	@Utility.viz_dynamic_graph()
+	@Visualize.viz_dynamic_graph()
 	@Statistics.save_stats([("agents_obj",3)], "Agents", ["state"])
 	def onStartTimeStep(self, interactionFiles_listOfList, eventFiles_listOfList, probabilistic_interactionFiles_listOfList, oneTimeEvent_obj):
 

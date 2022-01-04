@@ -1,5 +1,5 @@
 import random
-from Policy import Agent_Policy
+from policy.Policy import Agent_Policy
 import copy
 from functools import partial
 from collections import deque

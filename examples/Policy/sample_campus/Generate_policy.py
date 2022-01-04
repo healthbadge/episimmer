@@ -1,4 +1,4 @@
-import Lockdown_Policy
+from policy import Lockdown_Policy
 
 def monday_online():
 	#This function ensures classes are online on Monday

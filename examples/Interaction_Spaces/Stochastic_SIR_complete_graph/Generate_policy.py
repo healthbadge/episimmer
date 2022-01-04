@@ -1,4 +1,4 @@
-import Lockdown_Policy
+from policy import Lockdown_Policy
 
 def generate_policy():
 	policy_list=[]
