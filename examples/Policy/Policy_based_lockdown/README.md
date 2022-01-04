@@ -1,0 +1,2 @@
+# Policy Lockdown
+This example shows the use of multiple policies communication with each other, namely the Testing policy and the Lockdown policy. The Testing policy is first used to test random agents in the environment and then the Lockdown policy reads the testing history of  agents stored by the Testing policy and restricts them from participating in any kind of contact with other agents, if tested positive.

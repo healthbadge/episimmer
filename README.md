@@ -3,9 +3,7 @@ Powered by [HealthBadge](https://www.healthbadge.org/) <br>
 
 Episimmer is an Epidemic Simulation Platform. It aims to provide Decision and Recommendation Support to help answer your questions related to policies and restrictions during an epidemic. Using simulation techniques widely applied to other fields, we can help schools and colleges discover and hone the opportunities and optimizations they could make to their COVID-19 strategy. From the most simple decisions(Which days to be online or offline) to more complex strategies(What restrictions should I put on library use?, How many times should I test?, Whom do I test?) Episimmer is the tool for the job. <br>
 
-Here is a short video describing Episimmer : [Video link](https://drive.google.com/file/d/1Oo-eG7pNIzaqf1uJ9rIf7DAc7MZwNRVY/view?usp=sharing) <br>
-
-We are currently focusing on [Vulnerability Detection](https://docs.google.com/document/d/1x6ovo5wwkKDPtH1OEvd3zCNwzOBNIbE0qTsA5bs8pOI/edit?usp=sharing). If you are interested please do reach out to us. <br>
+Here is a short video describing Episimmer : [Video link](https://drive.google.com/file/d/1Oo-eG7pNIzaqf1uJ9rIf7DAc7MZwNRVY/view?usp=sharing)
 
 ## Requirements
 
@@ -18,8 +16,8 @@ To run code from current directory :
 
 		cd examples
 		python ../src/Main.py <Example name>
-		
-Flags : 
+
+Flags :
 
 		-np or --noplot : Doesn't show plot after simulation
 		-vul or --vuldetect : Run Vulnerability Detection on data folder based on VD_config.txt
@@ -28,7 +26,7 @@ Flags :
 		-vd or --vizdyn : Choose to vizualize simulation dynamically
 
 
- 
+
 ## Getting started
 
 You can start using Episimmer by  using the following tutorials :
