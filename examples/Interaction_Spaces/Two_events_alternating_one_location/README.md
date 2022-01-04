@@ -1,5 +1,5 @@
 # Two_events_alternating_one_location
-This example uses the concepts involving alternating events in a single location.
+This example involves alternating events in a single location.
 
 It is one of the different variations of real-life scenarios involving events and locations where these events occur.  
 
