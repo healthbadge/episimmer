@@ -1,4 +1,4 @@
-# Visualisation
+# Visualization
 
 
 ## 1. view_interaction_graph.py
