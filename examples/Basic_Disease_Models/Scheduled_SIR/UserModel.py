@@ -1,5 +1,6 @@
 import Model
 
+
 def event_contribute_fn(agent,event_info,location,current_time_step):
 		if agent.state=='Infected':
 			return 1
@@ -20,6 +21,3 @@ class UserModel(Model.ScheduledModel):
 
 		self.set_event_contribution_fn(event_contribute_fn)
 		self.set_event_recieve_fn(event_recieve_fn)
-
-
-

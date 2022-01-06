@@ -1,7 +1,7 @@
-import random
-import copy
-import numpy as np
 import sys
+
+import numpy as np
+
 
 def write_agents(filename,n):
 	header='Agent Index'
@@ -33,4 +33,3 @@ def write_events(filename,no_locations,no_agents):
 number_of_agents=int(sys.argv[1])
 write_agents('agents.txt',number_of_agents)
 write_events('one_event.txt',1,number_of_agents)
-

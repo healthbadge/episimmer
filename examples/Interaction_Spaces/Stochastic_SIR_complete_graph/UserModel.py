@@ -1,5 +1,6 @@
 import Model
 
+
 #This function represents the probability of getting infected during a single interaction/contact
 def probabilityOfInfection_fn(p_infected_states_list,contact_agent,c_dict,current_time_step):
 	if contact_agent.state=='Infected':
@@ -9,7 +10,7 @@ def probabilityOfInfection_fn(p_infected_states_list,contact_agent,c_dict,curren
 class UserModel(Model.StochasticModel):
 	def __init__(self):
 		individual_types=['Susceptible','Infected','Recovered']	#These are the states that will be used by the compartmental model
-		infected_states=['Infected']	#These are the states that can infect 
+		infected_states=['Infected']	#These are the states that can infect
 		state_proportion={				#This is the starting proportions of each state
 							'Susceptible':0.99,
 							'Infected':0.01,
@@ -20,7 +21,7 @@ class UserModel(Model.StochasticModel):
 		self.set_transition('Infected', 'Recovered', self.p_standard(0.2))	#Adding the I->R transition
 
 
-		self.set_event_contribution_fn(None)	
-		self.set_event_recieve_fn(None)	
+		self.set_event_contribution_fn(None)
+		self.set_event_recieve_fn(None)
 
 		self.name='Stochastic SIR on complete graph'

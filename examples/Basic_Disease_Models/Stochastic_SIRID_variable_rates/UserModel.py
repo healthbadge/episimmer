@@ -1,5 +1,5 @@
 import Model
-import math
+
 
 #User defined functions
 def fn1(current_time_step): #ICU recovery improves over time as doctors learn how to treat better

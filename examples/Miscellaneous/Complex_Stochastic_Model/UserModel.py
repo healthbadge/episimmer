@@ -1,5 +1,6 @@
 import Model
 
+
 class UserModel(Model.StochasticModel):
 	def __init__(self):
 
@@ -17,7 +18,7 @@ class UserModel(Model.StochasticModel):
 		gamma3=0.3
 
 		individual_types=['S','A','I','P','R','E','XS','XA','XI','XE']	#These are the states that will be used by the compartmental model
-		infected_states=[]	#These are the states that can infect 
+		infected_states=[]	#These are the states that can infect
 		state_proportion={				#This is the starting proportions of each state
 							'S':1
 						}
@@ -48,7 +49,7 @@ class UserModel(Model.StochasticModel):
 		self.set_transition('E','R',self.p_standard(gamma1))
 		self.set_transition('XE','R',self.p_standard(gamma1))
 
-		self.set_event_contribution_fn(None)	
-		self.set_event_recieve_fn(None)	
+		self.set_event_contribution_fn(None)
+		self.set_event_recieve_fn(None)
 
 		self.name='Probablistic Lockdown Model'

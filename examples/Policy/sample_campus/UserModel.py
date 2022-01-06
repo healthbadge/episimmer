@@ -1,5 +1,6 @@
-import Model
 import math
+
+import Model
 
 #User defined functions
 

@@ -1,7 +1,8 @@
 import random
-import copy
-import numpy as np
 import sys
+
+import numpy as np
+
 
 def write_agents(filename,n):
 	header='Agent Index'

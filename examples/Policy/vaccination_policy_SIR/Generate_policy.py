@@ -1,5 +1,6 @@
 from policy import Lockdown_Policy, Vaccination_policy
 
+
 def agents_per_step_fn(time_step):
 
 	n=100
@@ -23,11 +24,11 @@ def generate_policy():
 
 	# Multi Dose Vaccination
 	vaccines = {
-		"cov2": {"cost": 40, "count": 25, "efficacy": 0.4, "decay": [15, 14, 8], "dose": 3, "interval": [3, 2]},
-		"cov3": {"cost": 30, "count": 40, "efficacy": 0.7, "decay": [20, 25, 17, 5], "dose": 4, "interval": [12, 26, 14]},
-		"cov4": {"cost": 30, "count": 15, "efficacy": 0.7, "decay": [8], "dose": 1, "interval": []}
+		'cov2': {'cost': 40, 'count': 25, 'efficacy': 0.4, 'decay': [15, 14, 8], 'dose': 3, 'interval': [3, 2]},
+		'cov3': {'cost': 30, 'count': 40, 'efficacy': 0.7, 'decay': [20, 25, 17, 5], 'dose': 4, 'interval': [12, 26, 14]},
+		'cov4': {'cost': 30, 'count': 15, 'efficacy': 0.7, 'decay': [8], 'dose': 1, 'interval': []}
 	}
-	vp.add_vaccines(vaccines, "Multi")
+	vp.add_vaccines(vaccines, 'Multi')
 	vp.set_register_agent_vaccine_func(vp.multi_dose_vaccines())
 
 

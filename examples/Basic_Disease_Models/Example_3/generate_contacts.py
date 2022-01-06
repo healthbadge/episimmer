@@ -1,6 +1,7 @@
 import random
-import copy
+
 import numpy as np
+
 
 def write_to_file(filename,n,no_contacts):
 	info_dict={}
@@ -20,4 +21,3 @@ def write_to_file(filename,n,no_contacts):
 
 write_to_file('weekday_contacts.txt',300,500)
 write_to_file('weekend_contacts.txt',100,200)
-

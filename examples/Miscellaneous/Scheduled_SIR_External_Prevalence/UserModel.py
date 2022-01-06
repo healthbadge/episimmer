@@ -1,5 +1,6 @@
 import Model
 
+
 def external_prevalence(agent, current_time_step):
 	if(agent.info['Compliance'] == 'High'):
 		return 0.1

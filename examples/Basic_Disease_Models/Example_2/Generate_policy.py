@@ -1,5 +1,6 @@
 from policy import Lockdown_Policy
 
+
 def generate_policy():
 	policy_list=[]
 
@@ -12,5 +13,3 @@ def generate_policy():
 		return False
 
 	return policy_list,event_restriction_fn
-
-

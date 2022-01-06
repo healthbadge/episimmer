@@ -1,8 +1,9 @@
 import argparse
 from csv import DictWriter
 
+
 def readAgents(agents):
-    agList = ""
+    agList = ''
     if agents.endswith('.txt'):
         f = open(agents, 'r')
         n = f.readline()
@@ -71,18 +72,18 @@ def cleanFile(filename):
     f.close()
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     arg_parser = argparse.ArgumentParser(
-        description="Utility functions for generating agents file", usage='% (prog)s filename [options]')
+        description='Utility functions for generating agents file', usage='% (prog)s filename [options]')
 
     # options
-    arg_parser.add_argument("filename")
-    arg_parser.add_argument("--agents1", "-from", required=False)
-    arg_parser.add_argument("--agents2", "-to", required=False)
-    arg_parser.add_argument("--addLine", "-a", required=False)
-    arg_parser.add_argument("--clean", "-c", action="store_true", required=False)
-    arg_parser.add_argument("--both", "-b", action="store_true", required=False)
-    arg_parser.add_argument("--noHeader", "-nh", action="store_true", required=False)
+    arg_parser.add_argument('filename')
+    arg_parser.add_argument('--agents1', '-from', required=False)
+    arg_parser.add_argument('--agents2', '-to', required=False)
+    arg_parser.add_argument('--addLine', '-a', required=False)
+    arg_parser.add_argument('--clean', '-c', action='store_true', required=False)
+    arg_parser.add_argument('--both', '-b', action='store_true', required=False)
+    arg_parser.add_argument('--noHeader', '-nh', action='store_true', required=False)
 
     args = arg_parser.parse_args()
 
