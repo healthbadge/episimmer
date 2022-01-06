@@ -1,7 +1,6 @@
 [tool.yapf]
-based_on_style=pep8
-split_before_named_assigns=False
-split_before_expression_after_opening_paren = False
+based_on_style = "pep8"
+split_before_named_assigns = "False"
 
 [tool.yapfignore]
 ignore_patterns = ["examples"]
