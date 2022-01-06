@@ -23,7 +23,7 @@ jobs:
           pip install sphinx
           pip install sphinx_rtd_theme
       - name: Build documentation
-        uses: ammaraskar/sphinx-action@master
+        uses: cd docs && make clean && make html SPHINXOPTS="-W"  # Fail on warning.
         with:
           docs-folder: "docs/"
       - uses: actions/upload-artifact@v1
