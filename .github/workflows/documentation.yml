@@ -23,9 +23,8 @@ jobs:
           pip install sphinx
           pip install sphinx_rtd_theme
       - name: Build documentation
-        uses: cd docs && make clean && make html SPHINXOPTS="-W"  # Fail on warning.
-        with:
-          docs-folder: "docs/"
+        run: |
+          cd docs && make clean && make html SPHINXOPTS="-W"  # Fail on warning.
       - uses: actions/upload-artifact@v1
         with:
           name: DocumentationHTML
