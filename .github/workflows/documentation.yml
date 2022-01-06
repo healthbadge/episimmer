@@ -1,10 +1,13 @@
 name: Documentation
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
 
 jobs:
 
-  build:
+  publish :
     runs-on: ${{ matrix.os }}
 
     strategy:
@@ -29,11 +32,12 @@ jobs:
         with:
           name: DocumentationHTML
           path: docs/_build/html/
-      # Publish built docs to gh-pages branch.
-      # ===============================
-      - name: Commit documentation changes
+
+      - name: Commit documentation changes along with latest master
         run: |
           git clone https://github.com/healthbadge/episimmer.git --branch gh-pages --single-branch gh-pages
+          git clone https://github.com/healthbadge/episimmer.git
+          cp -r episimmer/* gh_pages/
           cp -r docs/_build/html/* gh-pages/
           cd gh-pages
           touch .nojekyll
