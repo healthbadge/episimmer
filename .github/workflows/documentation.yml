@@ -1,0 +1,27 @@
+name: Documentation
+
+on: [push]
+
+jobs:
+
+  make_html:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: [3.8]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install internal dependencies
+        run: |
+          pip install sphinx
+          pip install sphinx_rtd_theme
+      - name: Build documentation
+        run: |
+          cd docs && make clean && make html SPHINXOPTS="-W"  # Fail on warning.
