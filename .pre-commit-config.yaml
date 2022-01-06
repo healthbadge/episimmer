@@ -25,7 +25,7 @@ repos:
   - repo: meta
     hooks:
       - id: check-useless-excludes
-  - repo: https://github.com/asottile/seed-isort-config
-    rev: v2.2.0
+  - repo: https://github.com/pre-commit/mirrors-isort
+    rev: v5.10.1
     hooks:
-      - id: seed-isort-config
+      - id: isort
