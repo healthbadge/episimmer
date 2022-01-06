@@ -1,0 +1,56 @@
+name: Documentation
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+
+  publish:
+    runs-on: ${{ matrix.os }}
+
+    strategy:
+      matrix:
+        os: [ubuntu-latest]
+        python-version: [3.8]
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up Python ${{ matrix.python-version }}
+        uses: actions/setup-python@v2
+        with:
+          python-version: ${{ matrix.python-version }}
+      - name: Install internal dependencies
+        run: |
+          pip install sphinx
+          pip install sphinx_rtd_theme
+      - name: Build documentation
+        run: |
+          cd docs && make clean && make html SPHINXOPTS="-W"  # Fail on warning.
+      - uses: actions/upload-artifact@v1
+        with:
+          name: DocumentationHTML
+          path: docs/_build/html/
+
+      - name: Commit documentation changes along with latest master
+        run: |
+          git clone https://github.com/healthbadge/episimmer.git --branch gh-pages --single-branch gh-pages
+          git clone https://github.com/healthbadge/episimmer.git
+          cp -r episimmer/* gh_pages/
+          cp -r docs/_build/html/* gh-pages/
+          cd gh-pages
+          touch .nojekyll
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          git add .
+          git commit -m "Update documentation" -a || true
+          # The above command will fail if no changes were present, so we ignore
+          # that.
+      - name: Push changes
+        uses: ad-m/github-push-action@master
+        with:
+          branch: gh-pages
+          directory: gh-pages
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+      # ===============================

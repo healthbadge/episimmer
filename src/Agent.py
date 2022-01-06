@@ -48,7 +48,6 @@ class Agent():
                 self.schedule_time_left = None
 
     def update_state(self):
-
         if self.next_state == None:
             return
         self.state = self.next_state
