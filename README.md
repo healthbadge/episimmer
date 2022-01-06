@@ -12,10 +12,9 @@ Run the following command
 		pip3 install -r requirements.txt
 
 ## Running Examples
-To run code from current directory :
+To run examples :
 
-		cd examples
-		python ../src/Main.py <Example name>
+		python src/Main.py <Path_to_Example>
 
 Flags :
 

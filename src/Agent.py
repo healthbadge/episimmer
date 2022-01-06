@@ -8,9 +8,9 @@ class Agent():
 		self.index=info_dict['Agent Index']
 		self.event_probabilities=[]
 
-		self.schedule_time_left=None
-		self.can_recieve_infection=True
-		self.can_contribute_infection=True
+		self.schedule_time_left = None
+		self.can_recieve_infection = 1.0
+		self.can_contribute_infection = 1.0
 
 		self.policy_dict={}	#Store all policy related status of agent
 		self.initialize_policy_dict()
@@ -37,8 +37,8 @@ class Agent():
 		self.event_probabilities.append(p)
 
 	def new_time_step(self):
-		self.can_recieve_infection=True
-		self.can_contribute_infection=True
+		self.can_recieve_infection = 1.0
+		self.can_contribute_infection = 1.0
 		self.next_state=None
 		self.contact_list=[]
 		self.event_probabilities=[]
@@ -59,8 +59,8 @@ class Agent():
 		self.next_state=next_state
 		self.schedule_time_left=schedule_time
 
-	def restrict_recieve_infection(self):
-		self.can_recieve_infection=False
+	def update_recieve_infection(self, p):
+		self.can_recieve_infection=p
 
-	def restrict_contribute_infection(self):
-		self.can_contribute_infection=False
+	def update_contribute_infection(self, p):
+		self.can_contribute_infection=p

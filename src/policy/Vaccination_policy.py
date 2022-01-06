@@ -189,7 +189,7 @@ class Vaccination_policy(Agent_Policy):
             if (len(history)!=0):
                 if(history[-1].result=="Successful"):
                     if(history[-1].protection>=1):
-                        agent.restrict_recieve_infection()
+                        agent.update_recieve_infection(0.0)
 
 
     def get_stats(self):
