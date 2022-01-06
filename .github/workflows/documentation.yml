@@ -34,11 +34,11 @@ jobs:
         run: |
           git clone https://github.com/healthbadge/episimmer.git --branch gh-pages --single-branch gh-pages
           git clone https://github.com/healthbadge/episimmer.git
-          cp -r gh-pages/.git episimmer/.temp_git
-          rm -rf gh-pages/{*,.*}
-          cp -r episimmer/.temp_git gh-pages/.git
-          rm -rf episimmer/.temp_git
-          cp -r episimmer/* gh-pages/
+          cp -r episimmer/examples/* gh-pages/examples
+          cp -r episimmer/scripts/* gh-pages/scripts
+          cp -r episimmer/src/* gh-pages/src
+          cp -r episimmer/tests/* gh-pages/tests
+          cp episimmer/requirements.txt gh-pages/requirements.txt
           cp -r docs/_build/html/* gh-pages/
           cd gh-pages
           touch .nojekyll
