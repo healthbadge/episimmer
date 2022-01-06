@@ -133,5 +133,3 @@ def generate_policy():
 	#return wednesday_no_grade1_grade2()
 	#return mw_no_grade1_tf_no_grade3()
 	#return mt_no_grade2_wednesday_online()
-
-

@@ -3,7 +3,7 @@ from csv import DictWriter
 
 
 def makeEvents(filename, agents, locations, noHead):
-    agList = ""
+    agList = ''
     locList = []
     if agents.endswith('.txt'):
         f = open(agents, 'r')
@@ -75,19 +75,19 @@ def cleanFile(filename):
     f.close()
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     arg_parser = argparse.ArgumentParser(
-        description="Utility functions for generating agents file",
+        description='Utility functions for generating agents file',
         usage='% (prog)s filename [options]')
 
     # options
-    arg_parser.add_argument("filename")
-    arg_parser.add_argument("--agents", "-ag", required=False)
-    arg_parser.add_argument("--locations", "-loc", required=False)
-    arg_parser.add_argument("--addLine", "-a", required=False)
-    arg_parser.add_argument("--clean", "-c", action="store_true",
+    arg_parser.add_argument('filename')
+    arg_parser.add_argument('--agents', '-ag', required=False)
+    arg_parser.add_argument('--locations', '-loc', required=False)
+    arg_parser.add_argument('--addLine', '-a', required=False)
+    arg_parser.add_argument('--clean', '-c', action='store_true',
                             required=False)
-    arg_parser.add_argument("--noHeader", "-nh", action="store_true",
+    arg_parser.add_argument('--noHeader', '-nh', action='store_true',
                             required=False)
 
     args = arg_parser.parse_args()

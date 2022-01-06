@@ -12,5 +12,3 @@ def generate_policy():
 		return False
 
 	return policy_list,event_restriction_fn
-
-

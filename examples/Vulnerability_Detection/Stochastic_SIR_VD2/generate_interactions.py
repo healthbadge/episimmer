@@ -7,4 +7,3 @@ with open('interactions.csv', 'w', newline='') as file:
     for i in range(1000):
     	if i!=10:
     		writer.writerow({'Agent Index': i,'Interacting Agent':i+1})
-  

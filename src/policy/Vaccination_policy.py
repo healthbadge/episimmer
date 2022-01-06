@@ -32,8 +32,8 @@ class Vaccine_type():
 
         # vaccinate agents
         result = agent.get_policy_history(
-            "Vaccination")[-1].result if dose > 1 else self.inject_agent(agent)
-        if result == "Successful":
+            'Vaccination')[-1].result if dose > 1 else self.inject_agent(agent)
+        if result == 'Successful':
             decay_days = self.decay_days[dose -
                                          1] if self.dosage else self.decay_days
         else:
@@ -48,7 +48,7 @@ class Vaccine_type():
         if (random.random() < self.efficacy):
             return 'Successful'
         else:
-            return "Unsuccessful"
+            return 'Unsuccessful'
 
 
 class Vaccination_policy(Agent_Policy):
@@ -115,7 +115,7 @@ class Vaccination_policy(Agent_Policy):
 
             if parameter is None or agent.info[parameter] in value_list:
                 if agent.get_policy_state(
-                        "Vaccination") is None and self.vaccines:
+                        'Vaccination') is None and self.vaccines:
                     current_vaccine = random.choice(self.vaccines)
                     result = current_vaccine.vaccinate(agent, time_step)
                     self.results.append(result)
@@ -149,9 +149,9 @@ class Vaccination_policy(Agent_Policy):
                     curr_agents_to_vaccinate -= 1
 
                 elif (lh is not None and lh.current_dose <
-                      self.available_vaccines[lh.vaccine_name]["dose"]
+                      self.available_vaccines[lh.vaccine_name]['dose']
                       and time_step - lh.time_stamp >= self.available_vaccines[
-                          lh.vaccine_name]["interval"][lh.current_dose - 1]):
+                          lh.vaccine_name]['interval'][lh.current_dose - 1]):
                     current_vaccine = None
                     for vaccine in self.vaccines:
                         if vaccine.vaccine_name == lh.vaccine_name:
@@ -164,8 +164,8 @@ class Vaccination_policy(Agent_Policy):
                         self.vaccines.remove(current_vaccine)
                         curr_agents_to_vaccinate -= 1
 
-    def add_vaccines(self, vaccines, dosage="Single"):
-        if dosage == "Single":
+    def add_vaccines(self, vaccines, dosage='Single'):
+        if dosage == 'Single':
             self.available_vaccines = vaccines
             self.statistics = {
                 name: {
@@ -175,15 +175,15 @@ class Vaccination_policy(Agent_Policy):
                 }
                 for name in self.available_vaccines
             }
-        elif dosage == "Multi":
+        elif dosage == 'Multi':
             for name, vaccine in vaccines.items():
-                if len(vaccine["decay"]) != vaccine["dose"]:
+                if len(vaccine['decay']) != vaccine['dose']:
                     raise ValueError(
-                        "Vaccine decay must be a list of length equal to the count of vaccine dosage"
+                        'Vaccine decay must be a list of length equal to the count of vaccine dosage'
                     )
-                if len(vaccine["interval"]) != vaccine["dose"] - 1:
+                if len(vaccine['interval']) != vaccine['dose'] - 1:
                     raise ValueError(
-                        "Vaccine interval must be a list of length one less than the count of vaccine dosage"
+                        'Vaccine interval must be a list of length one less than the count of vaccine dosage'
                     )
                 self.available_vaccines[name] = vaccine
                 self.statistics[name] = {
@@ -197,7 +197,7 @@ class Vaccination_policy(Agent_Policy):
             history = self.get_agent_policy_history(agent)
             # dict of result objects
             if len(history
-                   ) == 0 or history[-1].result == "Unsuccessful" or history[
+                   ) == 0 or history[-1].result == 'Unsuccessful' or history[
                        -1].protection == 0:
                 continue
             else:
@@ -213,7 +213,7 @@ class Vaccination_policy(Agent_Policy):
         for agent in agents:
             history = self.get_agent_policy_history(agent)
             if (len(history) != 0):
-                if (history[-1].result == "Successful"):
+                if (history[-1].result == 'Successful'):
                     if (history[-1].protection >= 1):
                         agent.update_recieve_infection(0.0)
 
@@ -231,9 +231,9 @@ class Vaccination_policy(Agent_Policy):
             name = result_obj.vaccine_name
             self.statistics[name]['Total Vaccination'][-1] += 1
             result = result_obj.result
-            if result == "Successful":
+            if result == 'Successful':
                 self.statistics[name]['Total Successful'][-1] += 1
                 self.statistics_total['Total Successful'][-1] += 1
-            elif result == "Unsuccessful":
+            elif result == 'Unsuccessful':
                 self.statistics[name]['Total Unsuccessful'][-1] += 1
                 self.statistics_total['Total Unsuccessful'][-1] += 1

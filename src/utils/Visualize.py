@@ -71,7 +71,7 @@ def get_interaction_graph_from_object(obj):
     for i, agent in enumerate(agents_dict.values()):
         if (agent.state in infected_states):
             net.add_node(agent.index, x=100 * (i % root_num),
-                         y=100 * (i / root_num), color="red")
+                         y=100 * (i / root_num), color='red')
         else:
             net.add_node(agent.index, x=100 * (i % root_num),
                          y=100 * (i / root_num))
@@ -80,24 +80,24 @@ def get_interaction_graph_from_object(obj):
     for agent in agents_dict.values():
         if (agent.can_contribute_infection > 0):
             for int_agent in agent.contact_list:
-                int_agent_indx = int_agent["Interacting Agent Index"]
+                int_agent_indx = int_agent['Interacting Agent Index']
                 if (agents_obj.agents[int_agent_indx].can_recieve_infection >
                         0):
-                    net.add_edge(agent.index, int_agent_indx, color="black")
+                    net.add_edge(agent.index, int_agent_indx, color='black')
 
     # Events
     for j, location in enumerate(locations_obj.locations.values()):
         if not location.lock_down_state:
             for i, event_info in enumerate(location.events):
-                net.add_node(event_info["Location Index"] + "_event" + str(i),
-                             x=-300 - 100 * j, y=100 * i, shape="triangle")
-                for agent in event_info["Agents"]:
+                net.add_node(event_info['Location Index'] + '_event' + str(i),
+                             x=-300 - 100 * j, y=100 * i, shape='triangle')
+                for agent in event_info['Agents']:
                     if (agents_obj.agents[agent].can_recieve_infection > 0 or
                             agents_obj.agents[agent].can_contribute_infection >
                             0):
                         net.add_edge(
-                            event_info["Location Index"] + "_event" + str(i),
-                            agent, color="black")
+                            event_info['Location Index'] + '_event' + str(i),
+                            agent, color='black')
 
     net.toggle_physics(False)
     net.show(outpath)
@@ -107,7 +107,7 @@ def get_interaction_graph_from_object(obj):
 def viz_single_graph(obj):
     path = get_interaction_graph_from_object(obj)
     filename = 'file:' + os.sep + os.sep + osp.join(os.getcwd(), path)
-    print("Timestep = " + str(Time.Time.get_current_time_step()))
+    print('Timestep = ' + str(Time.Time.get_current_time_step()))
     if Time.Time.get_current_time_step() == 0:
         webbrowser.open_new(filename)
         time.sleep(3)

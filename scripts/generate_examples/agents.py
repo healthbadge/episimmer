@@ -4,7 +4,7 @@ import random
 from csv import DictWriter
 
 
-def makeAgents(filename, n, titles="", pdicts=[]):
+def makeAgents(filename, n, titles='', pdicts=[]):
     k = len(titles)
     div = []
     for pdict in pdicts:
@@ -73,18 +73,18 @@ def cleanFile(filename):
     f.close()
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     arg_parser = argparse.ArgumentParser(
-        description="Utility functions for generating agents file",
+        description='Utility functions for generating agents file',
         usage='% (prog)s filename [options]')
 
     # options
-    arg_parser.add_argument("filename")
-    arg_parser.add_argument("--number", "-n", required=False)
-    arg_parser.add_argument("--proportion", "-p", nargs=2, action='append',
+    arg_parser.add_argument('filename')
+    arg_parser.add_argument('--number', '-n', required=False)
+    arg_parser.add_argument('--proportion', '-p', nargs=2, action='append',
                             required=False)
-    arg_parser.add_argument("--addLine", "-a", required=False)
-    arg_parser.add_argument("--clean", "-c", action="store_true",
+    arg_parser.add_argument('--addLine', '-a', required=False)
+    arg_parser.add_argument('--clean', '-c', action='store_true',
                             required=False)
 
     args = arg_parser.parse_args()

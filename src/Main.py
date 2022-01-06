@@ -9,7 +9,7 @@ import os.path as osp
 
 
 def get_model(example_path):
-    UserModel = module_from_file("Generate_model",
+    UserModel = module_from_file('Generate_model',
                                  osp.join(example_path, 'UserModel.py'))
     model = UserModel.UserModel()
     return model
@@ -17,7 +17,7 @@ def get_model(example_path):
 
 def get_policy(example_path):
     Generate_policy = module_from_file(
-        "Generate_policy", osp.join(example_path, 'Generate_policy.py'))
+        'Generate_policy', osp.join(example_path, 'Generate_policy.py'))
     policy_list, event_restriction_fn = Generate_policy.generate_policy()
     return policy_list, event_restriction_fn
 
@@ -27,7 +27,7 @@ def get_config_path(path, filename):
     return config_filepath
 
 
-@Statistics.write_stats("stats.pickle", "stats.txt")
+@Statistics.write_stats('stats.pickle', 'stats.txt')
 def main():
     args = parse_args()
 
@@ -71,5 +71,5 @@ def main():
         world_obj.simulate_worlds()
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     main()

@@ -1,7 +1,7 @@
 # Two_events_alternating_one_location
 This example involves alternating events in a single location.
 
-It is one of the different variations of real-life scenarios involving events and locations where these events occur.  
+It is one of the different variations of real-life scenarios involving events and locations where these events occur.
 
 ## Additional Information
 Episimmer uses this example to highlight the cyclicity of events and how they are cyclicly called in some particular order. This is demonstrated by introducing two events in the event_files_list.txt file.

@@ -37,7 +37,7 @@ class Simulate():
         self.store_state()
 
     @Visualize.viz_dynamic_graph()
-    @Statistics.save_stats([("agents_obj", 3)], "Agents", ["state"])
+    @Statistics.save_stats([('agents_obj', 3)], 'Agents', ['state'])
     def onStartTimeStep(self, interactionFiles_listOfList,
                         eventFiles_listOfList,
                         probabilistic_interactionFiles_listOfList,

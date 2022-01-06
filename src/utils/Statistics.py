@@ -99,7 +99,7 @@ def process_dict_recursion(dict, final_level_properties, levels, cur_level):
 
 
 def process_dict(dict, final_level_properties, levels):
-    if (final_level_properties == "All"):
+    if (final_level_properties == 'All'):
         return dict
     elif (not is_list(final_level_properties)):
         raise Exception(
@@ -110,7 +110,7 @@ def process_dict(dict, final_level_properties, levels):
 
 def get_pretty_print_str(dict):
     val_string = pprint.pformat(dict, indent=0)
-    val_string += "\n"
+    val_string += '\n'
     return val_string
 
 
@@ -121,12 +121,12 @@ def save_pickle(example_path, pickle_file, final_dict):
 
 
 def save_to_text_file(example_path, str, text_filename):
-    fp = open(os.path.join(example_path, 'results', text_filename), "w")
+    fp = open(os.path.join(example_path, 'results', text_filename), 'w')
     fp.write(str)
     fp.close()
 
 
-def save_stats(obj_lev_tuples, key, final_level_properties="All"):
+def save_stats(obj_lev_tuples, key, final_level_properties='All'):
 
     def decorator(func):
 

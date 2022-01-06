@@ -86,20 +86,20 @@ class Machine():
             self.run_single_test(testtube, infected_states)
 
     def run_single_test(self, testtube, infected_states):
-        result = "Negative"
+        result = 'Negative'
 
         for agent in testtube.testtube_agent_dict.keys():
-            if (testtube.testtube_agent_dict[agent]["state"]
+            if (testtube.testtube_agent_dict[agent]['state']
                     in infected_states):
-                result = "Positive"
+                result = 'Positive'
                 break
 
-        if (result == "Negative"):
+        if (result == 'Negative'):
             if (random.random() > self.true_negative_rate):
-                result = "Positive"
+                result = 'Positive'
         else:
             if (random.random() > self.true_positive_rate):
-                result = "Negative"
+                result = 'Negative'
 
         testtube.set_result(result)
 
@@ -115,7 +115,7 @@ class Machine():
     def save_results(self, testtube, time_step):
         for agent in testtube.testtube_agent_dict.keys():
             time_step_entered = testtube.testtube_agent_dict[agent][
-                "time_step"]
+                'time_step']
             result_obj = Result(testtube.testtube_result, agent,
                                 self.machine_name, time_step_entered,
                                 self.start_step, time_step)
@@ -137,8 +137,8 @@ class Testtube():
 
     def register_agent(self, agent, time_step):
         self.testtube_agent_dict[agent] = {
-            "state": agent.state,
-            "time_step": time_step
+            'state': agent.state,
+            'time_step': time_step
         }
 
     def get_num_agents(self):
@@ -231,7 +231,7 @@ class Test_Policy(Agent_Policy):
 
             else:
                 print(
-                    "Error! Machine name with different parameters already exists"
+                    'Error! Machine name with different parameters already exists'
                 )
         else:
             self.current_machines[machine_name] = {'parameters':[cost, false_positive_rate, false_negative_rate, turnaround_time, capacity],\
@@ -251,25 +251,25 @@ class Test_Policy(Agent_Policy):
                        'Number of Negative Results':0, 'Number of Agents Tested':0}
 
     def initialize_process_logs(self, time_step):
-        self.statistics[time_step]["Process"] = {}
+        self.statistics[time_step]['Process'] = {}
         for machine_name in self.current_machines.keys():
-            self.statistics[time_step]["Process"][machine_name] = {}
+            self.statistics[time_step]['Process'][machine_name] = {}
 
         for machine in self.machine_list:
             machine_name = machine.get_machine_name()
-            self.statistics[time_step]["Process"][machine_name][
+            self.statistics[time_step]['Process'][machine_name][
                 machine.__str__()] = {
                     'Running Status': 'On Standby',
                     'Filled Status': 'Empty'
                 }
 
-        self.statistics[time_step]["Process"][
-            "All Testubes filled"] = 'Default'
-        self.statistics[time_step]["Process"][
-            "All Testubes in machine"] = 'Default'
-        self.statistics[time_step]["Process"][
-            "All Machines running"] = 'Default'
-        self.statistics[time_step]["Process"]['Ready Queue Length'] = -1
+        self.statistics[time_step]['Process'][
+            'All Testubes filled'] = 'Default'
+        self.statistics[time_step]['Process'][
+            'All Testubes in machine'] = 'Default'
+        self.statistics[time_step]['Process'][
+            'All Machines running'] = 'Default'
+        self.statistics[time_step]['Process']['Ready Queue Length'] = -1
 
     def new_time_step(self, time_step):
         self.initialize_statistics_logs(time_step)
@@ -388,20 +388,20 @@ class Test_Policy(Agent_Policy):
             machine_name = machine.get_machine_name()
 
             if (machine.is_running()):
-                self.statistics[time_step]["Process"][machine_name][
+                self.statistics[time_step]['Process'][machine_name][
                     machine.__str__()]['Running Status'] = 'Running'
             else:
-                self.statistics[time_step]["Process"][machine_name][
+                self.statistics[time_step]['Process'][machine_name][
                     machine.__str__()]['Running Status'] = 'On Standby'
 
             if (machine.is_empty()):
-                self.statistics[time_step]["Process"][machine_name][
+                self.statistics[time_step]['Process'][machine_name][
                     machine.__str__()]['Filled Status'] = 'Empty'
             elif (machine.is_full()):
-                self.statistics[time_step]["Process"][machine_name][
+                self.statistics[time_step]['Process'][machine_name][
                     machine.__str__()]['Filled Status'] = 'Completely Filled'
             else:
-                self.statistics[time_step]["Process"][machine_name][
+                self.statistics[time_step]['Process'][machine_name][
                     machine.__str__()]['Filled Status'] = 'Partly filled'
 
         all_testtubes_filled = True
@@ -421,16 +421,16 @@ class Test_Policy(Agent_Policy):
                 all_machines_running = False
                 break
 
-        self.statistics[time_step]["Process"][
+        self.statistics[time_step]['Process'][
             'All Testubes filled'] = all_testtubes_filled
-        self.statistics[time_step]["Process"][
+        self.statistics[time_step]['Process'][
             'All Machines running'] = all_machines_running
-        self.statistics[time_step]["Process"][
+        self.statistics[time_step]['Process'][
             'All Testubes in machine'] = all_testtubes_in_machines
-        self.statistics[time_step]["Process"]['Ready Queue Length'] = len(
+        self.statistics[time_step]['Process']['Ready Queue Length'] = len(
             self.ready_queue)
 
     def end_time_step(self, time_step):
         self.update_process_logs(time_step)
-        with open("testing_stats.json", "w") as outfile:
+        with open('testing_stats.json', 'w') as outfile:
             json.dump(self.statistics, outfile, indent=4)

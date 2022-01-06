@@ -60,25 +60,9 @@ class agent_policy_based_lockdown(Agent_Policy):
 
         indx = len(history) - 1
         while (indx >= 0 and history[indx].time_step == last_time_step):
-            if (history[indx].result == "Negative"):
-                return "Negative"
+            if (history[indx].result == 'Negative'):
+                return 'Negative'
 
             indx -= 1
 
-        return "Positive"
-
-
-'''
-class location_lockdown(Policy):
-	def __init__(self,parameter,value_list):
-		self.policy_type='Lockdown'
-		self.do_lockdown_fn=do_lockdown_fn
-		self.parameter=parameter
-		self.value_list=value_list
-
-	def enact_policy(self,time_step,agents,locations):
-		if self.do_lockdown_fn(time_step):
-			for location in locations:
-				if location.info[self.parameter] in self.value_list:
-					location.lock_down_state=True
-'''
+        return 'Positive'

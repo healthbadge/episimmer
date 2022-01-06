@@ -19,10 +19,10 @@ class ReadConfiguration():
         self.interaction_info_keys = None
         self.example_path = osp.dirname(filename)
 
-        f = open(filename, "r")
+        f = open(filename, 'r')
 
         self.random_seed = (self.get_value_config(f.readline()))
-        if (self.random_seed != ""):
+        if (self.random_seed != ''):
             random.seed((int)(self.random_seed))
 
         self.worlds = (int)(self.get_value_config(f.readline()))
@@ -88,9 +88,9 @@ class ReadConfiguration():
                 print('Event definition does not contain parameter \'Agents\'')
 
     def get_value_config(self, line):
-        l = re.findall("\<.*?\>", line)
+        l = re.findall('\<.*?\>', line)
         if len(l) != 1:
-            print("Error! Invalid entry in config.txt")
+            print('Error! Invalid entry in config.txt')
             return None
         value = (((l[0])[1:])[:-1])
         return value
@@ -187,7 +187,7 @@ class Read_VD_Configuration():
         self.output_mode = None
         self.example_path = osp.dirname(filename)
 
-        f = open(filename, "r")
+        f = open(filename, 'r')
 
         self.target = (self.get_value_config(f.readline()))
         self.algorithm = (self.get_value_config(f.readline()))
@@ -198,19 +198,19 @@ class Read_VD_Configuration():
 
         f.close()
 
-        if (self.target == ""):
-            raise Exception("Error! Target required in vd_config.txt")
+        if (self.target == ''):
+            raise Exception('Error! Target required in vd_config.txt')
 
-        if (self.algorithm == ""):
-            raise Exception("Error! Algorithm required in vd_config.txt")
+        if (self.algorithm == ''):
+            raise Exception('Error! Algorithm required in vd_config.txt')
 
         if (not self.parameter_dict):
-            print("No parameters provided in vd_config.txt")
+            print('No parameters provided in vd_config.txt')
 
     def get_value_config(self, line):
-        l = re.findall("\<.*?\>", line)
+        l = re.findall('\<.*?\>', line)
         if len(l) != 1:
-            print("Error! Invalid entry in vd_config.txt")
+            print('Error! Invalid entry in vd_config.txt')
             return None
         value = (((l[0])[1:])[:-1])
         return value
@@ -230,7 +230,7 @@ class ReadFilesList():
         lines = f.readlines()
         separator = ' '
         text = separator.join(lines)
-        l = re.findall("\<.*?\>", text)
+        l = re.findall('\<.*?\>', text)
         for filename in l:
             self.file_list.append(((filename)[1:])[:-1])
         f.close()
@@ -258,7 +258,7 @@ class ReadAgents(BaseReadFile):
             agent_info_keys = self.get_value(f.readline())
             if agent_info_keys != config_obj.agent_info_keys:
                 print(
-                    "Error! Agent Information parameters donot match the config.txt file"
+                    'Error! Agent Information parameters donot match the config.txt file'
                 )
                 return None
 
@@ -284,7 +284,7 @@ class ReadAgents(BaseReadFile):
                 agent_info_keys = ':'.join(csv_dict_reader.fieldnames)
                 if agent_info_keys != config_obj.agent_info_keys:
                     print(
-                        "Error! Agent Information parameters donot match the config.txt file"
+                        'Error! Agent Information parameters donot match the config.txt file'
                     )
                     return None
 
@@ -311,7 +311,7 @@ class ReadInteractions(BaseReadFile):
         super().__init__()
         self.config_obj = config_obj
         self.agents_obj = agents_obj
-        if filename == "" or filename == None:
+        if filename == '' or filename == None:
             return
 
         if filename.endswith('.txt'):
@@ -320,7 +320,7 @@ class ReadInteractions(BaseReadFile):
             interaction_info_keys = self.get_value(f.readline())
             if interaction_info_keys != config_obj.interaction_info_keys:
                 print(
-                    "Error! Interaction parameters donot match the config.txt file"
+                    'Error! Interaction parameters donot match the config.txt file'
                 )
                 return None
             self.parameter_keys = interaction_info_keys.split(':')
@@ -343,7 +343,7 @@ class ReadInteractions(BaseReadFile):
                 if self.parameter_keys != config_obj.interaction_info_keys:
 
                     print(
-                        "Error! Interaction Information parameters donot match the config.txt file"
+                        'Error! Interaction Information parameters donot match the config.txt file'
                     )
                     return None
 
@@ -379,7 +379,7 @@ class ReadProbabilisticInteractions(BaseReadFile):
         super().__init__()
         self.config_obj = config_obj
         self.agents_obj = agents_obj
-        if filename == "" or filename == None:
+        if filename == '' or filename == None:
             return
 
         if filename.endswith('.txt'):
@@ -393,7 +393,7 @@ class ReadProbabilisticInteractions(BaseReadFile):
                     2:] != config_interaction_info_keys_list and self.parameter_keys[
                         2:] != config_interaction_info_keys_list[2:]:
                 print(
-                    "Error! Probabilistic Interaction parameters donot match the config.txt file"
+                    'Error! Probabilistic Interaction parameters donot match the config.txt file'
                 )
                 return None
 
@@ -451,14 +451,14 @@ class ReadLocations(BaseReadFile):
         super().__init__()
         self.config_obj = config_obj
         self.locations = {}
-        if filename == "" or filename == None:
+        if filename == '' or filename == None:
             return
         f = open(filename, 'r')
 
         self.no_locations = int(self.get_value(f.readline()))
         location_info_keys = self.get_value(f.readline())
         if location_info_keys != config_obj.location_info_keys:
-            print("Error! Location parameters donot match the config.txt file")
+            print('Error! Location parameters donot match the config.txt file')
             return None
         self.parameter_keys = location_info_keys.split(':')
 
@@ -485,13 +485,13 @@ class ReadEvents(BaseReadFile):
         self.config_obj = config_obj
         self.locations_obj = locations_obj
         self.agents_obj = agents_obj
-        if filename == "" or filename == None:
+        if filename == '' or filename == None:
             return
         f = open(filename, 'r')
         self.no_events = int(self.get_value(f.readline()))
         event_info_keys = self.get_value(f.readline())
         if event_info_keys != config_obj.event_info_keys:
-            print("Error! Event parameters donot match the config.txt file")
+            print('Error! Event parameters donot match the config.txt file')
             return None
         self.parameter_keys = event_info_keys.split(':')
 
@@ -532,7 +532,7 @@ class ReadEvents(BaseReadFile):
                 set(info_dict[agent_parameter_index]) - to_remove)
 
         if location_index == None:
-            print("Error! No event to read")
+            print('Error! No event to read')
         return location_index, info_dict
 
 
@@ -541,7 +541,7 @@ class ReadOneTimeEvents(BaseReadFile):
     def __init__(self, filename):
         super().__init__()
         self.filename = filename
-        if self.filename == "" or self.filename == None:
+        if self.filename == '' or self.filename == None:
             return
         f = open(self.filename, 'r')
         self.no_events = int(self.get_value(f.readline()))
@@ -557,13 +557,13 @@ class ReadOneTimeEvents(BaseReadFile):
         f.close()
 
     def ReadOneTimeEvents(self, config_obj, locations_obj):
-        if self.filename == "" or self.filename == None:
+        if self.filename == '' or self.filename == None:
             return
         self.config_obj = config_obj
         self.locations_obj = locations_obj
         if self.event_info_keys != 'Time Step:' + config_obj.event_info_keys:
             print(
-                "Error! One Time Event parameters donot match the config.txt file"
+                'Error! One Time Event parameters donot match the config.txt file'
             )
             return None
         for event in self.eventsAt.get(Time.Time.get_current_time_step(), []):
@@ -586,5 +586,5 @@ class ReadOneTimeEvents(BaseReadFile):
                 info_dict[key] = parameter_list[i]
 
         if location_index == None:
-            print("Error! No event to read")
+            print('Error! No event to read')
         return location_index, info_dict

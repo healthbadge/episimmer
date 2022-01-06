@@ -8,7 +8,7 @@ from utils.Module_Handling import module_from_file
 
 
 def get_model(filename):
-    UserModel = module_from_file("Generate_model", filename)
+    UserModel = module_from_file('Generate_model', filename)
     model = UserModel.UserModel()
     return model
 
@@ -16,7 +16,7 @@ def get_model(filename):
 def get_model_graph(filename):
 
     model = get_model(filename)
-    outpath = filename[:-2] + "html"
+    outpath = filename[:-2] + 'html'
     net = Network(directed=True)
     states = model.individual_state_types
     infected_states = model.infected_states
@@ -30,7 +30,7 @@ def get_model_graph(filename):
 
     model_firstname = model.name.split()[0]
 
-    if model_firstname == "Stochastic":
+    if model_firstname == 'Stochastic':
         transitions = model.transmission_prob
         for i, state_i in enumerate(states):
             for j, state_j in enumerate(states):
@@ -39,12 +39,12 @@ def get_model_graph(filename):
                     str2 = str(transitions[state_i]
                                [state_j].func.__func__)[len(str1):]
                     func_name = str2.split(' ')[0]
-                    if (func_name == "full_p_infection"):
+                    if (func_name == 'full_p_infection'):
                         net.add_edge(i, j, color='#fc9283')
                     else:
                         net.add_edge(i, j, color='#99bdf7')
 
-    if model_firstname == "Scheduled":
+    if model_firstname == 'Scheduled':
         state_idx = {val: idx for idx, val in enumerate(states)}
         transitions = model.state_transition_fn
         for i, state_i in enumerate(states):
@@ -54,7 +54,7 @@ def get_model_graph(filename):
                 func_name = str2.split(' ')[0]
                 state_dict = transitions[state_i].args[-1]
                 for state in state_dict.keys():
-                    if (func_name == "full_p_infection"):
+                    if (func_name == 'full_p_infection'):
                         net.add_edge(i, int(state_idx[state]), color='#fc9283')
                     else:
                         if (state_i != state):
@@ -64,12 +64,12 @@ def get_model_graph(filename):
     net.show(outpath)
 
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     arg_parser = argparse.ArgumentParser(
-        description="Utility function for generating disease model graph",
+        description='Utility function for generating disease model graph',
         usage='% (prog)s filename [options]')
 
-    arg_parser.add_argument("--filename", "-f", required=True)
+    arg_parser.add_argument('--filename', '-f', required=True)
 
     args = arg_parser.parse_args()
 
