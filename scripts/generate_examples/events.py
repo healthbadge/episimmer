@@ -1,6 +1,7 @@
 import argparse
 from csv import DictWriter
 
+
 def makeEvents(filename, agents, locations, noHead):
     agList = ""
     locList = []
@@ -60,7 +61,8 @@ def makeEvents(filename, agents, locations, noHead):
             if not noHead:
                 writer.writeheader()
             for loc in locList:
-                writer.writerow({'Location Index': loc, 'Agents': agList })
+                writer.writerow({'Location Index': loc, 'Agents': agList})
+
 
 def addLine(filename, value):
     f = open(filename, 'a')
@@ -75,15 +77,18 @@ def cleanFile(filename):
 
 if __name__ == "__main__":
     arg_parser = argparse.ArgumentParser(
-        description="Utility functions for generating agents file", usage='% (prog)s filename [options]')
+        description="Utility functions for generating agents file",
+        usage='% (prog)s filename [options]')
 
     # options
     arg_parser.add_argument("filename")
     arg_parser.add_argument("--agents", "-ag", required=False)
     arg_parser.add_argument("--locations", "-loc", required=False)
     arg_parser.add_argument("--addLine", "-a", required=False)
-    arg_parser.add_argument("--clean", "-c", action="store_true", required=False)
-    arg_parser.add_argument("--noHeader", "-nh", action="store_true", required=False)
+    arg_parser.add_argument("--clean", "-c", action="store_true",
+                            required=False)
+    arg_parser.add_argument("--noHeader", "-nh", action="store_true",
+                            required=False)
 
     args = arg_parser.parse_args()
 

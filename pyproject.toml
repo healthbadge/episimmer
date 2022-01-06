@@ -1,0 +1,2 @@
+[tool.yapfignore]
+ignore_patterns = ["examples"]
