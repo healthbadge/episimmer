@@ -1,5 +1,4 @@
 import random
-import copy
 import numpy as np
 
 def write_to_file(filename,n,no_contacts):

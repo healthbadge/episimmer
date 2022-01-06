@@ -2,7 +2,6 @@
 # To run <python generate_files.py 100 0.1>
 
 import random
-import copy
 import numpy as np
 import sys
 
