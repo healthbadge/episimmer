@@ -1,9 +1,6 @@
 name: Documentation
 
-on:
-  push:
-    branches:
-      - master
+on: [push]
 
 jobs:
 
@@ -42,7 +39,7 @@ jobs:
           cp -r episimmer/src/* gh-pages/src
           cp -r episimmer/tests/* gh-pages/tests
           cp episimmer/requirements.txt gh-pages/requirements.txt
-          cp -r docs/_build/html/* gh-pages/
+          cp -r _build/html/* gh-pages/
           cd gh-pages
           touch .nojekyll
           git config --local user.email "action@github.com"
