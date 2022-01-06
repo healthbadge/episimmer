@@ -70,10 +70,10 @@ def get_interaction_graph_from_object(obj):
 
     # Interactions
     for agent in agents_dict.values():
-        if(agent.can_contribute_infection):
+        if(agent.can_contribute_infection > 0):
             for int_agent in agent.contact_list:
                 int_agent_indx = int_agent["Interacting Agent Index"]
-                if(agents_obj.agents[int_agent_indx].can_recieve_infection):
+                if(agents_obj.agents[int_agent_indx].can_recieve_infection > 0):
                     net.add_edge(agent.index, int_agent_indx,color="black")
 
     # Events
@@ -82,7 +82,8 @@ def get_interaction_graph_from_object(obj):
             for i,event_info in enumerate(location.events):
                 net.add_node(event_info["Location Index"]+"_event"+str(i),x=-300 - 100*j,y=100*i,shape="triangle")
                 for agent in event_info["Agents"]:
-                    net.add_edge(event_info["Location Index"]+"_event"+str(i), agent,color="black")
+                    if(agents_obj.agents[agent].can_recieve_infection > 0 or agents_obj.agents[agent].can_contribute_infection > 0):
+                        net.add_edge(event_info["Location Index"]+"_event"+str(i), agent,color="black")
 
     net.toggle_physics(False)
     net.show(outpath)
