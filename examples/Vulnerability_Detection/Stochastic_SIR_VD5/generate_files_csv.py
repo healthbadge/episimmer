@@ -6,4 +6,3 @@ with open('agents.csv', 'w', newline='') as file:
     writer.writeheader()
     for i in range(1000):
     	writer.writerow({'Agent Index': i})
-  

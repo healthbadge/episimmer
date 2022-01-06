@@ -34,7 +34,7 @@ def write_interactions(filename, n, k):
 
 	f.close()
 
-# n x n x k agents  
+# n x n x k agents
 n = int(sys.argv[1])
 k = int(sys.argv[2])
 

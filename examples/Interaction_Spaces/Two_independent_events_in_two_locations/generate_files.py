@@ -37,4 +37,3 @@ def write_events(filename,start_agent_index, end_agent_index):
 number_of_agents=int(sys.argv[1])
 write_agents('agents.txt',number_of_agents)
 write_events('two_events.txt',0,number_of_agents)
-

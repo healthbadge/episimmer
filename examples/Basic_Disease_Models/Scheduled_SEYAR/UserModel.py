@@ -24,6 +24,3 @@ class UserModel(Model.ScheduledModel):
 
 		self.set_event_contribution_fn(event_contribute_fn)
 		self.set_event_recieve_fn(event_recieve_fn)
-
-
-

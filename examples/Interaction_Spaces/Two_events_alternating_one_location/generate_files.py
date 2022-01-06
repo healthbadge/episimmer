@@ -33,4 +33,3 @@ number_of_agents=int(sys.argv[1])
 write_agents('agents.txt',number_of_agents)
 write_events('first_event.txt',0,int(number_of_agents/2))
 write_events('second_event.txt',int(number_of_agents/2),number_of_agents)
-

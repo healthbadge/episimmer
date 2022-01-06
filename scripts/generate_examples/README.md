@@ -1,4 +1,4 @@
-# Utility Files For Generating Examples 
+# Utility Files For Generating Examples
 
 ## 1. agents.py
 Creates a *agent_file.txt/csv* file for the user with input specifications.
@@ -11,10 +11,10 @@ python3 agents.py filename -n 10
 -p *Field "Propotions Dictionary of Field Types"* <br>
 Example : creates a new file *filename* of 10 agents with HLA types A, B, C in 0.1 : 0.7 : 0.2 ratio.<br>
 ```python
-python3 agents.py filename -n 10 -p HLA "{'A': 0.1, 'B': 0.7, 'C': 0.2}" 
+python3 agents.py filename -n 10 -p HLA "{'A': 0.1, 'B': 0.7, 'C': 0.2}"
 ```
-> NOTE: For multiple agent parameters just add another *-p Field2 "Propotions Dictionary of Field2 Types"* 
- 
+> NOTE: For multiple agent parameters just add another *-p Field2 "Propotions Dictionary of Field2 Types"*
+
 -a *"add_line"*<br>
 Example : appends the line *12:C* to the file *filename*. Creates a new file if it does not exist.
 ```python
@@ -47,7 +47,7 @@ python3 locations.py filename -n 10
 -p *Field* *"Propotions Dictionary of Field Types"* <br>
 Example : creates a new file *filename* of 10 locations with Ventilation types Good, Average, Poor in 0.1 : 0.7 : 0.2 ratio.<br>
 ```python
-python3 locations.py filename -n 10 -p Ventilation "{'Good': 0.1, 'Average': 0.7, 'Poor': 0.2}" 
+python3 locations.py filename -n 10 -p Ventilation "{'Good': 0.1, 'Average': 0.7, 'Poor': 0.2}"
 ```
 > NOTE: For multiple location parameters just add another *-p Field2 "Propotions Dictionary of Field2 Types"* <br>
 
@@ -63,12 +63,12 @@ Example : appends to file *filename* events where all *agent_indices* were prese
 ```python
 python3 events.py filename -ag "1,2" -loc "3,4"
 ```
->NOTE : you may put agents/location files made above as arguments as well. 
+>NOTE : you may put agents/location files made above as arguments as well.
 ```python
 python3 events.py filename -ag agents.txt -loc locations.csv
 ```
 
->-a *"ADD_LINE"* and -c function as mentioned in agents.py. 
+>-a *"ADD_LINE"* and -c function as mentioned in agents.py.
 
 > You need to add -c in the python command if you want to overwrite an existing file.<br>
 
@@ -88,11 +88,11 @@ Example : appends to file *filename* interactions from all *agent1_indices* to *
 ```python
 python3 interactions.py filename -from "1,2" -to "3,4"
 ```
->NOTE : you may put agents/location files made above as arguments as well. 
+>NOTE : you may put agents/location files made above as arguments as well.
 ```python
 python3 interactions.py filename -from agents1.txt -to agents2.csv
 ```
->-a *"ADD_LINE"* and -c function as mentioned in agents.py 
+>-a *"ADD_LINE"* and -c function as mentioned in agents.py
 
 >You need to add -c in the python command if you want to overwrite an existing file.<br>
 
