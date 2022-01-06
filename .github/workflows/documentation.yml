@@ -24,4 +24,4 @@ jobs:
           pip install sphinx_rtd_theme
       - name: Build documentation
         run: |
-          cd docs && make clean && make html SPHINXOPTS="-W"  # Fail on warning.
+          cd docs && make clean && make github SPHINXOPTS="-W"  # Fail on warning.
