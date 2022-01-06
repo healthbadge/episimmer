@@ -1,7 +1,8 @@
-import random
 import copy
-from policy.Policy import Agent_Policy
+import random
 from functools import partial
+
+from policy.Policy import Agent_Policy
 
 
 class Result():

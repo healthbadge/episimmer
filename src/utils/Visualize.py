@@ -1,15 +1,16 @@
-import matplotlib.pyplot as plt
-import matplotlib.animation as ani
-import webbrowser
 import functools
+import math
 import os
 import os.path as osp
-from pyvis.network import Network
 import time
-import math
-from utils import Time
-import numpy as np
+import webbrowser
 
+import matplotlib.animation as ani
+import matplotlib.pyplot as plt
+import numpy as np
+from pyvis.network import Network
+
+from utils import Time
 from utils.Arg_Parse import parse_args
 
 

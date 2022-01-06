@@ -1,6 +1,7 @@
 import argparse
 from csv import DictWriter
 
+
 def makeEvents(filename, agents, locations, noHead):
     agList = ''
     locList = []

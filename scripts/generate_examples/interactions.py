@@ -1,6 +1,7 @@
 import argparse
 from csv import DictWriter
 
+
 def readAgents(agents):
     agList = ''
     if agents.endswith('.txt'):

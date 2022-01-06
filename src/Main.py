@@ -1,11 +1,12 @@
-import ReadFile
-import World
-from utils.Arg_Parse import parse_args
-from utils.Module_Handling import module_from_file
-from utils import Statistics
-from vulnerability_detection.VD import VD
 import os
 import os.path as osp
+
+import ReadFile
+import World
+from utils import Statistics
+from utils.Arg_Parse import parse_args
+from utils.Module_Handling import module_from_file
+from vulnerability_detection.VD import VD
 
 
 def get_model(example_path):

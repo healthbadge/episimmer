@@ -2,8 +2,10 @@ import sys
 
 sys.path.insert(1, '../../src/')
 
-from pyvis.network import Network
 import argparse
+
+from pyvis.network import Network
+
 from utils.Module_Handling import module_from_file
 
 

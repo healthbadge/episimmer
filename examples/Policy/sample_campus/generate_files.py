@@ -1,6 +1,8 @@
 import random
-import numpy as np
 from itertools import combinations
+
+import numpy as np
+
 
 def write_to_file():
 	info_dict={}

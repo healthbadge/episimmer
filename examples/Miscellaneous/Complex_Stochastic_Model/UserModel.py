@@ -1,5 +1,6 @@
 import Model
 
+
 class UserModel(Model.StochasticModel):
 	def __init__(self):
 

@@ -1,5 +1,7 @@
 import random
+
 import numpy as np
+
 
 def write_to_file(filename,n):
 	info_dict={}

@@ -1,5 +1,6 @@
 import sys
 
+
 def write_agents(filename,n):
 	header='Agent Index'
 

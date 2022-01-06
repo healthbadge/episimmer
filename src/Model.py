@@ -1,7 +1,9 @@
 import random
 from functools import partial
-from utils import Time
+
 import numpy as np
+
+from utils import Time
 
 infectious_colors = ['red', 'pink', 'orange', 'purple']
 normal_colors = ['blue', 'green', 'black', 'yellow', 'brown', 'white']

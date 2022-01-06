@@ -1,9 +1,11 @@
-import Simulate
-import ReadFile
 import os.path as osp
-from utils.Arg_Parse import parse_args
-from utils import Time, Math, Visualize
+
 import numpy as np
+
+import ReadFile
+import Simulate
+from utils import Math, Time, Visualize
+from utils.Arg_Parse import parse_args
 
 
 class World():

@@ -1,5 +1,7 @@
-import Model
 import math
+
+import Model
+
 
 #User defined functions
 #This function is user defined, based on the parameters the user has inputed in agents file and interaction/contact file

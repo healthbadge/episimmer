@@ -1,5 +1,6 @@
 import Model
 
+
 #User defined functions
 def fn1(current_time_step): #ICU recovery improves over time as doctors learn how to treat better
 	return min(0.5,0.2+current_time_step*0.01)

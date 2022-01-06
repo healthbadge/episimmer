@@ -1,4 +1,5 @@
 from csv import DictWriter
+
 with open('interactions.csv', 'w', newline='') as file:
     fieldnames = ['Agent Index','Interacting Agent']
     writer = DictWriter(file, fieldnames=fieldnames)

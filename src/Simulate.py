@@ -1,5 +1,5 @@
 import ReadFile
-from utils import Time, Statistics, Visualize
+from utils import Statistics, Time, Visualize
 
 
 class Simulate():

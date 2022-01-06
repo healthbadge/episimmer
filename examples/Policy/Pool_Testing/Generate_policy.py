@@ -1,5 +1,7 @@
-from policy import Lockdown_Policy, Testing_Policy
 import random
+
+from policy import Lockdown_Policy, Testing_Policy
+
 
 def generate_policy():
 	policy_list=[]

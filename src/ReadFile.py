@@ -1,11 +1,12 @@
+import copy
+import json
+import os.path as osp
+import random
+import re
+from csv import DictReader
+
 import Agent
 import Location
-import random
-import copy
-import re
-import os.path as osp
-from csv import DictReader
-import json
 from utils import Time
 
 

@@ -1,9 +1,10 @@
-import random
-from policy.Policy import Agent_Policy
 import copy
-from functools import partial
-from collections import deque
 import json
+import random
+from collections import deque
+from functools import partial
+
+from policy.Policy import Agent_Policy
 
 
 class Result():

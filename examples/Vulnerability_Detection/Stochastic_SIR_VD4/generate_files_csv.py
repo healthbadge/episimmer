@@ -1,4 +1,5 @@
 from csv import DictWriter
+
 with open('agents.csv', 'w', newline='') as file:
     fieldnames = ['Agent Index']
     writer = DictWriter(file, fieldnames=fieldnames)

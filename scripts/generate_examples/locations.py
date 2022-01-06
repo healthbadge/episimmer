@@ -3,6 +3,7 @@ import ast
 import random
 from csv import DictWriter
 
+
 def makeLocation(filename, n, titles='', pdicts=[]):
     k = len(titles)
     div = []

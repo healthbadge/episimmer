@@ -1,5 +1,6 @@
-from pyvis.network import Network
 import argparse
+
+from pyvis.network import Network
 
 
 def get_interaction_graph_from_file(number_of_agents, interaction_file_path):

@@ -1,7 +1,8 @@
-import unittest
-import subprocess
 import os
 import os.path as osp
+import subprocess
+import unittest
+
 
 class TestExamples(unittest.TestCase):
 

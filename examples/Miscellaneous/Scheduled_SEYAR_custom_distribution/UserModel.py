@@ -1,5 +1,7 @@
-import Model
 import random
+
+import Model
+
 
 def event_contribute_fn(agent,event_info,location,current_time_step):
 		if agent.state=='Symptomatic':

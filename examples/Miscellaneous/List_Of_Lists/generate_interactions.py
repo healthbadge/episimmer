@@ -1,6 +1,7 @@
 import csv
 import random
 
+
 def write_interactions(filename,n,no_contacts):
 	with open(filename, 'w', newline='') as file:
 		fieldnames = ['Agent Index', 'Interacting Agent Index', 'Time Interval', 'Intensity']
