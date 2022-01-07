@@ -499,29 +499,24 @@ class ReadEvents(BaseReadFile):
     def get_event(self, parameter_list):
         info_dict = {}
         location_index = None
-        agent_parameter_index = None
         for i, key in enumerate(self.parameter_keys):
             if key == 'Location Index':
                 location_index = parameter_list[i]
 
             if key == 'Agents':
                 info_dict[key] = list(set(parameter_list[i].split(',')))
-                agent_parameter_index = key
                 if info_dict[key][-1] == '':
                     info_dict[key] = info_dict[:-1]
             else:
                 info_dict[key] = parameter_list[i]
 
-        if (info_dict[agent_parameter_index] is None
-                or self.agents_obj.agents is None):
+        if (info_dict['Agents'] is None or self.agents_obj.agents is None):
             location_index, info_dict = None, None
 
-        elif (set(info_dict[agent_parameter_index]) -
-              set(list(self.agents_obj.agents))):
-            to_remove = set(info_dict[agent_parameter_index]) - set(
+        elif (set(info_dict['Agents']) - set(list(self.agents_obj.agents))):
+            to_remove = set(info_dict['Agents']) - set(
                 list(self.agents_obj.agents))
-            info_dict[agent_parameter_index] = list(
-                set(info_dict[agent_parameter_index]) - to_remove)
+            info_dict['Agents'] = list(set(info_dict['Agents']) - to_remove)
 
         if location_index == None:
             print('Error! No event to read')
@@ -547,11 +542,12 @@ class ReadOneTimeEvents(BaseReadFile):
                     int(time), []) + [':'.join(line[1:])]
         f.close()
 
-    def ReadOneTimeEvents(self, config_obj, locations_obj):
+    def ReadOneTimeEvents(self, config_obj, locations_obj, agents_obj):
         if self.filename == '' or self.filename == None:
             return
         self.config_obj = config_obj
         self.locations_obj = locations_obj
+        self.agents_obj = agents_obj
         if self.event_info_keys != 'Time Step:' + config_obj.event_info_keys:
             print(
                 'Error! One Time Event parameters donot match the config.txt file'
@@ -575,6 +571,14 @@ class ReadOneTimeEvents(BaseReadFile):
                     info_dict[key] = info_dict[:-1]
             else:
                 info_dict[key] = parameter_list[i]
+
+        if (info_dict['Agents'] is None or self.agents_obj.agents is None):
+            location_index, info_dict = None, None
+
+        elif (set(info_dict['Agents']) - set(list(self.agents_obj.agents))):
+            to_remove = set(info_dict['Agents']) - set(
+                list(self.agents_obj.agents))
+            info_dict['Agents'] = list(set(info_dict['Agents']) - to_remove)
 
         if location_index == None:
             print('Error! No event to read')

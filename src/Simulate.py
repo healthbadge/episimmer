@@ -79,7 +79,8 @@ class Simulate():
                                     self.locations_obj, self.agents_obj)
 
         # Load One Time Events
-        oneTimeEvent_obj.ReadOneTimeEvents(self.config_obj, self.locations_obj)
+        oneTimeEvent_obj.ReadOneTimeEvents(self.config_obj, self.locations_obj,
+                                           self.agents_obj)
 
         #Enact policies by updating agent and location states.
         for policy in self.policy_list:
