@@ -50,48 +50,48 @@ class ReadConfiguration():
             )
 
         if self.interaction_info_keys.split(':') != ['']:
-            if self.probabilistic_interactions_files_list_list == ['']:
+            if self.interactions_files_list_list != ['']:
                 if 'Agent Index' not in self.interaction_info_keys.split(':'):
-                    print(
+                    raise Exception(
                         "Interaction definition does not contain parameter \'Agent Index\'"
                     )
 
                 if 'Interacting Agent Index' not in self.interaction_info_keys.split(
                         ':'):
-                    print(
+                    raise Exception(
                         "Interaction definition does not contain parameter \'Interacting Agent Index\'"
                     )
 
-            if self.interactions_files_list_list == ['']:
+            if self.probabilistic_interactions_files_list_list != ['']:
                 if 'Agents' not in self.interaction_info_keys.split(':'):
-                    print(
+                    raise Exception(
                         "Interaction definition does not contain parameter \'Agents\'"
                     )
 
                 if 'Probability' not in self.interaction_info_keys.split(':'):
-                    print(
+                    raise Exception(
                         "Interaction definition does not contain parameter \'Probability\'"
                     )
 
         if self.event_info_keys.split(':') != ['']:
             if 'Location Index' not in self.location_info_keys.split(':'):
-                print(
+                raise Exception(
                     'Location file does not contain parameter \'Location Index\''
                 )
 
             if 'Location Index' not in self.event_info_keys.split(':'):
-                print(
+                raise Exception(
                     'Event definition does not contain parameter \'Location Index\''
                 )
 
             if 'Agents' not in self.event_info_keys.split(':'):
-                print('Event definition does not contain parameter \'Agents\'')
+                raise Exception(
+                    'Event definition does not contain parameter \'Agents\'')
 
     def get_value_config(self, line):
         l = re.findall('\<.*?\>', line)
         if len(l) != 1:
-            print('Error! Invalid entry in config.txt')
-            return None
+            raise Exception('Error! Invalid entry in config.txt')
         value = (((l[0])[1:])[:-1])
         return value
 
@@ -204,13 +204,13 @@ class Read_VD_Configuration():
             raise Exception('Error! Algorithm required in vd_config.txt')
 
         if (not self.parameter_dict):
-            print('No parameters provided in vd_config.txt')
+            raise Warning(
+                'No parameters provided in vd_config.txt. Using Defaults')
 
     def get_value_config(self, line):
         l = re.findall('\<.*?\>', line)
         if len(l) != 1:
-            print('Error! Invalid entry in vd_config.txt')
-            return None
+            raise Exception('Error! Invalid entry in vd_config.txt')
         value = (((l[0])[1:])[:-1])
         return value
 
@@ -253,10 +253,9 @@ class ReadAgents(BaseReadFile):
             self.n = int(self.get_value(f.readline()))
             agent_info_keys = self.get_value(f.readline())
             if agent_info_keys != config_obj.agent_info_keys:
-                print(
-                    'Error! Agent Information parameters donot match the config.txt file'
+                raise Exception(
+                    'Error! Agent Information parameters do not match the config.txt file'
                 )
-                return None
 
             self.parameter_keys = agent_info_keys.split(':')
             self.agents = {}
@@ -273,16 +272,14 @@ class ReadAgents(BaseReadFile):
             with open(filename, 'r') as read_obj:
                 csv_dict_reader = DictReader(read_obj)
                 csv_list = list(csv_dict_reader)
-                #print(csv_list)
                 self.n = len(csv_list)
 
                 # Assuming that we have a config file that is .txt file.
                 agent_info_keys = ':'.join(csv_dict_reader.fieldnames)
                 if agent_info_keys != config_obj.agent_info_keys:
-                    print(
-                        'Error! Agent Information parameters donot match the config.txt file'
+                    raise Exception(
+                        'Error! Agent Information parameters do not match the config.txt file'
                     )
-                    return None
 
                 self.parameter_keys = csv_list
                 self.agents = {}
@@ -314,10 +311,9 @@ class ReadInteractions(BaseReadFile):
             self.no_interactions = int(self.get_value(f.readline()))
             interaction_info_keys = self.get_value(f.readline())
             if interaction_info_keys != config_obj.interaction_info_keys:
-                print(
-                    'Error! Interaction parameters donot match the config.txt file'
+                raise Exception(
+                    'Error! Interaction parameters do not match the config.txt file'
                 )
-                return None
             self.parameter_keys = interaction_info_keys.split(':')
 
             for i in range(self.no_interactions):
@@ -336,11 +332,9 @@ class ReadInteractions(BaseReadFile):
 
                 self.parameter_keys = ':'.join(csv_dict_reader.fieldnames)
                 if self.parameter_keys != config_obj.interaction_info_keys:
-
-                    print(
-                        'Error! Interaction Information parameters donot match the config.txt file'
+                    raise Exception(
+                        'Error! Interaction Information parameters do not match the config.txt file'
                     )
-                    return None
 
                 for i in range(self.n):
                     info_dict = csv_list[i]
@@ -386,10 +380,9 @@ class ReadProbabilisticInteractions(BaseReadFile):
             if self.parameter_keys != config_interaction_info_keys_list and self.parameter_keys[
                     2:] != config_interaction_info_keys_list and self.parameter_keys[
                         2:] != config_interaction_info_keys_list[2:]:
-                print(
-                    'Error! Probabilistic Interaction parameters donot match the config.txt file'
+                raise Exception(
+                    'Error! Probabilistic Interaction parameters do not match the config.txt file'
                 )
-                return None
 
             for i in range(self.no_interaction_sets):
                 parameter_list = (self.get_value(f.readline())).split(':')
@@ -451,8 +444,8 @@ class ReadLocations(BaseReadFile):
         self.no_locations = int(self.get_value(f.readline()))
         location_info_keys = self.get_value(f.readline())
         if location_info_keys != config_obj.location_info_keys:
-            print('Error! Location parameters donot match the config.txt file')
-            return None
+            raise Exception(
+                'Error! Location parameters do not match the config.txt file')
         self.parameter_keys = location_info_keys.split(':')
 
         for i in range(self.no_locations):
@@ -483,8 +476,9 @@ class ReadEvents(BaseReadFile):
         self.no_events = int(self.get_value(f.readline()))
         event_info_keys = self.get_value(f.readline())
         if event_info_keys != config_obj.event_info_keys:
-            print('Error! Event parameters donot match the config.txt file')
-            return None
+            raise Exception(
+                'Error! Event parameters do not match the config.txt file')
+
         self.parameter_keys = event_info_keys.split(':')
 
         for i in range(self.no_events):
@@ -519,7 +513,7 @@ class ReadEvents(BaseReadFile):
             info_dict['Agents'] = list(set(info_dict['Agents']) - to_remove)
 
         if location_index == None:
-            print('Error! No event to read')
+            raise Exception('Error! No event to read in the event file')
         return location_index, info_dict
 
 
@@ -549,10 +543,9 @@ class ReadOneTimeEvents(BaseReadFile):
         self.locations_obj = locations_obj
         self.agents_obj = agents_obj
         if self.event_info_keys != 'Time Step:' + config_obj.event_info_keys:
-            print(
-                'Error! One Time Event parameters donot match the config.txt file'
+            raise Exception(
+                'Error! One Time Event parameters do not match the config.txt file'
             )
-            return None
         for event in self.eventsAt.get(Time.Time.get_current_time_step(), []):
             parameter_list = (self.get_value(event)).split(':')
             location_index, info_dict = self.get_event(parameter_list)
@@ -581,5 +574,6 @@ class ReadOneTimeEvents(BaseReadFile):
             info_dict['Agents'] = list(set(info_dict['Agents']) - to_remove)
 
         if location_index == None:
-            print('Error! No event to read')
+            raise Exception(
+                'Error! No event to read in the one time event file')
         return location_index, info_dict

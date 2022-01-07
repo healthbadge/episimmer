@@ -9,8 +9,7 @@ def makeAgents(filename, n, titles = '', pdicts = []):
     div = []
     for pdict in pdicts:
         if sum(pdict.values()) != 1:
-            print("ERROR: Proportions don't add up to 1.")
-            exit()
+            raise ValueError("Proportions don't add up to 1.")
         else:
             div.append([[key, int(pdict[key]*n)] for key in pdict])
             for li in div:

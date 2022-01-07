@@ -46,8 +46,8 @@ class StochasticModel():
         for p in self.state_proportion.values():
             proportion_sum += p
         if proportion_sum != 1:
-            print("Error! Starting state proportions don't add up to 1")
-            return None
+            raise ValueError(
+                "Error! Starting state proportions don't add up to 1")
 
         prob_list = []
         cum_prob = 0
@@ -202,8 +202,8 @@ class ScheduledModel():
         for p in self.state_proportion.values():
             proportion_sum += p
         if proportion_sum != 1:
-            print("Error! Starting state proportions don't add up to 1")
-            return None
+            raise ValueError(
+                "Error! Starting state proportions don't add up to 1")
 
         prob_list = []
         cum_prob = 0
@@ -304,7 +304,7 @@ class ScheduledModel():
                 break
 
         if new_state == None:
-            print('Error! State probabilities do not add to 1')
+            raise ValueError('Error! State probabilities do not add to 1')
         return new_state
 
     def set_event_contribution_fn(self, fn):

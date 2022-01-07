@@ -227,7 +227,7 @@ class Test_Policy(Agent_Policy):
                                 capacity))
 
             else:
-                print(
+                raise Exception(
                     'Error! Machine name with different parameters already exists'
                 )
         else:
