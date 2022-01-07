@@ -8,6 +8,8 @@ The probabilistic interactions are considered to be bidirectional (as compared t
         Probability:Agents
 where "Agents" are all the interacting agents separated by commas.
 
+Also note that you need not pass 'Probability:Agents' in the config.txt interactions info keys but may do so to enforce the use of only probabilistic interactions (Adding normal interactions would give you an error).
+
 The disease model being used here is the Stochastic Model comprising of the states Susceptible, Infected and Recovered.
 
 

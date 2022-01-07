@@ -50,7 +50,8 @@ class ReadConfiguration():
             )
 
         if self.interaction_info_keys.split(':') != ['']:
-            if self.interactions_files_list_list != ['']:
+            if (self.probabilistic_interactions_files_list_list != [''] and self.interactions_files_list_list != ['']) or \
+                self.interactions_files_list_list != ['']:
                 if 'Agent Index' not in self.interaction_info_keys.split(':'):
                     raise Exception(
                         "Interaction definition does not contain parameter \'Agent Index\'"
@@ -62,7 +63,7 @@ class ReadConfiguration():
                         "Interaction definition does not contain parameter \'Interacting Agent Index\'"
                     )
 
-            if self.probabilistic_interactions_files_list_list != ['']:
+            elif self.probabilistic_interactions_files_list_list != ['']:
                 if 'Agents' not in self.interaction_info_keys.split(':'):
                     raise Exception(
                         "Interaction definition does not contain parameter \'Agents\'"

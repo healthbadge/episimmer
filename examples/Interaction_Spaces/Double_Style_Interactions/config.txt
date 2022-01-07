@@ -1,0 +1,13 @@
+Random Seed <10>
+Number of worlds <10>
+Number of Days <10>
+Agent Parameter Keys <Agent Index>
+Agent list filename <agents.txt>
+Interaction Info Keys <Agent Index:Interacting Agent Index:duration>
+Interaction Files list filename <interaction_files_list.txt>
+Probabilistic Interaction Files list filename <probabilistic_interaction_files_list.txt>
+Location Parameter Keys <Location Index>
+Location list filename <locations.txt>
+Event Parameter Keys <>
+Event Files list filename <>
+One Time Event filename <>
