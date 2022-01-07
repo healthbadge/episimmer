@@ -29,7 +29,7 @@ def get_interaction_graph_from_file(number_of_agents, interaction_file_path):
         csv_dict_reader = DictReader(fp)
         csv_list = list(csv_dict_reader)
         n = len(csv_list)
-        ls = list(range(n))
+        ls = list(range(number_of_agents))
         net.add_nodes(ls)
 
         for i in range(n):
