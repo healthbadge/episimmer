@@ -29,7 +29,7 @@ def generate_policy():
 		'cov4': {'cost': 30, 'count': 15, 'efficacy': 0.7, 'decay': [8], 'dose': 1, 'interval': []}
 	}
 	vp.add_vaccines(vaccines, 'Multi')
-	vp.set_register_agent_vaccine_func(vp.multi_dose_vaccines())
+	vp.set_register_agent_vaccine_func(vp.multi_dose_vaccination())
 
 
 	policy_list.append(vp)

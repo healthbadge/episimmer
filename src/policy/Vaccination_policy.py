@@ -120,12 +120,12 @@ class Vaccination_policy(Agent_Policy):
                     self.vaccines.remove(current_vaccine)
                     curr_agents_to_vaccinate -= 1
 
-    def multi_dose_vaccines(self, parameter=None, value_list=[]):
-        return partial(self.full_multi_dose_vaccines, parameter=parameter,
+    def multi_dose_vaccination(self, parameter=None, value_list=[]):
+        return partial(self.full_multi_dose_vaccination, parameter=parameter,
                        value_list=value_list)
 
-    def full_multi_dose_vaccines(self, agents, time_step, parameter,
-                                 value_list):
+    def full_multi_dose_vaccination(self, agents, time_step, parameter,
+                                    value_list):
         agents_copy = copy.copy(list(agents))
         random.shuffle(agents_copy)
         curr_agents_to_vaccinate = self.num_agents_to_vaccinate

@@ -13,4 +13,4 @@ For more information on these examples refer to [Tutorial 3](https://docs.google
 To run an example :
 
 		cd examples/Policy
-		python ../../src/Main.py sample_campus
+		python ../../src/Main.py Sample_Campus
