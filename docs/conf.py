@@ -17,7 +17,7 @@
 # -- Project information -----------------------------------------------------
 
 project = 'Episimmer'
-copyright = '2022, HealthBadge'
+copyright = '2022, HealthBadge Pvt Ltd'
 author = 'Inavamsi Enaganti'
 
 # -- General configuration ---------------------------------------------------
