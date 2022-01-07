@@ -1,4 +1,5 @@
 import argparse
+from csv import DictReader
 
 from pyvis.network import Network
 
