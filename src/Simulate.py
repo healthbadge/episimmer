@@ -11,6 +11,7 @@ class Simulate():
         self.policy_list = policy_list
         self.event_restriction_fn = event_restriction_fn
         self.config_obj = config_obj
+        self.G_list = []
 
     def onStartSimulation(self):
 
@@ -35,7 +36,7 @@ class Simulate():
         #Store state list
         self.store_state()
 
-    @Visualize.viz_dynamic_graph()
+    @Visualize.save_env_graph()
     @Statistics.save_stats([('agents_obj', 3)], 'Agents', ['state'])
     def onStartTimeStep(self, interactionFiles_listOfList,
                         eventFiles_listOfList,
@@ -119,6 +120,7 @@ class Simulate():
     def endTimeStep(self):
         self.store_state()
 
+    @Visualize.store_animated_dynamic_graph()
     def endSimulation(self):
         return self.state_history
 

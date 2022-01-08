@@ -87,14 +87,10 @@ class World():
         # Average number time series
         avg_dict = Math.average(tdict, self.config_obj.worlds)
         stddev_dict = Math.stddev(tdict, t2_dict, self.config_obj.worlds)
-        plottor = Visualize.plotResults(self.model, avg_dict, stddev_dict,
-                                        maxdict, mindict, plot)
-        plottor.savefig(
-            osp.join(self.config_obj.example_path, 'results', 'results.jpg'))
+        Visualize.plot_results(self.config_obj.example_path, self.model,
+                               avg_dict, stddev_dict, maxdict, mindict, plot)
         if anim:
-            animator = Visualize.animateResults(self.model.name, avg_dict)
-            animator.save(
-                osp.join(self.config_obj.example_path, 'results',
-                         'results.gif'))
+            Visualize.store_animated_time_plot(self.config_obj.example_path,
+                                               self.model, avg_dict)
 
         return avg_dict

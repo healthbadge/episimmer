@@ -18,11 +18,11 @@ To run examples :
 
 Flags :
 
-		-np or --noplot : Doesn't show plot after simulation
-		-vul or --vuldetect : Run Vulnerability Detection on data folder based on VD_config.txt
-		-an or --animate : Creates gif animation in the example folder
-	    	-s or --stats : Choose to store statistics
-		-vd or --vizdyn : Choose to vizualize simulation dynamically
+		-np or --noplot : Restrict plotting the time plot after simulation. Default = False
+		-vul or --vuldetect : Run Vulnerability Detection on the data folder based on VD_config.txt. Default = False
+		-an or --animate : Creates a gif animation of the time plot. Default = False
+  	-s or --stats : Choose to store statistics. Default = False
+		-vd or --vizdyn : Creates a gif of the simulation environment progressing through the days. Default = False
 
 
 
