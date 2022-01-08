@@ -10,8 +10,8 @@ with open('LICENSE') as f:
 
 
 install_requires = [
-    'matplotlib==3.4.2'
-    'numpy==1.17.2'
+    'matplotlib==3.4.2',
+    'numpy==1.17.2',
     'pyvis==0.1.9'
 ]
 tests_require = ['pytest', 'pytest-cov']
