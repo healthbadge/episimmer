@@ -1,9 +1,6 @@
 import functools
 import math
-import os
 import os.path as osp
-import random
-import time
 
 import matplotlib.animation as ani
 import matplotlib.pyplot as plt
