@@ -27,7 +27,7 @@ setup(
     author_email='episimmer@healthbadge.org',
     url='https://github.com/healthbadge/episimmer',
     license=license,
-    python_requires='>=3.7',
+    python_requires='>=3.8',
     install_requires=install_requires,
     extras_require={
         'test': tests_require,
