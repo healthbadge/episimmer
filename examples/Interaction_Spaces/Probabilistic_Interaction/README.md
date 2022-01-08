@@ -15,6 +15,6 @@ The disease model being used here is the Stochastic Model comprising of the stat
 
 ## Additional Information
 
-The interaction between a student and a teacher in a university might be considered to be probabilistic taking into account that the student has a consistent 95% attendance.
+For instance, the interaction between a student and a teacher in a university can be considered to be probabilistic taking into account that the student has a consistent 95% attendance.
 
 Hence, probabilistic interactions allow us to specify interactions between agents that are not most definitely bound to happen.
