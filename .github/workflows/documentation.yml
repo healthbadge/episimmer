@@ -18,8 +18,7 @@ jobs:
             python-version: ${{ matrix.python-version }}
         - name: Install internal dependencies
           run: |
-            pip install sphinx==4.3.2
-            pip install sphinx_rtd_theme==1.0.0
+            pip install -e .[dev]
         - name: Build documentation
           run: |
             cd docs && make clean && make html SPHINXOPTS="-W"  # Fail on warning.
