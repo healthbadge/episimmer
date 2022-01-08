@@ -15,7 +15,7 @@ class TestExamples(unittest.TestCase):
             for i,example in enumerate(examples_list):
                 main_path = osp.join('src','Main.py')
                 example_path = osp.join('examples',j,example)
-                process = subprocess.run('python3 {0} {1} -np -viz -a'.format(main_path,example_path),shell=True,stdout=subprocess.DEVNULL)
+                process = subprocess.run('python3 {0} {1} -np'.format(main_path,example_path),shell=True,stdout=subprocess.DEVNULL)
                 if(process.returncode):
                     raise Exception('Example {0} could not be run!'.format(example))
                 print('Classic Testing : {1}/{2} - {0} - {3} - complete'.format(j,i+1,len(examples_list),example))
