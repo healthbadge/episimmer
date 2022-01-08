@@ -21,7 +21,7 @@ Flags :
 		-np or --noplot : Restrict plotting the time plot after simulation. Default = False
 		-vul or --vuldetect : Run Vulnerability Detection on the data folder based on VD_config.txt. Default = False
 		-a or --animate : Creates a gif animation of the time plot. Default = False
-  	-s or --stats : Choose to store statistics. Default = False
+		-s or --stats : Choose to store statistics. Default = False
 		-viz or --vizdyn : Creates a gif of the simulation environment progressing through the days. Default = False
 
 
