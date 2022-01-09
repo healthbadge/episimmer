@@ -11,7 +11,7 @@ def makeLocation(filename, n, titles='', pdicts=[]):
         if sum(pdict.values()) != 1:
             raise ValueError("Proportions don't add up to 1.")
         else:
-            div.append([[key, int(pdict[key]*n)] for key in pdict])
+            div.append([[key, int(pdict[key] * n)] for key in pdict])
             for li in div:
                 for i in range(len(li)):
                     if li[i][1] == 0 and len(li) != 1:
@@ -28,7 +28,7 @@ def makeLocation(filename, n, titles='', pdicts=[]):
                     index = random.randint(0, len(div[t]) - 1)
                     f.write(':' + div[t][index][0])
                     div[t][index][1] -= 1
-                    if(div[t][index][1] == 0 and len(div[t]) != 1):
+                    if (div[t][index][1] == 0 and len(div[t]) != 1):
                         div[t].pop(index)
                 f.write('\n')
         else:
@@ -50,7 +50,7 @@ def makeLocation(filename, n, titles='', pdicts=[]):
                         index = random.randint(0, len(div[t]) - 1)
                         tdict[titles[t]] = div[t][index][0]
                         div[t][index][1] -= 1
-                        if(div[t][index][1] == 0 and len(div[t]) != 1):
+                        if (div[t][index][1] == 0 and len(div[t]) != 1):
                             div[t].pop(index)
                     writer.writerow(tdict)
             else:
@@ -74,19 +74,22 @@ def cleanFile(filename):
 
 if __name__ == '__main__':
     arg_parser = argparse.ArgumentParser(
-        description='Utility functions for generating locations file', usage = '% (prog)s filename [options]')
+        description='Utility functions for generating locations file',
+        usage='% (prog)s filename [options]')
 
     # options
     arg_parser.add_argument('filename')
     arg_parser.add_argument('--number', '-n', required=False)
-    arg_parser.add_argument('--proportion', '-p', nargs=2, action='append', required=False)
+    arg_parser.add_argument('--proportion', '-p', nargs=2, action='append',
+                            required=False)
     arg_parser.add_argument('--addLine', '-a', required=False)
-    arg_parser.add_argument('--clean', '-c', action='store_true', required=False)
+    arg_parser.add_argument('--clean', '-c', action='store_true',
+                            required=False)
 
     args = arg_parser.parse_args()
 
     if args.number:
-        if(args.proportion):
+        if (args.proportion):
             titles = [x[0] for x in args.proportion]
             pdicts = [ast.literal_eval(x[1]) for x in args.proportion]
             makeLocation(args.filename, int(args.number), titles, pdicts)
