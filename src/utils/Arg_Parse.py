@@ -2,8 +2,7 @@ import argparse
 
 
 def parse_args():
-    arg_parser = argparse.ArgumentParser(
-        prog='Main.py', usage='%(prog)s example_path [options]')
+    arg_parser = argparse.ArgumentParser()
 
     # input argument options
     arg_parser.add_argument(dest='example_path', type=str,

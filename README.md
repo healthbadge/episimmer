@@ -16,6 +16,10 @@ Run the following commands after cloning or downloading the repository
 ## Running Examples
 To run examples :
 
+		episimmer <Path_to_Example>
+
+or
+
 		python src/Main.py <Path_to_Example>
 
 Flags :

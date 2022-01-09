@@ -17,6 +17,11 @@ CLASSIFIERS = [
     'License :: OSI Approved :: BSD License',
     'Topic :: Scientific/Engineering',
 ]
+ENTRY={
+    'console_scripts': [
+        'episimmer=src.Main:main',
+    ]
+}
 
 with open('README.md') as f:
     LONG_DESC = f.read()
@@ -32,6 +37,7 @@ setup(
     version=VERSION,
     description=DESCRIPTION,
     long_description=LONG_DESC,
+    entry_points=ENTRY,
     author=AUTHOR,
     author_email=EMAIL,
     url=URL,
