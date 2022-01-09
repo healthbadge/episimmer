@@ -16,7 +16,7 @@ Run the following command in the local repository after cloning or downloading t
 ## Running Examples
 To run examples :
 
-		python src/Main.py <Path_to_Example>
+		python episimmer/main.py <Path_to_Example>
 
 Flags :
 
@@ -46,6 +46,6 @@ Episimmer is currently Work in Progress. Check out these point solutions built u
 - [Optimizing Lockdowns](https://optimising-lockdowns.herokuapp.com) <br>
 - [Efficient Contact tracing](https://contact-tracing.herokuapp.com) <br>
 - [YACHT protocol](https://hb-yacht.herokuapp.com) <br>
-- [Custom Stochastic Model on a complete graph](https://share.streamlit.io/inavamsi/custom_epidemic_model/main/Main.py) <br>
+- [Custom Stochastic Model on a complete graph](https://share.streamlit.io/inavamsi/custom_epidemic_model/main/main.py) <br>
 - [Testing strategies (Pool testing, Friendship testing)](https://share.streamlit.io/suryadheeshjith/epidemic-testing-ui/main.py) <br>
 - [Vaccination with multiple vaccine types](https://share.streamlit.io/ruthushankar/vaccination_ui/main/vac.py) <br>

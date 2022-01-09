@@ -15,4 +15,4 @@ For further details, refer to [Tutorial 2.2](https://docs.google.com/document/d/
 To run an example :
 
 		cd examples/Interaction_Spaces
-		python ../../src/Main.py Two_events_alternating_with_intersection
+		python ../../episimmer/main.py Two_events_alternating_with_intersection

@@ -1,7 +1,7 @@
-from policy.Policy import Agent_Policy
+from .base import AgentPolicy
 
 
-class full_lockdown(Agent_Policy):
+class FullLockdown(AgentPolicy):
     def __init__(self, do_lockdown_fn, p=0.0):
         self.policy_type = 'Restrict'
         self.do_lockdown_fn = do_lockdown_fn
@@ -14,7 +14,7 @@ class full_lockdown(Agent_Policy):
                 agent.update_contribute_infection(self.p)
 
 
-class agent_lockdown(Agent_Policy):
+class AgentLockdown(AgentPolicy):
     def __init__(self, parameter, value_list, do_lockdown_fn, p=0.0):
         self.policy_type = 'Restrict'
         self.do_lockdown_fn = do_lockdown_fn
@@ -30,7 +30,7 @@ class agent_lockdown(Agent_Policy):
                     agent.update_contribute_infection(self.p)
 
 
-class agent_policy_based_lockdown(Agent_Policy):
+class AgentPolicyBasedLockdown(AgentPolicy):
     def __init__(self, policy_to_consider, value_list, do_lockdown_fn,
                  time_period, p=0.0):
         self.policy_type = 'Restrict'

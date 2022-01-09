@@ -23,7 +23,7 @@ class TestExamples(unittest.TestCase):
                 and osp.isfile(osp.join('examples', j, p, 'config.txt'))
             ]
             for i, example in enumerate(examples_list):
-                main_path = osp.join('src', 'Main.py')
+                main_path = osp.join('episimmer', 'main.py')
                 example_path = osp.join('examples', j, example)
                 process = subprocess.run(
                     'python3 {0} {1} -np'.format(main_path, example_path),
@@ -34,6 +34,7 @@ class TestExamples(unittest.TestCase):
                 print(
                     'Classic Testing : {1}/{2} - {0} - {3} - complete'.format(
                         j, i + 1, len(examples_list), example))
+        print('Classic Testing complete!')
 
     # Vulnerability Detection Testing
     def test_vd_examples(self):
@@ -48,7 +49,7 @@ class TestExamples(unittest.TestCase):
                              'vd_config.txt'))
         ]
         for i, example in enumerate(examples_list):
-            main_path = osp.join('src', 'Main.py')
+            main_path = osp.join('episimmer', 'main.py')
             example_path = osp.join('examples', 'Vulnerability_Detection',
                                     example)
             process = subprocess.run(
@@ -59,6 +60,7 @@ class TestExamples(unittest.TestCase):
                     'Example {0} could not be run!'.format(example))
             print('Vulnerability Detection Testing : {0}/{1} - {2} - complete'.
                   format(i + 1, len(examples_list), example))
+        print('Vulnerability Detection Testing complete!')
 
     # Visualization and Animation
     def test_viz_examples(self):
@@ -79,7 +81,7 @@ class TestExamples(unittest.TestCase):
         ]
         example = examples_list[0]
         i = 0
-        main_path = osp.join('src', 'Main.py')
+        main_path = osp.join('episimmer', 'main.py')
         example_path = osp.join('examples', j, example)
         process = subprocess.run(
             'python3 {0} {1} -viz -np -a'.format(main_path, example_path),
@@ -107,7 +109,7 @@ class TestExamples(unittest.TestCase):
         ]
         example = examples_list[0]
         i = 0
-        main_path = osp.join('src', 'Main.py')
+        main_path = osp.join('episimmer', 'main.py')
         example_path = osp.join('examples', j, example)
         process = subprocess.run(
             'python3 {0} {1} -s -np'.format(main_path, example_path),

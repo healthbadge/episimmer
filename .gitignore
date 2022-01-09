@@ -12,7 +12,8 @@ UserModel.html
 /tests/unit/
 /tests/integration/
 Event_VD
-src/vulnerability_detection/Event_VD_algorithms.py
+episimmer/vulnerability_detection/Event_VD_algorithms.py
+rename-files.sh
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

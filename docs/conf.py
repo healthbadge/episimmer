@@ -15,11 +15,20 @@ import sys
 
 sys.path.insert(0, os.path.abspath('.'))
 
+# Read version from file
+version_file = os.path.join(os.path.dirname(__file__), '../episimmer',
+                            'version.txt')
+with open(version_file) as f:
+    __version__ = f.read().strip()
+
 # -- Project information -----------------------------------------------------
 
 project = 'episimmer'
 copyright = '2022, HealthBadge Pvt Ltd'
 author = 'HealthBadge'
+
+version = 'master (' + __version__ + ' )'
+release = __version__
 
 # -- General configuration ---------------------------------------------------
 

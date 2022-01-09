@@ -4,8 +4,8 @@ import os
 import pickle
 import pprint
 
-from utils import Time
-from utils.Arg_Parse import parse_args
+from .arg_parser import parse_args
+from .time import Time
 
 is_obj = lambda obj: hasattr(obj, '__dict__')
 is_iter = lambda obj: hasattr(obj, '__iter__')
@@ -20,8 +20,8 @@ class Stats():
 
     @staticmethod
     def add_content(K, C):
-        W = Time.Time.get_current_world()
-        T = Time.Time.get_current_time_step()
+        W = Time.get_current_world()
+        T = Time.get_current_time_step()
         if (W not in Stats.d.keys()):
             Stats.d[W] = {}
 

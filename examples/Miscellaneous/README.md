@@ -8,4 +8,4 @@ We also include examples that showcase the level of complexity and creativity th
 To run an example :
 
 		cd examples/Miscellaneous
-		python ../../src/Main.py 3D_Cellular_Automaton
+		python ../../episimmer/main.py 3D_Cellular_Automaton

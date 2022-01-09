@@ -1,7 +1,7 @@
 from setuptools import find_packages, setup
+import os.path as osp
 
 NAME = 'episimmer'
-VERSION = '2.0.0'
 DESCRIPTION = 'Epidemic Simulation Platform'
 URL = 'https://github.com/healthbadge/episimmer'
 EMAIL = 'inavamsi@healthbadge.org, surya@healthbadge.org'
@@ -18,6 +18,9 @@ CLASSIFIERS = [
     'Topic :: Scientific/Engineering',
 ]
 
+with open(osp.join("episimmer", "version.txt")) as f:
+    VERSION = f.read().strip()
+
 with open('README.md') as f:
     LONG_DESC = f.read()
 
@@ -31,7 +34,7 @@ EXTRA_REQUIRES = {'test': DEV_REQUIRES}
 
 ENTRY={
     'console_scripts': [
-        'episimmer=src.Main:main',
+        'episimmer=episimmer.main:main',
     ]
 }
 EXCLUDES = ['tests*','scripts']

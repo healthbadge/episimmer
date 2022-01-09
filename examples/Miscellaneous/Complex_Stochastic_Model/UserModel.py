@@ -1,7 +1,7 @@
-import Model
+import episimmer.model as model
 
 
-class UserModel(Model.StochasticModel):
+class UserModel(model.StochasticModel):
 	def __init__(self):
 
 		beta=0.05
@@ -22,7 +22,7 @@ class UserModel(Model.StochasticModel):
 		state_proportion={				#This is the starting proportions of each state
 							'S':1
 						}
-		Model.StochasticModel.__init__(self,individual_types,infected_states,state_proportion)  #We use the inbuilt model in the package
+		model.StochasticModel.__init__(self,individual_types,infected_states,state_proportion)  #We use the inbuilt model in the package
 		self.set_transition('S','A',self.p_standard(beta))
 		self.set_transition('A','I',self.p_standard(sigma))
 		self.set_transition('XS','XA',self.p_standard(beta1*beta))

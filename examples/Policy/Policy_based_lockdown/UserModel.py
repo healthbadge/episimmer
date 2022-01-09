@@ -1,4 +1,4 @@
-import Model
+import episimmer.model as model
 
 
 def event_contribute_fn(agent,event_info,location,current_time_step):
@@ -14,7 +14,7 @@ def event_recieve_fn(agent,ambient_infection,event_info,location,current_time_st
 	return ambient_infection*beta
 
 
-class UserModel(Model.StochasticModel):
+class UserModel(model.StochasticModel):
 	def __init__(self):
 		individual_types=['Susceptible','Exposed','Asymptomatic','Symptomatic','Recovered']
 		infected_states=['Asymptomatic','Symptomatic']
@@ -25,7 +25,7 @@ class UserModel(Model.StochasticModel):
 							'Asymptomatic':0,
 							'Symptomatic':0.01
 						}
-		Model.StochasticModel.__init__(self,individual_types,infected_states,state_proportion)
+		model.StochasticModel.__init__(self,individual_types,infected_states,state_proportion)
 		self.set_transition('Susceptible', 'Exposed', self.p_infection([None,None],None))
 		self.set_transition('Exposed', 'Symptomatic', self.p_standard(0.15))
 		self.set_transition('Exposed', 'Asymptomatic', self.p_standard(0.2))

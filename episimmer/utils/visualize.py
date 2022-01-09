@@ -7,8 +7,8 @@ import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
 
-from utils import Time
-from utils.Arg_Parse import parse_args
+from .arg_parser import parse_args
+from .time import Time
 
 
 def plot_results(example_path, model, avg_dict, stddev_dict, maxdict, mindict,
@@ -110,7 +110,7 @@ def save_env_graph():
         @functools.wraps(func)
         def wrapper(ref, *args, **kwargs):
             func(ref, *args, **kwargs)
-            if ref.config_obj.worlds - 1 == Time.Time.get_current_world():
+            if ref.config_obj.worlds - 1 == Time.get_current_world():
                 args = parse_args()
                 if (args.viz_dyn):
                     G = get_interaction_graph_from_object(ref)
@@ -161,7 +161,7 @@ def store_animated_dynamic_graph():
     def decorator(func):
         @functools.wraps(func)
         def wrapper(ref, *args, **kwargs):
-            if ref.config_obj.worlds - 1 == Time.Time.get_current_world():
+            if ref.config_obj.worlds - 1 == Time.get_current_world():
                 cmd_args = parse_args()
                 if (cmd_args.viz_dyn):
 

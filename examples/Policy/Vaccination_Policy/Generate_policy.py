@@ -1,4 +1,4 @@
-from policy import Lockdown_Policy, Vaccination_policy
+from episimmer.policy import lockdown_policy, vaccination_policy
 
 
 def agents_per_step_fn(time_step):
@@ -11,7 +11,7 @@ def generate_policy():
 	policy_list=[]
 
 
-	vp= Vaccination_policy.Vaccination_policy(agents_per_step_fn)
+	vp= vaccination_policy.VaccinationPolicy(agents_per_step_fn)
 
 	# Single Dose Vaccination
 	vaccines = {
