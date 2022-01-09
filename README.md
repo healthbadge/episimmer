@@ -1,3 +1,4 @@
+[![Documentation Status](https://readthedocs.org/projects/episimmer/badge/?version=latest)](https://episimmer.readthedocs.io/en/latest/?badge=latest) ![Testing Status](https://github.com/healthbadge/episimmer/actions/workflows/test.yml/badge.svg?branch=master) [![codecov](https://codecov.io/gh/healthbadge/episimmer/branch/additional_se/graph/badge.svg?token=F0BR661MG5)](https://codecov.io/gh/healthbadge/episimmer) [![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause) ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/healthbadge/episimmer?include_prereleases)
 # Episimmer : Epidemic Simulation Platform
 Powered by [HealthBadge](https://www.healthbadge.org/) <br>
 
@@ -5,11 +6,12 @@ Episimmer is an Epidemic Simulation Platform. It aims to provide Decision and Re
 
 Here is a short video describing Episimmer : [Video link](https://drive.google.com/file/d/1Oo-eG7pNIzaqf1uJ9rIf7DAc7MZwNRVY/view?usp=sharing)
 
-## Requirements
+## Installation
 
-Run the following command
+Run the following command in the local repository after cloning or downloading the repository
 
-		pip3 install -r requirements.txt
+		pip install -e .
+
 
 ## Running Examples
 To run examples :
@@ -27,8 +29,7 @@ Flags :
 
 
 ## Getting started
-
-You can start using Episimmer by  using the following tutorials :
+You can start using Episimmer by using the following tutorials :
 
 [Tutorial 1 : Getting started with Episimmer](https://docs.google.com/document/d/1PHMlz4W5gl_SpW8u1kWJEqzsAtW6NOWvePSMre9auT4/edit?usp=sharing) <br>
 [Tutorial 2.0 : Episimmer Basic Modelling Theory](https://docs.google.com/document/d/1BujPmaEOGoJn6_B0DAhIUUlROKBt4gIlG13Kl9kDRh4/edit?usp=sharing) <br>
