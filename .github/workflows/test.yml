@@ -6,7 +6,6 @@ on:
       - master
   pull_request:
 jobs:
-
   Code-Testing:
     runs-on: ubuntu-latest
 
@@ -18,30 +17,13 @@ jobs:
         with:
           python-version: 3.8
 
-      - name: Install dependencies
+      - name: Install main package
         run: |
-          pip install -r requirements.txt
-      - name: Run Tests
+          pip install -e .[test]
+      - name: Run tests
         run: |
-          python3 -m unittest discover -s tests/system
-  GitHub-Pages-Build:
-    runs-on: ${{ matrix.os }}
-
-    strategy:
-      matrix:
-        os: [ubuntu-latest]
-        python-version: [3.8]
-
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+          pytest --cov=src --cov-report=xml
+      - name: Upload coverage
+        uses: codecov/codecov-action@v2
         with:
-          python-version: ${{ matrix.python-version }}
-      - name: Install internal dependencies
-        run: |
-          pip install sphinx==4.3.2
-          pip install sphinx_rtd_theme==1.0.0
-      - name: Build documentation
-        run: |
-          cd docs && make clean && make html SPHINXOPTS="-W"  # Fail on warning.
+          fail_ci_if_error: true

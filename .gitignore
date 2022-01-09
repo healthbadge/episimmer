@@ -12,6 +12,7 @@ UserModel.html
 /tests/unit/
 /tests/integration/
 Event_VD
+src/vulnerability_detection/Event_VD_algorithms.py
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
