@@ -31,8 +31,12 @@ class AgentLockdown(AgentPolicy):
 
 
 class AgentPolicyBasedLockdown(AgentPolicy):
-    def __init__(self, policy_to_consider, value_list, do_lockdown_fn,
-                 time_period, p=0.0):
+    def __init__(self,
+                 policy_to_consider,
+                 value_list,
+                 do_lockdown_fn,
+                 time_period,
+                 p=0.0):
         self.policy_type = 'Restrict'
         self.policy_to_consider = policy_to_consider
         self.do_lockdown_fn = do_lockdown_fn

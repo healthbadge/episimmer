@@ -25,9 +25,10 @@ class TestExamples(unittest.TestCase):
             for i, example in enumerate(examples_list):
                 main_path = osp.join('episimmer', 'main.py')
                 example_path = osp.join('examples', j, example)
-                process = subprocess.run(
-                    'python3 {0} {1} -np'.format(main_path, example_path),
-                    shell=True, stdout=subprocess.DEVNULL)
+                process = subprocess.run('python3 {0} {1} -np'.format(
+                    main_path, example_path),
+                                         shell=True,
+                                         stdout=subprocess.DEVNULL)
                 if (process.returncode):
                     raise Exception(
                         'Example {0} could not be run!'.format(example))
@@ -52,9 +53,10 @@ class TestExamples(unittest.TestCase):
             main_path = osp.join('episimmer', 'main.py')
             example_path = osp.join('examples', 'Vulnerability_Detection',
                                     example)
-            process = subprocess.run(
-                'python3 {0} {1} -vul'.format(main_path, example_path),
-                shell=True, stdout=subprocess.DEVNULL)
+            process = subprocess.run('python3 {0} {1} -vul'.format(
+                main_path, example_path),
+                                     shell=True,
+                                     stdout=subprocess.DEVNULL)
             if (process.returncode):
                 raise Exception(
                     'Example {0} could not be run!'.format(example))
@@ -83,9 +85,10 @@ class TestExamples(unittest.TestCase):
         i = 0
         main_path = osp.join('episimmer', 'main.py')
         example_path = osp.join('examples', j, example)
-        process = subprocess.run(
-            'python3 {0} {1} -viz -np -a'.format(main_path, example_path),
-            shell=True, stdout=subprocess.DEVNULL)
+        process = subprocess.run('python3 {0} {1} -viz -np -a'.format(
+            main_path, example_path),
+                                 shell=True,
+                                 stdout=subprocess.DEVNULL)
         if (process.returncode):
             raise Exception('Example {0} could not be run!'.format(example))
         print('Dynamic Viz Testing : {0} - complete'.format(example))
@@ -111,9 +114,10 @@ class TestExamples(unittest.TestCase):
         i = 0
         main_path = osp.join('episimmer', 'main.py')
         example_path = osp.join('examples', j, example)
-        process = subprocess.run(
-            'python3 {0} {1} -s -np'.format(main_path, example_path),
-            shell=True, stdout=subprocess.DEVNULL)
+        process = subprocess.run('python3 {0} {1} -s -np'.format(
+            main_path, example_path),
+                                 shell=True,
+                                 stdout=subprocess.DEVNULL)
         if (process.returncode):
             raise Exception('Example {0} could not be run!'.format(example))
         print('Statistics Testing : {0} - complete'.format(example))

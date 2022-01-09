@@ -80,10 +80,15 @@ if __name__ == '__main__':
     # options
     arg_parser.add_argument('filename')
     arg_parser.add_argument('--number', '-n', required=False)
-    arg_parser.add_argument('--proportion', '-p', nargs=2, action='append',
+    arg_parser.add_argument('--proportion',
+                            '-p',
+                            nargs=2,
+                            action='append',
                             required=False)
     arg_parser.add_argument('--addLine', '-a', required=False)
-    arg_parser.add_argument('--clean', '-c', action='store_true',
+    arg_parser.add_argument('--clean',
+                            '-c',
+                            action='store_true',
                             required=False)
 
     args = arg_parser.parse_args()

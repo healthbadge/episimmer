@@ -18,8 +18,12 @@ def plot_results(example_path, model, avg_dict, stddev_dict, maxdict, mindict,
         plt.plot(avg_dict[state], color=model.colors[state])
         #y=np.array(avg_dict[state])
         #error=np.array(stddev_dict[state])
-        plt.fill_between(x, mindict[state], maxdict[state], alpha=0.2,
-                         facecolor=model.colors[state], linewidth=0)
+        plt.fill_between(x,
+                         mindict[state],
+                         maxdict[state],
+                         alpha=0.2,
+                         facecolor=model.colors[state],
+                         linewidth=0)
     plt.title(model.name + ' Plot')
     plt.legend(list(avg_dict.keys()), loc='upper right', shadow=True)
     plt.ylabel('Population')
@@ -51,7 +55,9 @@ def store_animated_time_plot(example_path, model, tdict):
     fig = plt.figure()
     fig.set_size_inches(8, 5)
 
-    anim = ani.FuncAnimation(fig, buildgraph, interval=100,
+    anim = ani.FuncAnimation(fig,
+                             buildgraph,
+                             interval=100,
                              fargs=(fig, model, tdict))
     anim.save(osp.join(example_path, 'results', 'time_plot.gif'),
               writer=ani.PillowWriter(fps=10))
@@ -73,10 +79,12 @@ def get_interaction_graph_from_object(obj):
     # Agent Nodes
     for i, agent in enumerate(agents_dict.values()):
         if (agent.state in infected_states):
-            G.add_node(agent.index, color=model.colors[agent.state],
+            G.add_node(agent.index,
+                       color=model.colors[agent.state],
                        pos=(500 * (i % root_num), 500 * (i / root_num)))
         else:
-            G.add_node(agent.index, color=model.colors[agent.state],
+            G.add_node(agent.index,
+                       color=model.colors[agent.state],
                        pos=(500 * (i % root_num), 500 * (i / root_num)))
 
     # Interactions
@@ -98,9 +106,10 @@ def get_interaction_graph_from_object(obj):
                     if (agents_obj.agents[agent].can_recieve_infection > 0 or
                             agents_obj.agents[agent].can_contribute_infection >
                             0):
-                        G.add_edge(
-                            event_info['Location Index'] + '_event' + str(i),
-                            agent, color='black')
+                        G.add_edge(event_info['Location Index'] + '_event' +
+                                   str(i),
+                                   agent,
+                                   color='black')
 
     return G
 
@@ -143,7 +152,9 @@ def draw_graph(G, ax):
     # pos = dict(zip(pos, temp))
 
     nodes = nx.draw_networkx_nodes(G, pos, node_color=color.values(), ax=ax)
-    edges = nx.draw_networkx_edges(G, pos, ax=ax,
+    edges = nx.draw_networkx_edges(G,
+                                   pos,
+                                   ax=ax,
                                    connectionstyle='arc3, rad = 0.1')
     return nodes, edges
 
@@ -167,13 +178,14 @@ def store_animated_dynamic_graph():
 
                     fig = plt.figure()
                     fig.set_size_inches(20, 14)
-                    anim = ani.FuncAnimation(
-                        fig, animate_graph, frames=ref.config_obj.time_steps,
-                        fargs=(fig, ref.model, ref.G_list))
-                    anim.save(
-                        osp.join(ref.config_obj.example_path, 'results',
-                                 'dyn_graph.gif'),
-                        writer=ani.PillowWriter(fps=5))
+                    anim = ani.FuncAnimation(fig,
+                                             animate_graph,
+                                             frames=ref.config_obj.time_steps,
+                                             fargs=(fig, ref.model,
+                                                    ref.G_list))
+                    anim.save(osp.join(ref.config_obj.example_path, 'results',
+                                       'dyn_graph.gif'),
+                              writer=ani.PillowWriter(fps=5))
                     fig.clf()
 
             return func(ref, *args, **kwargs)

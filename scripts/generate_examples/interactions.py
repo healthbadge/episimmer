@@ -89,11 +89,17 @@ if __name__ == '__main__':
     arg_parser.add_argument('--agents1', '-from', required=False)
     arg_parser.add_argument('--agents2', '-to', required=False)
     arg_parser.add_argument('--addLine', '-a', required=False)
-    arg_parser.add_argument('--clean', '-c', action='store_true',
+    arg_parser.add_argument('--clean',
+                            '-c',
+                            action='store_true',
                             required=False)
-    arg_parser.add_argument('--both', '-b', action='store_true',
+    arg_parser.add_argument('--both',
+                            '-b',
+                            action='store_true',
                             required=False)
-    arg_parser.add_argument('--noHeader', '-nh', action='store_true',
+    arg_parser.add_argument('--noHeader',
+                            '-nh',
+                            action='store_true',
                             required=False)
 
     args = arg_parser.parse_args()

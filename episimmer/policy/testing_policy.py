@@ -211,8 +211,14 @@ class TestPolicy(AgentPolicy):
     def set_register_agent_testtube_func(self, fn):
         self.register_agent_testtube_func = fn
 
-    def add_machine(self, machine_name, cost, false_positive_rate,
-                    false_negative_rate, turnaround_time, capacity, num=1):
+    def add_machine(self,
+                    machine_name,
+                    cost,
+                    false_positive_rate,
+                    false_negative_rate,
+                    turnaround_time,
+                    capacity,
+                    num=1):
         if (machine_name in self.current_machines.keys()):
             if ([
                     cost, false_positive_rate, false_negative_rate,
@@ -314,8 +320,10 @@ class TestPolicy(AgentPolicy):
             else:
                 break
 
-    def random_agents(self, num_agents_per_testtube=1,
-                      num_testtubes_per_agent=1, attribute=None,
+    def random_agents(self,
+                      num_agents_per_testtube=1,
+                      num_testtubes_per_agent=1,
+                      attribute=None,
                       value_list=[]):
         assert isinstance(value_list, list)
         return partial(self.full_random_agents, num_agents_per_testtube,

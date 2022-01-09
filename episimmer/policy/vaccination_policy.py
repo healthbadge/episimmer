@@ -17,7 +17,12 @@ class VaccineResult():
 
 
 class VaccineType():
-    def __init__(self, name, cost, decay, efficacy, dosage=None,
+    def __init__(self,
+                 name,
+                 cost,
+                 decay,
+                 efficacy,
+                 dosage=None,
                  interval=None):
 
         self.vaccine_name = name
@@ -98,7 +103,8 @@ class VaccinationPolicy(AgentPolicy):
 
     def random_vaccination(self, parameter=None, value_list=[]):
         assert isinstance(value_list, list)
-        return partial(self.full_random_vaccination, parameter=parameter,
+        return partial(self.full_random_vaccination,
+                       parameter=parameter,
                        value_list=value_list)
 
     def full_random_vaccination(self, agents, time_step, parameter,
@@ -121,7 +127,8 @@ class VaccinationPolicy(AgentPolicy):
                     curr_agents_to_vaccinate -= 1
 
     def multi_dose_vaccination(self, parameter=None, value_list=[]):
-        return partial(self.full_multi_dose_vaccination, parameter=parameter,
+        return partial(self.full_multi_dose_vaccination,
+                       parameter=parameter,
                        value_list=value_list)
 
     def full_multi_dose_vaccination(self, agents, time_step, parameter,

@@ -85,9 +85,13 @@ if __name__ == '__main__':
     arg_parser.add_argument('--agents', '-ag', required=False)
     arg_parser.add_argument('--locations', '-loc', required=False)
     arg_parser.add_argument('--addLine', '-a', required=False)
-    arg_parser.add_argument('--clean', '-c', action='store_true',
+    arg_parser.add_argument('--clean',
+                            '-c',
+                            action='store_true',
                             required=False)
-    arg_parser.add_argument('--noHeader', '-nh', action='store_true',
+    arg_parser.add_argument('--noHeader',
+                            '-nh',
+                            action='store_true',
                             required=False)
 
     args = arg_parser.parse_args()
