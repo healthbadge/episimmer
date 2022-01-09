@@ -1,4 +1,4 @@
-[![Documentation Status](https://readthedocs.org/projects/episimmer/badge/?version=latest)](https://episimmer.readthedocs.io/en/latest/?badge=latest) ![Testing Status](https://github.com/healthbadge/episimmer/actions/workflows/test.yml/badge.svg?branch=master) [![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause) ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/healthbadge/episimmer?include_prereleases)
+[![Documentation Status](https://readthedocs.org/projects/episimmer/badge/?version=latest)](https://episimmer.readthedocs.io/en/latest/?badge=latest) ![Testing Status](https://github.com/healthbadge/episimmer/actions/workflows/test.yml/badge.svg?branch=master) [![codecov](https://codecov.io/gh/healthbadge/episimmer/branch/additional_se/graph/badge.svg?token=F0BR661MG5)](https://codecov.io/gh/healthbadge/episimmer) [![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause) ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/healthbadge/episimmer?include_prereleases)
 # Episimmer : Epidemic Simulation Platform
 Powered by [HealthBadge](https://www.healthbadge.org/) <br>
 
@@ -8,17 +8,13 @@ Here is a short video describing Episimmer : [Video link](https://drive.google.c
 
 ## Installation
 
-Run the following commands after cloning or downloading the repository
+Run the following command in the local repository after cloning or downloading the repository
 
-		cd episimmer
 		pip install -e .
+
 
 ## Running Examples
 To run examples :
-
-		episimmer <Path_to_Example>
-
-or
 
 		python src/Main.py <Path_to_Example>
 
