@@ -1,6 +1,6 @@
 import math
 
-import Model
+import episimmer.model as model
 
 
 #User defined functions
@@ -18,9 +18,9 @@ def probabilityOfInfection_fn(p_infected_states_list,contact_agent,c_dict,curren
 		return 0
 
 
-class UserModel(Model.ScheduledModel):
+class UserModel(model.ScheduledModel):
 	def __init__(self):
-		Model.ScheduledModel.__init__(self)
+		model.ScheduledModel.__init__(self)
 		self.insert_state('Susceptible',None, None,self.p_infection([0.4,0.2],probabilityOfInfection_fn,{'Exposed':1}),False,0.9)
 		self.insert_state('Exposed',1,0,self.scheduled({'Symptomatic':0.4,'Asymptomatic':0.6}),False,0.1)
 		self.insert_state('Symptomatic',11,5,self.scheduled({'Recovered':1}),True,0)

@@ -1,12 +1,12 @@
 import os
 import os.path as osp
 
-import ReadFile
-import World
-from utils import Statistics
-from utils.Arg_Parse import parse_args
-from utils.Module_Handling import module_from_file
-from vulnerability_detection.VD import VD
+from episimmer.read_file import ReadConfiguration, ReadVDConfiguration
+from episimmer.utils.arg_parser import parse_args
+from episimmer.utils.module_handling import module_from_file
+from episimmer.utils.statistics import write_stats
+from episimmer.vulnerability_detection.vd import VD
+from episimmer.world import World
 
 
 def get_model(example_path):
@@ -28,7 +28,7 @@ def get_config_path(path, filename):
     return config_filepath
 
 
-@Statistics.write_stats('stats.pickle', 'stats.txt')
+@write_stats('stats.pickle', 'stats.txt')
 def main():
     args = parse_args()
 
@@ -36,8 +36,7 @@ def main():
     vuldetect = args.vuldetect
     config_filename = get_config_path(example_path, 'config.txt')
 
-    # Read Config file using ReadFile.ReadConfiguration
-    config_obj = ReadFile.ReadConfiguration(config_filename)
+    config_obj = ReadConfiguration(config_filename)
 
     agents_filename, interactions_FilesList_filename,\
         events_FilesList_filename, locations_filename, one_time_event_file, probabilistic_interactions_FilesList_filename = config_obj.get_file_paths(example_path)
@@ -55,16 +54,15 @@ def main():
         os.mkdir(osp.join(config_obj.example_path, 'results'))
 
     # Creation of World object
-    world_obj = World.World(config_obj, model, policy_list,
-                            event_restriction_fn, agents_filename,
-                            interactions_files_list,
-                            probabilistic_interactions_files_list,
-                            locations_filename, events_files_list,
-                            one_time_event_file)
+    world_obj = World(config_obj, model, policy_list, event_restriction_fn,
+                      agents_filename, interactions_files_list,
+                      probabilistic_interactions_files_list,
+                      locations_filename, events_files_list,
+                      one_time_event_file)
 
     if vuldetect:
         vd_config_filename = get_config_path(example_path, 'vd_config.txt')
-        vd_config_obj = ReadFile.Read_VD_Configuration(vd_config_filename)
+        vd_config_obj = ReadVDConfiguration(vd_config_filename)
         VD_obj = VD(vd_config_obj, world_obj)
         VD_obj.run_vul_detection()
 

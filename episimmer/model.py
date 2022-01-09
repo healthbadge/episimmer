@@ -3,7 +3,7 @@ from functools import partial
 
 import numpy as np
 
-from utils import Time
+from .utils.time import Time
 
 infectious_colors = ['red', 'pink', 'orange', 'purple']
 normal_colors = ['blue', 'green', 'black', 'yellow', 'brown', 'white']
@@ -81,7 +81,7 @@ class StochasticModel():
         return partial(self.full_p_standard, p)
 
     def full_p_function(self, fn, agent, agents):
-        return fn(Time.Time.get_current_time_step())
+        return fn(Time.get_current_time_step())
 
     def p_function(self, fn):
         return partial(self.full_p_function, fn)
@@ -94,14 +94,13 @@ class StochasticModel():
             if random.random(
             ) < contact_agent.can_contribute_infection and random.random(
             ) < agent.can_recieve_infection:
-                p_not_inf *= (1 -
-                              fn(p_infected_states_list, contact_agent, c_dict,
-                                 Time.Time.get_current_time_step()))
+                p_not_inf *= (1 - fn(p_infected_states_list, contact_agent,
+                                     c_dict, Time.get_current_time_step()))
 
         for p in agent.event_probabilities:
             p_not_inf *= (1 - p)
         return (1 - p_not_inf) + self.external_prev_fn(
-            agent, Time.Time.get_current_time_step())
+            agent, Time.get_current_time_step())
 
     def p_infection(self, p_infected_states_list, fn):
         return partial(self.full_p_infection, fn, p_infected_states_list)
@@ -124,22 +123,20 @@ class StochasticModel():
         for agent_index in event_info['Agents']:
             agent = agents_obj.agents[agent_index]
             if event_restriction_fn(agent, event_info,
-                                    Time.Time.get_current_time_step()):
+                                    Time.get_current_time_step()):
                 continue
             if random.random() < agent.can_contribute_infection:
                 ambient_infection += self.contribute_fn(
-                    agent, event_info, location,
-                    Time.Time.get_current_time_step())
+                    agent, event_info, location, Time.get_current_time_step())
 
         for agent_index in event_info['Agents']:
             agent = agents_obj.agents[agent_index]
             if event_restriction_fn(agent, event_info,
-                                    Time.Time.get_current_time_step()):
+                                    Time.get_current_time_step()):
                 continue
             if random.random() < agent.can_recieve_infection:
-                p = self.recieve_fn(agent, ambient_infection,
-                                    event_info, location,
-                                    Time.Time.get_current_time_step())
+                p = self.recieve_fn(agent, ambient_infection, event_info,
+                                    location, Time.get_current_time_step())
                 agent.add_event_result(p)
 
 
@@ -236,8 +233,7 @@ class ScheduledModel():
 
         else:
 
-            scheduled_time = self.state_fn[state](
-                Time.Time.get_current_time_step())
+            scheduled_time = self.state_fn[state](Time.get_current_time_step())
         return scheduled_time
 
     def find_next_state(self, agent, agents):
@@ -278,16 +274,15 @@ class ScheduledModel():
             if random.random(
             ) < contact_agent.can_contribute_infection and random.random(
             ) < agent.can_recieve_infection:
-                p_not_inf *= (1 -
-                              fn(p_infected_states_list, contact_agent, c_dict,
-                                 Time.Time.get_current_time_step()))
+                p_not_inf *= (1 - fn(p_infected_states_list, contact_agent,
+                                     c_dict, Time.get_current_time_step()))
 
         for p in agent.event_probabilities:
             p_not_inf *= (1 - p)
 
         r = random.random()
         if r >= (1 - p_not_inf) + self.external_prev_fn(
-                agent, Time.Time.get_current_time_step()):
+                agent, Time.get_current_time_step()):
             new_state = agent.state
 
         scheduled_time = self.find_scheduled_time(new_state)
@@ -322,20 +317,18 @@ class ScheduledModel():
         for agent_index in event_info['Agents']:
             agent = agents_obj.agents[agent_index]
             if event_restriction_fn(agent, event_info,
-                                    Time.Time.get_current_time_step()):
+                                    Time.get_current_time_step()):
                 continue
             if random.random() < agent.can_contribute_infection:
                 ambient_infection += self.contribute_fn(
-                    agent, event_info, location,
-                    Time.Time.get_current_time_step())
+                    agent, event_info, location, Time.get_current_time_step())
 
         for agent_index in event_info['Agents']:
             agent = agents_obj.agents[agent_index]
             if event_restriction_fn(agent, event_info,
-                                    Time.Time.get_current_time_step()):
+                                    Time.get_current_time_step()):
                 continue
             if random.random() < agent.can_recieve_infection:
-                p = self.recieve_fn(agent, ambient_infection,
-                                    event_info, location,
-                                    Time.Time.get_current_time_step())
+                p = self.recieve_fn(agent, ambient_infection, event_info,
+                                    location, Time.get_current_time_step())
                 agent.add_event_result(p)

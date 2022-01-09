@@ -1,5 +1,8 @@
-import ReadFile
-from utils import Statistics, Time, Visualize
+from .read_file import (ReadEvents, ReadInteractions,
+                        ReadProbabilisticInteractions)
+from .utils.statistics import save_stats
+from .utils.time import Time
+from .utils.visualize import save_env_graph, store_animated_dynamic_graph
 
 
 class Simulate():
@@ -36,8 +39,8 @@ class Simulate():
         #Store state list
         self.store_state()
 
-    @Visualize.save_env_graph()
-    @Statistics.save_stats([('agents_obj', 3)], 'Agents', ['state'])
+    @save_env_graph()
+    @save_stats([('agents_obj', 3)], 'Agents', ['state'])
     def onStartTimeStep(self, interactionFiles_listOfList,
                         eventFiles_listOfList,
                         probabilistic_interactionFiles_listOfList,
@@ -56,28 +59,27 @@ class Simulate():
         for interactionFiles_list in interactionFiles_listOfList:
             if interactionFiles_list != []:
                 interactions_filename = interactionFiles_list[
-                    Time.Time.get_current_time_step() %
-                    len(interactionFiles_list)]
-                ReadFile.ReadInteractions(interactions_filename,
-                                          self.config_obj, self.agents_obj)
+                    Time.get_current_time_step() % len(interactionFiles_list)]
+                ReadInteractions(interactions_filename, self.config_obj,
+                                 self.agents_obj)
 
         # Load probabilistic interactions
         for probabilistic_interactionFiles_list in probabilistic_interactionFiles_listOfList:
             if probabilistic_interactionFiles_list != []:
                 probabilistic_interactions_filename = probabilistic_interactionFiles_list[
-                    Time.Time.get_current_time_step() %
+                    Time.get_current_time_step() %
                     len(probabilistic_interactionFiles_list)]
-                ReadFile.ReadProbabilisticInteractions(
+                ReadProbabilisticInteractions(
                     probabilistic_interactions_filename, self.config_obj,
                     self.agents_obj)
 
         # Load Events
         for eventFiles_list in eventFiles_listOfList:
             if eventFiles_list != []:
-                events_filename = eventFiles_list[
-                    Time.Time.get_current_time_step() % len(eventFiles_list)]
-                ReadFile.ReadEvents(events_filename, self.config_obj,
-                                    self.locations_obj, self.agents_obj)
+                events_filename = eventFiles_list[Time.get_current_time_step()
+                                                  % len(eventFiles_list)]
+                ReadEvents(events_filename, self.config_obj,
+                           self.locations_obj, self.agents_obj)
 
         # Load One Time Events
         oneTimeEvent_obj.ReadOneTimeEvents(self.config_obj, self.locations_obj,
@@ -85,7 +87,7 @@ class Simulate():
 
         #Enact policies by updating agent and location states.
         for policy in self.policy_list:
-            policy.enact_policy(Time.Time.get_current_time_step(),
+            policy.enact_policy(Time.get_current_time_step(),
                                 self.agents_obj.agents.values(),
                                 self.locations_obj.locations.values(),
                                 self.model)
@@ -120,7 +122,7 @@ class Simulate():
     def endTimeStep(self):
         self.store_state()
 
-    @Visualize.store_animated_dynamic_graph()
+    @store_animated_dynamic_graph()
     def endSimulation(self):
         return self.state_history
 

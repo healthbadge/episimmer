@@ -5,9 +5,9 @@ import random
 import re
 from csv import DictReader
 
-import Agent
-import Location
-from utils import Time
+from .agent import Agent
+from .location import Location
+from .utils.time import Time
 
 
 class ReadConfiguration():
@@ -177,7 +177,7 @@ class ReadConfiguration():
         return interactions_files_list, events_files_list, probabilistic_interactions_files_list
 
 
-class Read_VD_Configuration():
+class ReadVDConfiguration():
     def __init__(self, filename):
         self.target = None
         self.algorithm = None
@@ -265,7 +265,7 @@ class ReadAgents(BaseReadFile):
                 info_dict = self.create_info_dict(
                     self.get_value(f.readline()).split(':'))
                 state = None  #config_obj.default_state
-                agent = Agent.Agent(state, info_dict)
+                agent = Agent(state, info_dict)
                 self.agents[agent.index] = agent
             f.close()
 
@@ -288,7 +288,7 @@ class ReadAgents(BaseReadFile):
                 for i in range(self.n):
                     info_dict = csv_list[i]
                     state = None  #config_obj.default_state
-                    agent = Agent.Agent(state, info_dict)
+                    agent = Agent(state, info_dict)
                     self.agents[agent.index] = agent
 
     def create_info_dict(self, info_list):
@@ -452,7 +452,7 @@ class ReadLocations(BaseReadFile):
         for i in range(self.no_locations):
             info_dict = self.create_info_dict(
                 self.get_value(f.readline()).split(':'))
-            location = Location.Location(info_dict)
+            location = Location(info_dict)
             self.locations[location.index] = location
 
         f.close()
@@ -547,7 +547,7 @@ class ReadOneTimeEvents(BaseReadFile):
             raise Exception(
                 'Error! One Time Event parameters do not match the config.txt file'
             )
-        for event in self.eventsAt.get(Time.Time.get_current_time_step(), []):
+        for event in self.eventsAt.get(Time.get_current_time_step(), []):
             parameter_list = (self.get_value(event)).split(':')
             location_index, info_dict = self.get_event(parameter_list)
             self.locations_obj.locations[location_index].add_event(info_dict)

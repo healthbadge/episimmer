@@ -1,4 +1,4 @@
-import Model
+import episimmer.model as model
 
 #The two fucntions event_contribute_fn and event_recieve_fn together control the spread of infection
 
@@ -15,7 +15,7 @@ def event_recieve_fn(agent,ambient_infection,event_info,location,current_time_st
 	return ambient_infection*beta
 
 
-class UserModel(Model.StochasticModel):
+class UserModel(model.StochasticModel):
 	def __init__(self):
 		individual_types=['Susceptible','Infected','Recovered']	#These are the states that will be used by the compartmental model
 		infected_states=['Infected']	#These are the states that can infect
@@ -24,7 +24,7 @@ class UserModel(Model.StochasticModel):
 							'Infected':0.01,
 							'Recovered':0
 						}
-		Model.StochasticModel.__init__(self,individual_types,infected_states,state_proportion)  #We use the inbuilt model in the package
+		model.StochasticModel.__init__(self,individual_types,infected_states,state_proportion)  #We use the inbuilt model in the package
 		self.set_transition('Susceptible', 'Infected', self.p_infection(None,None))	#Adding S-> I transition which is redundant in this case as we use the event_contribute and event_recieve function
 		self.set_transition('Infected', 'Recovered', self.p_standard(0.1))	#Adding the I->R transition
 

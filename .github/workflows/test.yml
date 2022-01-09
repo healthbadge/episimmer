@@ -22,7 +22,7 @@ jobs:
           pip install -e .[test]
       - name: Run tests
         run: |
-          pytest --cov=src --cov-report=xml
+          pytest --cov=episimmer --cov-report=xml
       - name: Upload coverage
         uses: codecov/codecov-action@v2
         with:

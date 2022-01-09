@@ -5,4 +5,4 @@ The examples in this directory shows the basic models that the user can implemen
 To run an example :
 
 		cd examples/Basic_Disease_Models
-		python ../../src/Main.py Stochastic_SIR
+		python ../../episimmer/main.py Stochastic_SIR

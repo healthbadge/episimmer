@@ -1,12 +1,10 @@
+import argparse
 import sys
 
-sys.path.insert(1, '../../src/')
-
-import argparse
-
 from pyvis.network import Network
+from utils.module_handling import module_from_file
 
-from utils.Module_Handling import module_from_file
+sys.path.insert(1, '../../episimmer/')
 
 
 def get_model(filename):
@@ -24,11 +22,19 @@ def get_model_graph(filename):
     infected_states = model.infected_states
     for i, state in enumerate(states):
         if (state in infected_states):
-            net.add_node(i, label=state, shape='box', color='#fc9283',
-                         borderWidth=30, borderWidthSelected=30)
+            net.add_node(i,
+                         label=state,
+                         shape='box',
+                         color='#fc9283',
+                         borderWidth=30,
+                         borderWidthSelected=30)
         else:
-            net.add_node(i, label=state, shape='box', color='#99bdf7',
-                         borderWidth=30, borderWidthSelected=30)
+            net.add_node(i,
+                         label=state,
+                         shape='box',
+                         color='#99bdf7',
+                         borderWidth=30,
+                         borderWidthSelected=30)
 
     model_firstname = model.name.split()[0]
 
@@ -60,7 +66,8 @@ def get_model_graph(filename):
                         net.add_edge(i, int(state_idx[state]), color='#fc9283')
                     else:
                         if (state_i != state):
-                            net.add_edge(i, int(state_idx[state]),
+                            net.add_edge(i,
+                                         int(state_idx[state]),
                                          color='#99bdf7')
 
     net.show(outpath)

@@ -2,10 +2,10 @@ import copy
 import random
 from functools import partial
 
-from policy.Policy import Agent_Policy
+from .base import AgentPolicy
 
 
-class Result():
+class VaccineResult():
     def __init__(self, vaccine_name, agent, result, time_step, efficacy,
                  decay_days, current_dose):
         self.vaccine_name = vaccine_name
@@ -16,8 +16,13 @@ class Result():
         self.current_dose = current_dose
 
 
-class Vaccine_type():
-    def __init__(self, name, cost, decay, efficacy, dosage=None,
+class VaccineType():
+    def __init__(self,
+                 name,
+                 cost,
+                 decay,
+                 efficacy,
+                 dosage=None,
                  interval=None):
 
         self.vaccine_name = name
@@ -37,8 +42,8 @@ class Vaccine_type():
                                          1] if self.dosage else self.decay_days
         else:
             decay_days = 0
-        result_obj = Result(self.vaccine_name, agent, result, time_step,
-                            self.efficacy, decay_days, dose)
+        result_obj = VaccineResult(self.vaccine_name, agent, result, time_step,
+                                   self.efficacy, decay_days, dose)
 
         return result_obj
 
@@ -50,7 +55,7 @@ class Vaccine_type():
             return 'Unsuccessful'
 
 
-class Vaccination_policy(Agent_Policy):
+class VaccinationPolicy(AgentPolicy):
     def __init__(self, agents_per_step_fn=None):
         super().__init__()
 
@@ -86,11 +91,11 @@ class Vaccination_policy(Agent_Policy):
 
         for name, vaccine in self.available_vaccines.items():
             for i in range(int(self.available_vaccines[name]['count'])):
-                vaccine_obj = Vaccine_type(name, vaccine['cost'],
-                                           vaccine['decay'],
-                                           vaccine['efficacy'],
-                                           vaccine.get('dose', 0),
-                                           vaccine.get('interval', []))
+                vaccine_obj = VaccineType(name, vaccine['cost'],
+                                          vaccine['decay'],
+                                          vaccine['efficacy'],
+                                          vaccine.get('dose', 0),
+                                          vaccine.get('interval', []))
                 self.vaccines.append(vaccine_obj)
 
     def set_register_agent_vaccine_func(self, func):
@@ -98,7 +103,8 @@ class Vaccination_policy(Agent_Policy):
 
     def random_vaccination(self, parameter=None, value_list=[]):
         assert isinstance(value_list, list)
-        return partial(self.full_random_vaccination, parameter=parameter,
+        return partial(self.full_random_vaccination,
+                       parameter=parameter,
                        value_list=value_list)
 
     def full_random_vaccination(self, agents, time_step, parameter,
@@ -121,7 +127,8 @@ class Vaccination_policy(Agent_Policy):
                     curr_agents_to_vaccinate -= 1
 
     def multi_dose_vaccination(self, parameter=None, value_list=[]):
-        return partial(self.full_multi_dose_vaccination, parameter=parameter,
+        return partial(self.full_multi_dose_vaccination,
+                       parameter=parameter,
                        value_list=value_list)
 
     def full_multi_dose_vaccination(self, agents, time_step, parameter,

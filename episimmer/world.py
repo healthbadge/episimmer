@@ -1,9 +1,11 @@
 import numpy as np
 
-import ReadFile
-import Simulate
-from utils import Math, Time, Visualize
-from utils.Arg_Parse import parse_args
+from .read_file import ReadAgents, ReadLocations, ReadOneTimeEvents
+from .simulate import Simulate
+from .utils.arg_parser import parse_args
+from .utils.math import average, stddev
+from .utils.time import Time
+from .utils.visualize import plot_results, store_animated_time_plot
 
 
 class World():
@@ -26,22 +28,20 @@ class World():
 
         time_steps = self.config_obj.time_steps
 
-        Time.Time.new_world()
+        Time.new_world()
 
         # Initialize agents
-        agents_obj = ReadFile.ReadAgents(self.agents_filename, self.config_obj)
+        agents_obj = ReadAgents(self.agents_filename, self.config_obj)
 
         # Intialize locations
-        locations_obj = ReadFile.ReadLocations(self.locations_filename,
-                                               self.config_obj)
+        locations_obj = ReadLocations(self.locations_filename, self.config_obj)
 
         # Initialize one time events
-        oneTimeEvent_obj = ReadFile.ReadOneTimeEvents(self.one_time_event_file)
+        oneTimeEvent_obj = ReadOneTimeEvents(self.one_time_event_file)
 
-        sim_obj = Simulate.Simulate(self.config_obj, self.model,
-                                    self.policy_list,
-                                    self.event_restriction_fn, agents_obj,
-                                    locations_obj)
+        sim_obj = Simulate(self.config_obj, self.model, self.policy_list,
+                           self.event_restriction_fn, agents_obj,
+                           locations_obj)
         sim_obj.onStartSimulation()
 
         for current_time_step in range(time_steps):
@@ -51,7 +51,7 @@ class World():
                                     oneTimeEvent_obj)
             sim_obj.handleTimeStepForAllAgents()
             sim_obj.endTimeStep()
-            Time.Time.increment_current_time_step()
+            Time.increment_current_time_step()
 
         end_state = sim_obj.endSimulation()
         return end_state, agents_obj, locations_obj
@@ -83,12 +83,12 @@ class World():
                     mindict[state][j] = min(mindict[state][j], sdict[state][j])
 
         # Average number time series
-        avg_dict = Math.average(tdict, self.config_obj.worlds)
-        stddev_dict = Math.stddev(tdict, t2_dict, self.config_obj.worlds)
-        Visualize.plot_results(self.config_obj.example_path, self.model,
-                               avg_dict, stddev_dict, maxdict, mindict, plot)
+        avg_dict = average(tdict, self.config_obj.worlds)
+        stddev_dict = stddev(tdict, t2_dict, self.config_obj.worlds)
+        plot_results(self.config_obj.example_path, self.model, avg_dict,
+                     stddev_dict, maxdict, mindict, plot)
         if anim:
-            Visualize.store_animated_time_plot(self.config_obj.example_path,
-                                               self.model, avg_dict)
+            store_animated_time_plot(self.config_obj.example_path, self.model,
+                                     avg_dict)
 
         return avg_dict

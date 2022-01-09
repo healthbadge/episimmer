@@ -4,10 +4,10 @@ import random
 from collections import deque
 from functools import partial
 
-from policy.Policy import Agent_Policy
+from .base import AgentPolicy
 
 
-class Result():
+class TestResult():
     def __init__(self, result, agent, machine_name, time_step,
                  machine_start_step, time_step_done):
         self.result = result
@@ -115,9 +115,9 @@ class Machine():
         for agent in testtube.testtube_agent_dict.keys():
             time_step_entered = testtube.testtube_agent_dict[agent][
                 'time_step']
-            result_obj = Result(testtube.testtube_result, agent,
-                                self.machine_name, time_step_entered,
-                                self.start_step, time_step)
+            result_obj = TestResult(testtube.testtube_result, agent,
+                                    self.machine_name, time_step_entered,
+                                    self.start_step, time_step)
             self.results.append(result_obj)
 
     def get_results(self):
@@ -127,7 +127,7 @@ class Machine():
         return self.machine_name
 
 
-class Testtube():
+class TestTube():
     def __init__(self):
         self.testtube_agent_dict = {}
         self.testtube_result = None
@@ -163,7 +163,7 @@ class Testtube():
         return self.in_machine
 
 
-class Test_Policy(Agent_Policy):
+class TestPolicy(AgentPolicy):
     def __init__(self, agents_per_step_fn=None):
         super().__init__()
         self.policy_type = 'Testing'
@@ -211,8 +211,14 @@ class Test_Policy(Agent_Policy):
     def set_register_agent_testtube_func(self, fn):
         self.register_agent_testtube_func = fn
 
-    def add_machine(self, machine_name, cost, false_positive_rate,
-                    false_negative_rate, turnaround_time, capacity, num=1):
+    def add_machine(self,
+                    machine_name,
+                    cost,
+                    false_positive_rate,
+                    false_negative_rate,
+                    turnaround_time,
+                    capacity,
+                    num=1):
         if (machine_name in self.current_machines.keys()):
             if ([
                     cost, false_positive_rate, false_negative_rate,
@@ -295,7 +301,7 @@ class Test_Policy(Agent_Policy):
             (num_testtubes_per_agent * self.num_agents_to_test +
              num_agents_per_testtube - 1) / num_agents_per_testtube)
         for _ in range(num_testtubes):
-            testtube = Testtube()
+            testtube = TestTube()
             self.cur_testtubes.append(testtube)
 
         # Assign agents to testtubes
@@ -314,8 +320,10 @@ class Test_Policy(Agent_Policy):
             else:
                 break
 
-    def random_agents(self, num_agents_per_testtube=1,
-                      num_testtubes_per_agent=1, attribute=None,
+    def random_agents(self,
+                      num_agents_per_testtube=1,
+                      num_testtubes_per_agent=1,
+                      attribute=None,
                       value_list=[]):
         assert isinstance(value_list, list)
         return partial(self.full_random_agents, num_agents_per_testtube,

@@ -1,4 +1,4 @@
-from policy import Lockdown_Policy
+from episimmer.policy import lockdown_policy
 
 
 def generate_policy():
@@ -9,7 +9,7 @@ def generate_policy():
 		#	return True
 		return False
 
-	policy_list.append(Lockdown_Policy.full_lockdown(lockdown_fn))
+	policy_list.append(lockdown_policy.FullLockdown(lockdown_fn))
 
 	def event_restriction_fn(agent,event_info,current_time_step):
 		return False
