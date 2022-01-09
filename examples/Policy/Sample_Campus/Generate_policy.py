@@ -1,4 +1,4 @@
-# from policy import Lockdown_Policy
+from policy import Lockdown_Policy
 
 
 def monday_online():

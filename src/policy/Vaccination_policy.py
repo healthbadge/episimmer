@@ -89,8 +89,8 @@ class Vaccination_policy(Agent_Policy):
                 vaccine_obj = Vaccine_type(name, vaccine['cost'],
                                            vaccine['decay'],
                                            vaccine['efficacy'],
-                                           vaccine.get('dose'),
-                                           vaccine.get('interval'))
+                                           vaccine.get('dose', 0),
+                                           vaccine.get('interval', []))
                 self.vaccines.append(vaccine_obj)
 
     def set_register_agent_vaccine_func(self, func):
@@ -146,35 +146,50 @@ class Vaccination_policy(Agent_Policy):
                     self.vaccines.remove(current_vaccine)
                     curr_agents_to_vaccinate -= 1
 
-                elif (lh is not None and lh.current_dose <
-                      self.available_vaccines[lh.vaccine_name]['dose']
-                      and time_step - lh.time_stamp >= self.available_vaccines[
-                          lh.vaccine_name]['interval'][lh.current_dose - 1]):
-                    current_vaccine = None
-                    for vaccine in self.vaccines:
-                        if vaccine.vaccine_name == lh.vaccine_name:
-                            current_vaccine = vaccine
-                            break
-                    if current_vaccine is not None:
-                        result = current_vaccine.vaccinate(
-                            agent, time_step, lh.current_dose + 1)
-                        self.results.append(result)
-                        self.vaccines.remove(current_vaccine)
-                        curr_agents_to_vaccinate -= 1
+                elif (lh is not None
+                      and self.available_vaccines[lh.vaccine_name]['type']
+                      == 'Multi'):
+                    if (lh.current_dose <
+                            self.available_vaccines[lh.vaccine_name]['dose']
+                            and time_step - lh.time_stamp >=
+                            self.available_vaccines[lh.vaccine_name]
+                        ['interval'][lh.current_dose - 1]):
+                        current_vaccine = None
+                        for vaccine in self.vaccines:
+                            if vaccine.vaccine_name == lh.vaccine_name:
+                                current_vaccine = vaccine
+                                break
+                        if current_vaccine is not None:
+                            result = current_vaccine.vaccinate(
+                                agent, time_step, lh.current_dose + 1)
+                            self.results.append(result)
+                            self.vaccines.remove(current_vaccine)
+                            curr_agents_to_vaccinate -= 1
 
     def add_vaccines(self, vaccines, dosage='Single'):
         if dosage == 'Single':
-            self.available_vaccines = vaccines
-            self.statistics = {
-                name: {
+            for name, vaccine in vaccines.items():
+                if not isinstance(vaccine['decay'], int):
+                    raise TypeError('Vaccine decay must be a type integer')
+                self.available_vaccines[name] = vaccine
+                self.available_vaccines[name]['type'] = dosage
+                self.statistics[name] = {
                     'Total Vaccination': [],
                     'Total Successful': [],
                     'Total Unsuccessful': []
                 }
-                for name in self.available_vaccines
-            }
         elif dosage == 'Multi':
             for name, vaccine in vaccines.items():
+                if not isinstance(vaccine['decay'], list):
+                    raise TypeError('Vaccine decay must be a list')
+                if vaccine.get('dose') is None:
+                    raise Exception('Dose parameter missing')
+
+                if vaccine.get('interval') is None:
+                    raise Exception('Interval parameter missing')
+
+                if not isinstance(vaccine['interval'], list):
+                    raise TypeError('Interval must be a list')
                 if len(vaccine['decay']) != vaccine['dose']:
                     raise ValueError(
                         'Vaccine decay must be a list of length equal to the count of vaccine dosage'
@@ -184,6 +199,7 @@ class Vaccination_policy(Agent_Policy):
                         'Vaccine interval must be a list of length one less than the count of vaccine dosage'
                     )
                 self.available_vaccines[name] = vaccine
+                self.available_vaccines[name]['type'] = dosage
                 self.statistics[name] = {
                     'Total Vaccination': [],
                     'Total Successful': [],
