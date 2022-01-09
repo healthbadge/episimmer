@@ -17,9 +17,9 @@ sys.path.insert(0, os.path.abspath('.'))
 
 # -- Project information -----------------------------------------------------
 
-project = 'Episimmer'
+project = 'episimmer'
 copyright = '2022, HealthBadge Pvt Ltd'
-author = 'Inavamsi Enaganti'
+author = 'HealthBadge'
 
 # -- General configuration ---------------------------------------------------
 
