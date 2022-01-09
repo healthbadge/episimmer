@@ -1,7 +1,7 @@
 from setuptools import find_packages, setup
 
 NAME = 'episimmer'
-VERSION = '1.0.0'
+VERSION = '2.0.0'
 DESCRIPTION = 'Epidemic Simulation Platform'
 URL = 'https://github.com/healthbadge/episimmer'
 EMAIL = 'inavamsi@healthbadge.org, surya@healthbadge.org'

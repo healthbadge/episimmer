@@ -41,20 +41,21 @@ class TestExamples(unittest.TestCase):
     # Visualization and Animation
     def test_viz_examples(self):
         """
-        Running visualization tests
+        Running visualization test
         """
         print()
         sub_examples_list = [s for s in os.listdir('examples') if osp.isdir(osp.join('examples', s))]
-        for j in sub_examples_list:
-            examples_list = [p for p in os.listdir(osp.join('examples',j)) if osp.isdir(osp.join('examples',j,p)) and osp.isfile(osp.join('examples',j,p,'config.txt'))]
-            example = examples_list[0]
-            i = 0
-            main_path = osp.join('src','Main.py')
-            example_path = osp.join('examples',j,example)
-            process = subprocess.run('python3 {0} {1} -viz -np -a'.format(main_path,example_path),shell=True,stdout=subprocess.DEVNULL)
-            if(process.returncode):
-                raise Exception('Example {0} could not be run!'.format(example))
-            print('Dynamic Viz Testing : {0} - complete'.format(example))
+        j = sub_examples_list[0]
+
+        examples_list = [p for p in os.listdir(osp.join('examples',j)) if osp.isdir(osp.join('examples',j,p)) and osp.isfile(osp.join('examples',j,p,'config.txt'))]
+        example = examples_list[0]
+        i = 0
+        main_path = osp.join('src','Main.py')
+        example_path = osp.join('examples',j,example)
+        process = subprocess.run('python3 {0} {1} -viz -np -a'.format(main_path,example_path),shell=True,stdout=subprocess.DEVNULL)
+        if(process.returncode):
+            raise Exception('Example {0} could not be run!'.format(example))
+        print('Dynamic Viz Testing : {0} - complete'.format(example))
 
     # Statistics module
     def test_statistics(self):
