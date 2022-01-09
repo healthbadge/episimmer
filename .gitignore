@@ -11,9 +11,10 @@ interaction_list.html
 UserModel.html
 /tests/unit/
 /tests/integration/
-Event_VD
-episimmer/vulnerability_detection/Event_VD_algorithms.py
+event_vd
+event_vd_algorithms.py
 rename-files.sh
+generate_examples
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
