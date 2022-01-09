@@ -1,6 +1,10 @@
 name: Documentation
 
-on: [push]
+on:
+  push:
+    branches:
+      - master
+  pull_request:
 jobs:
     GitHub-Pages-Build:
       runs-on: ${{ matrix.os }}
