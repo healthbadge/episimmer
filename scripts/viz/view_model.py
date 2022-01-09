@@ -5,8 +5,6 @@ from pyvis.network import Network
 
 from episimmer.utils.module_handling import module_from_file
 
-sys.path.insert(1, '../../episimmer/')
-
 
 def get_model(filename):
     UserModel = module_from_file('Generate_model', filename)
