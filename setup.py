@@ -30,6 +30,7 @@ with open('requirements.txt') as f:
 with open('docs/requirements-dev.txt') as f:
     DEV_REQUIRES = f.read()
 
+LONG_DESC_CONTENT_TYPE = 'text/markdown'
 EXTRA_REQUIRES = {'test': DEV_REQUIRES}
 
 ENTRY={
@@ -44,6 +45,7 @@ setup(
     name=NAME,
     version=VERSION,
     description=DESCRIPTION,
+    long_description_content_type=LONG_DESC_CONTENT_TYPE,
     long_description=LONG_DESC,
     entry_points=ENTRY,
     author=AUTHOR,
