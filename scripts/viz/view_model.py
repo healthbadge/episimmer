@@ -2,7 +2,8 @@ import argparse
 import sys
 
 from pyvis.network import Network
-from utils.module_handling import module_from_file
+
+from episimmer.utils.module_handling import module_from_file
 
 sys.path.insert(1, '../../episimmer/')
 
