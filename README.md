@@ -1,4 +1,4 @@
-[![Documentation Status](https://readthedocs.org/projects/episimmer/badge/?version=latest)](https://episimmer.readthedocs.io/en/latest/?badge=latest) ![Testing Status](https://github.com/healthbadge/episimmer/actions/workflows/test.yml/badge.svg?branch=master) [![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause) ![Release](https://badgen.net/github/release/healthbadge/episimmer)
+[![Documentation Status](https://readthedocs.org/projects/episimmer/badge/?version=latest)](https://episimmer.readthedocs.io/en/latest/?badge=latest) ![Testing Status](https://github.com/healthbadge/episimmer/actions/workflows/test.yml/badge.svg?branch=master) [![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause) ![GitHub release (latest by date including pre-releases)](https://img.shields.io/github/v/release/healthbadge/episimmer?include_prereleases)
 # Episimmer : Epidemic Simulation Platform
 Powered by [HealthBadge](https://www.healthbadge.org/) <br>
 
