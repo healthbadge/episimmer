@@ -4,15 +4,13 @@ Powered by [HealthBadge](https://www.healthbadge.org/) <br>
 
 Episimmer is an Epidemic Simulation Platform. It aims to provide Decision and Recommendation Support to help answer your questions related to policies and restrictions during an epidemic. Using simulation techniques widely applied to other fields, we can help schools and colleges discover and hone the opportunities and optimizations they could make to their COVID-19 strategy. From the most simple decisions (Which days to be online or offline) to more complex strategies (What restrictions should I put on library use?, How many times should I test?, Whom do I test?) Episimmer is the tool for the job. <br>
 
-Here is a short video describing Episimmer : [Video link](https://drive.google.com/file/d/1Oo-eG7pNIzaqf1uJ9rIf7DAc7MZwNRVY/view?usp=sharing)
-
 ## Installation
 
 ### Prerequisites
 
 Episimmer requires requires python 3.7+.
 
-### Install using pip 
+### Install using pip
 
 Install from PyPI
 
@@ -30,14 +28,14 @@ Run the following command in the local repository after cloning or downloading t
 To run examples :
 
 If you downloaded episimmer through PyPI, run
-		
+
 		episimmer <Path_to_Example>
 
 Otherwise, in the repository, run
 
 		python episimmer/main.py <Path_to_Example>
 
-### Command line Arguments 
+### Command line Arguments
 positional arguments:
 
   		example_path : Pass the path to the data folder
