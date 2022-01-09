@@ -3,7 +3,7 @@ name: Documentation
 on:
   push:
     branches:
-      - episimmer_package_fix
+      - master
   pull_request:
 jobs:
     GitHub-Pages-Build:
