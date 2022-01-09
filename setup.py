@@ -17,11 +17,6 @@ CLASSIFIERS = [
     'License :: OSI Approved :: BSD License',
     'Topic :: Scientific/Engineering',
 ]
-ENTRY={
-    'console_scripts': [
-        'episimmer=src.Main:main',
-    ]
-}
 
 with open('README.md') as f:
     LONG_DESC = f.read()
@@ -31,6 +26,16 @@ with open('requirements.txt') as f:
 
 with open('docs/requirements-dev.txt') as f:
     DEV_REQUIRES = f.read()
+
+EXTRA_REQUIRES = {'test': DEV_REQUIRES}
+
+ENTRY={
+    'console_scripts': [
+        'episimmer=src.Main:main',
+    ]
+}
+EXCLUDES = ['tests*','scripts']
+
 
 setup(
     name=NAME,
@@ -44,6 +49,6 @@ setup(
     license=LICENSE,
     classifiers=CLASSIFIERS,
     install_requires=REQUIRES,
-    extras_require={'test': DEV_REQUIRES},
-    packages=find_packages(exclude=['tests', 'docs', 'examples'])
+    extras_require=EXTRA_REQUIRES,
+    packages=find_packages(exclude=EXCLUDES)
 )
