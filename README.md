@@ -29,7 +29,7 @@ Flags :
 
 
 ## Getting started
-You can start using Episimmer by  using the following tutorials :
+You can start using Episimmer by using the following tutorials :
 
 [Tutorial 1 : Getting started with Episimmer](https://docs.google.com/document/d/1PHMlz4W5gl_SpW8u1kWJEqzsAtW6NOWvePSMre9auT4/edit?usp=sharing) <br>
 [Tutorial 2.0 : Episimmer Basic Modelling Theory](https://docs.google.com/document/d/1BujPmaEOGoJn6_B0DAhIUUlROKBt4gIlG13Kl9kDRh4/edit?usp=sharing) <br>
