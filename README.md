@@ -8,8 +8,9 @@ Here is a short video describing Episimmer : [Video link](https://drive.google.c
 
 ## Installation
 
-Run the following command after cloning or downloading the repository
+Run the following commands after cloning or downloading the repository
 
+		cd episimmer
 		pip install -e .
 
 ## Running Examples
