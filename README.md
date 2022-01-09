@@ -8,7 +8,7 @@ Episimmer is an Epidemic Simulation Platform. It aims to provide Decision and Re
 
 ### Prerequisites
 
-Episimmer requires requires python 3.7+.
+Episimmer requires python 3.7+.
 
 ### Install using pip
 

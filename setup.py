@@ -55,5 +55,6 @@ setup(
     classifiers=CLASSIFIERS,
     install_requires=REQUIRES,
     extras_require=EXTRA_REQUIRES,
+    python_requires=PYTHON,
     packages=find_packages(exclude=EXCLUDES)
 )
