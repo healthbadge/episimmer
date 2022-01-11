@@ -3,7 +3,7 @@ import numpy as np
 from .read_file import ReadAgents, ReadLocations, ReadOneTimeEvents
 from .simulate import Simulate
 from .utils.arg_parser import parse_args
-from .utils.math import average, stddev
+from .utils.math import deep_copy_average, deep_copy_stddev
 from .utils.time import Time
 from .utils.visualize import plot_results, store_animated_time_plot
 
@@ -83,8 +83,8 @@ class World():
                     mindict[state][j] = min(mindict[state][j], sdict[state][j])
 
         # Average number time series
-        avg_dict = average(tdict, self.config_obj.worlds)
-        stddev_dict = stddev(tdict, t2_dict, self.config_obj.worlds)
+        avg_dict = deep_copy_average(tdict, self.config_obj.worlds)
+        stddev_dict = deep_copy_stddev(tdict, t2_dict, self.config_obj.worlds)
         plot_results(self.config_obj.example_path, self.model, avg_dict,
                      stddev_dict, maxdict, mindict, plot)
         if anim:

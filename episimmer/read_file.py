@@ -223,6 +223,9 @@ class ReadVDConfiguration():
 
 
 class ReadFilesList():
+    """
+    Reads environment components that contains the list of file lists files.
+    """
     def __init__(self, filename):
         self.file_list = []
         f = open(filename, 'r')

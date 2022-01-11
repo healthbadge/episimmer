@@ -2,6 +2,9 @@ from .base import AgentPolicy
 
 
 class FullLockdown(AgentPolicy):
+    """
+    Testing 1
+    """
     def __init__(self, do_lockdown_fn, p=0.0):
         self.policy_type = 'Restrict'
         self.do_lockdown_fn = do_lockdown_fn
@@ -23,6 +26,13 @@ class AgentLockdown(AgentPolicy):
         self.p = p
 
     def enact_policy(self, time_step, agents, locations, model=None):
+        """
+        Hello
+
+        :param state: State to initialize
+        :param agents: agents
+        :return:
+        """
         if self.do_lockdown_fn(time_step):
             for agent in agents:
                 if agent.info[self.parameter] in self.value_list:
@@ -31,6 +41,9 @@ class AgentLockdown(AgentPolicy):
 
 
 class AgentPolicyBasedLockdown(AgentPolicy):
+    """
+    Testing 3
+    """
     def __init__(self,
                  policy_to_consider,
                  value_list,
