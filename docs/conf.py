@@ -14,9 +14,8 @@ import datetime
 import os
 import sys
 
-import episimmer
-
 sys.path.insert(0, os.path.abspath('..'))
+import episimmer
 
 # Read version from file
 version_file = os.path.join('..', 'episimmer', 'version.txt')
