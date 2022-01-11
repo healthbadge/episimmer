@@ -1,16 +1,16 @@
 
-Public Policy
+Intervention Policy
 =====================================
 
-* :ref:`Introduction - Public Policy`
+* :ref:`Introduction - Intervention Policy`
 * :ref:`Implementing Policies`
 * :doc:`Policy API<../modules/policy>`
 
 
-Introduction - Public Policy
+Introduction - Intervention Policy
 -------------------------------------
 
-A public policy, in Epidemic terms, is a user defined intervention method which applies to any activity undertaken with the
+A Intervention Policy, in Epidemic terms, is a user defined intervention method which applies to any activity undertaken with the
 objective of improving human health by preventing disease, or reducing the severity or duration of an existing disease.
 
 The mantra of episimmer is to be flexible in all aspects of epidemic simulation. Thus, any kind of policy can be accommodated and
