@@ -3,7 +3,7 @@ import copy
 import numpy as np
 
 
-def average(tdict, number):
+def deep_copy_average(tdict, number):
     avg_dict = copy.deepcopy(tdict)
     for k in avg_dict.keys():
         l = avg_dict[k]
@@ -12,7 +12,7 @@ def average(tdict, number):
     return avg_dict
 
 
-def stddev(tdict, t2_dict, number):
+def deep_copy_stddev(tdict, t2_dict, number):
     stddev_dict = copy.deepcopy(tdict)
     for k in stddev_dict.keys():
         l = stddev_dict[k]

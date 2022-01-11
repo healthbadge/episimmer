@@ -6,6 +6,7 @@
 
 # -- Path setup --------------------------------------------------------------
 
+import datetime
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
@@ -13,21 +14,23 @@
 import os
 import sys
 
-sys.path.insert(0, os.path.abspath('.'))
+import episimmer
+
+sys.path.insert(0, os.path.abspath('..'))
 
 # Read version from file
-version_file = os.path.join(os.path.dirname(__file__), '../episimmer',
-                            'version.txt')
+version_file = os.path.join('..', 'episimmer', 'version.txt')
+
 with open(version_file) as f:
     __version__ = f.read().strip()
 
 # -- Project information -----------------------------------------------------
 
 project = 'episimmer'
-copyright = '2022, HealthBadge Pvt Ltd'
 author = 'HealthBadge'
+copyright = f'{datetime.datetime.now().year}, {author}'
 
-version = 'master (' + __version__ + ' )'
+version = __version__
 release = __version__
 
 # -- General configuration ---------------------------------------------------
@@ -44,6 +47,7 @@ extensions = [
     'sphinx.ext.viewcode',
     'sphinx.ext.githubpages',
     'sphinx.ext.coverage',
+    'sphinx.ext.autosectionlabel',
 ]
 
 # Add any paths that contain templates here, relative to this directory.
@@ -65,3 +69,26 @@ html_theme = 'sphinx_rtd_theme'
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
 html_static_path = ['_static']
+add_module_names = False
+autodoc_member_order = 'bysource'
+rst_context = {'episimmer': episimmer}
+
+
+def setup(app):
+    def skip(app, what, name, obj, skip, options):
+        members = [
+            '__init__',
+            '__repr__',
+            '__weakref__',
+            '__dict__',
+            '__module__',
+        ]
+        return True if name in members else skip
+
+    def rst_jinja_render(app, docname, source):
+        src = source[0]
+        rendered = app.builder.templates.render_string(src, rst_context)
+        source[0] = rendered
+
+    app.connect('autodoc-skip-member', skip)
+    app.connect('source-read', rst_jinja_render)

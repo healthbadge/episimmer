@@ -1,8 +1,13 @@
-[![Documentation Status](https://readthedocs.org/projects/episimmer/badge/?version=latest)](https://episimmer.readthedocs.io/en/latest/?badge=latest) ![Testing Status](https://github.com/healthbadge/episimmer/actions/workflows/test.yml/badge.svg?branch=master) [![codecov](https://codecov.io/gh/healthbadge/episimmer/branch/additional_se/graph/badge.svg?token=F0BR661MG5)](https://codecov.io/gh/healthbadge/episimmer) [![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](https://opensource.org/licenses/BSD-3-Clause) ![PyPI](https://img.shields.io/pypi/v/episimmer)
+[![Test Status](https://github.com/healthbadge/episimmer/actions/workflows/test.yml/badge.svg?branch=master)](https://github.com/healthbadge/episimmer/actions/workflows/test.yml) [![Documentation Status](https://readthedocs.org/projects/episimmer/badge/?version=latest)](https://episimmer.readthedocs.io/en/latest/?badge=latest) [![Code Coverage](https://codecov.io/gh/healthbadge/episimmer/branch/additional_se/graph/badge.svg?token=F0BR661MG5)](https://codecov.io/gh/healthbadge/episimmer) [![License](https://img.shields.io/badge/License-BSD_3--Clause-blue.svg)](https://github.com/healthbadge/episimmer/blob/master/LICENSE) [![PyPI](https://img.shields.io/pypi/v/episimmer)](https://pypi.org/project/episimmer/)
 # Episimmer : Epidemic Simulation Platform
-Powered by [HealthBadge](https://www.healthbadge.org/) <br>
+Powered by [HealthBadge](https://www.healthbadge.org/)
 
-Episimmer is an Epidemic Simulation Platform. It aims to provide Decision and Recommendation Support to help answer your questions related to policies and restrictions during an epidemic. Using simulation techniques widely applied to other fields, we can help schools and colleges discover and hone the opportunities and optimizations they could make to their COVID-19 strategy. From the most simple decisions (Which days to be online or offline) to more complex strategies (What restrictions should I put on library use?, How many times should I test?, Whom do I test?) Episimmer is the tool for the job. <br>
+Episimmer is an Epidemic Simulation Platform that aims to provide Decision and Recommendation Support to help answer your questions related
+to policies and restrictions during an epidemic. Using simulation techniques widely applied to other fields, we can help schools and colleges
+discover and hone the opportunities and optimizations they could make to their COVID-19 strategy.
+
+From the most simple decisions (Which days to be online or offline) to more complex strategies (What restrictions should I put on library use?,
+How many times should I test?, Whom do I test?) Episimmer is the tool for the job.
 
 ## Installation
 
@@ -12,41 +17,60 @@ Episimmer requires python 3.7+.
 
 ### Install using pip
 
-Install from PyPI
+If you are using Linux or macOS you can install episimmer from PyPI with pip:
+```
+pip install episimmer
+```
 
-		pip install episimmer
+### Install from source
 
-(or)
+Or you can install from source
 
+1. First clone this repository:
+```
+git clone https://github.com/healthbadge/episimmer.git
+```
+2. Then, to install the package, run:
+```
+pip install -e .
+```
 
-Run the following command in the local repository after cloning or downloading the repository
+3. If you do not have pip you can instead use:
+```
+python setup.py install
+```
 
-		pip install -e .
+If you do not have root access, you should add the ``--user`` option to the above lines.
 
 
 ## Running Examples
-To run examples :
+To run examples -
 
-If you downloaded episimmer through PyPI, run
+If you installed episimmer through PyPI, run:
 
-		episimmer <Path_to_Example>
+```
+episimmer <Path_to_Example>
+```
 
-Otherwise, in the repository, run
-
-		python episimmer/main.py <Path_to_Example>
+Otherwise, in the repository, run:
+```
+python episimmer/main.py <Path_to_Example>
+```
 
 ### Command line Arguments
 positional arguments:
-
-  		example_path : Pass the path to the data folder
+```
+example_path : Pass the path to the data folder
+```
 
 optional arguments:
-
-		-np or --noplot : Restrict plotting the time plot after simulation. Default = False
-		-vul or --vuldetect : Run Vulnerability Detection on the data folder based on VD_config.txt. Default = False
-		-a or --animate : Creates a gif animation of the time plot. Default = False
-		-s or --stats : Choose to store statistics. Default = False
-		-viz or --vizdyn : Creates a gif of the simulation environment progressing through the days. Default = False
+```
+-np or --noplot : Restrict plotting the time plot after simulation. Default = False
+-vul or --vuldetect : Run Vulnerability Detection on the data folder based on VD_config.txt. Default = False
+-a or --animate : Creates a gif animation of the time plot. Default = False
+-s or --stats : Choose to store statistics. Default = False
+-viz or --vizdyn : Creates a gif of the simulation environment progressing through the days. Default = False
+```
 
 ## Getting started
 You can start using Episimmer by following the tutorials given below :
