@@ -250,16 +250,6 @@ class ScheduledModel():
     def scheduled(self, new_states):
         return partial(self.full_scheduled, new_states)
 
-    def full_p_function(self, new_states, agent, agents):
-
-        new_state = self.choose_one_state(new_states)
-        scheduled_time = self.find_scheduled_time(new_state)
-
-        return new_state, scheduled_time
-
-    def p_function(self, new_states):
-        return partial(self.full_p_function, new_states)
-
     def p_infection(self, p_infected_states_list, fn, new_states):
         return partial(self.full_p_infection, fn, p_infected_states_list,
                        new_states)
