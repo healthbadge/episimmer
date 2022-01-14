@@ -14,7 +14,6 @@ UserModel.html
 event_vd
 event_vd_algorithms.py
 rename-files.sh
-generate_examples
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
