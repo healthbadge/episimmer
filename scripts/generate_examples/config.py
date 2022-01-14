@@ -1,4 +1,5 @@
 import argparse
+from csv import DictReader
 
 from episimmer.read_file import ReadConfiguration
 
