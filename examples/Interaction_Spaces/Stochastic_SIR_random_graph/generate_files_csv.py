@@ -1,5 +1,6 @@
 import csv
 import random
+import sys
 
 
 def write_agents(filename,no_agents):
@@ -31,7 +32,8 @@ def write_interactions(filename,no_agents,p):
 	        writer.writerow({'Agent Index':agent_list[i],'Interacting Agent Index':interacting_agent_list[i]})
 
 
+n = int(sys.argv[1])
+prob = float(sys.argv[2])
 
-
-write_agents('agents.csv',100)
-write_interactions('interactions_list.csv', 100, 0.1)
+write_agents('agents.csv',n)
+write_interactions('interactions_list.csv', n, prob)
