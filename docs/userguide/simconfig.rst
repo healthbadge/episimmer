@@ -25,7 +25,7 @@ All the parameters of the configuration can be set in the mandatory config.txt f
     One Time Event filename <>
 
 
-1. *Random seed (integer)* : A random seed is an integer that is used to obtain a deterministic output in a stochastic environment. This can be used to get reproducible simulation results.
+1. *Random seed (integer)* : Random seed refers to initializing the random number generator. When initialized with the same value, you get deterministic outputs in a stochastic setting. This can be used to get reproducible simulation results.
 
 .. code-block:: text
     :caption: Random Seed set to 1
