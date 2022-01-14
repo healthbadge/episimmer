@@ -9,7 +9,7 @@ Example : creates a config.txt file with random seed 10, number of worlds 3 and 
 ```python
 python3 config.py -rs 3 -nw 3 -nd 30
 ```
-You can also get a new config.txt file based on another target_config.txt file. It copies all the values from it and you may pass additional 
+You can also get a new config.txt file based on another target_config.txt file. It copies all the values from it and you may pass additional
 parameters to make changes to it.
 
 --fromfile target_config.txt -rs 10
