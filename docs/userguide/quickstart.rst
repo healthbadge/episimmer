@@ -8,3 +8,5 @@ external references for a much better understanding of Epidemic Simulations and 
 
 
 You may also go through these colab notebooks for a more hands-on tutorial on Episimmer:
+
+1. `Tutorial 1 <https://colab.research.google.com/github/healthbadge/episimmer/blob/master/scripts/Tutorial1.ipynb>`_
