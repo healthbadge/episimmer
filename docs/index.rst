@@ -38,6 +38,7 @@ Contents
    userguide/installation
    userguide/quickstart
    userguide/environment
+   userguide/simconfig
    userguide/diseasemodel
    userguide/policy
    userguide/vulnerability_detection
