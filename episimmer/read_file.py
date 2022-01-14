@@ -141,7 +141,7 @@ class ReadConfiguration():
         interactions_files_list = events_files_list = probabilistic_interactions_files_list = []
 
         if self.interactions_files_list_list == ['']:
-            print('No Interaction files uploaded!')
+            pass
         else:
             interactionFiles_obj = [
                 ReadFilesList(file) for file in interactions_FilesList_filename
@@ -152,7 +152,7 @@ class ReadConfiguration():
             ]
 
         if self.probabilistic_interactions_files_list_list == ['']:
-            print('No Probabilistic Interaction files uploaded!')
+            pass
         else:
             probabilistic_interactionFiles_obj = [
                 ReadFilesList(file)
@@ -164,7 +164,7 @@ class ReadConfiguration():
             ]
 
         if self.events_files_list_list == ['']:
-            print('No Event files uploaded!')
+            pass
         else:
             eventFiles_obj = [
                 ReadFilesList(file) for file in events_FilesList_filename
