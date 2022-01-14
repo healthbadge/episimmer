@@ -1,6 +1,27 @@
 # Utility Files For Generating Examples
 
-## 1. agents.py
+## 1. config.py
+Creates a config.txt file for the user with input specifications.
+
+-rs 3 -nw 3 -nd 30
+
+Example : creates a config.txt file with random seed 10, number of worlds 3 and number of days 30
+```python
+python3 config.py -rs 3 -nw 3 -nd 30
+```
+You can also get a new config.txt file based on another target_config.txt file. It copies all the values from it and you may pass additional 
+parameters to make changes to it.
+
+--fromfile target_config.txt -rs 10
+
+Example : creates a new config.txt file with the same attributes as target_config.txt with random seed 10
+```python
+python3 config.py --fromfile target_config.txt -rs 10
+```
+
+---
+
+## 2. agents.py
 Creates a *agent_file.txt/csv* file for the user with input specifications.
 
 -n *no_of_agents*<br>
@@ -24,14 +45,6 @@ python3 agents.py filename -a "12:C"
 Example : clears the file *filename*
 ```python
 python3 agents.py filename -c
-```
-
----
-
-## 2. config.py
-Creates a config.txt template file for the user.
-```python
-python3 config.py
 ```
 
 ---
