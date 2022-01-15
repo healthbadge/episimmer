@@ -47,12 +47,12 @@ complexities, the agent based model is more complex and will require more proces
 Some differences between an Equation Based Model (EBM) and an Agent Based Model (ABM) are given below.
 
 
-.. image:: https://ieeexplore.ieee.org/mediastore_new/IEEE/content/media/6515923/6516413/6516432/6516432-table-1-source-large.gif
+.. figure:: ../_figures/EBMvABM.png
     :width: 400
+    :align: center
 
-
-Taken from `Agent-Based vs. Equation-Based Epidemiological Models: A Model Selection Case Study. <https://ieeexplore.ieee.org/document/6516432>`_
-This paper has a nice introduction and comparison between the two types of models.
+    Taken from `Agent-Based vs. Equation-Based Epidemiological Models: A Model Selection Case Study.
+    <https://ieeexplore.ieee.org/document/6516432>`_
 
 .. note ::
       Episimmer is strictly an ABM.
