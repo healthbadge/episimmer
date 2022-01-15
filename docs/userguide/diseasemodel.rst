@@ -22,8 +22,9 @@ Before we detail the two models, we shall first look into standard compartmental
 Compartmental Models
 ^^^^^^^^^^^^^^^^^^^^^^^
 
-Both models in Episimmer follow the `compartmental style of disease modelling <https://en.wikipedia.org/wiki/Compartmental_models_in_epidemiology>`_ i.e. they have compartments or states that define the agent's disease state and
-each state contains a proportion of the entire population.
+Mathematical modelling in epidemiology provides understanding of the underlying mechanisms that influence the spread of disease and, in the process, it suggests control strategies/policies.
+Both models in Episimmer follow the `compartmental style of disease modelling <https://en.wikipedia.org/wiki/Compartmental_models_in_epidemiology>`_. In compartmental models, the population under study is divided
+into compartments and assumptions are made about the nature and time rate of transfer from one compartment to another.
 
 Consider the SIR compartmental model where S, I and R represent the Susceptible, Infectious and Recovered populations.
 
