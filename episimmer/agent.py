@@ -1,9 +1,4 @@
 class Agent():
-    """
-    Agent class
-
-    :param state: Initial state of the agent
-    """
     def __init__(self, state, info_dict):
         self.state = state
         self.next_state = None
@@ -21,10 +16,6 @@ class Agent():
         self.initialize_policy_dict()
 
     def initialize_state(self, state, schedule_time_left=None):
-        """
-        :param state: State to initialize
-        :return:
-        """
         self.state = state
         self.schedule_time_left = schedule_time_left
 
