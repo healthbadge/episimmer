@@ -229,7 +229,8 @@ class ScheduledModel():
             if mean == None or vary == None:
                 scheduled_time = None
             else:
-                scheduled_time = max(0, int(np.random.normal(mean, vary)))
+                scheduled_time = max(
+                    0, int(np.random.normal(mean, np.sqrt(vary))))
 
         else:
 
