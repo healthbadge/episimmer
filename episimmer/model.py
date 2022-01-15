@@ -1,7 +1,12 @@
 import random
 from functools import partial
+from typing import Callable, Dict, List, Tuple, Union
 
 import numpy as np
+
+from episimmer.agent import Agent
+from episimmer.location import Location
+from episimmer.read_file import ReadAgents
 
 from .utils.time import Time
 
@@ -10,16 +15,26 @@ normal_colors = ['blue', 'green', 'black', 'yellow', 'brown', 'white']
 
 
 class StochasticModel():
-    def __init__(self, individual_state_types, infected_states,
-                 state_proportion):
-        self.individual_state_types = individual_state_types
-        self.infected_states = infected_states
-        self.state_proportion = state_proportion
-        self.name = 'Stochastic Model'
-        self.external_prev_fn = lambda x, y: 0.0
+    """
+    Class for the stochastic model.
 
-        self.colors = {}
-        self.color_index = [0, 0]
+    :param individual_state_types: The states in the compartment model
+    :param infected_states: The states that are infectious
+    :param state_proportion: Starting proportions of each state
+    """
+    def __init__(self, individual_state_types: List[str],
+                 infected_states: List[str], state_proportion: Dict[str,
+                                                                    float]):
+        self.recieve_fn: Union[Callable, None] = None
+        self.contribute_fn: Union[Callable, None] = None
+        self.transmission_prob: Dict[str, Dict[str, Callable]] = {}
+        self.individual_state_types: List[str] = individual_state_types
+        self.infected_states: List[str] = infected_states
+        self.state_proportion: Dict[str, float] = state_proportion
+        self.name: str = 'Stochastic Model'
+        self.external_prev_fn: Callable = lambda x, y: 0.0
+        self.colors: Dict[str, str] = {}
+        self.color_index: List[int] = [0, 0]
         for state in individual_state_types:
             if state in infected_states:
                 self.colors[state] = infectious_colors[self.color_index[0] %
@@ -32,7 +47,10 @@ class StochasticModel():
 
         self.reset()
 
-    def reset(self):
+    def reset(self) -> None:
+        """
+        Initializes transitions probabilities between states.
+        """
         self.transmission_prob = {}
         for t in self.individual_state_types:
             self.transmission_prob[t] = {}
@@ -41,7 +59,12 @@ class StochasticModel():
             for t2 in self.individual_state_types:
                 self.transmission_prob[t1][t2] = self.p_standard(0)
 
-    def initalize_states(self, agents):
+    def initalize_states(self, agents: Dict[int, Agent]) -> None:
+        """
+        Initializes the states of the agents.
+
+        :param agents: A dictionary mapping agent indexes to agent objects
+        """
         proportion_sum = 0
         for p in self.state_proportion.values():
             proportion_sum += p
@@ -63,7 +86,15 @@ class StochasticModel():
                     agent.initialize_state(state)
                     break
 
-    def find_next_state(self, agent, agents):
+    def find_next_state(self, agent: Agent,
+                        agents: Dict[int, Agent]) -> Tuple[str, None]:
+        """
+        Returns new state of the agent according to the probabilities between the states.
+
+        :param agent: The agent whose state is to be changed
+        :param agents: A dictionary mapping agent indexes to agent objects
+        :return: The new state of the agent
+        """
         scheduled_time = None
         r = random.random()
         p = 0
@@ -74,19 +105,65 @@ class StochasticModel():
                 break
         return agent.state, scheduled_time
 
-    def full_p_standard(self, p, agent, agents):
+    def full_p_standard(self, p: float, agent: Agent,
+                        agents: Dict[int, Agent]) -> float:
+        """
+        Returns the probability of transition.
+
+        :param p: Probability
+        :param agent: An agent object
+        :param agents: A dictionary mapping agent indexes to agent objects
+        :return: Probability
+        """
         return p
 
-    def p_standard(self, p):
+    def p_standard(self, p: float) -> Callable:
+        """
+        Returns the probability of transition.
+        This function can be used by the user in ``UserModel.py`` to define a fixed probability.
+        It returns a partial function of :meth:`~full_p_standard`.
+
+        :param p: Probability
+        :return: Partial function
+        """
         return partial(self.full_p_standard, p)
 
-    def full_p_function(self, fn, agent, agents):
+    def full_p_function(self, fn: Callable, agent: Agent,
+                        agents: Dict[int, Agent]) -> float:
+        """
+        Returns the probability of transition that is specified by the user defined function.
+
+        :param fn: Function defining the probability
+        :param agent: An agent object
+        :param agents: A dictionary mapping agent indexes to agent objects
+        :return: Probability
+        """
         return fn(Time.get_current_time_step())
 
-    def p_function(self, fn):
+    def p_function(self, fn: Callable) -> Callable:
+        """
+        Returns the probability of transition that is specified by the user defined function.
+        This function can be used by the user in ``UserModel.py`` to specify the probability
+        from the user defined function.
+        It returns a partial function of :meth:`~full_p_function`.
+
+        :param fn: Function defining the probability
+        :return: Partial function
+        """
         return partial(self.full_p_function, fn)
 
-    def full_p_infection(self, fn, p_infected_states_list, agent, agents):
+    def full_p_infection(self, fn: Union[Callable, None],
+                         p_infected_states_list: List[Union[float, None]],
+                         agent: Agent, agents: Dict[int, Agent]) -> float:
+        """
+        Returns the probability of infection based on the interaction between agents.
+
+        :param fn: Function defining the probability based on interaction
+        :param p_infected_states_list:
+        :param agent: An agent object
+        :param agents: A dictionary mapping agent indexes to agent objects
+        :return: Probability of getting an infection
+        """
         p_not_inf = 1
         for c_dict in agent.contact_list:
             contact_index = c_dict['Interacting Agent Index']
@@ -102,23 +179,66 @@ class StochasticModel():
         return (1 - p_not_inf) + self.external_prev_fn(
             agent, Time.get_current_time_step())
 
-    def p_infection(self, p_infected_states_list, fn):
+    def p_infection(self, p_infected_states_list: Union[List[float], None],
+                    fn: Union[Callable, None]) -> Callable:
+        """
+        Returns the probability of infection based on the interaction between agents.
+        This function can be used by the user in ``UserModel.py`` to specify a user defined function
+        for the probability of infection.
+        Returns a partial function of :meth:`~full_p_infection`.
+
+        :param p_infected_states_list: List of probabilities of transition to infected states
+        :param fn: Function defining the probability based on interaction
+        :return: Partial function
+        """
         return partial(self.full_p_infection, fn, p_infected_states_list)
 
-    def set_transition(self, s1, s2, fn):
+    def set_transition(self, s1: str, s2: str, fn: Callable) -> None:
+        """
+        Adds a transition probability function between the specified states.
+
+        :param s1: The first state
+        :param s2: The second state
+        :param fn: The function to be used for the transition probability
+        """
         self.transmission_prob[s1][s2] = fn
 
-    def set_event_contribution_fn(self, fn):
+    def set_event_contribution_fn(self, fn: Union[Callable, None]) -> None:
+        """
+        Sets the probability of contribution by an agent to an ambient infection.
+
+        :param fn: Function used to determine the probability of contribution by an agent to an ambient infection
+        """
         self.contribute_fn = fn
 
-    def set_event_recieve_fn(self, fn):
+    def set_event_recieve_fn(self, fn: Union[Callable, None]) -> None:
+        """
+        Sets the probability of an agent receiving ambient infection.
+
+        :param fn: Function used to determine the probability of an agent receiving ambient infection
+        """
         self.recieve_fn = fn
 
-    def set_external_prevalence_fn(self, fn):
+    def set_external_prevalence_fn(self, fn: Callable) -> None:
+        """
+        Sets the probability of an agent receiving an infection due to external prevalence.
+
+        :param fn: User defined function for specifying probability of receiving an infection due to external prevalence
+        """
         self.external_prev_fn = fn
 
-    def update_event_infection(self, event_info, location, agents_obj,
-                               event_restriction_fn):
+    def update_event_infection(self, event_info: Dict[str, Union[str,
+                                                                 List[str]]],
+                               location: Location, agents_obj: ReadAgents,
+                               event_restriction_fn: Callable) -> None:
+        """
+        Updates event info to agents from location.
+
+        :param event_info: Dictionary containing location and participating agents of an event
+        :param location: Location object
+        :param agents_obj: An object of class :class:`~episimmer.read_file.ReadAgents` containing all agents
+        :param event_restriction_fn: Function used to determine if an agent is restricted from participating in an event
+        """
         ambient_infection = 0
         for agent_index in event_info['Agents']:
             agent = agents_obj.agents[agent_index]
