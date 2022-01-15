@@ -16,7 +16,6 @@ repos:
       - id: trailing-whitespace
       - id: check-docstring-first
       - id: check-json
-      - id: check-added-large-files
       - id: check-yaml
       - id: debug-statements
       - id: requirements-txt-fixer
