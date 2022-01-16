@@ -59,7 +59,7 @@ class StochasticModel():
             for t2 in self.individual_state_types:
                 self.transmission_prob[t1][t2] = self.p_standard(0)
 
-    def initalize_states(self, agents: Dict[int, Agent]) -> None:
+    def initalize_states(self, agents: Dict[str, Agent]) -> None:
         """
         Initializes the states of the agents.
 
@@ -87,7 +87,7 @@ class StochasticModel():
                     break
 
     def find_next_state(self, agent: Agent,
-                        agents: Dict[int, Agent]) -> Tuple[str, None]:
+                        agents: Dict[str, Agent]) -> Tuple[str, None]:
         """
         Returns new state of the agent according to the probabilities between the states.
 
@@ -106,7 +106,7 @@ class StochasticModel():
         return agent.state, scheduled_time
 
     def full_p_standard(self, p: float, agent: Agent,
-                        agents: Dict[int, Agent]) -> float:
+                        agents: Dict[str, Agent]) -> float:
         """
         Returns the probability of transition.
 
@@ -129,7 +129,7 @@ class StochasticModel():
         return partial(self.full_p_standard, p)
 
     def full_p_function(self, fn: Callable, agent: Agent,
-                        agents: Dict[int, Agent]) -> float:
+                        agents: Dict[str, Agent]) -> float:
         """
         Returns the probability of transition that is specified by the user defined function.
 
@@ -154,7 +154,7 @@ class StochasticModel():
 
     def full_p_infection(self, fn: Union[Callable, None],
                          p_infected_states_list: List[Union[float, None]],
-                         agent: Agent, agents: Dict[int, Agent]) -> float:
+                         agent: Agent, agents: Dict[str, Agent]) -> float:
         """
         Returns the probability of infection based on the interaction between agents.
 
