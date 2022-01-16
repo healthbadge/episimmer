@@ -18,9 +18,9 @@ class StochasticModel():
     """
     Class for the stochastic model.
 
-    :param individual_state_types: The states in the compartment model
-    :param infected_states: The states that are infectious
-    :param state_proportion: Starting proportions of each state
+    :param individual_state_types: (List[str]) The states in the compartment model
+    :param infected_states: (List[str]) The states that are infectious
+    :param state_proportion: (Dict[str, float]) Starting proportions of each state
     """
     def __init__(self, individual_state_types: List[str],
                  infected_states: List[str], state_proportion: Dict[str,
@@ -63,7 +63,7 @@ class StochasticModel():
         """
         Initializes the states of the agents based on state proportions.
 
-        :param agents: A dictionary mapping from agent indices to agent objects
+        :param agents: (Dict[str, Agent]) A dictionary mapping from agent indices to agent objects
         """
         proportion_sum = 0
         for p in self.state_proportion.values():
@@ -91,9 +91,9 @@ class StochasticModel():
         """
         Returns next state of the agent according to the transition functions between the states stored in transmission_prob.
 
-        :param agent: The current agent whose next state is to be determined
-        :param agents: A dictionary mapping from agent indices to agent objects
-        :return: The new state of the agent
+        :param agent: (Agent) The current agent whose next state is to be determined
+        :param agents: (Dict[str, Agent]) A dictionary mapping from agent indices to agent objects
+        :return: (Tuple[str, None]) The new state of the agent
         """
         scheduled_time = None
         r = random.random()
