@@ -153,7 +153,7 @@ class StochasticModel():
         return partial(self.full_p_function, fn)
 
     def full_p_infection(self, fn: Union[Callable, None],
-                         p_infected_states_list: List[Union[float, None]],
+                         p_infected_states_list: Union[List[float], None],
                          agent: Agent, agents: Dict[str, Agent]) -> float:
         """
         Returns the probability of infection based on the interaction between agents.
