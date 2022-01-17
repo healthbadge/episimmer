@@ -1,7 +1,7 @@
 exclude: 'setup.py'
 repos:
   - repo: https://github.com/pre-commit/mirrors-yapf
-    rev: v0.31.0
+    rev: v0.32.0
     hooks:
       - id: yapf
         name: yapf
@@ -11,7 +11,7 @@ repos:
         types: [python]
         exclude: '^examples'
   - repo: https://github.com/pre-commit/pre-commit-hooks
-    rev: v3.2.0
+    rev: v4.1.0
     hooks:
       - id: trailing-whitespace
       - id: check-docstring-first
@@ -25,7 +25,7 @@ repos:
   - repo: meta
     hooks:
       - id: check-useless-excludes
-  - repo: https://github.com/pre-commit/mirrors-isort
-    rev: v5.10.1
+  - repo: https://github.com/PyCQA/isort
+    rev: 5.10.1
     hooks:
       - id: isort
