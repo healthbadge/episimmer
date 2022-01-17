@@ -127,7 +127,7 @@ class StochasticModel():
 
     def p_standard(self, p: float) -> Callable:
         """
-        This function can be used by the user in ``UserModel.py`` specifies an independent transition with a fixed probability.
+        This function can be used by the user in ``UserModel.py`` to specify an independent transition with a fixed probability.
         It returns a partial function of :meth:`~full_p_standard`.
 
         Args:
@@ -356,7 +356,7 @@ class ScheduledModel():
                             transition_fn: Callable, infected_state: bool,
                             proportion: float) -> None:
         """
-        Inserts a state innto the model and schedules the agent for this state using a custom distribution
+        Inserts a state into the model and schedules the agent for this state using a custom distribution
         specified by the user-defined function. The user must specify one of the following functions for the transition function
 
         * :meth:`~scheduled`
@@ -507,7 +507,7 @@ class ScheduledModel():
                          new_states: Dict[str, float], agent: Agent,
                          agents: Dict[str, Agent]) -> Tuple[str, int]:
         """
-        This function returns returns a new state from new_states and its scheduled time based on
+        This function returns a new state from new_states and its scheduled time based on
         all types of interaction between the current agent and other agents.
 
         Args:
