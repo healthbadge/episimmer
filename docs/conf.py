@@ -70,8 +70,8 @@ for j in sorted(sub_examples_list):
                 else:
                     examples[j][example][k] = {}
                     examples[j][example][k]['name'] = k
-                    line_count = sum(1
-                                     for _ in open(osp.join(example_path, k)))
+                    line_count = sum(1 for _ in open(\
+                                        osp.join(example_path, k)))
                     examples[j][example][k][
                         'line_count'] = line_count if line_count < 200 else 200
                     examples[j][example][k]['path'] = osp.join(

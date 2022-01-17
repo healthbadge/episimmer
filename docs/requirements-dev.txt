@@ -1,5 +1,6 @@
 flake8
 matplotlib==3.4.2
+myst-parser==0.16.1
 numpy==1.21.0
 pytest
 pytest-cov
