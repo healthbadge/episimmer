@@ -26,8 +26,8 @@ of the environments you can create.
 
 The edges represent connections between the agents and the node colours represent the changing agent disease state.
 
-But these are static networks, which aren't truly representing real-world phenomena. Episimmer allows you have to cycling dynamic networks that more closely
-align with real-world social networks.
+But these are static networks, which aren't truly representing real-world phenomena. Episimmer allows you to have cycling dynamic networks which more closely
+align with real-world social networks than static networks.
 
 <p align = "center"><img width="600" alt="Dynamic Network" src="docs/_figures/dyn_graph.gif"> </p>
 <p align = "center"> <b> Dynamic Network </b> </p>
