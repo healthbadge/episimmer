@@ -24,9 +24,9 @@ of the environments you can create.
 :-------------------------:|:-------------------------:|:-------------------------:
 <b>Star Graph</b>  |  <b>Cellular Automaton</b> | <b>Multi-cycle graph</b>
 
-The edges represent connections between the agents and the node colours represent the changing agent disease state. 
+The edges represent connections between the agents and the node colours represent the changing agent disease state.
 
-But these are static networks, which aren't truly representing real-world phenomena. Episimmer allows you have to cycling dynamic networks that more closely 
+But these are static networks, which aren't truly representing real-world phenomena. Episimmer allows you have to cycling dynamic networks that more closely
 align with real-world social networks.
 
 <p align = "center"><img width="600" alt="Dynamic Network" src="docs/_figures/dyn_graph.gif"> </p>
