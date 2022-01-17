@@ -9,12 +9,14 @@ discover and hone the opportunities and optimizations they could make to their C
 From the most simple decisions (Which days to be online or offline) to more complex strategies (What restrictions should I put on library use?,
 How many times should I test?, Whom do I test?) Episimmer is the tool for the job.
 
+## The Environment
+
 Episimmer is an agent-based epidemic simulator which allows you to model any kind of disease spreading environment. With the help
 of simple text files, you can have your agents and the interaction network setup in no time. Here are some example
 of the environments you can create.
 
 
-![SIR_2_locations.gif](docs/_figures/SIR_2_locations.gif)|![dyn_graph_random_SIR.gif](docs/_figures/dyn_graph_random_SIR.gif)
+![SIR_2_locations.gif](docs/_figures/SIR_2_locations.gif)|![random_SIR.gif](docs/_figures/random_SIR.gif)
 :-------------------------:|:-------------------------:
 <b>Completely connected agents at two locations</b>  |  <b>Random Graph G(100, 0.1)</b>
 
@@ -22,23 +24,31 @@ of the environments you can create.
 :-------------------------:|:-------------------------:|:-------------------------:
 <b>Star Graph</b>  |  <b>Cellular Automaton</b> | <b>Multi-cycle graph</b>
 
-The edges represent connections between the agents and the node colours represent the changing agent disease state. Disease states could be Susceptible, Infected,
-Recovered or any possible state imaginable.
+The edges represent connections between the agents and the node colours represent the changing agent disease state. 
+
+But these are static networks, which aren't truly representing real-world phenomena. Episimmer allows you have to cycling dynamic networks that more closely 
+align with real-world social networks.
+
+<p align = "center"><img width="600" alt="Dynamic Network" src="docs/_figures/dyn_graph.gif"> </p>
+<p align = "center"> <b> Dynamic Network </b> </p>
 
 
-Episimmer also allows easy creation of compartmental disease models. You can be as creative as you like, for example, you can set up a disease model as large as this
+## The Disease Model
+
+Episimmer also allows easy creation of compartmental disease models. You can be as creative as you like, for example,
 
 ![complex_model1.png](docs/_figures/complex_model1.png)|![complex_model2.png](docs/_figures/complex_model2.png)
 :-------------------------:|:-------------------------:
-<b>Complex Model 1 (Taken from <a href=https://www.nature.com/articles/s41591-020-0883-7>here</a>)</b>  |  <b>Complex Model 2 (Taken from <a href=https://www.nature.com/articles/s41591-020-0883-7>here</a>)</b>
+<b>Complex Model 1 (Taken from <a href=https://arxiv.org/abs/2007.14392>here</a>)</b>  |  <b>Complex Model 2 (Taken from <a href=https://www.nature.com/articles/s41591-020-0883-7>here</a>)</b>
 
-<br/>
 <br/>
 
 Or you could even model a fancy Zombie Apocalypse disease model like this
 <p align = "center"><img width="600" alt="Zombie Apocalypse" src="docs/_figures/zombie_apo.png"> </p>
-<p align = "center"> Zombie Apocalypse </p>
+<p align = "center"> <b> Zombie Apocalypse </b> </p>
 
+
+Post modelling your environment and disease model, you can run simulations to obtain epidemic trajectories and compare policies like Lockdown (Restriction), Testing and Vaccination policies. Check the [official documentation](https://episimmer.readthedocs.io/en/latest/) for more details.
 
 ## Installation
 
@@ -115,7 +125,7 @@ Check out Episimmer's [official documentation](https://episimmer.readthedocs.io/
 
 
 ## UI
-Our current UI can be found at https://episimmer.herokuapp.com/. Note that it has minimal functionality as compared to running the codebase directly. Yet it competes with the current state of the art systems with multiple novel features. <br>
+Our current UI can be found at [here](https://episimmer.herokuapp.com/). Note that it has minimal functionality as compared to running the codebase directly. Yet it competes with the current state of the art systems with multiple novel features. <br>
 
 Episimmer is currently Work in Progress. Check out these point solutions built using the Episimmer codebase. <br>
 
