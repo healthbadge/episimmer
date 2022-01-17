@@ -468,7 +468,7 @@ class ScheduledModel():
         Returns a new state from new_states and its scheduled time for an agent.
 
         Args:
-            new_states: A dictionary mapping states to proportion an agent from the current state can transition to
+            new_states: A dictionary mapping states to proportions an agent from the current state can transition to
             agent: An agent object
             agents: A dictionary mapping from agent indices to agent objects
 
@@ -522,7 +522,7 @@ class ScheduledModel():
         Args:
             fn: User-defined function defining the probability of infection based on individual/probabilistic interactions
             p_infected_states_list: List of probabilities that can be used in the user-defined function fn
-            new_states: A dictionary mapping states to proportion an agent from the current state can transition to
+            new_states: A dictionary mapping states to proportions an agent from the current state can transition to
             agent: Current agent object
             agents: A dictionary mapping from agent indices to agent objects
 
@@ -563,7 +563,7 @@ class ScheduledModel():
         Args:
             p_infected_states_list: List of probabilities that can be used in the user-defined function fn
             fn: User-defined function defining the probability of infection based on individual/probabilistic interactions
-            new_states: A dictionary mapping states to proportion an agent from the current state can transition to
+            new_states: A dictionary mapping states to proportions an agent from the current state can transition to
 
         Returns:
             A partial function of :meth:`~full_p_infection`
@@ -576,7 +576,7 @@ class ScheduledModel():
         Returns a new state from state_dict according to its proportion in the state_dict.
 
         Args:
-            state_dict: A dictionary mapping states to proportion of current state that can transition into
+            state_dict: A dictionary mapping states to proportions of current state that can transition into
 
         Returns:
             A new state
