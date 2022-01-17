@@ -32,6 +32,9 @@ Episimmer also allows easy creation of compartmental disease models. You can be 
 :-------------------------:|:-------------------------:
 <b>Complex Model 1 (Taken from <a href=https://www.nature.com/articles/s41591-020-0883-7>here</a>)</b>  |  <b>Complex Model 2 (Taken from <a href=https://www.nature.com/articles/s41591-020-0883-7>here</a>)</b>
 
+<br/>
+<br/>
+
 Or you could even model a fancy Zombie Apocalypse disease model like this
 
 ![zombie_apo.png](docs/_figures/zombie_apo.png)
