@@ -9,6 +9,47 @@ discover and hone the opportunities and optimizations they could make to their C
 From the most simple decisions (Which days to be online or offline) to more complex strategies (What restrictions should I put on library use?,
 How many times should I test?, Whom do I test?) Episimmer is the tool for the job.
 
+## The Environment
+
+Episimmer is an agent-based epidemic simulator which allows you to model any kind of disease spreading environment. With the help
+of simple text files, you can have your agents and the interaction network setup in no time. Here are some example
+of the environments you can create.
+
+
+![SIR_2_locations.gif](docs/_figures/SIR_2_locations.gif)|![random_SIR.gif](docs/_figures/random_SIR.gif)
+:-------------------------:|:-------------------------:
+<b>Completely connected agents at two locations</b>  |  <b>Random Graph G(100, 0.1)</b>
+
+![Star_graph.gif](docs/_figures/Star_graph.gif)|![cellular_automaton.gif](docs/_figures/cellular_automaton.gif)|![multi_cycle.gif](docs/_figures/multi_cycle.gif)
+:-------------------------:|:-------------------------:|:-------------------------:
+<b>Star Graph</b>  |  <b>Cellular Automaton</b> | <b>Multi-cycle graph</b>
+
+The edges represent connections between the agents and the node colours represent the changing agent disease state.
+
+But these are static networks, which aren't truly representing real-world phenomena. Episimmer allows you have to cycling dynamic networks that more closely
+align with real-world social networks.
+
+<p align = "center"><img width="600" alt="Dynamic Network" src="docs/_figures/dyn_graph.gif"> </p>
+<p align = "center"> <b> Dynamic Network </b> </p>
+
+
+## The Disease Model
+
+Episimmer also allows easy creation of compartmental disease models. You can be as creative as you like, for example,
+
+![complex_model1.png](docs/_figures/complex_model1.png)|![complex_model2.png](docs/_figures/complex_model2.png)
+:-------------------------:|:-------------------------:
+<b>Complex Model 1 (Taken from <a href=https://arxiv.org/abs/2007.14392>here</a>)</b>  |  <b>Complex Model 2 (Taken from <a href=https://www.nature.com/articles/s41591-020-0883-7>here</a>)</b>
+
+<br/>
+
+Or you could even model a fancy Zombie Apocalypse disease model like this
+<p align = "center"><img width="600" alt="Zombie Apocalypse" src="docs/_figures/zombie_apo.png"> </p>
+<p align = "center"> <b> Zombie Apocalypse </b> </p>
+
+
+Post modelling your environment and disease model, you can run simulations to obtain epidemic trajectories and compare policies like Lockdown (Restriction), Testing and Vaccination policies. Check the [official documentation](https://episimmer.readthedocs.io/en/latest/) for more details.
+
 ## Installation
 
 ### Prerequisites
@@ -72,18 +113,19 @@ optional arguments:
 -viz or --vizdyn : Creates a gif of the simulation environment progressing through the days. Default = False
 ```
 
-## Getting started
-You can start using Episimmer by following the tutorials given below :
+## Tutorials
 
-[Tutorial 1 : Getting started with Episimmer](https://docs.google.com/document/d/1PHMlz4W5gl_SpW8u1kWJEqzsAtW6NOWvePSMre9auT4/edit?usp=sharing) <br>
-[Tutorial 2.0 : Episimmer Basic Modelling Theory](https://docs.google.com/document/d/1BujPmaEOGoJn6_B0DAhIUUlROKBt4gIlG13Kl9kDRh4/edit?usp=sharing) <br>
-[Tutorial 2.1 : Modifications to the compartment model](https://docs.google.com/document/d/1vn8xc95bCQ7K09lMuc3ijHfSeDPa6Nd28tko-19SlnQ/edit?usp=sharing) <br>
-[Tutorial 2.2 : Modifications to interaction spaces](https://docs.google.com/document/d/17QNw3BUEclqjtuoN6bd3pFNHsbzNIu2Bo0L1BCPS_A4/edit?usp=sharing) <br>
-[Tutorial 3 : Introduction to Intervention and Policy](https://docs.google.com/document/d/121CdfYRg1144kZJoyJMq4xwfuM6vVdLn8bDnMIMMzoY/edit?usp=sharing) <br>
+Check out Episimmer's [official documentation](https://episimmer.readthedocs.io/en/latest/) for a complete tutorial on the simulator. You may also go through these colab notebooks for a more hands-on tutorial on Episimmer:
+
+1. [Tutorial 1 - Episimmer Basics](https://colab.research.google.com/github/healthbadge/episimmer/blob/master/scripts/Tutorial1.ipynb)
+2. [Tutorial 2 - The Environment](https://colab.research.google.com/github/healthbadge/episimmer/blob/master/scripts/Tutorial2.ipynb)
+3. [Tutorial 3 - Disease Modelling](https://colab.research.google.com/github/healthbadge/episimmer/blob/master/scripts/Tutorial3.ipynb)
+4. Tutorial 4 - Intervention Policies in Episimmer (WIP)
+5. Tutorial 5 - Vulnerability Detection in Episimmer (WIP)
 
 
 ## UI
-Our current UI can be found at https://episimmer.herokuapp.com/. Note that it has minimal functionality as compared to running the codebase directly. Yet it competes with the current state of the art systems with multiple novel features. <br>
+Our current UI can be found at [here](https://episimmer.herokuapp.com/). Note that it has minimal functionality as compared to running the codebase directly. Yet it competes with the current state of the art systems with multiple novel features. <br>
 
 Episimmer is currently Work in Progress. Check out these point solutions built using the Episimmer codebase. <br>
 

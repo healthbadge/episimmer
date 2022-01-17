@@ -137,12 +137,13 @@ def set_ax_params(ax, model, timestep):
 
     ax.scatter([0], [0], color='#40E0D0',
                label='Event location')  # Events - Turquoise
+    ax.scatter([0], [0], color='#FFFFFF')
 
     ax.legend(bbox_to_anchor=(1, 1), prop={'size': 12})
     return ax
 
 
-def draw_graph(G, ax):
+def draw_graph(G, ax, seed):
     pos = nx.get_node_attributes(G, 'pos')
     color = nx.get_node_attributes(G, 'color')
 
@@ -150,6 +151,9 @@ def draw_graph(G, ax):
     # temp = list(pos.values())
     # random.shuffle(temp)
     # pos = dict(zip(pos, temp))
+
+    # Layout positions
+    pos = nx.spring_layout(G, seed=int(1))
 
     nodes = nx.draw_networkx_nodes(G, pos, node_color=color.values(), ax=ax)
     edges = nx.draw_networkx_edges(G,
@@ -159,13 +163,15 @@ def draw_graph(G, ax):
     return nodes, edges
 
 
-def animate_graph(timestep, fig, model, G_list):
+def animate_graph(timestep, fig, model, G_list, seed):
+    if not seed:
+        seed = 42
     fig.clf()
     ax = fig.gca()
     ax = set_ax_params(ax, model, timestep)
 
     current_G = G_list[timestep % len(G_list)]
-    return draw_graph(current_G, ax)
+    return draw_graph(current_G, ax, seed)
 
 
 def store_animated_dynamic_graph():
@@ -178,11 +184,12 @@ def store_animated_dynamic_graph():
 
                     fig = plt.figure()
                     fig.set_size_inches(20, 14)
-                    anim = ani.FuncAnimation(fig,
-                                             animate_graph,
-                                             frames=ref.config_obj.time_steps,
-                                             fargs=(fig, ref.model,
-                                                    ref.G_list))
+                    anim = ani.FuncAnimation(
+                        fig,
+                        animate_graph,
+                        frames=ref.config_obj.time_steps,
+                        fargs=(fig, ref.model, ref.G_list,
+                               ref.config_obj.random_seed))
                     anim.save(osp.join(ref.config_obj.example_path, 'results',
                                        'dyn_graph.gif'),
                               writer=ani.PillowWriter(fps=5))
