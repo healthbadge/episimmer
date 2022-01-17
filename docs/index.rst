@@ -43,6 +43,7 @@ Contents
    userguide/policy
    userguide/vulnerability_detection
    userguide/misc
+   userguide/examples
 
 
 .. toctree::

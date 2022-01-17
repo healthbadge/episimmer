@@ -41,3 +41,11 @@ Or you can install from source
     python setup.py install
 
 If you do not have root access, you should add the ``--user`` option to the above lines.
+
+
+Documentation
+---------------
+
+.. include:: ../README.md
+    :parser: myst_parser.sphinx_
+    :start-line: 2

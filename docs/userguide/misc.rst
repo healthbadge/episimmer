@@ -1,11 +1,7 @@
 
-Miscellaneous
+Extra Reading
 =====================================
 
-How are Events modelled?
----------------------------
-
-Events
 
 Agent-Based models (ABM) vs Equation-Based models (EBM)
 --------------------------------------------------------

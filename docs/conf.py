@@ -12,6 +12,7 @@ import datetime
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
 import os
+import os.path as osp
 import sys
 
 sys.path.insert(0, os.path.abspath('..'))
@@ -38,16 +39,43 @@ release = __version__
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    'sphinx.ext.autodoc',
-    'sphinx.ext.autosummary',
-    'sphinx.ext.intersphinx',
-    'sphinx.ext.mathjax',
-    'sphinx.ext.napoleon',
-    'sphinx.ext.viewcode',
-    'sphinx.ext.githubpages',
-    'sphinx.ext.coverage',
-    'sphinx.ext.autosectionlabel',
+    'sphinx.ext.autodoc', 'sphinx.ext.autosummary', 'sphinx.ext.intersphinx',
+    'sphinx.ext.mathjax', 'sphinx.ext.napoleon', 'sphinx.ext.viewcode',
+    'sphinx.ext.githubpages', 'sphinx.ext.coverage',
+    'sphinx.ext.autosectionlabel', 'myst_parser'
 ]
+
+# Examples
+examples = {}
+sub_examples_list = [
+    s for s in os.listdir('../examples')
+    if osp.isdir(osp.join('../examples', s))
+]
+for j in sorted(sub_examples_list):
+    examples[j] = {}
+    examples[j]['read_me_path'] = osp.join('../../examples', j, 'README.md')
+    examples_list = [
+        p for p in os.listdir(osp.join('../examples', j))
+        if osp.isdir(osp.join('../examples', j, p))
+        and osp.isfile(osp.join('../examples', j, p, 'config.txt'))
+    ]
+    for i, example in enumerate(sorted(examples_list)):
+        example_path = osp.join('../examples', j, example)
+        examples[j][example] = {}
+        for k in sorted(os.listdir(example_path)):
+            if osp.isfile(osp.join(example_path, k)):
+                if k == 'README.md':
+                    examples[j][example]['read_me_path'] = osp.join(
+                        '../', example_path, k)
+                else:
+                    examples[j][example][k] = {}
+                    examples[j][example][k]['name'] = k
+                    line_count = sum(1
+                                     for _ in open(osp.join(example_path, k)))
+                    examples[j][example][k][
+                        'line_count'] = line_count if line_count < 200 else 200
+                    examples[j][example][k]['path'] = osp.join(
+                        '../', example_path, k)
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -70,8 +98,11 @@ html_theme = 'sphinx_rtd_theme'
 html_static_path = ['_static']
 add_module_names = False
 autodoc_member_order = 'bysource'
-rst_context = {'episimmer': episimmer}
 autodoc_typehints = 'description'
+# suppress_warnings = ['autosectionlabel.*']
+# autosectionlabel_maxdepth = 1
+
+rst_context = {'episimmer': episimmer, 'examples': examples}
 
 
 def setup(app):
