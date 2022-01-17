@@ -9,6 +9,18 @@ discover and hone the opportunities and optimizations they could make to their C
 From the most simple decisions (Which days to be online or offline) to more complex strategies (What restrictions should I put on library use?,
 How many times should I test?, Whom do I test?) Episimmer is the tool for the job.
 
+Episimmer is an agent-based epidemic simulator which allows you to model any kind of disease spreading environment. With the help
+of simple text files, you can have your agents and the interaction network setup in no time. Here are some example
+of the environments you can create.
+
+
+
+Episimmer also allows easy creation of compartmental disease models. You can be as creative as you like, for example, you can set up a disease model as large as this
+
+
+Or you could even model a fancy Zombie Apocalypse disease model like this
+
+
 ## Installation
 
 ### Prerequisites
@@ -72,14 +84,15 @@ optional arguments:
 -viz or --vizdyn : Creates a gif of the simulation environment progressing through the days. Default = False
 ```
 
-## Getting started
-You can start using Episimmer by following the tutorials given below :
+## Tutorials
 
-[Tutorial 1 : Getting started with Episimmer](https://docs.google.com/document/d/1PHMlz4W5gl_SpW8u1kWJEqzsAtW6NOWvePSMre9auT4/edit?usp=sharing) <br>
-[Tutorial 2.0 : Episimmer Basic Modelling Theory](https://docs.google.com/document/d/1BujPmaEOGoJn6_B0DAhIUUlROKBt4gIlG13Kl9kDRh4/edit?usp=sharing) <br>
-[Tutorial 2.1 : Modifications to the compartment model](https://docs.google.com/document/d/1vn8xc95bCQ7K09lMuc3ijHfSeDPa6Nd28tko-19SlnQ/edit?usp=sharing) <br>
-[Tutorial 2.2 : Modifications to interaction spaces](https://docs.google.com/document/d/17QNw3BUEclqjtuoN6bd3pFNHsbzNIu2Bo0L1BCPS_A4/edit?usp=sharing) <br>
-[Tutorial 3 : Introduction to Intervention and Policy](https://docs.google.com/document/d/121CdfYRg1144kZJoyJMq4xwfuM6vVdLn8bDnMIMMzoY/edit?usp=sharing) <br>
+Check out Episimmer's [official documentation](https://episimmer.readthedocs.io/en/latest/) for a complete tutorial on the simulator. You may also go through these colab notebooks for a more hands-on tutorial on Episimmer:
+
+1. [Tutorial 1 - Episimmer Basics](https://colab.research.google.com/github/healthbadge/episimmer/blob/master/scripts/Tutorial1.ipynb)
+2. [Tutorial 2 - The Environment](https://colab.research.google.com/github/healthbadge/episimmer/blob/master/scripts/Tutorial2.ipynb)
+3. [Tutorial 3 - Disease Modelling](https://colab.research.google.com/github/healthbadge/episimmer/blob/master/scripts/Tutorial3.ipynb)
+4. Tutorial 4 - Intervention Policies in Episimmer (WIP)
+5. Tutorial 5 - Vulnerability Detection in Episimmer (WIP)
 
 
 ## UI
