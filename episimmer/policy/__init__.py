@@ -4,8 +4,10 @@ from .lockdown_policy import (AgentLockdown, AgentPolicyBasedLockdown,
 from .testing_policy import Machine, TestPolicy, TestResult, TestTube
 from .vaccination_policy import VaccinationPolicy, VaccineResult, VaccineType
 
-__all__ = [
-    'AgentPolicy', 'FullLockdown', 'AgentLockdown', 'AgentPolicyBasedLockdown',
-    'TestPolicy', 'TestTube', 'Machine', 'TestResult', 'VaccinationPolicy',
-    'VaccineType', 'VaccineResult'
+lockdown_classes = [
+    'AgentPolicy', 'FullLockdown', 'AgentLockdown', 'AgentPolicyBasedLockdown'
 ]
+test_classes = ['TestPolicy', 'TestTube', 'Machine', 'TestResult']
+vaccine_classes = ['VaccinationPolicy', 'VaccineType', 'VaccineResult']
+__all__ = lockdown_classes + test_classes + vaccine_classes
+classes = __all__
