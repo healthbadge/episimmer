@@ -14,11 +14,28 @@ of simple text files, you can have your agents and the interaction network setup
 of the environments you can create.
 
 
+![SIR_2_locations.gif](docs/_figures/SIR_2_locations.gif)|![dyn_graph_random_SIR.gif](docs/_figures/dyn_graph_random_SIR.gif)
+:-------------------------:|:-------------------------:
+<b>Completely connected agents at two locations</b>  |  <b>Random Graph G(100, 0.1)</b>
+
+![Star_graph.gif](docs/_figures/Star_graph.gif)|![cellular_automaton.gif](docs/_figures/cellular_automaton.gif)|![multi_cycle.gif](docs/_figures/multi_cycle.gif)
+:-------------------------:|:-------------------------:|:-------------------------:
+<b>Star Graph</b>  |  <b>Cellular Automaton</b> | <b>Multi-cycle graph</b>
+
+The edges represent connections between the agents and the node colours represent the changing agent disease state. Disease states could be Susceptible, Infected, 
+Recovered or any possible state imaginable.
+
 
 Episimmer also allows easy creation of compartmental disease models. You can be as creative as you like, for example, you can set up a disease model as large as this
 
+<p align = "center"><img width="600" alt="Screenshot 2022-01-18 at 2 10 55 AM" src="https://user-images.githubusercontent.com/41594351/149834726-b577730a-c4f7-48fd-822c-5d3e62b0d2ba.png"> </p>
+<p align = "center"> Taken from <a href=https://www.nature.com/articles/s41591-020-0883-7> Modelling the COVID-19 epidemic and implementation of population-wide interventions in Italy</a></p>
+
+
 
 Or you could even model a fancy Zombie Apocalypse disease model like this
+
+<img width="1230" alt="Screenshot 2022-01-18 at 2 03 35 AM" src="https://user-images.githubusercontent.com/41594351/149834011-a90fcae3-7a69-4b4d-b723-8d8be0ef8001.png">
 
 
 ## Installation
