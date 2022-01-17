@@ -16,7 +16,7 @@ normal_colors = ['blue', 'green', 'black', 'yellow', 'brown', 'white']
 
 class StochasticModel():
     """
-    Class for the stochastic model.
+    Class for the Stochastic model.
 
     Args:
         individual_state_types: The states in the compartment model
@@ -127,7 +127,7 @@ class StochasticModel():
 
     def p_standard(self, p: float) -> Callable:
         """
-        This function can be used by the user in ``UserModel.py`` to define a fixed probability.
+        This function can be used by the user in ``UserModel.py`` specifies an independent transition with a fixed probability.
         It returns a partial function of :meth:`~full_p_standard`.
 
         Args:
@@ -155,8 +155,8 @@ class StochasticModel():
 
     def p_function(self, fn: Callable) -> Callable:
         """
-        This function can be used by the user in ``UserModel.py`` to specify the probability of transition
-        with a user-defined function.
+        This function can be used by the user in ``UserModel.py`` to specify an independent transition
+        with a user-defined function defining the probability of transition.
         It returns a partial function of :meth:`~full_p_function`.
 
         Args:
@@ -171,7 +171,7 @@ class StochasticModel():
                          p_infected_states_list: Union[List[float], None],
                          agent: Agent, agents: Dict[str, Agent]) -> float:
         """
-        This function specifies a dependent transition. Returns the probability of infection based on
+        This function returns the probability of infection based on
         all types of interaction between the current agent and other agents.
 
         Args:
@@ -201,7 +201,8 @@ class StochasticModel():
     def p_infection(self, p_infected_states_list: Union[List[float], None],
                     fn: Union[Callable, None]) -> Callable:
         """
-        This function can be used by the user in ``UserModel.py`` to specify a dependent transition.
+        This function can be used by the user in ``UserModel.py`` to specify a dependent transition. The transition
+        probability is based on all the types of interactions between the agents.
         Returns a partial function of :meth:`~full_p_infection`.
 
         Args:
@@ -295,14 +296,13 @@ class StochasticModel():
 
 class ScheduledModel():
     """
-    Class for the scheduled model.
+    Class for the Scheduled model.
     """
     def __init__(self):
         self.recieve_fn: Union[Callable, None] = None
         self.contribute_fn: Union[Callable, None] = None
         self.individual_state_types: List[str] = []
-        self.state_transition_fn: Dict[str, Callable] = {
-        }  #One of Scheduled or Dependant
+        self.state_transition_fn: Dict[str, Callable] = {}
         self.state_mean: Dict[str, Union[int, None]] = {}
         self.state_vary: Dict[str, Union[int, None]] = {}
         self.infected_states: List[str] = []
@@ -318,13 +318,19 @@ class ScheduledModel():
                      vary: Union[int, None], transition_fn: Callable,
                      infected_state: bool, proportion: float) -> None:
         """
-        Inserts a state into the model.
+        Inserts a state into the model and schedules the agent for this state using a Normal
+        distribution. The mean and variance are passed here as parameters to the Normal distribution. The user
+        must specify one of the following functions for the transition function
+
+        * :meth:`~scheduled`
+
+        * :meth:`~p_infection`
 
         Args:
             state: The state to be inserted
-            mean: The mean threshold time steps for which the state is scheduled for before an agent transitions
-            vary: The variable time steps for which the state can be scheduled for before an agent transitions
-            transition_fn: A function that encodes the states an agent can transition into from the current state
+            mean: The mean parameter of the Normal distribution
+            vary: The variance parameter of the Normal distribution
+            transition_fn: A function that encodes the states the agent can transition into from the current state
             infected_state: Defines whether the state is infectious
             proportion: Initial proportion of the state
         """
@@ -346,14 +352,19 @@ class ScheduledModel():
                                                len(normal_colors)]
             self.color_index[1] += 1
 
-    def insert_state_custom(self, state, fn, transition_fn, infected_state,
-                            proportion) -> None:
+    def insert_state_custom(self, state: str, fn: Callable,
+                            transition_fn: Callable, infected_state: bool,
+                            proportion: float) -> None:
         """
-        Inserts a state with custom scheduling specified by the user-defined function.
-        This function can be used for custom (not Normal) distributions.
+        Inserts a state innto the model and schedules the agent for this state using a custom distribution
+        specified by the user-defined function. The user must specify one of the following functions for the transition function
+
+        * :meth:`~scheduled`
+
+        * :meth:`~p_infection`
 
         Args:
-            state: he state to be inserted
+            state: The state to be inserted
             fn: User-defined function that encodes the scheduled time step for transition
             transition_fn: A function that encodes the states an agent can transition into from the current state
             infected_state: Defines whether the state is infectious
@@ -381,7 +392,7 @@ class ScheduledModel():
         Initializes the states of the agents based on state proportions.
 
         Args:
-            agents: A dictionary mapping agent indices to agent objects
+            agents: A dictionary mapping from agent indices to agent objects
         """
         proportion_sum = 0
         for p in self.state_proportion.values():
@@ -439,7 +450,7 @@ class ScheduledModel():
 
         Args:
             agent: The agent whose next state is to be determined
-            agents: A dictionary mapping agent indices to agent objects
+            agents: A dictionary mapping from agent indices to agent objects
 
         Returns:
             The new state of the agent
@@ -458,7 +469,7 @@ class ScheduledModel():
         Args:
             new_states: A dictionary mapping states to proportion an agent from the current state can transition to
             agent: An agent object
-            agents: A dictionary mapping agent indices to agent objects
+            agents: A dictionary mapping from agent indices to agent objects
 
         Returns:
             The new state of the agent and its scheduled time
@@ -469,11 +480,12 @@ class ScheduledModel():
 
     def scheduled(self, new_states: Dict[str, float]) -> Callable:
         """
-        This function can be used by the user in ``UserModel.py`` to specify that the state change is scheduled.
+        This function can be used by the user in ``UserModel.py`` to specify an independent transition. The transition
+        will occur based on a calculated scheduled time of stay for the state.
         Returns a partial function of :meth:`~full_scheduled`.
 
         Args:
-            new_states: A dictionary mapping states to proportion an agent from the current state can transition to
+            new_states: A dictionary mapping states to proportions an agent from the current state can transition to
 
         Returns:
             A partial function of :meth:`~full_scheduled`
@@ -490,30 +502,12 @@ class ScheduledModel():
     def p_function(self, new_states):
         return partial(self.full_p_function, new_states)
 
-    def p_infection(self, p_infected_states_list: List[Union[float, None]],
-                    fn: Union[Callable,
-                              None], new_states: Dict[str, float]) -> Callable:
-        """
-        This function can be used by the user in ``UserModel.py`` to specify that state change is driven by interaction with another state.
-        Returns a partial function of :meth:`~full_p_infection`.
-
-        Args:
-            p_infected_states_list: List of probabilities that can be used in the user-defined function fn
-            fn: User-defined function defining the probability of infection based on individual/probabilistic interactions
-            new_states: A dictionary mapping states to proportion an agent from the current state can transition to
-
-        Returns:
-            A partial function of :meth:`~full_p_infection`
-        """
-        return partial(self.full_p_infection, fn, p_infected_states_list,
-                       new_states)
-
     def full_p_infection(self, fn: Callable,
                          p_infected_states_list: List[Union[float, None]],
                          new_states: Dict[str, float], agent: Agent,
                          agents: Dict[str, Agent]) -> Tuple[str, int]:
         """
-        This function specifies a dependent transition. Returns a new state from new_states and its scheduled time based on
+        This function returns returns a new state from new_states and its scheduled time based on
         all types of interaction between the current agent and other agents.
 
         Args:
@@ -521,11 +515,12 @@ class ScheduledModel():
             p_infected_states_list: List of probabilities that can be used in the user-defined function fn
             new_states: A dictionary mapping states to proportion an agent from the current state can transition to
             agent: Current agent object
-            agents: A dictionary mapping agent indices to agent objects
+            agents: A dictionary mapping from agent indices to agent objects
 
         Returns:
             The new state of the agent and its scheduled time
         """
+
         new_state = self.choose_one_state(new_states)
         p_not_inf = 1
         for c_dict in agent.contact_list:
@@ -547,6 +542,25 @@ class ScheduledModel():
 
         scheduled_time = self.find_scheduled_time(new_state)
         return new_state, scheduled_time
+
+    def p_infection(self, p_infected_states_list: List[Union[float, None]],
+                    fn: Union[Callable,
+                              None], new_states: Dict[str, float]) -> Callable:
+        """
+        This function can be used by the user in ``UserModel.py`` to specify a dependent transition. The transition
+        probability is based on all the types of interactions between the agents.
+        Returns a partial function of :meth:`~full_p_infection`.
+
+        Args:
+            p_infected_states_list: List of probabilities that can be used in the user-defined function fn
+            fn: User-defined function defining the probability of infection based on individual/probabilistic interactions
+            new_states: A dictionary mapping states to proportion an agent from the current state can transition to
+
+        Returns:
+            A partial function of :meth:`~full_p_infection`
+        """
+        return partial(self.full_p_infection, fn, p_infected_states_list,
+                       new_states)
 
     def choose_one_state(self, state_dict: Dict[str, float]) -> str:
         """
