@@ -46,7 +46,7 @@ Episimmer also allows easy creation of compartmental disease models. You can be 
 
 Or you could even model a fancy Zombie Apocalypse disease model like this
 <p align = "center"><img width="600" alt="Zombie Apocalypse" src="docs/_figures/Light/zombie_apo.png#gh-light-mode-only"> </p>
-<p align = "center"><img width="600" alt="Zombie Apocalypse" src="docs/_figures/zombie_apo_dark.png#gh-dark-mode-only"> </p>
+<p align = "center"><img width="600" alt="Zombie Apocalypse" src="docs/_figures/Dark/zombie_apo_dark.png#gh-dark-mode-only"> </p>
 <p align = "center"> <b> Zombie Apocalypse </b> </p>
 
 
