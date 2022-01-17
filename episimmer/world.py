@@ -9,6 +9,7 @@ from .utils.visualize import plot_results, store_animated_time_plot
 
 
 class World():
+
     def __init__(self, config_obj, model, policy_list, event_restriction_fn,
                  agents_filename, interactionFiles_list,
                  probabilistic_interactionFiles_list, locations_filename,

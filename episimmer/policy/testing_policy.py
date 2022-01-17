@@ -8,6 +8,7 @@ from .base import AgentPolicy
 
 
 class TestResult():
+
     def __init__(self, result, agent, machine_name, time_step,
                  machine_start_step, time_step_done):
         self.result = result
@@ -25,6 +26,7 @@ class TestResult():
 
 
 class Machine():
+
     def __init__(self, machine_name, cost, false_positive_rate,
                  false_negative_rate, turnaround_time, capacity):
         self.machine_name = machine_name
@@ -128,6 +130,7 @@ class Machine():
 
 
 class TestTube():
+
     def __init__(self):
         self.testtube_agent_dict = {}
         self.testtube_result = None
@@ -164,6 +167,7 @@ class TestTube():
 
 
 class TestPolicy(AgentPolicy):
+
     def __init__(self, agents_per_step_fn=None):
         super().__init__()
         self.policy_type = 'Testing'

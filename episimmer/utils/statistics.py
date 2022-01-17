@@ -127,7 +127,9 @@ def save_to_text_file(example_path, str, text_filename):
 
 
 def save_stats(obj_lev_tuples, key, final_level_properties='All'):
+
     def decorator(func):
+
         @functools.wraps(func)
         def wrapper(ref, *args, **kwargs):
             func(ref, *args, **kwargs)
@@ -149,7 +151,9 @@ def save_stats(obj_lev_tuples, key, final_level_properties='All'):
 
 
 def write_stats(pickle_file, text_file):
+
     def decorator(func):
+
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
             func(*args, **kwargs)

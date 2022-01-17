@@ -1,4 +1,5 @@
 class Location():
+
     def __init__(self, info_dict):
         self.info = info_dict
         self.index = info_dict['Location Index']

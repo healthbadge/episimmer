@@ -23,6 +23,7 @@ class StochasticModel():
         infected_states: The states that are infectious
         state_proportion: Starting proportions of each state
     """
+
     def __init__(self, individual_state_types: List[str],
                  infected_states: List[str], state_proportion: Dict[str,
                                                                     float]):
@@ -298,6 +299,7 @@ class ScheduledModel():
     """
     Class for the Scheduled model.
     """
+
     def __init__(self):
         self.recieve_fn: Union[Callable, None] = None
         self.contribute_fn: Union[Callable, None] = None

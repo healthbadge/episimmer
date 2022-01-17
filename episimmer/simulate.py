@@ -6,6 +6,7 @@ from .utils.visualize import save_env_graph, store_animated_dynamic_graph
 
 
 class Simulate():
+
     def __init__(self, config_obj, model, policy_list, event_restriction_fn,
                  agents_obj, locations_obj):
         self.agents_obj = agents_obj

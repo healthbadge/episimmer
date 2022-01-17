@@ -11,6 +11,7 @@ from .utils.time import Time
 
 
 class ReadConfiguration():
+
     def __init__(self, filename):
         self.worlds = None
         self.time_steps = None
@@ -178,6 +179,7 @@ class ReadConfiguration():
 
 
 class ReadVDConfiguration():
+
     def __init__(self, filename):
         self.target = None
         self.algorithm = None
@@ -226,6 +228,7 @@ class ReadFilesList():
     """
     Reads environment components that contains the list of file lists files.
     """
+
     def __init__(self, filename):
         self.file_list = []
         f = open(filename, 'r')
@@ -239,6 +242,7 @@ class ReadFilesList():
 
 
 class BaseReadFile():
+
     def __init__(self):
         pass
 
@@ -249,6 +253,7 @@ class BaseReadFile():
 
 
 class ReadAgents(BaseReadFile):
+
     def __init__(self, filename, config_obj):
         super().__init__()
 
@@ -303,6 +308,7 @@ class ReadAgents(BaseReadFile):
 
 
 class ReadInteractions(BaseReadFile):
+
     def __init__(self, filename, config_obj, agents_obj):
         super().__init__()
         self.config_obj = config_obj
@@ -367,6 +373,7 @@ class ReadInteractions(BaseReadFile):
 
 
 class ReadProbabilisticInteractions(BaseReadFile):
+
     def __init__(self, filename, config_obj, agents_obj):
         super().__init__()
         self.config_obj = config_obj
@@ -437,6 +444,7 @@ class ReadProbabilisticInteractions(BaseReadFile):
 
 
 class ReadLocations(BaseReadFile):
+
     def __init__(self, filename, config_obj):
         super().__init__()
         self.config_obj = config_obj
@@ -469,6 +477,7 @@ class ReadLocations(BaseReadFile):
 
 
 class ReadEvents(BaseReadFile):
+
     def __init__(self, filename, config_obj, locations_obj, agents_obj):
         super().__init__()
         self.config_obj = config_obj
@@ -522,6 +531,7 @@ class ReadEvents(BaseReadFile):
 
 
 class ReadOneTimeEvents(BaseReadFile):
+
     def __init__(self, filename):
         super().__init__()
         self.filename = filename

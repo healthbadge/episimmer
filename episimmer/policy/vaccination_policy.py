@@ -6,6 +6,7 @@ from .base import AgentPolicy
 
 
 class VaccineResult():
+
     def __init__(self, vaccine_name, agent, result, time_step, efficacy,
                  decay_days, current_dose):
         self.vaccine_name = vaccine_name
@@ -17,6 +18,7 @@ class VaccineResult():
 
 
 class VaccineType():
+
     def __init__(self,
                  name,
                  cost,
@@ -56,6 +58,7 @@ class VaccineType():
 
 
 class VaccinationPolicy(AgentPolicy):
+
     def __init__(self, agents_per_step_fn=None):
         super().__init__()
 

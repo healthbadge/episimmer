@@ -1,4 +1,5 @@
 class AgentPolicy():
+
     def __init__(self):
         self.policy_type = None
 

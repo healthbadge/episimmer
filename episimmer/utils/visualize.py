@@ -115,7 +115,9 @@ def get_interaction_graph_from_object(obj):
 
 
 def save_env_graph():
+
     def decorator(func):
+
         @functools.wraps(func)
         def wrapper(ref, *args, **kwargs):
             func(ref, *args, **kwargs)
@@ -169,7 +171,9 @@ def animate_graph(timestep, fig, model, G_list):
 
 
 def store_animated_dynamic_graph():
+
     def decorator(func):
+
         @functools.wraps(func)
         def wrapper(ref, *args, **kwargs):
             if ref.config_obj.worlds - 1 == Time.get_current_world():

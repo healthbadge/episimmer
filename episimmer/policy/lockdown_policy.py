@@ -2,6 +2,7 @@ from .base import AgentPolicy
 
 
 class FullLockdown(AgentPolicy):
+
     def __init__(self, do_lockdown_fn, p=0.0):
         self.policy_type = 'Restrict'
         self.do_lockdown_fn = do_lockdown_fn
@@ -15,6 +16,7 @@ class FullLockdown(AgentPolicy):
 
 
 class AgentLockdown(AgentPolicy):
+
     def __init__(self, parameter, value_list, do_lockdown_fn, p=0.0):
         self.policy_type = 'Restrict'
         self.do_lockdown_fn = do_lockdown_fn
@@ -31,6 +33,7 @@ class AgentLockdown(AgentPolicy):
 
 
 class AgentPolicyBasedLockdown(AgentPolicy):
+
     def __init__(self,
                  policy_to_consider,
                  value_list,
