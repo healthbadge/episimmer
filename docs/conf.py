@@ -71,6 +71,7 @@ html_static_path = ['_static']
 add_module_names = False
 autodoc_member_order = 'bysource'
 rst_context = {'episimmer': episimmer}
+autodoc_typehints = 'description'
 
 
 def setup(app):
