@@ -153,7 +153,7 @@ def draw_graph(G, ax, seed):
     # pos = dict(zip(pos, temp))
 
     # Layout positions
-    pos = nx.spring_layout(G, seed=int(1))
+    pos = nx.spring_layout(G, seed=int(seed))
 
     nodes = nx.draw_networkx_nodes(G, pos, node_color=color.values(), ax=ax)
     edges = nx.draw_networkx_edges(G,
