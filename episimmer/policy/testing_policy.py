@@ -178,7 +178,7 @@ class TestPolicy(AgentPolicy):
         assert callable(agents_per_step_fn)
         self.agents_per_step_fn = agents_per_step_fn
 
-    def reset(self):
+    def reset(self, agents=None, policy_index=None):
         self.statistics = {}
         self.ready_queue = deque()
         for machine in self.machine_list:
@@ -188,12 +188,16 @@ class TestPolicy(AgentPolicy):
             machine.available = True
             machine.start_step = None
 
-    def enact_policy(self, time_step, agents, locations, model):
-
+    def enact_policy(self,
+                     time_step,
+                     agents,
+                     locations,
+                     model,
+                     policy_index=None):
         self.new_time_step(time_step)
         self.populate_results_in_machine(time_step)
         self.release_results(time_step)
-        self.register_agent_testtube_func(agents, time_step)
+        self.register_agent_testtube_func(agents.values(), time_step)
         self.add_partial_to_ready_queue()
         self.register_testtubes_to_machines(time_step)
         self.run_tests(model, time_step)

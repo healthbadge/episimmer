@@ -74,13 +74,18 @@ class VaccinationPolicy(AgentPolicy):
         assert callable(agents_per_step_fn)
         self.agents_per_step_fn = agents_per_step_fn
 
-    def enact_policy(self, time_step, agents, locations, model=None):
+    def enact_policy(self,
+                     time_step,
+                     agents,
+                     locations,
+                     model=None,
+                     policy_index=None):
 
         self.newday(time_step)
-        self.set_protection(agents)
-        self.registered_agent_vaccine_func(agents, time_step)
+        self.set_protection(agents.values())
+        self.registered_agent_vaccine_func(agents.values(), time_step)
         self.populate_results()
-        self.restrict_agents(agents)
+        self.restrict_agents(agents.values())
         self.get_stats()
 
     def newday(self, time_step):
