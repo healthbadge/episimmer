@@ -1,5 +1,4 @@
 import random
-from itertools import filterfalse
 
 from .read_file import (ReadEvents, ReadInteractions,
                         ReadProbabilisticInteractions)
@@ -143,6 +142,7 @@ class Simulate():
         contact_agent = self.agents_obj.agents[contact_index]
         if r < contact_agent.can_contribute_infection and r < agent.can_recieve_infection:
             return True
+        return False
 
     def store_event_lists(self, event_info):
         event_info['can_contrib'] = []

@@ -138,13 +138,14 @@ class TestingBasedLockdown(LockdownPolicy):
 
     def lockdown_contacts(self, agents):
         for agent in agents.values():
-            max_state = 0
+            max_schedule_time = 0
             agent_ct_policy = agent.get_policy_state('Contact_Tracing')
             if agent_ct_policy is not None:
                 for policy_index in agent_ct_policy.keys():
                     agent_ct_scheduled_time = agent_ct_policy[policy_index][
                         'schedule_time']
                     if agent_ct_scheduled_time is not None:
-                        max_state = max(max_state, agent_ct_scheduled_time)
-                if max_state > 0:
+                        max_schedule_time = max(max_schedule_time,
+                                                agent_ct_scheduled_time)
+                if max_schedule_time > 0:
                     self.lockdown_agent(agent)

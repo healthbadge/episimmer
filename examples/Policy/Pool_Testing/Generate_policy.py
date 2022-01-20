@@ -18,7 +18,7 @@ def generate_policy():
 	Pool_Testing.set_register_agent_testtube_func(Pool_Testing.random_agents(5,2))
 	policy_list.append(Pool_Testing)
 
-	ATP = lockdown_policy.AgentPolicyBasedLockdown('Testing',['Positive'],lambda x:random.random()<0.95,10)
+	ATP = lockdown_policy.TestingBasedLockdown(lambda x:random.random()<0.95,10)
 	policy_list.append(ATP)
 
 	def event_restriction_fn(agent,event_info,current_time_step):
