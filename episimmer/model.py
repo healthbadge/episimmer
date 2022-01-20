@@ -423,10 +423,7 @@ class ScheduledModel(BaseModel):
         self.state_proportion[state] = proportion
         self.state_fn[state] = fn
 
-        if infected_state:
-            self.set_state_color(state, True)
-        else:
-            self.set_state_color(state, False)
+        self.set_state_color(state, infected_state)
 
     def initalize_states(self, agents: Dict[str, Agent]) -> None:
         """
