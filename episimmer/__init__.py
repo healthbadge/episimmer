@@ -4,7 +4,7 @@ from . import policy, utils, vulnerability_detection
 from .agent import Agent
 from .location import Location
 from .main import main
-from .model import ScheduledModel, StochasticModel
+from .model import BaseModel, ScheduledModel, StochasticModel
 from .policy import (AgentLockdown, AgentPolicy, AgentPolicyBasedLockdown,
                      FullLockdown, Machine, TestPolicy, TestResult, TestTube,
                      VaccinationPolicy, VaccineResult, VaccineType)
