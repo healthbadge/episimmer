@@ -1,13 +1,17 @@
 from .base import AgentPolicy
-from .lockdown_policy import (AgentLockdown, AgentPolicyBasedLockdown,
-                              FullLockdown)
+from .contact_tracing_policy import CTPolicy
+from .lockdown_policy import (AgentLockdown, FullLockdown, LockdownPolicy,
+                              TestingBasedLockdown)
 from .testing_policy import Machine, TestPolicy, TestResult, TestTube
 from .vaccination_policy import VaccinationPolicy, VaccineResult, VaccineType
 
 lockdown_classes = [
-    'AgentPolicy', 'FullLockdown', 'AgentLockdown', 'AgentPolicyBasedLockdown'
+    'FullLockdown', 'AgentLockdown', 'LockdownPolicy', 'TestingBasedLockdown'
 ]
 test_classes = ['TestPolicy', 'TestTube', 'Machine', 'TestResult']
 vaccine_classes = ['VaccinationPolicy', 'VaccineType', 'VaccineResult']
-__all__ = lockdown_classes + test_classes + vaccine_classes
+contact_tracing_classes = ['CTPolicy']
+__all__ = [
+    'AgentPolicy'
+] + lockdown_classes + test_classes + vaccine_classes + contact_tracing_classes
 classes = __all__

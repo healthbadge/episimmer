@@ -2,10 +2,13 @@ class AgentPolicy():
     def __init__(self):
         self.policy_type = None
 
-    def enact_policy(self, time_step, agents, locations, model):
+    def enact_policy(self, time_step, agents, locations, model, policy_index):
         pass
 
-    def reset(self):
+    def reset(self, agents, policy_index):
+        pass
+
+    def post_policy(self, time_step, agents, locations, model, policy_index):
         pass
 
     def update_agent_policy_history(self, agent, history_value):

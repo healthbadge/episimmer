@@ -1,3 +1,5 @@
+import random
+
 from .read_file import (ReadEvents, ReadInteractions,
                         ReadProbabilisticInteractions)
 from .utils.statistics import save_stats
@@ -29,8 +31,8 @@ class Simulate():
         self.model.initalize_states(self.agents_obj.agents)
 
         #Reset Policies
-        for policy in self.policy_list:
-            policy.reset()
+        for policy_index, policy in enumerate(self.policy_list):
+            policy.reset(self.agents_obj.agents.values(), policy_index)
 
         #Update State list
         for agent in self.agents_obj.agents.values():
@@ -86,11 +88,23 @@ class Simulate():
                                            self.agents_obj)
 
         #Enact policies by updating agent and location states.
-        for policy in self.policy_list:
+        for policy_index, policy in enumerate(self.policy_list):
             policy.enact_policy(Time.get_current_time_step(),
-                                self.agents_obj.agents.values(),
+                                self.agents_obj.agents,
                                 self.locations_obj.locations.values(),
-                                self.model)
+                                self.model, policy_index)
+
+        # Restrict agents with can_contribute_infection and can_receive_infection
+        # All interactions and events restricted by removing elements in
+        # agent.contact_list and location.events
+        self.save_valid_interactions_events()
+
+        #Enact post-policy procedures after updating agent contacts and event lists.
+        for policy_index, policy in enumerate(self.policy_list):
+            policy.post_policy(Time.get_current_time_step(),
+                               self.agents_obj.agents,
+                               self.locations_obj.locations.values(),
+                               self.model, policy_index)
 
         if events_filename != None:
             #Update event info to agents from location
@@ -121,6 +135,38 @@ class Simulate():
 
     def endTimeStep(self):
         self.store_state()
+
+    def valid_interaction(self, agent, c_dict):
+        r = random.random()
+        contact_index = c_dict['Interacting Agent Index']
+        contact_agent = self.agents_obj.agents[contact_index]
+        if r < contact_agent.can_contribute_infection and r < agent.can_recieve_infection:
+            return True
+        return False
+
+    def store_event_lists(self, event_info):
+        event_info['can_contrib'] = []
+        event_info['can_receive'] = []
+        for agent_index in event_info['Agents']:
+            r = random.random()
+            agent = self.agents_obj.agents[agent_index]
+
+            if r < agent.can_contribute_infection:
+                event_info['can_contrib'].append(agent_index)
+
+            if r < agent.can_recieve_infection:
+                event_info['can_receive'].append(agent_index)
+
+    def save_valid_interactions_events(self):
+        for agent in self.agents_obj.agents.values():
+            agent.contact_list[:] = [
+                c_dict for c_dict in agent.contact_list
+                if self.valid_interaction(agent, c_dict)
+            ]
+
+        for location in self.locations_obj.locations.values():
+            for event_info in location.events:
+                self.store_event_lists(event_info)
 
     @store_animated_dynamic_graph()
     def endSimulation(self):

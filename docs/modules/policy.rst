@@ -5,6 +5,13 @@ episimmer.policy
 .. contents:: Contents
     :local:
 
+.. currentmodule:: episimmer.policy
+
+.. autoclass:: episimmer.policy.AgentPolicy
+    :members:
+    :undoc-members:
+
+
 Lockdown Policy API
 ------------------------------
 .. currentmodule:: episimmer.policy
@@ -48,4 +55,15 @@ Vaccination Policy API
 .. autoclass:: {{ cls }}
   :members:
   :undoc-members:
+{% endfor %}
+
+
+Contact Tracing Policy API
+-------------------------------
+.. currentmodule:: episimmer.policy
+
+{% for cls in episimmer.policy.contact_tracing_classes %}
+.. autoclass:: {{ cls }}
+   :members:
+   :undoc-members:
 {% endfor %}

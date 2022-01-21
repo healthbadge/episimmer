@@ -79,7 +79,7 @@ class BaseModel():
             if event_restriction_fn(agent, event_info,
                                     Time.get_current_time_step()):
                 continue
-            if random.random() < agent.can_contribute_infection:
+            if agent_index in event_info['can_contrib']:
                 ambient_infection += self.contribute_fn(
                     agent, event_info, location, Time.get_current_time_step())
 
@@ -88,7 +88,7 @@ class BaseModel():
             if event_restriction_fn(agent, event_info,
                                     Time.get_current_time_step()):
                 continue
-            if random.random() < agent.can_recieve_infection:
+            if agent_index in event_info['can_receive']:
                 p = self.recieve_fn(agent, ambient_infection, event_info,
                                     location, Time.get_current_time_step())
                 agent.add_event_result(p)
@@ -144,15 +144,12 @@ class BaseModel():
         for c_dict in agent.contact_list:
             contact_index = c_dict['Interacting Agent Index']
             contact_agent = agents[contact_index]
-            if random.random(
-            ) < contact_agent.can_contribute_infection and random.random(
-            ) < agent.can_recieve_infection:
-                p_not_inf *= (1 - fn(p_infected_states_list, contact_agent,
-                                     c_dict, Time.get_current_time_step()))
+
+            p_not_inf *= (1 - fn(p_infected_states_list, contact_agent, c_dict,
+                                 Time.get_current_time_step()))
 
         for p in agent.event_probabilities:
             p_not_inf *= (1 - p)
-
         return (1 - p_not_inf) + self.external_prev_fn(
             agent, Time.get_current_time_step())
 

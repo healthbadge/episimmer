@@ -20,7 +20,9 @@ class Agent():
         self.schedule_time_left = schedule_time_left
 
     def initialize_policy_dict(self):
-        for policy_type in ['Restrict', 'Testing', 'Vaccination']:
+        for policy_type in [
+                'Restrict', 'Testing', 'Vaccination', 'Contact_Tracing'
+        ]:
             temp = {'History': [], 'State': None}
             self.policy_dict[policy_type] = temp
 
