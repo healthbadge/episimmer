@@ -135,7 +135,7 @@ class VaccinationPolicy(AgentPolicy):
 
     def enact_policy(self,
                      time_step: int,
-                     agents: Dict[str,Agent],
+                     agents: Dict[str, Agent],
                      locations: ValuesView[Location],
                      model: Union[BaseModel, None] = None,
                      policy_index: int = None) -> None:
@@ -298,6 +298,7 @@ class VaccinationPolicy(AgentPolicy):
                     curr_agents_to_vaccinate -= 1
 
                 elif (lh is not None
+                      and lh.vaccine_name in self.available_vaccines
                       and self.available_vaccines[lh.vaccine_name]['type']
                       == 'Multi'):
                     if (lh.current_dose <
