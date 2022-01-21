@@ -137,6 +137,9 @@ class Simulate():
         self.store_state()
 
     def valid_interaction(self, agent, c_dict):
+        if agent.under_protection:
+            return False
+
         r = random.random()
         contact_index = c_dict['Interacting Agent Index']
         contact_agent = self.agents_obj.agents[contact_index]
@@ -154,7 +157,7 @@ class Simulate():
             if r < agent.can_contribute_infection:
                 event_info['can_contrib'].append(agent_index)
 
-            if r < agent.can_recieve_infection:
+            if not agent.under_protection and r < agent.can_recieve_infection:
                 event_info['can_receive'].append(agent_index)
 
     def save_valid_interactions_events(self):

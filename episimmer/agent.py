@@ -11,6 +11,7 @@ class Agent():
         self.schedule_time_left = None
         self.can_recieve_infection = 1.0
         self.can_contribute_infection = 1.0
+        self.under_protection = False
 
         self.policy_dict = {}  #Store all policy related status of agent
         self.initialize_policy_dict()
@@ -65,3 +66,6 @@ class Agent():
 
     def update_contribute_infection(self, p):
         self.can_contribute_infection = p
+
+    def protect(self):
+        self.under_protection = True
