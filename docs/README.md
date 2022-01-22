@@ -8,7 +8,7 @@ To build the documentation:
 pip install -e .[test]
 ```
 
-Note: Some shells such as Zsh require quotation marks around brackets, i.e. pip install 'stable-baselines3[extra]'
+Note: Some shells such as Zsh require quotation marks around brackets, i.e. pip install -e '.[test]'
 
 2. Generate the documentation file via:
 
