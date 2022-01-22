@@ -284,6 +284,32 @@ class TestPolicy(AgentPolicy):
         self.cur_testtubes = []
         self.num_agents_to_test = self.agents_per_step_fn(time_step)
 
+    def populate_test_queue(self, agents_to_test, num_agents_per_testtube,
+                            num_testtubes_per_agent, time_step):
+        # Create testtubes based on formula - int((ntpa x no. of agents + napt -1)/napt)
+        num_testtubes = int(
+            (num_testtubes_per_agent * self.num_agents_to_test +
+             num_agents_per_testtube - 1) / num_agents_per_testtube)
+        for _ in range(num_testtubes):
+            testtube = TestTube()
+            self.cur_testtubes.append(testtube)
+
+        # Assign agents to testtubes and populate ready queue
+        for agent in agents_to_test:
+            if (len(self.cur_testtubes) > 0):
+                cur_list = random.sample(
+                    self.cur_testtubes,
+                    min(num_testtubes_per_agent, len(self.cur_testtubes)))
+
+                for testtube in cur_list:
+                    testtube.register_agent(agent, time_step)
+
+                    if (testtube.get_num_agents() >= num_agents_per_testtube):
+                        self.ready_queue.append(testtube)
+                        self.cur_testtubes.remove(testtube)
+            else:
+                break
+
     def full_random_agents(self, num_agents_per_testtube,
                            num_testtubes_per_agent, attribute, value_list,
                            agents, time_step):
@@ -300,38 +326,49 @@ class TestPolicy(AgentPolicy):
             elif (attribute is None or agent.info[attribute] in value_list):
                 agents_to_test.append(agent)
 
-        # Create testtubes based on formula - int((ntpa x no. of agents + napt -1)/napt)
-        num_testtubes = int(
-            (num_testtubes_per_agent * self.num_agents_to_test +
-             num_agents_per_testtube - 1) / num_agents_per_testtube)
-        for _ in range(num_testtubes):
-            testtube = TestTube()
-            self.cur_testtubes.append(testtube)
-
-        # Assign agents to testtubes
-        for agent in agents_to_test:
-            if (len(self.cur_testtubes) > 0):
-                cur_list = random.sample(
-                    self.cur_testtubes,
-                    min(num_testtubes_per_agent, len(self.cur_testtubes)))
-
-                for testtube in cur_list:
-                    testtube.register_agent(agent, time_step)
-
-                    if (testtube.get_num_agents() >= num_agents_per_testtube):
-                        self.ready_queue.append(testtube)
-                        self.cur_testtubes.remove(testtube)
-            else:
-                break
+        self.populate_test_queue(agents_to_test, num_agents_per_testtube,
+                                 num_testtubes_per_agent, time_step)
 
     def random_agents(self,
                       num_agents_per_testtube=1,
                       num_testtubes_per_agent=1,
                       attribute=None,
                       value_list=[]):
-        assert isinstance(value_list, list)
         return partial(self.full_random_agents, num_agents_per_testtube,
                        num_testtubes_per_agent, attribute, value_list)
+
+    def full_state_testing(self, agent_states, num_agents_per_testtube,
+                           num_testtubes_per_agent, attribute, value_list,
+                           agents, time_step):
+
+        agents_copy = copy.copy(list(agents))
+        random.shuffle(agents_copy)
+
+        # Get agents for test
+        agents_to_test = []
+        for agent in agents_copy:
+
+            if (len(agents_to_test) == self.num_agents_to_test):
+                break
+
+            elif (attribute is None or agent.info[attribute] in value_list):
+                if agent.state in agent_states:
+                    agents_to_test.append(agent)
+
+        self.populate_test_queue(agents_to_test, num_agents_per_testtube,
+                                 num_testtubes_per_agent, time_step)
+
+    def state_testing(self,
+                      agent_states,
+                      num_agents_per_testtube=1,
+                      num_testtubes_per_agent=1,
+                      attribute=None,
+                      value_list=[]):
+
+        assert isinstance(agent_states, list)
+        return partial(self.full_state_testing, agent_states,
+                       num_agents_per_testtube, num_testtubes_per_agent,
+                       attribute, value_list)
 
     def add_partial_to_ready_queue(self):
         for testtube in self.cur_testtubes:
