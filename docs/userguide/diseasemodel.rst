@@ -213,7 +213,7 @@ in contrast with p_standard which takes only a float probability. For example -
     :linenos:
 
     def fn2(current_time_step): #People going into ICU decreases due to better drugs
-    	return max(0.02,0.1-current_time_step*0.001)
+      return max(0.02,0.1-current_time_step*0.001)
     .
     .
     .
@@ -590,3 +590,37 @@ One can also set up conditions as to who gets infected and how much as well. Thi
         self.insert_state('Recovered',0, 0,self.scheduled({'Recovered':1}),False,0)
 
         self.set_external_prevalence_fn(external_prevalence)
+
+
+**Symptomatic States**
+
+You may also set the states that represent the symptomatic states of the disease model.
+
+.. code-block:: python
+    :linenos:
+    :emphasize-lines: 21
+
+    class UserModel(model.StochasticModel):
+      def __init__(self):
+        individual_types=['Susceptible','Exposed','Asymptomatic','Symptomatic','Recovered']
+        infected_states=['Asymptomatic','Symptomatic']
+        state_proportion={
+                  'Susceptible':0.99,
+                  'Exposed':0,
+                  'Recovered':0,
+                  'Asymptomatic':0,
+                  'Symptomatic':0.01
+                }
+        model.StochasticModel.__init__(self,individual_types,infected_states,state_proportion)
+        self.set_transition('Susceptible', 'Exposed', self.p_infection(None,None))
+        self.set_transition('Exposed', 'Symptomatic', self.p_standard(0.15))
+        self.set_transition('Exposed', 'Asymptomatic', self.p_standard(0.2))
+        self.set_transition('Symptomatic', 'Recovered', self.p_standard(0.1))
+        self.set_transition('Asymptomatic', 'Recovered', self.p_standard(0.1))
+
+        self.set_event_contribution_fn(event_contribute_fn)
+        self.set_event_recieve_fn(event_recieve_fn)
+        self.set_symptomatic_states(['Symptomatic'])
+
+This is useful for modules such as the Testing Policy. You may choose to test the agents that are only symptomatic
+(showing visible signs of having the disease) rather than random agents. More on how to setup these policies :doc:`here<policy>`.

@@ -24,6 +24,7 @@ class BaseModel():
         self.recieve_fn: Union[Callable, None] = None
         self.contribute_fn: Union[Callable, None] = None
         self.external_prev_fn: Callable = lambda x, y: 0.0
+        self.symptomatic_states: Union[List[str]] = []
 
         self.infectious_colors: List[str] = ['red', 'pink', 'orange', 'purple']
         self.normal_colors: List[str] = [
@@ -119,6 +120,15 @@ class BaseModel():
             fn: User-defined function for specifying probability of infection due to external prevalence
         """
         self.external_prev_fn = fn
+
+    def set_symptomatic_states(self, states: List[str]) -> None:
+        """
+        Sets the symptomatic states of the disease model. These agents in these states have visible symptoms of the disease.
+
+        Args:
+            states: List of disease model states that are symptomatic
+        """
+        self.symptomatic_states = states
 
     def get_final_infection_prob(self, fn: Union[Callable, None],
                                  p_infected_states_list: Union[List[float],
