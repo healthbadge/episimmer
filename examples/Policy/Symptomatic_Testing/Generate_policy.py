@@ -6,10 +6,10 @@ from episimmer.policy import lockdown_policy, testing_policy
 def generate_policy():
 	policy_list=[]
 
-	# Pool Testing with specific agent states.
-	Pool_Testing = testing_policy.TestPolicy(lambda x:5)
-	Pool_Testing.add_machine('Simple_Machine', 200, 0.0, 0.0, 0, 50, 1)
-	Pool_Testing.set_register_agent_testtube_func(Pool_Testing.state_testing(['Symptomatic']))
+	# Testing only symptomatic agents.
+	Normal_Testing = testing_policy.TestPolicy(lambda x:5)
+	Normal_Testing.add_machine('Simple_Machine', 200, 0.0, 0.0, 0, 50, 1)
+	Normal_Testing.set_register_agent_testtube_func(Normal_Testing.random_agents(only_symptomatic=True))
 	policy_list.append(Pool_Testing)
 
 	ATP = lockdown_policy.TestingBasedLockdown(lambda x:random.random()<0.95,10)

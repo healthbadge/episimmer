@@ -1,5 +1,5 @@
 Random Seed <3>
-Number of worlds <3>
+Number of worlds <10>
 Number of Days <30>
 Agent Parameter Keys <Agent Index>
 Agent list filename <agents.txt>

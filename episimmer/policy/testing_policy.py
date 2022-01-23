@@ -197,7 +197,7 @@ class TestPolicy(AgentPolicy):
         self.new_time_step(time_step)
         self.populate_results_in_machine(time_step)
         self.release_results(time_step)
-        self.register_agent_testtube_func(agents.values(), time_step)
+        self.register_agent_testtube_func(agents.values(), time_step, model)
         self.add_partial_to_ready_queue()
         self.register_testtubes_to_machines(time_step)
         self.run_tests(model, time_step)
@@ -311,8 +311,8 @@ class TestPolicy(AgentPolicy):
                 break
 
     def full_random_agents(self, num_agents_per_testtube,
-                           num_testtubes_per_agent, attribute, value_list,
-                           agents, time_step):
+                           num_testtubes_per_agent, only_symptomatic,
+                           attribute, value_list, agents, time_step, model):
         agents_copy = copy.copy(list(agents))
         random.shuffle(agents_copy)
 
@@ -324,7 +324,8 @@ class TestPolicy(AgentPolicy):
                 break
 
             elif (attribute is None or agent.info[attribute] in value_list):
-                agents_to_test.append(agent)
+                if not only_symptomatic or agent.state in model.symptomatic_states:
+                    agents_to_test.append(agent)
 
         self.populate_test_queue(agents_to_test, num_agents_per_testtube,
                                  num_testtubes_per_agent, time_step)
@@ -332,43 +333,12 @@ class TestPolicy(AgentPolicy):
     def random_agents(self,
                       num_agents_per_testtube=1,
                       num_testtubes_per_agent=1,
+                      only_symptomatic=False,
                       attribute=None,
                       value_list=[]):
         return partial(self.full_random_agents, num_agents_per_testtube,
-                       num_testtubes_per_agent, attribute, value_list)
-
-    def full_state_testing(self, agent_states, num_agents_per_testtube,
-                           num_testtubes_per_agent, attribute, value_list,
-                           agents, time_step):
-
-        agents_copy = copy.copy(list(agents))
-        random.shuffle(agents_copy)
-
-        # Get agents for test
-        agents_to_test = []
-        for agent in agents_copy:
-
-            if (len(agents_to_test) == self.num_agents_to_test):
-                break
-
-            elif (attribute is None or agent.info[attribute] in value_list):
-                if agent.state in agent_states:
-                    agents_to_test.append(agent)
-
-        self.populate_test_queue(agents_to_test, num_agents_per_testtube,
-                                 num_testtubes_per_agent, time_step)
-
-    def state_testing(self,
-                      agent_states,
-                      num_agents_per_testtube=1,
-                      num_testtubes_per_agent=1,
-                      attribute=None,
-                      value_list=[]):
-
-        assert isinstance(agent_states, list)
-        return partial(self.full_state_testing, agent_states,
-                       num_agents_per_testtube, num_testtubes_per_agent,
-                       attribute, value_list)
+                       num_testtubes_per_agent, only_symptomatic, attribute,
+                       value_list)
 
     def add_partial_to_ready_queue(self):
         for testtube in self.cur_testtubes:
