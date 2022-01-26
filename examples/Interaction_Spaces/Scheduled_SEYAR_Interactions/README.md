@@ -4,5 +4,5 @@ This example builds over the Scheduled SEYAR model. It uses interaction construc
 The file interactions_list.txt contains all the interactions between the agents.
 
 
-## Additional Information
+
 The interactions are unidirectional, hence we have to specify two interactions to depict bidirectional contact between any two agents.

@@ -10,8 +10,7 @@ Current policies in Episimmer include :
 
 For more information on these examples refer to [Tutorial 3](https://docs.google.com/document/d/121CdfYRg1144kZJoyJMq4xwfuM6vVdLn8bDnMIMMzoY/edit?usp=sharing)
 
-## Running
-To run an example :
+**To run an example :**
 
 		cd examples/Policy
 		python ../../episimmer/main.py Sample_Campus

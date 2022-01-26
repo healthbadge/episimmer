@@ -14,6 +14,7 @@ length to 200 lines.
   :local:
   :depth: 2
 
+{#
 {% for top_key in examples %}
 ########################################
 {{ top_key }}
@@ -35,8 +36,8 @@ length to 200 lines.
     {% endif %}
   {% endfor %}
 {% endfor %}
+#}
 
-{#
 {% for top_key in examples %}
 ########################################
 {{ top_key }}
@@ -62,4 +63,3 @@ length to 200 lines.
     {% endif %}
   {% endfor %}
 {% endfor %}
-#}

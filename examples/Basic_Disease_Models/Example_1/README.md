@@ -6,7 +6,7 @@ It represents a university environment where the agents like students, teachers,
 Interactions as well as events have been defined for the weekdays and weekends from Monday through Sunday.
 
 
-## Additional Information
+
 Episimmer uses this example to study disease spread using a real-life scenario (university).
 
 The specificity of this example comes from defining interactions between agents as well as the events that each agent was part of for every single day throughout the week.

@@ -4,8 +4,7 @@ The examples under this directory showcase additional functionality of Episimmer
 We also include examples that showcase the level of complexity and creativity that the user can harness with Episimmer.
 
 
-## Running
-To run an example :
+**To run an example :**
 
 		cd examples/Miscellaneous
 		python ../../episimmer/main.py 3D_Cellular_Automaton

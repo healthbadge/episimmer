@@ -5,5 +5,5 @@ This example shows this use case with the SEYAR model representing the Susceptib
 states. Our symptomatic state is "Symptomatic" state in the disease model. In the testing policy, while registering the agent to a testtube, you can set the only_symptomatic parameter to true. This will choose only the agents that are part of the symptomatic states for testing.
 
 
-## Additional Information
+
 Be careful while using this method because you should not pass the disease states that do not represent agents with visible symptoms. For example, asymptomatic agents do not show any symptoms of the disease and must not be passed in this list.
