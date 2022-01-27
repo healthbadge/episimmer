@@ -7,7 +7,7 @@ performance.txt
 .vscode
 results
 *graph.html
-interaction_list.html
+interactions_list.html
 UserModel.html
 /tests/unit/
 /tests/integration/
