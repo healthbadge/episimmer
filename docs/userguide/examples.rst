@@ -35,6 +35,7 @@ length to 200 lines.
 
 .. literalinclude:: {{ examples[top_key][example][file]['path'] }}
     :linenos:
+    :lines: -{{ examples[top_key][example][file]['line_count'] }}
 
         {% endif %}
       {% endfor %}
@@ -60,6 +61,7 @@ length to 200 lines.
 
 .. literalinclude:: {{ examples[top_key][example][file]['path'] }}
     :linenos:
+    :lines: -{{ examples[top_key][example][file]['line_count'] }}
 
         {% endif %}
       {% endfor %}
