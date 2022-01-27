@@ -11,8 +11,7 @@ Currently, Episimmer can model the following modules for agent interactions :
 
 For further details, refer to [Tutorial 2.2](https://docs.google.com/document/d/17QNw3BUEclqjtuoN6bd3pFNHsbzNIu2Bo0L1BCPS_A4/edit?usp=sharing).
 
-## Running
-To run an example :
+**To run an example :**
 
 		cd examples/Interaction_Spaces
 		python ../../episimmer/main.py Two_events_alternating_with_intersection

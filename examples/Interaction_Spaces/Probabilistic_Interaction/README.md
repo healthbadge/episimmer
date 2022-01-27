@@ -13,7 +13,7 @@ Also note that you need not pass 'Probability:Agents' in the config.txt interact
 The disease model being used here is the Stochastic Model comprising of the states Susceptible, Infected and Recovered.
 
 
-## Additional Information
+
 
 For instance, the interaction between a student and a teacher in a university can be considered to be probabilistic taking into account that the student has a consistent 95% attendance.
 

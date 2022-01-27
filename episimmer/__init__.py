@@ -12,11 +12,11 @@ from .read_file import (ReadAgents, ReadConfiguration, ReadEvents,
                         ReadInteractions, ReadLocations, ReadOneTimeEvents,
                         ReadProbabilisticInteractions, ReadVDConfiguration)
 from .simulate import Simulate
-from .vulnerability_detection import (VD, AgentVD, AgentVulnerabilities,
-                                      AgentVulnerabilitiesMC,
-                                      AgentVulnerabilitiesMC2, BanditAlgos,
-                                      VulnerableAgentMC1, VulnerableAgentMC2,
-                                      VulnerableAgents)
+from .vulnerability_detection import (VD, AgentVD, AgentVulnerability,
+                                      BanditAlgos, ChunkAgentVulnerability,
+                                      EarlyVulnerableAgent,
+                                      SimpleAgentVulnerability,
+                                      SimpleVulnerableAgent, VulnerableAgent)
 from .world import World
 
 try:

@@ -1,4 +1,4 @@
-# List Of Lists
+# List_Of_Lists
 
 Episimmer can handle a list of File lists in the config file and run them concurrently. This is to provide the ability to simulate timetable-like simulation environments. For example, Student Timetables for each class are different but the classes are conducted at the same time.
 

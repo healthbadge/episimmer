@@ -6,7 +6,7 @@ This is why Events as a disease spread module is very important in Episimmer. It
 Here, each agent interacts with every other agent bidirectionally and all of these interactions are listed in the complete_interactions_list.txt file.
 
 
-## Additional Information
+
 
 It considers the agents to be vertices of a complete graph with each edge being an interaction between the two connecting agent vertices.
 
