@@ -14,6 +14,36 @@ length to 200 lines.
   :local:
   :depth: 2
 
+{% for top_key in examples %}
+########################################
+{{ top_key }}
+########################################
+.. include:: {{ examples[top_key]['read_me_path'] }}
+    :parser: myst_parser.sphinx_
+    :start-line: 1
+
+-------------------------------------------
+  {% for example in examples[top_key] %}
+    {% if example != 'read_me_path' %}
+.. include:: {{ examples[top_key][example]['read_me_path'] }}
+    :parser: myst_parser.sphinx_
+
+-------------------------------------------
+      {% for file in examples[top_key][example] %}
+        {% if file != 'read_me_path' %}
+{{ examples[top_key][example][file]['name'] }}
+
+.. literalinclude:: {{ examples[top_key][example][file]['path'] }}
+    :linenos:
+
+        {% endif %}
+      {% endfor %}
+    {% endif %}
+  {% endfor %}
+{% endfor %}
+
+
+
 {#
 {% for top_key in examples %}
 ########################################
@@ -37,29 +67,3 @@ length to 200 lines.
   {% endfor %}
 {% endfor %}
 #}
-
-{% for top_key in examples %}
-########################################
-{{ top_key }}
-########################################
-.. include:: {{ examples[top_key]['read_me_path'] }}
-    :parser: myst_parser.sphinx_
-    :start-line: 1
-
-  {% for example in examples[top_key] %}
-    {% if example != 'read_me_path' %}
-.. include:: {{ examples[top_key][example]['read_me_path'] }}
-    :parser: myst_parser.sphinx_
-
-      {% for file in examples[top_key][example] %}
-        {% if file != 'read_me_path' %}
-{{ examples[top_key][example][file]['name'] }}
-
-.. literalinclude:: {{ examples[top_key][example][file]['path'] }}
-    :linenos:
-
-        {% endif %}
-      {% endfor %}
-    {% endif %}
-  {% endfor %}
-{% endfor %}
