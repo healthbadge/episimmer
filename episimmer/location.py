@@ -1,6 +1,3 @@
-Location.py
-
-
 from typing import Callable, Dict, List, Union, ValuesView
 
 
@@ -30,5 +27,3 @@ class Location():
         """
         if not self.lock_down_state:
             self.events.append(event_info)
-
-
