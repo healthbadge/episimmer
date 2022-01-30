@@ -143,10 +143,10 @@ class VaccinationPolicy(AgentPolicy):
         Executes vaccination policy for the given time step.
 
         Args:
-            time_step: Time step in which the policy is enacted
-            agents: Collection of :class:`~episimmer.agent.Agent` objects
-            locations: Collection of :class:`~episimmer.location.Location` objects
-            model: Disease model specified by the user
+            time_step: Time step in which the policy is enacted.
+            agents: Collection of :class:`~episimmer.agent.Agent` objects.
+            locations: Collection of :class:`~episimmer.location.Location` objects.
+            model: Disease model specified by the user.
             policy_index: Policy index passed to differentiate policies.
         """
         self.newday(time_step)
@@ -159,8 +159,7 @@ class VaccinationPolicy(AgentPolicy):
     def newday(self, time_step: int) -> None:
         """
         Creates a list in which vaccine objects are added according to the user’s specification.
-        Resets the results of the policy enacted in previous time step and the number of agents to vaccinate in the
-        current time step.
+        Resets the results of the policy enacted in previous time step and the number of agents to vaccinate in the current time step.
 
         Args:
             time_step: Current time step
@@ -181,14 +180,14 @@ class VaccinationPolicy(AgentPolicy):
     def set_register_agent_vaccine_func(self, func: Callable) -> None:
         """
         Registers the function that determines the type of vaccination to be performed.
-        The user must specify one of the following functions
+        The user must specify one of the following functions.
 
         * :meth:`~random_vaccination`
 
         * :meth:`~multi_dose_vaccination`
 
         Args:
-            func: Function that determines the type of vaccination to be performed
+            func: Function that determines the type of vaccination to be performed.
         """
         self.registered_agent_vaccine_func = func
 
@@ -200,8 +199,8 @@ class VaccinationPolicy(AgentPolicy):
         This function returns a partial function of :meth:`~full_random_vaccination`.
 
         Args:
-            parameter: Parameter (attribute) type of agents
-            value_list: List of attribute values of agents
+            parameter: Parameter (attribute) type of agents.
+            value_list: List of attribute values of agents.
 
         Returns:
             Partial function of :meth:`~full_random_vaccination`
@@ -220,10 +219,10 @@ class VaccinationPolicy(AgentPolicy):
         vaccination on the agent. This function is valid only for single dose vaccines.
 
         Args:
-            agents: Collection of :class:`~episimmer.agent.Agent` objects
-            time_step: Current time step
-            parameter: Parameter (attribute) of agents
-            value_list: List of attribute values of agents
+            agents: Collection of :class:`~episimmer.agent.Agent` objects.
+            time_step: Current time step.
+            parameter: Parameter (attribute) of agents.
+            value_list: List of attribute values of agents.
         """
         agents_copy = copy.copy(list(agents))
         random.shuffle(agents_copy)
@@ -250,8 +249,8 @@ class VaccinationPolicy(AgentPolicy):
         This function returns a partial function of :meth:`~full_multi_dose_vaccination`.
 
         Args:
-            parameter: Parameter (attribute) of agents
-            value_list: List of attribute values of agents
+            parameter: Parameter (attribute) of agents.
+            value_list: List of attribute values of agents.
 
         Returns:
             Partial function of :meth:`~full_multi_dose_vaccination`
@@ -272,10 +271,10 @@ class VaccinationPolicy(AgentPolicy):
         This function is valid only for multi dose vaccines.
 
         Args:
-            agents: Collection of :class:`~episimmer.agent.Agent` objects
-            time_step: Current time step
-            parameter: Parameter (attribute) of agents
-            value_list: List of attribute values of agents
+            agents: Collection of :class:`~episimmer.agent.Agent` objects.
+            time_step: Current time step.
+            parameter: Parameter (attribute) of agents.
+            value_list: List of attribute values of agents.
         """
         agents_copy = copy.copy(list(agents))
         random.shuffle(agents_copy)
@@ -326,8 +325,8 @@ class VaccinationPolicy(AgentPolicy):
         This function enables the user to add vaccines.
 
         Args:
-            vaccines: A dictionary mapping vaccine names to its parameters
-            dosage: Specifies if the vaccines are either ``Single`` dose or ``Multi`` dose
+            vaccines: A dictionary mapping vaccine names to its parameters.
+            dosage: Specifies if the vaccines are either ``Single`` dose or ``Multi`` dose.
         """
         if dosage == 'Single':
             for name, vaccine in vaccines.items():
@@ -373,7 +372,7 @@ class VaccinationPolicy(AgentPolicy):
         For every vaccinated agent the protection days offered by the vaccine in agent history is decremented by 1.
 
         Args:
-            agents: Collection of :class:`~episimmer.agent.Agent` objects
+            agents: Collection of :class:`~episimmer.agent.Agent` objects.
         """
         for agent in agents:
             history = self.get_agent_policy_history(agent)
@@ -399,7 +398,7 @@ class VaccinationPolicy(AgentPolicy):
         Restricts the ability of a vaccinated agent to receive an infection.
 
         Args:
-            agents: Collection of :class:`~episimmer.agent.Agent` objects
+            agents: Collection of :class:`~episimmer.agent.Agent` objects.
         """
         for agent in agents:
             history = self.get_agent_policy_history(agent)
