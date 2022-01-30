@@ -6,20 +6,45 @@ from .utils.statistics import save_stats
 from .utils.time import Time
 from .utils.visualize import save_env_graph, store_animated_dynamic_graph
 
+from typing import Callable, Dict, List, Tuple, Union
+
+from episimmer.agent import Agent
+from episimmer.location import Location
+from episimmer.read_file import ReadAgents
+from episimmer.read_file import ReadLocations
+from episimmer.read_file import ReadOneTimeEvents
+from episimmer.read_file import ReadEvents
+from episimmer.read_file import ReadConfigurations
+from episimmer.model import BaseModel
+
 
 class Simulate():
-    def __init__(self, config_obj, model, policy_list, event_restriction_fn,
-                 agents_obj, locations_obj):
-        self.agents_obj = agents_obj
-        self.locations_obj = locations_obj
-        self.model = model
-        self.policy_list = policy_list
-        self.event_restriction_fn = event_restriction_fn
-        self.config_obj = config_obj
+    """
+    Class for handling all the activities taking place throughout a simulation and its time steps from start till the end. 
+
+    Args:
+        config_obj: A dictionary containing information from the config file of the example.
+        model: Disease model specified by the user
+        policy_list: List of all the policies part of the simulation
+        event_restriction_fn: User-defined function used to determine if an agent is restricted from participating in an event
+        agents_obj: An object of class :class:`~episimmer.read_file.ReadAgents` containing all agents
+        locations_obj: An object of class :class:`~episimmer.read_file.ReadLocations` containing all locations
+    """
+    def __init__(self, config_obj: Dict[str, str], model: Union[BaseModel, None], policy_list: List[str], event_restriction_fn: Callable,
+                 agents_obj: ReadAgents, locations_obj: ReadLocations):
+        self.agents_obj: ReadAgents = agents_obj
+        self.locations_obj: ReadLocations = locations_obj
+        self.model: Union[BaseModel, None] = model
+        self.policy_list: List[str] = policy_list
+        self.event_restriction_fn: Callable = event_restriction_fn
+        self.config_obj: ReadConfiguration = config_obj
         self.G_list = []
 
-    def onStartSimulation(self):
-
+    def onStartSimulation(self) -> None:
+        """
+        Funtion to initialize the state list and states, reset policies, and update and store the state list at the start of a 
+        simulation.
+        """
         #Intitialize state list
         self.state_list = {}
         self.state_history = {}
@@ -43,10 +68,20 @@ class Simulate():
 
     @save_env_graph()
     @save_stats([('agents_obj', 3)], 'Agents', ['state'])
-    def onStartTimeStep(self, interactionFiles_listOfList,
-                        eventFiles_listOfList,
-                        probabilistic_interactionFiles_listOfList,
-                        oneTimeEvent_obj):
+    def onStartTimeStep(self, interactionFiles_listOfList: List[List[str]],
+                        eventFiles_listOfList: List[List[str]],
+                        probabilistic_interactionFiles_listOfList: List[List[str]],
+                        oneTimeEvent_obj: ReadOneTimeEvents) -> None:
+        """
+        Function to initialize filenames, to load interactions, probabilistic interactions, events and one time events, to save valid
+        interactions and events, and to enact the policies at the start of a time step.
+
+        Args:
+            interactionFiles_listOfList: List of path names of all the interactions files
+            eventFiles_listOfList: List of path names of all the events files
+            probabilistic_interactionFiles_listOfList: List of path names of all the prababilistic interactions files
+            oneTimeEvent_obj: An object of class :class:`~episimmer.read_file.ReadOneTimeEvents` containing all one time events
+        """
 
         for agent in self.agents_obj.agents.values():
             agent.new_time_step()
@@ -115,7 +150,10 @@ class Simulate():
                             event_info, location, self.agents_obj,
                             self.event_restriction_fn)
 
-    def handleTimeStepForAllAgents(self):
+    def handleTimeStepForAllAgents(self) -> None:
+        """
+        Updates next state of every agent to ensure concurrency and following this updates the states of all the agents. 
+        """
         #Too ensure concurrency we update agent.next_state in method handleTimeStepAsAgent
         #After every agent has updated next_state we update states of all agents in method handleTimeStep()
 
@@ -125,7 +163,13 @@ class Simulate():
         for agent in self.agents_obj.agents.values():
             self.convert_state(agent)
 
-    def handleTimeStepAsAgent(self, agent):
+    def handleTimeStepAsAgent(self, agent: Agent) -> None:
+        """
+        Updates next state of the agent to ensure concurrency
+
+        Args:
+            agent: Agent whose next state is to be set
+        """
         #Too ensure concurrency we update agent.next_state in method handleTimeStepAsAgent
         #After every agent has updated next_state we update states of all agents in method handleTimeStep()
 
@@ -133,10 +177,20 @@ class Simulate():
         agent.set_next_state(
             self.model.find_next_state(agent, self.agents_obj.agents))
 
-    def endTimeStep(self):
+    def endTimeStep(self) -> None:
+        """
+        Stores the state of the simulation at the end of the time step.
+        """
         self.store_state()
 
-    def valid_interaction(self, agent, c_dict):
+    def valid_interaction(self, agent: Agent, c_dict: Dict[str, str]) -> bool:
+        """
+        Verifies whether the contact of an agent shares a valid interaction with the agent.
+
+        Args:
+            agent: Agent whose next state is to be set
+            c_dict: Cotact dictionary of an agent with agent index as the key and interacting agent index as the value
+        """
         if agent.under_protection:
             return False
 
@@ -147,7 +201,14 @@ class Simulate():
             return True
         return False
 
-    def store_event_lists(self, event_info):
+    def store_event_lists(self, event_info: ReadEvents) -> None:
+        """
+        Checks which agents part of an event can contribute infection to the event and which ones can receive infection from
+        the event.
+
+        Args:
+            event_info: An object of class :class:`~episimmer.read_file.ReadEvents` containing all events
+        """
         event_info['can_contrib'] = []
         event_info['can_receive'] = []
         for agent_index in event_info['Agents']:
@@ -160,7 +221,10 @@ class Simulate():
             if not agent.under_protection and r < agent.can_recieve_infection:
                 event_info['can_receive'].append(agent_index)
 
-    def save_valid_interactions_events(self):
+    def save_valid_interactions_events(self) -> None:
+        """
+        Saves all the valid interactions of an agent from its contact list, and saves valid event information of a location. 
+        """
         for agent in self.agents_obj.agents.values():
             agent.contact_list[:] = [
                 c_dict for c_dict in agent.contact_list
@@ -172,14 +236,26 @@ class Simulate():
                 self.store_event_lists(event_info)
 
     @store_animated_dynamic_graph()
-    def endSimulation(self):
+    def endSimulation(self) -> Dict[str, List[int]]:
+        """
+        Returns the state history at the end of the simulation. 
+        """
         return self.state_history
 
-    def store_state(self):
+    def store_state(self) -> return None:
+        """
+        Stores the number of agents in each state in the state history at the end of the simulation. 
+        """
         for state in self.state_history.keys():
             self.state_history[state].append(len(self.state_list[state]))
 
-    def convert_state(self, agent):
+    def convert_state(self, agent) -> None:
+        """
+        Updates state list when an agent transitions from one state to another.
+
+        Args:
+            agent: Agent whose next state is to be set
+        """
         self.state_list[agent.state].remove(agent.index)
         agent.update_state()
         self.state_list[agent.state].append(agent.index)

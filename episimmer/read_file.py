@@ -9,15 +9,27 @@ from .agent import Agent
 from .location import Location
 from .utils.time import Time
 
+from typing import Callable, Dict, List, Tuple, Union
+
+from episimmer.agent import Agent
+from episimmer.location import Location
+from episimmer.model import BaseModel
 
 class ReadConfiguration():
+    """
+    Class for reading the configuration file of an example used in Episimmer to obtain the required file paths and file names 
+    needed for its simulation.
+
+    Args:
+        filename: Name of the example directory 
+    """
     def __init__(self, filename):
-        self.worlds = None
-        self.time_steps = None
-        self.starting_exposed_percentage = None
-        self.agent_info_keys = None
-        self.interaction_info_keys = None
-        self.example_path = osp.dirname(filename)
+        self.worlds: Union[int, None] = None
+        self.time_steps: Union[int, None] = None
+        self.starting_exposed_percentage: Union[float, None] = None
+        self.agent_info_keys: Union[str, None] = None
+        self.interaction_info_keys: Union[str, None] = None
+        self.example_path: str = osp.dirname(filename)
 
         f = open(filename, 'r')
 
@@ -89,15 +101,28 @@ class ReadConfiguration():
                 raise Exception(
                     'Event definition does not contain parameter \'Agents\'')
 
-    def get_value_config(self, line):
+    def get_value_config(self, line: str) -> str:
+        """
+        Gets the value associated with the label in a line of the config file.
+
+        Args:
+            line: Line in the config file which has a label and its respective value
+        """
         l = re.findall('\<.*?\>', line)
         if len(l) != 1:
             raise Exception('Error! Invalid entry in config.txt')
         value = (((l[0])[1:])[:-1])
         return value
 
-    def get_file_paths(self, example_path):
+    def get_file_paths(self, example_path: str) -> str, str, str, str, str, str:
         # File Names
+        """
+        Gets the paths of the agents file, interactions files, events files, locations file, one time event file, and 
+        probabalistic interactions files from the config file.
+
+        Args:
+            example_path: Path of the directory of the example used in Episimmer
+        """
         locations_filename = one_time_event_file = None
         events_FilesList_filename = interactions_FilesList_filename = []
 
@@ -132,11 +157,20 @@ class ReadConfiguration():
 
         return agents_filename, interactions_FilesList_filename, events_FilesList_filename, locations_filename, one_time_event_file, probabilistic_interactions_FilesList_filename
 
-    def get_file_names_list(self, example_path,
-                            interactions_FilesList_filename,
-                            events_FilesList_filename,
-                            probabilistic_interactions_FilesList_filename):
+    def get_file_names_list(self, example_path: str,
+                            interactions_FilesList_filename: str,
+                            events_FilesList_filename: str,
+                            probabilistic_interactions_FilesList_filename: str) -> List[str], List[str], List[str]:
         # Reading through a file (for interactions/events) that contain file names which contain interactions and event details for a time step
+        """
+        Gets the list of all the interaction files, events files and probabilistic interaction files.
+
+        Args:
+            example_path: Path of the directory of the example used in Episimmer
+            interactions_FilesList_filename: List of path names of all the interactions files
+            events_FilesList_filename: List of path names of all the events files
+            probabilistic_interactions_FilesList_filename: List of path names of all the prababilistic interactions files
+        """
 
         interactions_files_list = events_files_list = probabilistic_interactions_files_list = []
 
@@ -178,14 +212,21 @@ class ReadConfiguration():
 
 
 class ReadVDConfiguration():
+    """
+    Class for reading the configuration file of an example built for Vulnerability Detection used in Episimmer to obtain the 
+    required file paths and file names needed for its simulation.
+
+    Args:
+        filename: Name of the example directory 
+    """
     def __init__(self, filename):
-        self.target = None
-        self.algorithm = None
-        self.parameter_dict = {}
-        self.pre_process = None
-        self.post_process = None
-        self.output_mode = None
-        self.example_path = osp.dirname(filename)
+        self.target: Union[str, None] = None
+        self.algorithm: Union[str, None] = None
+        self.parameter_dict: Dict[str, Union[List[str], int]] = {}
+        self.pre_process: Union[str, None] = None
+        self.post_process: Union[str, None] = None
+        self.output_mode: Union[str, None] = None
+        self.example_path: str = osp.dirname(filename)
 
         f = open(filename, 'r')
 
@@ -208,14 +249,26 @@ class ReadVDConfiguration():
             raise Warning(
                 'No parameters provided in vd_config.txt. Using Defaults')
 
-    def get_value_config(self, line):
+    def get_value_config(self, line: str) -> str:
+        """
+        Gets the value associated with the label in a line of the config file.
+
+        Args:
+            line: Line in the config file which has a label and its respective value
+        """
         l = re.findall('\<.*?\>', line)
         if len(l) != 1:
             raise Exception('Error! Invalid entry in vd_config.txt')
         value = (((l[0])[1:])[:-1])
         return value
 
-    def read_parameter_file(self, filename):
+    def read_parameter_file(self, filename: str) -> None:
+        """
+        Gets the parameters associated with the Vulnerability Detection example.
+
+        Args:
+            filename: Name of the json file containing the parameters
+        """
         f = open(osp.join(self.example_path, filename), 'r')
         data = json.load(f)
         self.parameter_dict = data
@@ -239,16 +292,27 @@ class ReadFilesList():
 
 
 class BaseReadFile():
+    """
+    Base class for reading agents, locations, interactions and events from a file. 
+    """
     def __init__(self):
         pass
 
-    def get_value(self, line):
+    def get_value(self, line: str):
         if line.endswith('\n'):
             line = line[:-1]
         return line
 
 
 class ReadAgents(BaseReadFile):
+    """
+    Class for reading and storing agent information from a file.
+    Inherits :class:`~episimmer.read_file.BaseReadFile` class.
+
+    Args:
+        filename: Name of the file containing agent information.
+        config_obj: A dictionary containing information from the config file of the example.
+    """
     def __init__(self, filename, config_obj):
         super().__init__()
 
@@ -294,7 +358,13 @@ class ReadAgents(BaseReadFile):
                     agent = Agent(state, info_dict)
                     self.agents[agent.index] = agent
 
-    def create_info_dict(self, info_list):
+    def create_info_dict(self, info_list: List[str]) -> Dict[str, Union[str, List[str], None]]:
+        """
+        Creates a dictionary of information regarding an agent.
+
+        Args:
+            info_list: List of values for all the parameter keys of an agent.
+        """
         info_dict = {}
         for i, key in enumerate(self.parameter_keys):
             info_dict[key] = info_list[i]
@@ -303,10 +373,18 @@ class ReadAgents(BaseReadFile):
 
 
 class ReadInteractions(BaseReadFile):
-    def __init__(self, filename, config_obj, agents_obj):
+    """
+    Class for reading and storing interaction information of the agents from a file.
+    Inherits :class:`~episimmer.read_file.BaseReadFile` class.
+
+    Args:
+        filename: Name of the file containing agent interaction information.
+        config_obj: An object of class :class:`~episimmer.read_file.ReadConfiguration` containing all configurations.
+    """
+    def __init__(self, filename: str, config_obj: ReadConfiguration, agents_obj: ReadAgents):
         super().__init__()
-        self.config_obj = config_obj
-        self.agents_obj = agents_obj
+        self.config_obj: Dict[str, str] = config_obj
+        self.agents_obj: Dict[str, str] = agents_obj
         if filename == '' or filename == None:
             return
 
@@ -348,7 +426,13 @@ class ReadInteractions(BaseReadFile):
                         agent_index = info_dict['Agent Index']
                         agents_obj.agents[agent_index].add_contact(info_dict)
 
-    def get_interaction(self, parameter_list):
+    def get_interaction(self, parameter_list: List[str]) -> str, Dict[str, Union[str, List[str], None]]:
+        """
+        Creates a dictionary for an agent containing interaction information.
+
+        Args:
+            parameter_list: List containing agent index and interacting agent index
+        """
         info_dict = {}
         agent_index = None
         contact_agent_index = None
@@ -367,7 +451,16 @@ class ReadInteractions(BaseReadFile):
 
 
 class ReadProbabilisticInteractions(BaseReadFile):
-    def __init__(self, filename, config_obj, agents_obj):
+    """
+    Class for reading and storing probabilistic interaction information of the agents from a file.
+    Inherits :class:`~episimmer.read_file.BaseReadFile` class.
+
+    Args:
+        filename: Name of the file containing agent probabilistic interaction information.
+        config_obj: An object of class :class:`~episimmer.read_file.ReadConfiguration` containing all configurations.
+        agents_obj: An object of class :class:`~episimmer.read_file.ReadAgents` containing all agents
+    """
+    def __init__(self, filename: str, config_obj: ReadConfiguration, agents_obj: ReadAgents):
         super().__init__()
         self.config_obj = config_obj
         self.agents_obj = agents_obj
@@ -396,7 +489,13 @@ class ReadProbabilisticInteractions(BaseReadFile):
 
             f.close()
 
-    def get_interactions(self, parameter_list):
+    def get_interactions(self, parameter_list: List[str]) -> List[str]:
+        """
+        Creates a dictionary for an agent containing interaction information.
+
+        Args:
+            parameter_list: List containing probability of interaction and agent indices associated with that probability.
+        """
         info_dict = {}
         agent_indexes = []
         interactions_list = []
@@ -437,9 +536,17 @@ class ReadProbabilisticInteractions(BaseReadFile):
 
 
 class ReadLocations(BaseReadFile):
-    def __init__(self, filename, config_obj):
+    """
+    Class for reading and storing location information from a file.
+    Inherits :class:`~episimmer.read_file.BaseReadFile` class.
+
+    Args:
+        filename: Name of the file containing location information.
+        config_obj: An object of class :class:`~episimmer.read_file.ReadConfiguration` containing all configurations.
+    """
+    def __init__(self, filename: str, config_obj: ReadConfiguration):
         super().__init__()
-        self.config_obj = config_obj
+        self.config_obj: ReadConfiguration = config_obj
         self.locations = {}
         if filename == '' or filename == None:
             return
@@ -460,7 +567,13 @@ class ReadLocations(BaseReadFile):
 
         f.close()
 
-    def create_info_dict(self, info_list):
+    def create_info_dict(self, info_list: List[str]) -> Dict[str, Union[List[str], None]]:
+        """
+        Creates a dictionary of information regarding an agent.
+
+        Args:
+            info_list: List of values for all the parameter keys of a location.
+        """
         info_dict = {}
         for i, key in enumerate(self.parameter_keys):
             info_dict[key] = info_list[i]
@@ -469,11 +582,19 @@ class ReadLocations(BaseReadFile):
 
 
 class ReadEvents(BaseReadFile):
-    def __init__(self, filename, config_obj, locations_obj, agents_obj):
+    """
+    Class for reading and storing event information from a file.
+    Inherits :class:`~episimmer.read_file.BaseReadFile` class.
+
+    Args:
+        filename: Name of the file containing event information.
+        config_obj: An object of class :class:`~episimmer.read_file.ReadConfiguration` containing all configurations.
+    """
+    def __init__(self, filename: str, config_obj: ReadConfiguration, locations_obj: ReadLocations, agents_obj: ReadAgents):
         super().__init__()
-        self.config_obj = config_obj
-        self.locations_obj = locations_obj
-        self.agents_obj = agents_obj
+        self.config_obj: ReadConfiguration = config_obj
+        self.locations_obj: ReadLocations = locations_obj
+        self.agents_obj: ReadAgents = agents_obj
         if filename == '' or filename == None:
             return
         f = open(filename, 'r')
@@ -494,7 +615,14 @@ class ReadEvents(BaseReadFile):
 
         f.close()
 
-    def get_event(self, parameter_list):
+    def get_event(self, parameter_list: List[str]) -> str, Dict[str, Union[str, List[str], None]]:
+        """
+        Creates a dictionary for a location containing information about the events taking place at that location.
+
+        Args:
+            parameter_list: List containing location index of a location and agent indices of the agents part of an event taking place
+            at that location.
+        """
         info_dict = {}
         location_index = None
         for i, key in enumerate(self.parameter_keys):
@@ -522,7 +650,14 @@ class ReadEvents(BaseReadFile):
 
 
 class ReadOneTimeEvents(BaseReadFile):
-    def __init__(self, filename):
+    """
+    Class for reading and storing one time event information from a file.
+    Inherits :class:`~episimmer.read_file.BaseReadFile` class.
+
+    Args:
+        filename: Name of the file containing ont time event information.
+    """
+    def __init__(self, filename: str):
         super().__init__()
         self.filename = filename
         if self.filename == '' or self.filename == None:
@@ -540,7 +675,15 @@ class ReadOneTimeEvents(BaseReadFile):
                     int(time), []) + [':'.join(line[1:])]
         f.close()
 
-    def ReadOneTimeEvents(self, config_obj, locations_obj, agents_obj):
+    def ReadOneTimeEvents(self, config_obj: ReadConfiguration, locations_obj: ReadLocations, agents_obj: ReadAgents) -> None:
+        """
+        Reads one time event information if it takes place at the current time step.
+
+        Args:
+            config_obj: An object of class :class:`~episimmer.read_file.ReadConfiguration` containing all configurations
+            locations_obj: An object of class :class:`~episimmer.read_file.ReadLocations` containing all locations
+            agents_obj: An object of class :class:`~episimmer.read_file.ReadAgents` containing all agents
+        """
         if self.filename == '' or self.filename == None:
             return
         self.config_obj = config_obj
@@ -555,7 +698,14 @@ class ReadOneTimeEvents(BaseReadFile):
             location_index, info_dict = self.get_event(parameter_list)
             self.locations_obj.locations[location_index].add_event(info_dict)
 
-    def get_event(self, parameter_list):
+    def get_event(self, parameter_list: List[str]) -> str, Dict[str, Union[str, List[str], None]]:
+        """
+        Creates a dictionary for a location containing information about the one time event taking place at that location.
+
+        Args:
+            parameter_list: List containing time steps at which the one time event takes place, index of the location and agent indices
+            of the agents part of the event.
+        """
         info_dict = {}
         location_index = None
         for i, key in enumerate(self.parameter_keys):

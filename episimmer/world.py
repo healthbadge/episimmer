@@ -7,24 +7,53 @@ from .utils.math import deep_copy_average, deep_copy_stddev
 from .utils.time import Time
 from .utils.visualize import plot_results, store_animated_time_plot
 
+from episimmer.read_file import ReadAgents
+from episimmer.read_file import ReadLocations
+from episimmer.read_file import ReadOneTimeEvents
+from episimmer.read_file import ReadEvents
+from episimmer.read_file import ReadConfiguration
+from episimmer.model import BaseModel
+
 
 class World():
-    def __init__(self, config_obj, model, policy_list, event_restriction_fn,
-                 agents_filename, interactionFiles_list,
-                 probabilistic_interactionFiles_list, locations_filename,
-                 eventFiles_list, one_time_event_file):
-        self.config_obj = config_obj
-        self.policy_list = policy_list
-        self.event_restriction_fn = event_restriction_fn
-        self.agents_filename = agents_filename
-        self.locations_filename = locations_filename
-        self.model = model
-        self.interactionFiles_list = interactionFiles_list
-        self.probabilistic_interactionsFiles_list = probabilistic_interactionFiles_list
-        self.eventFiles_list = eventFiles_list
-        self.one_time_event_file = one_time_event_file
+    """
+    Class for implementing the vaccination policy.
+    Inherits :class:`~episimmer.policy.base.AgentPolicy` class.
+
+    Args:
+        config_obj: A dictionary containing information from the config file of the example.
+        model: Disease model specified by the user
+        policy_list: List of all the policies part of the simulation
+        event_restriction_fn: User-defined function used to determine if an agent is restricted from participating in an event
+        agents_filename: Name of the file that contains agents information
+        interactionFiles_list: List of path names of all the interactions files
+        probabilistic_interactionFiles_list: List of path names of all the prababilistic interactions files
+        locations_filename: Name of the file that contains locations information
+        eventFiles_list: List of path names of all the events files
+        one_time_event_file: File name of the one time event
+    """
+    def __init__(self, config_obj: ReadConfiguration, model: Union[BaseModel, None], policy_list: List[str], event_restriction_fn: Callable,
+                 agents_filename: str, interactionFiles_list: List[str],
+                 probabilistic_interactionFiles_list: List[str], locations_filename: str,
+                 eventFiles_list: List[str], one_time_event_file: str):
+        self.config_obj: ReadConfiguration = config_obj
+        self.policy_list: List[str] = policy_list
+        self.event_restriction_fn: Callable = event_restriction_fn
+        self.agents_filename: str = agents_filename
+        self.locations_filename: str = locations_filename
+        self.model: Union[BaseModel, None] = model
+        self.interactionFiles_list: List[str] = interactionFiles_list
+        self.probabilistic_interactionsFiles_list: List[str]= probabilistic_interactionFiles_list
+        self.eventFiles_list: List[str] = eventFiles_list
+        self.one_time_event_file: str = one_time_event_file
 
     def one_world(self):
+        """
+        Starts and ends a simulation along with saving the state of the simulation at each time step.
+
+        Returns:
+            State of the world at the end of a simulation, result object of agent, and result object of location
+        """
 
         time_steps = self.config_obj.time_steps
 
@@ -56,8 +85,14 @@ class World():
         end_state = sim_obj.endSimulation()
         return end_state, agents_obj, locations_obj
 
-    # Averages multiple simulations and plots a single plot
+
     def simulate_worlds(self):
+        """
+        Averages over multiple simulations and plots a single plot.
+
+        Returns:
+            Object of simulations averaged.
+        """
 
         args = parse_args()
         plot = args.noplot
