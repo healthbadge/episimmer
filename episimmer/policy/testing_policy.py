@@ -3,88 +3,251 @@ import json
 import random
 from collections import deque
 from functools import partial
+from typing import Callable, Deque, Dict, List, Union, ValuesView
+
+from episimmer.agent import Agent
+from episimmer.location import Location
+from episimmer.model import BaseModel
 
 from .base import AgentPolicy
 
 
 class TestResult():
-    def __init__(self, result, agent, machine_name, time_step,
-                 machine_start_step, time_step_done):
-        self.result = result
-        self.agent = agent
-        self.machine_name = machine_name
-        self.time_step = time_step
-        self.machine_start_step = machine_start_step
-        self.time_step_done = time_step_done
+    """
+    Class for a Test Result.
 
-    def get_machine_name(self):
+    Args:
+        result: Result of test for testtube
+        agent: Instance of the :class:`~episimmer.agent.Agent` tested
+        machine_name: Name of machine used for testing
+        time_step: Time step agent tested
+        machine_start_step: Time step machine started testing
+        time_step_done: Time step machine completed test
+    """
+    def __init__(self, result: str, agent: Agent, machine_name: str,
+                 time_step: int, machine_start_step: int, time_step_done: int):
+        self.result: str = result
+        self.agent: Agent = agent
+        self.machine_name: str = machine_name
+        self.time_step: int = time_step
+        self.machine_start_step: int = machine_start_step
+        self.time_step_done: int = time_step_done
+
+    def get_machine_name(self) -> str:
+        """
+        Returns the name of machine used for testing
+
+        Returns:
+            Name of machine used for testing
+        """
         return self.machine_name
 
-    def get_result(self):
+    def get_result(self) -> str:
+        """
+        Returns the result of test
+
+        Returns:
+            Result of test
+        """
         return self.result
 
 
+class TestTube():
+    """
+    Class for a Testtube.
+    """
+    def __init__(self):
+        self.testtube_agent_dict: Dict[Agent, Dict[str, Union[str, int]]] = {}
+        self.testtube_result: Union[str, None] = None
+        self.in_machine: bool = False
+
+    def register_agent(self, agent: Agent, time_step: int) -> None:
+        """
+        Testtube registering an agent.
+
+        Args:
+            agent: Instance of :class:`~episimmer.agent.Agent`
+            time_step: Current time step
+        """
+        self.testtube_agent_dict[agent] = {
+            'state': agent.state,
+            'time_step': time_step
+        }
+
+    def get_num_agents(self) -> int:
+        """
+        Returns the number of agents in the testtube.
+
+        Returns:
+            Number of agents in testtube
+        """
+        return len(self.testtube_agent_dict)
+
+    def set_result(self, result: str) -> None:
+        """
+        Sets the result of test - Positive or Negative.
+
+        Args:
+            result: Result of test
+        """
+        self.testtube_result = result
+
+    def set_in_machine(self, bool_val: bool) -> None:
+        """
+        Sets the testtube to be in the machine.
+
+        Args:
+            bool_val: Boolean for in machine
+        """
+        if bool_val:
+            self.in_machine = bool_val
+        else:
+            self.in_machine = bool_val
+            self.testtube_agent_dict = {}
+            self.testtube_result = None
+
+    def is_empty(self) -> bool:
+        """
+        Returns a boolean indicating whether testtube is empty.
+
+        Returns:
+            Boolean indicating whether testtube is empty
+        """
+        if len(self.testtube_agent_dict) == 0:
+            return True
+
+        return False
+
+    def is_in_machine(self) -> bool:
+        """
+        Returns a boolean indicating whether testtube is in machine.
+
+        Returns:
+            Boolean indicating whether testtube in machine
+        """
+        return self.in_machine
+
+
 class Machine():
-    def __init__(self, machine_name, cost, false_positive_rate,
-                 false_negative_rate, turnaround_time, capacity):
-        self.machine_name = machine_name
-        self.cost = cost
-        self.false_positive_rate = false_positive_rate
-        self.false_negative_rate = false_negative_rate
-        self.true_positive_rate = 1 - self.false_negative_rate
-        self.true_negative_rate = 1 - self.false_positive_rate
-        self.turnaround_time = turnaround_time
-        self.capacity = capacity
-        # In a time_step, a machine can run only once. EDGE CASE : If turnaround_time = 0 and the number of agents to test
-        # is greater than capacity, then the machine runs only once in that time step.
+    """
+    Class for a Testing Machine.
+
+    Args:
+        machine_name: Name of machine
+        cost: Cost for a single test in the machine
+        false_positive_rate: False positive rate of the machine
+        false_negative_rate: False negative rate of the machine
+        turnaround_time: Time taken for a test result
+        capacity: Capacity of the machine for tests
+    """
+    def __init__(self, machine_name: str, cost: int,
+                 false_positive_rate: float, false_negative_rate: float,
+                 turnaround_time: int, capacity: int):
+        self.machine_name: str = machine_name
+        self.cost: int = cost
+        self.false_positive_rate: float = false_positive_rate
+        self.false_negative_rate: float = false_negative_rate
+        self.true_positive_rate: float = 1 - self.false_negative_rate
+        self.true_negative_rate: float = 1 - self.false_positive_rate
+        self.turnaround_time: int = turnaround_time
+        self.capacity: int = capacity
+        self.testtubes: List[TestTube] = []
+        self.results: List[TestResult] = []
+        self.available: bool = True
+        self.start_step: Union[int, None] = None
+        self.machine_cost: int = 0
+
+    def is_running(self) -> bool:
+        """
+        Returns a boolean indicating whether machine is running.
+
+        Returns:
+            Boolean indicating whether machine is running
+        """
+        if not self.available:
+            return True
+
+        return False
+
+    def is_full(self) -> bool:
+        """
+        Returns a boolean indicating whether machine is full.
+
+        Returns:
+            Boolean indicating whether machine is full
+        """
+        if len(self.testtubes) >= self.capacity:
+            return True
+
+        return False
+
+    def is_empty(self) -> bool:
+        """
+        Returns a boolean indicating whether machine is completely empty.
+
+        Returns:
+            Boolean indicating whether machine is completely empty
+        """
+        if len(self.testtubes) == 0:
+            return True
+
+        return False
+
+    def has_empty_results(self) -> bool:
+        """
+        Returns a boolean indicating whether machine has no results.
+
+        Returns:
+            Boolean indicating whether machine has no results
+        """
+        if len(self.results) == 0:
+            return True
+
+        return False
+
+    def reset_machine(self) -> None:
+        """
+        Resets the machine's list of testtubes, results and sets its availability to True.
+        """
         self.testtubes = []
         self.results = []
         self.available = True
-        self.start_step = None
-        self.machine_cost = 0
 
-    def is_running(self):
-        if (not self.available):
-            return True
+    def register_testtube(self, testtube: TestTube) -> None:
+        """
+        Registers a testtube to the machine. Since each testtube corresponds to a single test, the machine cost
+        accumulates the saved cost value once.
 
-        return False
-
-    def is_full(self):
-        if (len(self.testtubes) >= self.capacity):
-            return True
-
-        return False
-
-    def is_empty(self):
-        if (len(self.testtubes) == 0):
-            return True
-
-        return False
-
-    def has_empty_results(self):
-        if (len(self.results) == 0):
-            return True
-
-        return False
-
-    def reset_machine(self):
-        self.testtubes = []
-        self.results = []
-        self.available = True
-
-    def register_testtube(self, testtube):
+        Args:
+            testtube: Instance of :class:`TestTube`
+        """
         testtube.set_in_machine(True)
         self.testtubes.append(testtube)
         self.machine_cost += self.cost
 
-    def run_tests(self, infected_states, time_step):
+    def run_tests(self, infected_states: List[str], time_step: int) -> None:
+        """
+        Runs the tests for each testtube in the machine.
+
+        Args:
+            infected_states: Infected states of the disease model
+            time_step: Current time step
+        """
         self.available = False
         self.start_step = time_step
 
         for testtube in self.testtubes:
             self.run_single_test(testtube, infected_states)
 
-    def run_single_test(self, testtube, infected_states):
+    def run_single_test(self, testtube: TestTube,
+                        infected_states: List[str]) -> None:
+        """
+        Runs a single test for a testtube in the machine and saves the result for that testtube.
+
+        Args:
+            testtube: Instance of :class:`TestTube`
+            infected_states: Infected states of the disease model
+        """
         result = 'Negative'
 
         for agent in testtube.testtube_agent_dict.keys():
@@ -93,25 +256,45 @@ class Machine():
                 result = 'Positive'
                 break
 
-        if (result == 'Negative'):
-            if (random.random() > self.true_negative_rate):
+        if result == 'Negative':
+            if random.random() > self.true_negative_rate:
                 result = 'Positive'
         else:
-            if (random.random() > self.true_positive_rate):
+            if random.random() > self.true_positive_rate:
                 result = 'Negative'
 
         testtube.set_result(result)
 
-    def populate_machine_results(self, time_step):
-        if (self.run_completed(time_step)):
+    def populate_machine_results(self, time_step: int) -> None:
+        """
+        Populates the machine with results for each testtube if the machine has completed running. It also
+        removes the testtube from the machine.
+
+        Args:
+            time_step: Current time step
+        """
+        if self.run_completed(time_step):
             for testtube_with_result in self.testtubes:
                 self.save_results(testtube_with_result, time_step)
                 testtube_with_result.set_in_machine(False)
 
-    def run_completed(self, time_step):
+    def run_completed(self, time_step: int) -> bool:
+        """
+        Returns a boolean indicating whether machine has completed running tests.
+
+        Returns:
+            Boolean indicating whether machine has completed running tests
+        """
         return time_step - self.start_step >= self.turnaround_time
 
-    def save_results(self, testtube, time_step):
+    def save_results(self, testtube: TestTube, time_step: int) -> None:
+        """
+        Saves the results for a testtube in the results list.
+
+        Args:
+            testtube: Instance of :class:`TestTube`
+            time_step: Current time step
+        """
         for agent in testtube.testtube_agent_dict.keys():
             time_step_entered = testtube.testtube_agent_dict[agent][
                 'time_step']
@@ -120,65 +303,58 @@ class Machine():
                                     self.start_step, time_step)
             self.results.append(result_obj)
 
-    def get_results(self):
+    def get_results(self) -> List[TestResult]:
+        """
+        Returns the results saved in the results list
+
+        Returns:
+            Results saved in the results list
+        """
         return self.results
 
-    def get_machine_name(self):
+    def get_machine_name(self) -> str:
+        """
+        Returns the name of machine
+
+        Returns:
+            Name of machine
+        """
         return self.machine_name
 
 
-class TestTube():
-    def __init__(self):
-        self.testtube_agent_dict = {}
-        self.testtube_result = None
-        self.in_machine = False
-
-    def register_agent(self, agent, time_step):
-        self.testtube_agent_dict[agent] = {
-            'state': agent.state,
-            'time_step': time_step
-        }
-
-    def get_num_agents(self):
-        return len(self.testtube_agent_dict)
-
-    def set_result(self, result):
-        self.testtube_result = result
-
-    def set_in_machine(self, bool_val):
-        if (bool_val):
-            self.in_machine = bool_val
-        else:
-            self.in_machine = bool_val
-            self.testtube_agent_dict = {}
-            self.testtube_result = None
-
-    def is_empty(self):
-        if (len(self.testtube_agent_dict) == 0):
-            return True
-
-        return False
-
-    def is_in_machine(self):
-        return self.in_machine
-
-
 class TestPolicy(AgentPolicy):
-    def __init__(self, agents_per_step_fn=None):
+    """
+    Class for implementing the testing policy.
+    Inherits :class:`~episimmer.policy.base.AgentPolicy` class.
+
+    Args:
+        agents_per_step_fn: User-defined function to specify the number of agents to test per time step
+    """
+    def __init__(self, agents_per_step_fn: Callable):
         super().__init__()
-        self.policy_type = 'Testing'
-        self.register_agent_testtube_func = None
-        self.cur_testtubes = None
-        self.ready_queue = deque()
-        self.machine_list = []
-        self.statistics = {}
-        self.current_machines = {}
-        self.total_cost = 0
+        self.policy_type: str = 'Testing'
+        self.register_agent_testtube_func: Union[Callable, None] = None
+        self.cur_testtubes: Union[List[TestTube], None] = None
+        self.ready_queue: Deque[TestTube] = deque()
+        self.machine_list: List[Machine] = []
+        self.statistics: Dict[int, Dict] = {}
+        self.current_machines: Dict[str, Dict[str, Union[int, float]]] = {}
+        self.total_cost: int = 0
+        self.num_agents_to_test: Union[int, None] = None
 
         assert callable(agents_per_step_fn)
-        self.agents_per_step_fn = agents_per_step_fn
+        self.agents_per_step_fn: Callable = agents_per_step_fn
 
-    def reset(self, agents=None, policy_index=None):
+    def reset(self,
+              agents: Union[ValuesView[Agent], None] = None,
+              policy_index: Union[int, None] = None) -> None:
+        """
+        Resets statistics, ready queue and all the machines for a new world.
+
+        Args:
+            agents: Collection of :class:`~episimmer.agent.Agent` objects
+            policy_index: Policy index passed to differentiate policies.
+        """
         self.statistics = {}
         self.ready_queue = deque()
         for machine in self.machine_list:
@@ -189,41 +365,79 @@ class TestPolicy(AgentPolicy):
             machine.start_step = None
 
     def enact_policy(self,
-                     time_step,
-                     agents,
-                     locations,
-                     model,
-                     policy_index=None):
+                     time_step: int,
+                     agents: Dict[str, Agent],
+                     locations: ValuesView[Location],
+                     model: BaseModel,
+                     policy_index: Union[int, None] = None) -> None:
+        """
+        Executes testing policy for the given time step.
+
+        Args:
+            time_step: Time step in which the policy is enacted
+            agents: Collection of :class:`~episimmer.agent.Agent` objects
+            locations: Collection of :class:`~episimmer.location.Location` objects
+            model: Disease model specified by the user
+            policy_index: Policy index passed to differentiate policies.
+        """
         self.new_time_step(time_step)
         self.populate_results_in_machine(time_step)
         self.release_results(time_step)
         self.register_agent_testtube_func(agents.values(), time_step, model)
         self.add_partial_to_ready_queue()
-        self.register_testtubes_to_machines(time_step)
+        self.register_testtubes_to_machines()
         self.run_tests(model, time_step)
-        self.run_edge_case(time_step)
+        self.zero_turnaround_time_func(time_step)
         self.end_time_step(time_step)
 
-    def run_edge_case(self, time_step):
-        # For the case when turnaround_time = 0
+    def zero_turnaround_time_func(self, time_step: int) -> None:
+        """
+        When turnaround time = 0, results are populated in the same time step. This function handles
+        that scenario.
+
+        Args:
+            time_step: Current time step
+        """
         for machine in self.machine_list:
             if not machine.is_empty() and machine.run_completed(time_step):
                 self.populate_results_in_machine(time_step)
                 self.release_results(time_step)
                 break
 
-    def set_register_agent_testtube_func(self, fn):
+    def set_register_agent_testtube_func(self, fn: Callable) -> None:
+        """
+        Registers the function that determines how agents are mapped to testtubes.
+        The user must specify one of the following functions
+
+        * :meth:`~random_agents`
+
+        Args:
+            fn: Function that determines the type of testing to be performed
+        """
         self.register_agent_testtube_func = fn
 
     def add_machine(self,
-                    machine_name,
-                    cost,
-                    false_positive_rate,
-                    false_negative_rate,
-                    turnaround_time,
-                    capacity,
-                    num=1):
-        if (machine_name in self.current_machines.keys()):
+                    machine_name: str,
+                    cost: int,
+                    false_positive_rate: float,
+                    false_negative_rate: float,
+                    turnaround_time: int,
+                    capacity: int,
+                    num: int = 1) -> None:
+        """
+        This function enables the user to add a machine. A machine must be defined as it performs the testing
+        procedure on testtubes. It defines parameters of the testing policy.
+
+        Args:
+            machine_name: Name of machine
+            cost: Cost for a single test in the machine
+            false_positive_rate: False positive rate of the machine
+            false_negative_rate: False negative rate of the machine
+            turnaround_time: Time taken for a test result
+            capacity: Capacity of the machine for tests
+            num: Number of instances of this machine
+        """
+        if machine_name in self.current_machines.keys():
             if ([
                     cost, false_positive_rate, false_negative_rate,
                     turnaround_time, capacity
@@ -241,23 +455,49 @@ class TestPolicy(AgentPolicy):
                     'Error! Machine name with different parameters already exists'
                 )
         else:
-            self.current_machines[machine_name] = {'parameters':[cost, false_positive_rate, false_negative_rate, turnaround_time, capacity],\
-                      'number':num}
+            self.current_machines[machine_name] = {
+                'parameters': [
+                    cost, false_positive_rate, false_negative_rate,
+                    turnaround_time, capacity
+                ],
+                'number':
+                num
+            }
 
             for i in range(num):
                 self.machine_list.append(
                     Machine(machine_name, cost, false_positive_rate,
                             false_negative_rate, turnaround_time, capacity))
 
-    def initialize_statistics_logs(self, time_step):
-        self.statistics[time_step] = {'Total Tests':0, 'Total Positive Results':0,\
-                'Total Negative Results':0, 'Total Agents Tested':0}
+    def initialize_statistics_logs(self, time_step: int) -> None:
+        """
+        Initializes statistics dictionary. It contains global information of all tests.
+
+        Args:
+            time_step: Current time step
+        """
+        self.statistics[time_step] = {
+            'Total Tests': 0,
+            'Total Positive Results': 0,
+            'Total Negative Results': 0,
+            'Total Agents Tested': 0
+        }
 
         for machine_name in self.current_machines.keys():
-            self.statistics[time_step][machine_name] = {'Number of Tests':0, 'Number of Positive Results':0,\
-                       'Number of Negative Results':0, 'Number of Agents Tested':0}
+            self.statistics[time_step][machine_name] = {
+                'Number of Tests': 0,
+                'Number of Positive Results': 0,
+                'Number of Negative Results': 0,
+                'Number of Agents Tested': 0
+            }
 
-    def initialize_process_logs(self, time_step):
+    def initialize_process_logs(self, time_step: int) -> None:
+        """
+        Initializes statistics dictionary for each machine. It contains machine-level information.
+
+        Args:
+            time_step: Current time step
+        """
         self.statistics[time_step]['Process'] = {}
         for machine_name in self.current_machines.keys():
             self.statistics[time_step]['Process'][machine_name] = {}
@@ -278,15 +518,40 @@ class TestPolicy(AgentPolicy):
             'All Machines running'] = 'Default'
         self.statistics[time_step]['Process']['Ready Queue Length'] = -1
 
-    def new_time_step(self, time_step):
+    def new_time_step(self, time_step: int) -> None:
+        """
+        Initializes statistics of the testing policy.
+        Resets the current test tubes and the number of agents to test in the current time step.
+
+        Args:
+            time_step: Current time step
+        """
         self.initialize_statistics_logs(time_step)
         self.initialize_process_logs(time_step)
         self.cur_testtubes = []
         self.num_agents_to_test = self.agents_per_step_fn(time_step)
 
-    def populate_test_queue(self, agents_to_test, num_agents_per_testtube,
-                            num_testtubes_per_agent, time_step):
-        # Create testtubes based on formula - int((ntpa x no. of agents + napt -1)/napt)
+    def populate_test_queue(self, agents_to_test: List[Agent],
+                            num_agents_per_testtube: int,
+                            num_testtubes_per_agent: int,
+                            time_step: int) -> None:
+        r"""
+        Populates the testing ready queue with fully filled testtubes containing agent samples. This method can handle
+        both regular testing and pool testing using the parameters :math:`NAPT` (number of agents per testtube) and
+        :math:`NTPA` (number of testtubes per agent) passed from the function defining the mapping from agents to
+        testtubes. The number of testtubes :math:`N_T` required follow the formula -
+
+        .. math::
+            N_T = \lfloor \frac{NTPA \times N_A + NAPT - 1}{NAPT} \rfloor
+
+        where :math:`N_A` denotes the number of agents to test.
+
+        Args:
+            agents_to_test: List of :class:`~episimmer.agent.Agent` objects ready for testing
+            num_agents_per_testtube: Number of agents per testtube
+            num_testtubes_per_agent: Number of testtubes per agent
+            time_step: Current time step
+        """
         num_testtubes = int(
             (num_testtubes_per_agent * self.num_agents_to_test +
              num_agents_per_testtube - 1) / num_agents_per_testtube)
@@ -296,7 +561,7 @@ class TestPolicy(AgentPolicy):
 
         # Assign agents to testtubes and populate ready queue
         for agent in agents_to_test:
-            if (len(self.cur_testtubes) > 0):
+            if len(self.cur_testtubes) > 0:
                 cur_list = random.sample(
                     self.cur_testtubes,
                     min(num_testtubes_per_agent, len(self.cur_testtubes)))
@@ -304,15 +569,34 @@ class TestPolicy(AgentPolicy):
                 for testtube in cur_list:
                     testtube.register_agent(agent, time_step)
 
-                    if (testtube.get_num_agents() >= num_agents_per_testtube):
+                    if testtube.get_num_agents() >= num_agents_per_testtube:
                         self.ready_queue.append(testtube)
                         self.cur_testtubes.remove(testtube)
             else:
                 break
 
-    def full_random_agents(self, num_agents_per_testtube,
-                           num_testtubes_per_agent, only_symptomatic,
-                           attribute, value_list, agents, time_step, model):
+    def full_random_agents(self, num_agents_per_testtube: int,
+                           num_testtubes_per_agent: int,
+                           only_symptomatic: bool, attribute: Union[str, None],
+                           value_list: List[str], agents: ValuesView[Agent],
+                           time_step: int, model: BaseModel) -> None:
+        """
+        Agents are first selected for testing and added to a list based on the number of agents to test in the
+        current time step, agent parameters (if given) and symptomatic states (if set to True). Then, the test ready
+        queue is populated.
+
+        Args:
+            num_agents_per_testtube: Number of agents per testtube (NAPT)
+            num_testtubes_per_agent: Number of testtubes per agent (NTPA)
+            only_symptomatic: Choose whether to only select symptomatic agents or not (If set to True, you must
+                              have symptomatic states set in ``UserModel.py``)
+            attribute: Parameter (attribute) type of agents
+            value_list: List of attribute values of agents
+            agents: Collection of :class:`~episimmer.agent.Agent` objects
+            time_step: Current time step
+            model: Disease model specified by the user
+
+        """
         agents_copy = copy.copy(list(agents))
         random.shuffle(agents_copy)
 
@@ -320,10 +604,10 @@ class TestPolicy(AgentPolicy):
         agents_to_test = []
         for agent in agents_copy:
 
-            if (len(agents_to_test) == self.num_agents_to_test):
+            if len(agents_to_test) == self.num_agents_to_test:
                 break
 
-            elif (attribute is None or agent.info[attribute] in value_list):
+            elif attribute is None or agent.info[attribute] in value_list:
                 if not only_symptomatic or agent.state in model.symptomatic_states:
                     agents_to_test.append(agent)
 
@@ -331,56 +615,110 @@ class TestPolicy(AgentPolicy):
                                  num_testtubes_per_agent, time_step)
 
     def random_agents(self,
-                      num_agents_per_testtube=1,
-                      num_testtubes_per_agent=1,
-                      only_symptomatic=False,
-                      attribute=None,
-                      value_list=[]):
+                      num_agents_per_testtube: int = 1,
+                      num_testtubes_per_agent: int = 1,
+                      only_symptomatic: bool = False,
+                      attribute: Union[str, None] = None,
+                      value_list: List[str] = []) -> Callable:
+        """
+        This function can be used by the user in ``Generate_policy.py`` to specify random agents to be tested. This
+        function can handle normal or pool testing. Normal testing refers to testing a single agent once i.e. A
+        single agent's sample present in a single testtube, or, pool testing where you may have multiple agents in a
+        testtube defined by the num_agents_per_testtube parameter and multiple testtubes for an agent defined by the
+        num_testtubes_per_agent parameter. If symptomatic states are defined in the disease model in the
+        ``UserModel.py`` file, then you may also only test symptomatic agents. This function returns a partial
+        function of :meth:`~full_random_agents`.
+
+        Args:
+            num_agents_per_testtube: Number of agents per testtube (NAPT)
+            num_testtubes_per_agent: Number of testtubes per agent (NAPT)
+            only_symptomatic: Choose whether to only select symptomatic agents or not (If set to True, you must have
+                              symptomatic states set in ``UserModel.py``)
+            attribute: Parameter (attribute) type of agents
+            value_list: List of attribute values of agents
+
+        Returns:
+            Partial function of :meth:`~full_random_agents`
+        """
         return partial(self.full_random_agents, num_agents_per_testtube,
                        num_testtubes_per_agent, only_symptomatic, attribute,
                        value_list)
 
-    def add_partial_to_ready_queue(self):
+    def add_partial_to_ready_queue(self) -> None:
+        """
+        Since the :meth:`~populate_test_queue` method only populates fully filled testtubes, this function adds
+        partially filled testtubes to the test ready queue.
+        """
         for testtube in self.cur_testtubes:
-            if (not testtube.is_empty()):
+            if not testtube.is_empty():
                 self.ready_queue.append(testtube)
 
-    def register_testtubes_to_machines(self, time_step):
+    def register_testtubes_to_machines(self) -> None:
+        """
+        Registers the testtubes to all empty/partially filled non-running machines defined by user.
+        """
         for machine in self.machine_list:
-            while (self.ready_queue):
-                if (machine.is_running() or machine.is_full()):
+            while self.ready_queue:
+                if machine.is_running() or machine.is_full():
                     break
 
                 else:
                     testtube = self.ready_queue.popleft()
                     machine.register_testtube(testtube)
 
-    def run_tests(self, model, time_step):
+    def run_tests(self, model: BaseModel, time_step: int) -> None:
+        """
+        Runs the tests for all non-empty non-running machines.
+
+        Args:
+            model: Disease model specified by the user
+            time_step: Current time step
+        """
         for machine in self.machine_list:
-            if (not machine.is_empty() and not machine.is_running()):
+            if not machine.is_empty() and not machine.is_running():
                 machine.run_tests(model.infected_states, time_step)
 
-    def populate_results_in_machine(self, time_step):
+    def populate_results_in_machine(self, time_step: int) -> None:
+        """
+        Populates the results of each test in the machines (if test is complete).
+
+        Args:
+            time_step: Current time step
+        """
         for machine in self.machine_list:
-            if (machine.is_running()):
+            if machine.is_running():
                 machine.populate_machine_results(time_step)
 
-    def release_results_to_agents(self, results):
+    def release_results_to_agents(self, results: List[TestResult]) -> None:
+        """
+        Results are released to the agents and the policy history of the agent is updated.
+
+        Args:
+            results: Collection of :class:`TestResult` objects
+        """
         for result_obj in results:
             self.update_agent_policy_history(result_obj.agent, result_obj)
 
-    def release_results_to_policy(self, results, time_step):
+    def release_results_to_policy(self, results: List[TestResult],
+                                  time_step: int) -> None:
+        """
+        Results are released to the policy i.e. stored in the statistics dictionary.
+
+        Args:
+            results: Collection of :class:`TestResult` objects
+            time_step: Current time step
+        """
         for result_obj in results:
             machine_name = result_obj.get_machine_name()
             self.statistics[time_step][machine_name]['Number of Tests'] += 1
             self.statistics[time_step]['Total Tests'] += 1
 
-            if (result_obj.get_result() == 'Positive'):
+            if result_obj.get_result() == 'Positive':
                 self.statistics[time_step][machine_name][
                     'Number of Positive Results'] += 1
                 self.statistics[time_step]['Total Positive Results'] += 1
 
-            elif (result_obj.get_result() == 'Negative'):
+            elif result_obj.get_result() == 'Negative':
                 self.statistics[time_step][machine_name][
                     'Number of Negative Results'] += 1
                 self.statistics[time_step]['Total Negative Results'] += 1
@@ -389,31 +727,44 @@ class TestPolicy(AgentPolicy):
                 'Number of Agents Tested'] += 1
             self.statistics[time_step]['Total Agents Tested'] += 1
 
-    def release_results(self, time_step):
+    def release_results(self, time_step: int) -> None:
+        """
+        Results are released to the agents and policy once the machine has been populated with results. The machine is
+        then reset.
+
+        Args:
+            time_step: Current time step
+        """
         results = []
         for machine in self.machine_list:
-            if (not machine.has_empty_results()):
+            if not machine.has_empty_results():
                 results += machine.get_results()
                 machine.reset_machine()
 
         self.release_results_to_agents(results)
         self.release_results_to_policy(results, time_step)
 
-    def update_process_logs(self, time_step):
+    def update_process_logs(self, time_step: int) -> None:
+        """
+        Machine-level logging done here
+
+        Args:
+            time_step: Current time step
+        """
         for machine in self.machine_list:
             machine_name = machine.get_machine_name()
 
-            if (machine.is_running()):
+            if machine.is_running():
                 self.statistics[time_step]['Process'][machine_name][
                     machine.__str__()]['Running Status'] = 'Running'
             else:
                 self.statistics[time_step]['Process'][machine_name][
                     machine.__str__()]['Running Status'] = 'On Standby'
 
-            if (machine.is_empty()):
+            if machine.is_empty():
                 self.statistics[time_step]['Process'][machine_name][
                     machine.__str__()]['Filled Status'] = 'Empty'
-            elif (machine.is_full()):
+            elif machine.is_full():
                 self.statistics[time_step]['Process'][machine_name][
                     machine.__str__()]['Filled Status'] = 'Completely Filled'
             else:
@@ -425,15 +776,15 @@ class TestPolicy(AgentPolicy):
         all_machines_running = True
 
         for testtube in self.cur_testtubes:
-            if (testtube.is_empty()):
+            if testtube.is_empty():
                 all_testtubes_filled = False
                 break
 
-        if (self.ready_queue):
+        if self.ready_queue:
             all_testtubes_in_machines = False
 
         for machine in self.machine_list:
-            if (not machine.is_running()):
+            if not machine.is_running():
                 all_machines_running = False
                 break
 
@@ -446,7 +797,13 @@ class TestPolicy(AgentPolicy):
         self.statistics[time_step]['Process']['Ready Queue Length'] = len(
             self.ready_queue)
 
-    def end_time_step(self, time_step):
+    def end_time_step(self, time_step: int) -> None:
+        """
+        At the end of the time step, process logs are updated and stored as a json.
+
+        Args:
+            time_step: Current time step
+        """
         self.update_process_logs(time_step)
         with open('testing_stats.json', 'w') as outfile:
             json.dump(self.statistics, outfile, indent=4)
