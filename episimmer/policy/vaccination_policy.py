@@ -149,14 +149,14 @@ class VaccinationPolicy(AgentPolicy):
             model: Disease model specified by the user
             policy_index: Policy index passed to differentiate policies.
         """
-        self.newday(time_step)
+        self.new_time_step(time_step)
         self.set_protection(agents.values())
         self.registered_agent_vaccine_func(agents.values(), time_step)
         self.populate_results()
         self.restrict_agents(agents.values())
         self.get_stats()
 
-    def newday(self, time_step: int) -> None:
+    def new_time_step(self, time_step: int) -> None:
         """
         Creates a list in which vaccine objects are added according to the user’s specification.
         Resets the results of the policy enacted in previous time step and the number of agents to vaccinate in the
@@ -192,28 +192,10 @@ class VaccinationPolicy(AgentPolicy):
         """
         self.registered_agent_vaccine_func = func
 
-    def random_vaccination(self,
-                           parameter: Union[str, None] = None,
-                           value_list: List[str] = []) -> Callable:
-        """
-        This function can be used by the user in ``Generate_policy.py`` to specify randomized vaccination to be performed for the agents.
-        This function returns a partial function of :meth:`~full_random_vaccination`.
-
-        Args:
-            parameter: Parameter (attribute) type of agents
-            value_list: List of attribute values of agents
-
-        Returns:
-            Partial function of :meth:`~full_random_vaccination`
-        """
-        assert isinstance(value_list, list)
-        return partial(self.full_random_vaccination,
-                       parameter=parameter,
-                       value_list=value_list)
-
-    def full_random_vaccination(self, agents: ValuesView[Agent],
-                                time_step: int, parameter: Union[str, None],
-                                value_list: List[str]) -> None:
+    def full_random_vaccination(self, attribute: Union[str, None],
+                                value_list: List[str],
+                                agents: ValuesView[Agent],
+                                time_step: int) -> None:
         """
         If the number of agents vaccinated is less than the maximum number of agents to vaccinate per time step,
         for every unvaccinated agent this function randomly chooses a vaccine from the list of vaccines and performs
@@ -222,7 +204,7 @@ class VaccinationPolicy(AgentPolicy):
         Args:
             agents: Collection of :class:`~episimmer.agent.Agent` objects
             time_step: Current time step
-            parameter: Parameter (attribute) of agents
+            attribute: Attribute name of agents
             value_list: List of attribute values of agents
         """
         agents_copy = copy.copy(list(agents))
@@ -233,7 +215,7 @@ class VaccinationPolicy(AgentPolicy):
             if curr_agents_to_vaccinate <= 0:
                 break
 
-            if parameter is None or agent.info[parameter] in value_list:
+            if attribute is None or agent.info[attribute] in value_list:
                 if agent.get_policy_state(
                         'Vaccination') is None and self.vaccines:
                     current_vaccine = random.choice(self.vaccines)
@@ -242,28 +224,27 @@ class VaccinationPolicy(AgentPolicy):
                     self.vaccines.remove(current_vaccine)
                     curr_agents_to_vaccinate -= 1
 
-    def multi_dose_vaccination(self,
-                               parameter: Union[str, None] = None,
-                               value_list: List[str] = []) -> Callable:
+    def random_vaccination(self,
+                           attribute: Union[str, None] = None,
+                           value_list: List[str] = []) -> Callable:
         """
-        This function can be used by the user in ``Generate_policy.py`` to specify multi-dose vaccination to be performed for the agents.
-        This function returns a partial function of :meth:`~full_multi_dose_vaccination`.
+        This function can be used by the user in ``Generate_policy.py`` to specify randomized vaccination to be performed for the agents.
+        This function returns a partial function of :meth:`~full_random_vaccination`.
 
         Args:
-            parameter: Parameter (attribute) of agents
+            attribute: Attribute name of agents
             value_list: List of attribute values of agents
 
         Returns:
-            Partial function of :meth:`~full_multi_dose_vaccination`
+            Partial function of :meth:`~full_random_vaccination`
         """
-        return partial(self.full_multi_dose_vaccination,
-                       parameter=parameter,
-                       value_list=value_list)
+        assert isinstance(value_list, list)
+        return partial(self.full_random_vaccination, attribute, value_list)
 
-    def full_multi_dose_vaccination(self, agents: ValuesView[Agent],
-                                    time_step: int, parameter: Union[str,
-                                                                     None],
-                                    value_list: List[str]) -> None:
+    def full_multi_dose_vaccination(self, attribute: Union[str, None],
+                                    value_list: List[str],
+                                    agents: ValuesView[Agent],
+                                    time_step: int) -> None:
         """
         If the number of agents vaccinated is less than the maximum number of agents to vaccinate per time step,
         for every unvaccinated agent this function randomly chooses a vaccine from the list of vaccines and performs
@@ -274,7 +255,7 @@ class VaccinationPolicy(AgentPolicy):
         Args:
             agents: Collection of :class:`~episimmer.agent.Agent` objects
             time_step: Current time step
-            parameter: Parameter (attribute) of agents
+            attribute: Attribute name of agents
             value_list: List of attribute values of agents
         """
         agents_copy = copy.copy(list(agents))
@@ -285,7 +266,7 @@ class VaccinationPolicy(AgentPolicy):
             if curr_agents_to_vaccinate <= 0:
                 break
 
-            if parameter is None or agent.info[parameter] in value_list:
+            if attribute is None or agent.info[attribute] in value_list:
                 history = self.get_agent_policy_history(agent)
                 lh = history[-1] if history else None
 
@@ -318,12 +299,44 @@ class VaccinationPolicy(AgentPolicy):
                             self.vaccines.remove(current_vaccine)
                             curr_agents_to_vaccinate -= 1
 
+    def multi_dose_vaccination(self,
+                               attribute: Union[str, None] = None,
+                               value_list: List[str] = []) -> Callable:
+        """
+        This function can be used by the user in ``Generate_policy.py`` to specify multi-dose vaccination to be performed for the agents.
+        This function returns a partial function of :meth:`~full_multi_dose_vaccination`.
+
+        Args:
+            attribute: Attribute name of agents
+            value_list: List of attribute values of agents
+
+        Returns:
+            Partial function of :meth:`~full_multi_dose_vaccination`
+        """
+        return partial(self.full_multi_dose_vaccination, attribute, value_list)
+
     def add_vaccines(self,
                      vaccines: Dict[str, Dict[str, Union[int, float, List[int],
                                                          str]]],
                      dosage: str = 'Single') -> None:
         """
         This function enables the user to add vaccines.
+
+        Parameters to be specified for single dose vaccines:
+
+        * cost: Cost of vaccine.
+        * count: Number of vaccine available.
+        * efficacy: Vaccine efficacy.
+        * decay: Number of days of protection offered by the vaccine.
+
+        Parameters to be specified for multi dose vaccines:
+
+        * cost: Cost of vaccine.
+        * count: Number of vaccine available.
+        * efficacy: Vaccine efficacy.
+        * decay: A list of number of days of protection offered by each dose of the vaccine.
+        * dose: Number of doses of the vaccine.
+        * interval: A list specifying minimum days to pass before the administration of the next dose for each dose.
 
         Args:
             vaccines: A dictionary mapping vaccine names to its parameters
