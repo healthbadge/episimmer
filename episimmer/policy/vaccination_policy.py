@@ -113,7 +113,7 @@ class VaccinationPolicy(AgentPolicy):
     Args:
         agents_per_step_fn: User-defined function to specify the number of agents to vaccinate per time step
     """
-    def __init__(self, agents_per_step_fn: Union[Callable, None] = None):
+    def __init__(self, agents_per_step_fn: Callable):
         super().__init__()
 
         self.num_agents_to_vaccinate: int = 0
@@ -131,7 +131,7 @@ class VaccinationPolicy(AgentPolicy):
         }
         self.registered_agent_vaccine_func: Union[Callable, None] = None
         assert callable(agents_per_step_fn)
-        self.agents_per_step_fn: Union[Callable, None] = agents_per_step_fn
+        self.agents_per_step_fn: Callable = agents_per_step_fn
 
     def enact_policy(self,
                      time_step: int,
