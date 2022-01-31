@@ -2,6 +2,13 @@ import argparse
 
 
 def parse_args():
+    """
+    This function parses the commmand-line options, arguments and sub-arguments which makes it easy to write user-friendly 
+    command-line interfaces.
+
+    Returns:
+        Arguments which are parsed and ready for utilization.
+    """
     arg_parser = argparse.ArgumentParser()
 
     # input argument options
