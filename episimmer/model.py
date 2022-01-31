@@ -179,10 +179,10 @@ class StochasticModel(BaseModel):
                                                                     float]):
         super().__init__('Stochastic Model')
         self.transmission_prob: Dict[str, Dict[str, Callable]] = {}
+        self.infected_states: List[str] = infected_states
         self.individual_state_types: List[str] = individual_state_types
         self.state_proportion: Dict[str, float] = state_proportion
 
-        self.infected_states = infected_states
         for state in individual_state_types:
             if state in infected_states:
                 self.set_state_color(state, True)
