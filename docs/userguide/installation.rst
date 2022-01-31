@@ -23,22 +23,22 @@ Or you can install from source
 
 1. First clone this repository:
 
-.. code-block:: bash
+  .. code-block:: bash
 
-    git clone https://github.com/healthbadge/episimmer.git
+      git clone https://github.com/healthbadge/episimmer.git
 
 2. Then, to install the package, run:
 
-.. code-block:: bash
+  .. code-block:: bash
 
-    pip install -e .
+      pip install -e .
 
 
 3. If you do not have pip you can instead use:
 
-.. code-block:: bash
+  .. code-block:: bash
 
-    python setup.py install
+      python setup.py install
 
 If you do not have root access, you should add the ``--user`` option to the above lines.
 
