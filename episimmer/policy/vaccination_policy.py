@@ -325,6 +325,22 @@ class VaccinationPolicy(AgentPolicy):
         """
         This function enables the user to add vaccines.
 
+        Parameters to be specified for single dose vaccines:
+
+        * cost: Cost of vaccine.
+        * count: Number of vaccine available.
+        * efficacy: Vaccine efficacy.
+        * decay: Number of days of protection offered by the vaccine.
+
+        Parameters to be specified for multi dose vaccines:
+
+        * cost: Cost of vaccine.
+        * count: Number of vaccine available.
+        * efficacy: Vaccine efficacy.
+        * decay: A list of number of days of protection offered by each dose of the vaccine.
+        * dose: Number of doses of the vaccine.
+        * interval: A list specifying minimum days to pass before the administration of the next dose for each dose.
+
         Args:
             vaccines: A dictionary mapping vaccine names to its parameters
             dosage: Specifies if the vaccines are either ``Single`` dose or ``Multi`` dose
