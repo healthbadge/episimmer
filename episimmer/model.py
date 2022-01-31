@@ -21,6 +21,7 @@ class BaseModel():
     def __init__(self, name: str):
         self.name: str = name
 
+        self.infected_states: List[str] = []
         self.recieve_fn: Union[Callable, None] = None
         self.contribute_fn: Union[Callable, None] = None
         self.external_prev_fn: Callable = lambda x, y: 0.0
@@ -178,9 +179,10 @@ class StochasticModel(BaseModel):
                                                                     float]):
         super().__init__('Stochastic Model')
         self.transmission_prob: Dict[str, Dict[str, Callable]] = {}
-        self.individual_state_types: List[str] = individual_state_types
         self.infected_states: List[str] = infected_states
+        self.individual_state_types: List[str] = individual_state_types
         self.state_proportion: Dict[str, float] = state_proportion
+
         for state in individual_state_types:
             if state in infected_states:
                 self.set_state_color(state, True)
@@ -369,7 +371,6 @@ class ScheduledModel(BaseModel):
         self.state_transition_fn: Dict[str, Callable] = {}
         self.state_mean: Dict[str, Union[int, None]] = {}
         self.state_vary: Dict[str, Union[int, None]] = {}
-        self.infected_states: List[str] = []
         self.state_proportion: Dict[str, float] = {}
         self.state_fn: Dict[str, Union[Callable, None]] = {}
 
