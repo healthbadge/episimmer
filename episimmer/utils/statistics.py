@@ -1,3 +1,6 @@
+from typing import Callable, Dict, List, Union, ValuesView,Tuple
+from xmlrpc.client import Boolean
+
 import copy
 import functools
 import os
@@ -108,25 +111,42 @@ def process_dict(dict, final_level_properties, levels):
     return process_dict_recursion(dict, final_level_properties, levels, 0)
 
 
-def get_pretty_print_str(dict):
+def get_pretty_print_str(dict)->str:
+    """
+    Formats and prints the dictionary.
+
+    Args:
+        dict:Dictionary to be formatted.
+    """
     val_string = pprint.pformat(dict, indent=0)
     val_string += '\n'
     return val_string
 
 
-def save_pickle(example_path, pickle_file, final_dict):
+def save_pickle(example_path, pickle_file, final_dict)->None:
+    """
+    Saves the model object of the example.
+
+    Args:
+        example_path:path of episimmer example.
+        pickle_file:model file.
+        final_dict:dict containing final state proportions.
+    """
     with open(os.path.join(example_path, 'results', pickle_file),
               'wb') as handle:
         pickle.dump(final_dict, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 
-def save_to_text_file(example_path, str, text_filename):
+def save_to_text_file(example_path, str, text_filename)->None:
+    """
+    Saves results to a text file.
+    """
     fp = open(os.path.join(example_path, 'results', text_filename), 'w')
     fp.write(str)
     fp.close()
 
 
-def save_stats(obj_lev_tuples, key, final_level_properties='All'):
+def save_stats(obj_lev_tuples, key, final_level_properties='All')->None:
     def decorator(func):
         @functools.wraps(func)
         def wrapper(ref, *args, **kwargs):

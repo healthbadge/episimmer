@@ -24,7 +24,7 @@ class BaseModel():
         self.recieve_fn: Union[Callable, None] = None
         self.contribute_fn: Union[Callable, None] = None
         self.external_prev_fn: Callable = lambda x, y: 0.0
-        self.symptomatic_states: Union[List[str]] = []
+        self.symptomatic_states: List[str] = []
 
         self.infectious_colors: List[str] = ['red', 'pink', 'orange', 'purple']
         self.normal_colors: List[str] = [

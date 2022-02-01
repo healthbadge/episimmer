@@ -1,3 +1,5 @@
+from typing import Callable, Dict, List, Union, ValuesView,Tuple
+from xmlrpc.client import Boolean
 import functools
 import math
 import os.path as osp
@@ -11,8 +13,17 @@ from .arg_parser import parse_args
 from .time import Time
 
 
-def plot_results(example_path, model, avg_dict, stddev_dict, maxdict, mindict,
-                 plot):
+def plot_results(example_path:str, model:object, avg_dict:Dict[str,List[int]], stddev_dict, maxdict:Dict[str,int], mindict:Dict[str,int],
+                 plot)->None:
+    """
+    Plots the result of simulation.
+
+    Args:
+        example_path:path of episimmer example.
+        model:model object of example.
+        maxdict:global maxima of state of example.
+        mindict:global minima of state of example.
+    """
     for state in avg_dict.keys():
         x = np.arange(0, len(avg_dict[state]))
         plt.plot(avg_dict[state], color=model.colors[state])
@@ -38,7 +49,14 @@ def plot_results(example_path, model, avg_dict, stddev_dict, maxdict, mindict,
     fig.savefig(osp.join(example_path, 'results', 'results.jpg'))
 
 
-def buildgraph(i, fig, model, tdict):
+def buildgraph(i, fig, model: object , tdict)->None:
+    """
+    Noting down labels of graph.
+
+    Args:
+        model:Model object of example.
+
+    """
     plt.clf()
     plt.title(model.name + ' Plot')
     plt.ylabel('Population')
@@ -63,7 +81,7 @@ def store_animated_time_plot(example_path, model, tdict):
               writer=ani.PillowWriter(fps=10))
 
 
-def get_interaction_graph_from_object(obj):
+def get_interaction_graph_from_object(obj)->Graph:
 
     agents_obj = obj.agents_obj
     model = obj.model
@@ -114,7 +132,7 @@ def get_interaction_graph_from_object(obj):
     return G
 
 
-def save_env_graph():
+def save_env_graph()->None:
     def decorator(func):
         @functools.wraps(func)
         def wrapper(ref, *args, **kwargs):
@@ -144,6 +162,9 @@ def set_ax_params(ax, model, timestep):
 
 
 def draw_graph(G, ax, seed):
+    """
+
+    """
     pos = nx.get_node_attributes(G, 'pos')
     color = nx.get_node_attributes(G, 'color')
 
@@ -175,6 +196,9 @@ def animate_graph(timestep, fig, model, G_list, seed):
 
 
 def store_animated_dynamic_graph():
+    """
+    Plots results of simulation as an animation.
+    """
     def decorator(func):
         @functools.wraps(func)
         def wrapper(ref, *args, **kwargs):
