@@ -33,7 +33,7 @@ class ReadConfiguration():
 
         f = open(filename, 'r')
 
-        self.random_seed = (self.get_value_config(f.readline()))
+        self.random_seed: int = (self.get_value_config(f.readline()))
         if (self.random_seed != ''):
             random.seed((int)(self.random_seed))
 
@@ -41,19 +41,19 @@ class ReadConfiguration():
         self.time_steps = (int)(self.get_value_config(f.readline()))
 
         self.agent_info_keys = self.get_value_config(f.readline())
-        self.agents_filename = self.get_value_config(f.readline())
+        self.agents_filename: Union[str, None] = self.get_value_config(f.readline())
         self.interaction_info_keys = self.get_value_config(f.readline())
-        self.interactions_files_list_list = (self.get_value_config(
+        self.interactions_files_list_list: Union[List[str], None] = (self.get_value_config(
             f.readline())).split(',')
-        self.probabilistic_interactions_files_list_list = (
+        self.probabilistic_interactions_files_list_list: Union[List[str], None] = (
             self.get_value_config(f.readline())).split(',')
 
-        self.location_info_keys = self.get_value_config(f.readline())
-        self.locations_filename = self.get_value_config(f.readline())
-        self.event_info_keys = self.get_value_config(f.readline())
-        self.events_files_list_list = (self.get_value_config(
+        self.location_info_keys: Union[str, None] = self.get_value_config(f.readline())
+        self.locations_filename: Union[str, None] = self.get_value_config(f.readline())
+        self.event_info_keys: Union[str, None] = self.get_value_config(f.readline())
+        self.events_files_list_list: Union[List[str], None] = (self.get_value_config(
             f.readline())).split(',')
-        self.one_time_event_file = self.get_value_config(f.readline())
+        self.one_time_event_file: Union[str, None] = self.get_value_config(f.readline())
         f.close()
 
         if 'Agent Index' not in self.agent_info_keys.split(':'):
@@ -107,6 +107,9 @@ class ReadConfiguration():
 
         Args:
             line: Line in the config file which has a label and its respective value
+            
+        Returns:
+            Value of an entry in the config file.
         """
         l = re.findall('\<.*?\>', line)
         if len(l) != 1:
@@ -114,14 +117,18 @@ class ReadConfiguration():
         value = (((l[0])[1:])[:-1])
         return value
 
-    def get_file_paths(self, example_path: str) -> str, str, str, str, str, str:
+    def get_file_paths(self, example_path: str) -> Tuple[str]:
         # File Names
         """
         Gets the paths of the agents file, interactions files, events files, locations file, one time event file, and
         probabalistic interactions files from the config file.
 
         Args:
-            example_path: Path of the directory of the example used in Episimmer
+            example_path: Path of the directory of the example used in Episimmer.
+            
+        Returns:
+            Tuple containing paths of the agents file, interactions files, events files, locations file, one time event file, and
+            probabalistic interactions files.
         """
         locations_filename = one_time_event_file = None
         events_FilesList_filename = interactions_FilesList_filename = []
@@ -160,7 +167,7 @@ class ReadConfiguration():
     def get_file_names_list(self, example_path: str,
                             interactions_FilesList_filename: str,
                             events_FilesList_filename: str,
-                            probabilistic_interactions_FilesList_filename: str) -> List[str], List[str], List[str]:
+                            probabilistic_interactions_FilesList_filename: str) -> Tuple[List[str]]:
         # Reading through a file (for interactions/events) that contain file names which contain interactions and event details for a time step
         """
         Gets the list of all the interaction files, events files and probabilistic interaction files.
@@ -170,6 +177,9 @@ class ReadConfiguration():
             interactions_FilesList_filename: List of path names of all the interactions files
             events_FilesList_filename: List of path names of all the events files
             probabilistic_interactions_FilesList_filename: List of path names of all the prababilistic interactions files
+            
+        Returns:
+            Tuple containing list of interaction files, list of events files, and list of probabilistic interaction files.
         """
 
         interactions_files_list = events_files_list = probabilistic_interactions_files_list = []
@@ -255,6 +265,9 @@ class ReadVDConfiguration():
 
         Args:
             line: Line in the config file which has a label and its respective value
+            
+        Returns:
+            Value of an entry in the config file.
         """
         l = re.findall('\<.*?\>', line)
         if len(l) != 1:
