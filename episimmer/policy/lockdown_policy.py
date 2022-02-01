@@ -1,12 +1,10 @@
 import copy
-from typing import Callable, Deque, Dict, List, Set, Union, ValuesView
+from typing import Callable, Dict, List, Union, ValuesView, Set, Deque
 
+from .base import AgentPolicy
 from episimmer.agent import Agent
 from episimmer.location import Location
 from episimmer.model import BaseModel
-
-from .base import AgentPolicy
-
 
 class LockdownPolicy(AgentPolicy):
     """
@@ -21,7 +19,7 @@ class LockdownPolicy(AgentPolicy):
         self.do_lockdown_fn: Callable = do_lockdown_fn
         self.p: float = p
 
-    def lockdown_agent(self, agent: Agent):
+    def lockdown_agent(self, agent: Agent)->None:
         """
         Updates the agent's contribution to and reception of infection.
 
@@ -41,15 +39,15 @@ class FullLockdown(LockdownPolicy):
         do_lockdown_fn: User-defined function to specify which time steps to enforce lockdown in.
         p: Measure of how much the agent's contribution to and reception of the infection is influenced by lockdown.
     """
-    def __init__(self, do_lockdown_fn: Callable, p: float = 0.0):
+    def __init__(self, do_lockdown_fn: Callable, p: float=0.0):
         super().__init__(do_lockdown_fn, p)
 
     def enact_policy(self,
                      time_step: int,
                      agents: Dict[str, Agent],
                      locations: ValuesView[Location],
-                     model: Union[BaseModel, None] = None,
-                     policy_index: int = None):
+                     model: Union[BaseModel, None] =None,
+                     policy_index: int=None)->None:
         """
         If lockdown policy is enforced in the time step, it lockdowns all agents.
 
@@ -77,11 +75,7 @@ class AgentLockdown(LockdownPolicy):
         do_lockdown_fn: User-defined function to specify which time steps to enforce lockdown in.
         p: Measure of how much the agent's contribution to and reception of the infection is influenced by lockdown.
     """
-    def __init__(self,
-                 parameter: Union[str, None],
-                 value_list: List[str],
-                 do_lockdown_fn: Callable,
-                 p: float = 0.0):
+    def __init__(self, parameter: Union[str, None], value_list: List[str], do_lockdown_fn: Callable, p: float=0.0):
         super().__init__(do_lockdown_fn, p)
         self.parameter: Union[str, None] = parameter
         self.value_list: List[str] = value_list
@@ -90,8 +84,8 @@ class AgentLockdown(LockdownPolicy):
                      time_step: int,
                      agents: Dict[str, Agent],
                      locations: ValuesView[Location],
-                     model: Union[BaseModel, None] = None,
-                     policy_index: int = None):
+                     model: Union[BaseModel, None]=None,
+                     policy_index: int=None)->None:
         """
         If lockdown policy is enforced in the time step, it lockdowns select set of agents according to value list.
 
@@ -123,8 +117,8 @@ class TestingBasedLockdown(LockdownPolicy):
     def __init__(self,
                  do_lockdown_fn: Callable,
                  time_period: int,
-                 contact_tracing: bool = False,
-                 p: float = 0.0):
+                 contact_tracing: bool=False,
+                 p: float=0.0):
         super().__init__(do_lockdown_fn, p)
         self.time_period: int = time_period
         self.contact_tracing: bool = contact_tracing
@@ -133,10 +127,10 @@ class TestingBasedLockdown(LockdownPolicy):
                      time_step: int,
                      agents: Dict[str, Agent],
                      locations: ValuesView[Location],
-                     model: Union[BaseModel, None] = None,
-                     policy_index: int = None):
+                     model: Union[BaseModel, None] =None,
+                     policy_index: int =None)->None:
         """
-        Reduces scheduled time of agents. If lockdown policy is enforced in the time step, it lockdowns positive agents and their
+        Reduces scheduled time of agents. If lockdown policy is enforced in the time step, it lockdowns positive agents and their 
         contacts as well if contact tracing is enabled.
 
         Args:
@@ -152,7 +146,7 @@ class TestingBasedLockdown(LockdownPolicy):
             if self.contact_tracing:
                 self.lockdown_contacts(agents)
 
-    def reduce_agent_schedule_time(self, agents: Dict[str, Agent]):
+    def reduce_agent_schedule_time(self, agents: Dict[str, Agent])->None:
         """
         Reduces the scheduled time for all agents across all contact tracing policies.
 
@@ -166,11 +160,7 @@ class TestingBasedLockdown(LockdownPolicy):
                     self.reduce_schedule_time(agent, agent_ct_state,
                                               ct_policy_index)
 
-    def reduce_schedule_time(self, agent: Agent,
-                             policy_state: Dict[int, Dict[str,
-                                                          Union[int,
-                                                                Deque[int]]]],
-                             policy_num: int):
+    def reduce_schedule_time(self, agent: Agent, policy_state: Dict[int, Dict[str, Union[int, Deque[int]]]], policy_num: int)->None:
         """
         If the agent's scheduled time is positive, this function decrements its scheduled time by 1.
 
@@ -183,8 +173,7 @@ class TestingBasedLockdown(LockdownPolicy):
         if agent_ct_scheduled_time > 0:
             policy_state[policy_num]['schedule_time'] -= 1
 
-    def lockdown_positive_agents(self, agents: Dict[str, Agent],
-                                 time_step: int):
+    def lockdown_positive_agents(self, agents: Dict[str, Agent], time_step: int)->None:
         """
         Locks down the positively tested agents and resets the scheduled time of their contacts.
 
@@ -201,9 +190,9 @@ class TestingBasedLockdown(LockdownPolicy):
                     if contacts:
                         self.set_schedule_time(agents, contacts)
 
-    def get_agent_test_result(self, agent: Agent, time_step: int):
+    def get_agent_test_result(self, agent: Agent, time_step: int)->Union[None,str]:
         """
-        Gets the result of most recently conducted test on the agent from its testing history if its validity still holds in the
+        Gets the result of most recently conducted test on the agent from its testing history if its validity still holds in the 
         curent time step.
 
         Args:
@@ -222,10 +211,7 @@ class TestingBasedLockdown(LockdownPolicy):
                 return result
         return None
 
-    def get_accumulated_test_result(self, history: Dict[str,
-                                                        Union[str, List[str],
-                                                              List[int]]],
-                                    last_time_step: int):
+    def get_accumulated_test_result(self, history: Dict[str, Union[str, List[str], List[int]]], last_time_step: int)->str:
         """
         Gets the test result from the last time step that the agent was tested in.
 
@@ -243,7 +229,7 @@ class TestingBasedLockdown(LockdownPolicy):
             indx -= 1
         return 'Positive'
 
-    def obtain_contact_set(self, agent: Agent):
+    def obtain_contact_set(self, agent: Agent)->set:
         """
         Finds set of contacts of an agent across all contact tracing policies.
 
@@ -264,9 +250,9 @@ class TestingBasedLockdown(LockdownPolicy):
                         contacts = contacts.union(set(contact))
         return contacts
 
-    def set_schedule_time(self, agents: Dict[str, Agent], contacts: Set[str]):
+    def set_schedule_time(self, agents: Dict[str, Agent], contacts: Set[str])->None:
         """
-        Sets the scheduled time of contacts of positive agent as time period of the lockdown policy if the scheduled time of the
+        Sets the scheduled time of contacts of positive agent as time period of the lockdown policy if the scheduled time of the 
         contact is 0.
 
         Args:
@@ -283,7 +269,7 @@ class TestingBasedLockdown(LockdownPolicy):
                     contact_ct_state[contact_ct_policy_index][
                         'schedule_time'] = self.time_period
 
-    def lockdown_contacts(self, agents: Dict[str, Agent]):
+    def lockdown_contacts(self, agents: Dict[str, Agent])->None:
         """
         Locks down a contact if its scheduled time is greater than 0.
 
