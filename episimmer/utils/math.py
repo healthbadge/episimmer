@@ -4,6 +4,16 @@ import numpy as np
 
 
 def deep_copy_average(tdict, number):
+    """
+    This function averages over the values in a dictionary.
+
+    Args:
+        tdict: Time series dictionary.
+        number: Value used for averaging over the dictionary.
+
+    Returns:
+        Dictionary averaged out.
+    """
     avg_dict = copy.deepcopy(tdict)
     for k in avg_dict.keys():
         l = avg_dict[k]
