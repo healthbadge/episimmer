@@ -377,6 +377,9 @@ class ReadAgents(BaseReadFile):
 
         Args:
             info_list: List of values for all the parameter keys of an agent.
+            
+        Returns:
+            Information dictionary of the agent.
         """
         info_dict = {}
         for i, key in enumerate(self.parameter_keys):
@@ -439,12 +442,15 @@ class ReadInteractions(BaseReadFile):
                         agent_index = info_dict['Agent Index']
                         agents_obj.agents[agent_index].add_contact(info_dict)
 
-    def get_interaction(self, parameter_list: List[str]) -> str, Dict[str, Union[str, List[str], None]]:
+    def get_interaction(self, parameter_list: List[str]) -> Tuple[str, Dict[str, Union[str, List[str], None]]]:
         """
         Creates a dictionary for an agent containing interaction information.
 
         Args:
             parameter_list: List containing agent index and interacting agent index
+            
+        Returns:
+            Agent index and information dictionary of the agent.
         """
         info_dict = {}
         agent_index = None
@@ -504,10 +510,13 @@ class ReadProbabilisticInteractions(BaseReadFile):
 
     def get_interactions(self, parameter_list: List[str]) -> List[str]:
         """
-        Creates a dictionary for an agent containing interaction information.
+        Creates a list of interactions using probability values and agent indices according to parameter values.
 
         Args:
             parameter_list: List containing probability of interaction and agent indices associated with that probability.
+            
+        Returns:
+            Interaction list consisting of tuples of agent index and interaction information.
         """
         info_dict = {}
         agent_indexes = []
@@ -586,6 +595,9 @@ class ReadLocations(BaseReadFile):
 
         Args:
             info_list: List of values for all the parameter keys of a location.
+
+        Returns:
+            Information dictionary of the agent.
         """
         info_dict = {}
         for i, key in enumerate(self.parameter_keys):
@@ -628,13 +640,16 @@ class ReadEvents(BaseReadFile):
 
         f.close()
 
-    def get_event(self, parameter_list: List[str]) -> str, Dict[str, Union[str, List[str], None]]:
+    def get_event(self, parameter_list: List[str]) -> Tuple[str, Dict[str, Union[str, List[str], None]]]:
         """
         Creates a dictionary for a location containing information about the events taking place at that location.
 
         Args:
             parameter_list: List containing location index of a location and agent indices of the agents part of an event taking place
             at that location.
+
+        Returns:
+            Location index and information dictionary of the location.
         """
         info_dict = {}
         location_index = None
@@ -711,13 +726,16 @@ class ReadOneTimeEvents(BaseReadFile):
             location_index, info_dict = self.get_event(parameter_list)
             self.locations_obj.locations[location_index].add_event(info_dict)
 
-    def get_event(self, parameter_list: List[str]) -> str, Dict[str, Union[str, List[str], None]]:
+    def get_event(self, parameter_list: List[str]) -> Tuple[str, Dict[str, Union[str, List[str], None]]]:
         """
         Creates a dictionary for a location containing information about the one time event taking place at that location.
 
         Args:
             parameter_list: List containing time steps at which the one time event takes place, index of the location and agent indices
             of the agents part of the event.
+        
+        Returns: Location index and information dictionary of the location.
+
         """
         info_dict = {}
         location_index = None
