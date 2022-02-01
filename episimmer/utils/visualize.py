@@ -2,7 +2,7 @@ import functools
 import math
 import os.path as osp
 from typing import Callable, Dict, List, Tuple, Union, ValuesView
-from xmlrpc.client import Boolean
+
 
 import matplotlib.animation as ani
 import matplotlib.pyplot as plt

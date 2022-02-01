@@ -1,5 +1,5 @@
 from typing import Callable, Dict, List, Tuple, Union, ValuesView
-from xmlrpc.client import Boolean
+
 
 
 class Agent():
@@ -22,7 +22,7 @@ class Agent():
         self.schedule_time_left: Union[int, None] = None
         self.can_recieve_infection: int = 1.0
         self.can_contribute_infection: int = 1.0
-        self.under_protection: Boolean = False
+        self.under_protection: bool = False
 
         self.policy_dict: Dict = {}  #Store all policy related status of agent
         self.initialize_policy_dict()

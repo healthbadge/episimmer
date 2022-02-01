@@ -1,5 +1,4 @@
 from typing import Callable, Dict, List, Union, ValuesView
-from xmlrpc.client import Boolean
 
 
 class Location():
@@ -13,7 +12,7 @@ class Location():
         self.info: Dict[str, str] = info_dict
         self.index: str = info_dict['Location Index']
         self.events: List[str] = []
-        self.lock_down_state: Boolean = False
+        self.lock_down_state: bool = False
 
     def new_time_step(self) -> None:
         """
