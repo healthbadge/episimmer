@@ -7,7 +7,7 @@ class Agent():
 
         Args:
         state: The state of the agent.
-        info_dict: Information of each agent taken from agents.txt.
+        info_dict: Information of each agent taken from the agents file.
     """
     def __init__(self, state: str, info_dict: Dict[str, str]):
         self.state: str = state
