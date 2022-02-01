@@ -186,6 +186,9 @@ class Simulate():
         Args:
             agent: Agent whose next state is to be set
             c_dict: Cotact dictionary of an agent with agent index as the key and interacting agent index as the value
+        
+        Returns:
+            Boolean representing validity of the interaction.
         """
         if agent.under_protection:
             return False
