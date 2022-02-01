@@ -33,7 +33,7 @@ class Simulate():
         self.model: Union[BaseModel, None] = model
         self.policy_list: List[str] = policy_list
         self.event_restriction_fn: Callable = event_restriction_fn
-        self.config_obj: ReadConfiguration = config_obj
+        self.config_obj: object = config_obj
         self.G_list = []
 
     def onStartSimulation(self) -> None:
@@ -238,7 +238,7 @@ class Simulate():
         """
         return self.state_history
 
-    def store_state(self) -> return None:
+    def store_state(self) -> None:
         """
         Stores the number of agents in each state in the state history at the end of the simulation.
         """

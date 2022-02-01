@@ -83,7 +83,7 @@ def store_animated_time_plot(example_path, model, tdict):
               writer=ani.PillowWriter(fps=10))
 
 
-def get_interaction_graph_from_object(obj) -> Graph:
+def get_interaction_graph_from_object(obj):
 
     agents_obj = obj.agents_obj
     model = obj.model

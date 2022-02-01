@@ -1,7 +1,9 @@
 import argparse
+from typing import Callable, Dict, List, Tuple, Union, ValuesView,ModuleType,Namespace
+from xmlrpc.client import Boolean
 
 
-def parse_args():
+def parse_args()->Namespace:
     """
     This function parses the commmand-line options, arguments and sub-arguments which makes it easy to write user-friendly
     command-line interfaces.
