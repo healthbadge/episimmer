@@ -3,11 +3,11 @@ from typing import Dict, List, Tuple, Union
 
 class Agent():
     """
-        Class for an agent of the simulation.
+    Class for an agent of the simulation.
 
-        Args:
-        state: The state of the agent.
-        info_dict: Information of each agent taken from agents.txt.
+    Args:
+    state: The state of the agent.
+    info_dict: Information of each agent taken from agents.txt.
     """
     def __init__(self, state: str, info_dict: Dict[str, str]):
         self.state: str = state
