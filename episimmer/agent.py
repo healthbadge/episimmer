@@ -1,4 +1,4 @@
-from typing import Callable, Dict, List, Union, ValuesView,Tuple
+from typing import Callable, Dict, List, Tuple, Union, ValuesView
 from xmlrpc.client import Boolean
 
 
@@ -10,21 +10,21 @@ class Agent():
         state: The state of the agent.
         info_dict: Information of each agent taken from agents.txt.
     """
-    def __init__(self, state: str, info_dict: Dict[str,str]):
+    def __init__(self, state: str, info_dict: Dict[str, str]):
         self.state: str = state
-        self.next_state: Union[str,None] = None
+        self.next_state: Union[str, None] = None
         self.contact_list: List[str] = []
         self.location_list: List[str] = []
-        self.info: Dict[str,str] = info_dict
+        self.info: Dict[str, str] = info_dict
         self.index: str = info_dict['Agent Index']
         self.event_probabilities: List[int] = []
 
-        self.schedule_time_left: Union[int,None] = None
+        self.schedule_time_left: Union[int, None] = None
         self.can_recieve_infection: int = 1.0
         self.can_contribute_infection: int = 1.0
         self.under_protection: Boolean = False
 
-        self.policy_dict:Dict = {}  #Store all policy related status of agent
+        self.policy_dict: Dict = {}  #Store all policy related status of agent
         self.initialize_policy_dict()
 
     def initialize_state(self,

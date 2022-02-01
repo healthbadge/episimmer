@@ -3,7 +3,7 @@ import argparse
 
 def parse_args():
     """
-    This function parses the commmand-line options, arguments and sub-arguments which makes it easy to write user-friendly 
+    This function parses the commmand-line options, arguments and sub-arguments which makes it easy to write user-friendly
     command-line interfaces.
 
     Returns:

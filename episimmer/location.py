@@ -1,6 +1,7 @@
 from typing import Callable, Dict, List, Union, ValuesView
 from xmlrpc.client import Boolean
 
+
 class Location():
     """
     Class used for storing any information related to the location such as events and lockdown state of location.
@@ -8,11 +9,11 @@ class Location():
     Args:
         info_dict: Information of each location obtained from locations.txt .
     """
-    def __init__(self, info_dict: Dict[str,str]):
-        self.info:Dict[str,str] = info_dict
-        self.index:str = info_dict['Location Index']
-        self.events:List[str] = []
-        self.lock_down_state:Boolean = False
+    def __init__(self, info_dict: Dict[str, str]):
+        self.info: Dict[str, str] = info_dict
+        self.index: str = info_dict['Location Index']
+        self.events: List[str] = []
+        self.lock_down_state: Boolean = False
 
     def new_time_step(self) -> None:
         """
@@ -21,7 +22,7 @@ class Location():
         self.lock_down_state = False
         self.events = []
 
-    def add_event(self, event_info: Dict[str,List[str]]) -> None:
+    def add_event(self, event_info: Dict[str, List[str]]) -> None:
         """
         Storing all the events that take place in the location under the events list.
         """

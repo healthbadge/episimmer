@@ -1,11 +1,10 @@
-from typing import Callable, Dict, List, Union, ValuesView,Tuple
-from xmlrpc.client import Boolean
-
 import copy
 import functools
 import os
 import pickle
 import pprint
+from typing import Callable, Dict, List, Tuple, Union, ValuesView
+from xmlrpc.client import Boolean
 
 from .arg_parser import parse_args
 from .time import Time
@@ -111,7 +110,7 @@ def process_dict(dict, final_level_properties, levels):
     return process_dict_recursion(dict, final_level_properties, levels, 0)
 
 
-def get_pretty_print_str(dict)->str:
+def get_pretty_print_str(dict) -> str:
     """
     Formats and prints the dictionary.
 
@@ -123,7 +122,7 @@ def get_pretty_print_str(dict)->str:
     return val_string
 
 
-def save_pickle(example_path, pickle_file, final_dict)->None:
+def save_pickle(example_path, pickle_file, final_dict) -> None:
     """
     Saves the model object of the example.
 
@@ -137,7 +136,7 @@ def save_pickle(example_path, pickle_file, final_dict)->None:
         pickle.dump(final_dict, handle, protocol=pickle.HIGHEST_PROTOCOL)
 
 
-def save_to_text_file(example_path, str, text_filename)->None:
+def save_to_text_file(example_path, str, text_filename) -> None:
     """
     Saves results to a text file.
     """
@@ -146,7 +145,7 @@ def save_to_text_file(example_path, str, text_filename)->None:
     fp.close()
 
 
-def save_stats(obj_lev_tuples, key, final_level_properties='All')->None:
+def save_stats(obj_lev_tuples, key, final_level_properties='All') -> None:
     def decorator(func):
         @functools.wraps(func)
         def wrapper(ref, *args, **kwargs):

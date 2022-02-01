@@ -1,8 +1,8 @@
-from typing import Callable, Dict, List, Union, ValuesView,Tuple
-from xmlrpc.client import Boolean
 import functools
 import math
 import os.path as osp
+from typing import Callable, Dict, List, Tuple, Union, ValuesView
+from xmlrpc.client import Boolean
 
 import matplotlib.animation as ani
 import matplotlib.pyplot as plt
@@ -13,8 +13,10 @@ from .arg_parser import parse_args
 from .time import Time
 
 
-def plot_results(example_path:str, model:object, avg_dict:Dict[str,List[int]], stddev_dict, maxdict:Dict[str,int], mindict:Dict[str,int],
-                 plot)->None:
+def plot_results(example_path: str, model: object, avg_dict: Dict[str,
+                                                                  List[int]],
+                 stddev_dict, maxdict: Dict[str, int], mindict: Dict[str, int],
+                 plot) -> None:
     """
     Plots the result of simulation.
 
@@ -49,7 +51,7 @@ def plot_results(example_path:str, model:object, avg_dict:Dict[str,List[int]], s
     fig.savefig(osp.join(example_path, 'results', 'results.jpg'))
 
 
-def buildgraph(i, fig, model: object , tdict)->None:
+def buildgraph(i, fig, model: object, tdict) -> None:
     """
     Noting down labels of graph.
 
@@ -81,7 +83,7 @@ def store_animated_time_plot(example_path, model, tdict):
               writer=ani.PillowWriter(fps=10))
 
 
-def get_interaction_graph_from_object(obj)->Graph:
+def get_interaction_graph_from_object(obj) -> Graph:
 
     agents_obj = obj.agents_obj
     model = obj.model
@@ -132,7 +134,7 @@ def get_interaction_graph_from_object(obj)->Graph:
     return G
 
 
-def save_env_graph()->None:
+def save_env_graph() -> None:
     def decorator(func):
         @functools.wraps(func)
         def wrapper(ref, *args, **kwargs):

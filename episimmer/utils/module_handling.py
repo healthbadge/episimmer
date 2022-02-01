@@ -3,7 +3,7 @@ import importlib.util
 
 def module_from_file(module_name: Union[str, None], file_path: Union[str, None]) -> :
     """
-    This function creates a ModuleSpec instance based on the path to a file and obtains a module from the instance. This module is 
+    This function creates a ModuleSpec instance based on the path to a file and obtains a module from the instance. This module is
     then loaded and returned.
 
     Args:

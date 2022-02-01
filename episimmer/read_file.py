@@ -4,24 +4,24 @@ import os.path as osp
 import random
 import re
 from csv import DictReader
-
-from .agent import Agent
-from .location import Location
-from .utils.time import Time
-
 from typing import Callable, Dict, List, Tuple, Union
 
 from episimmer.agent import Agent
 from episimmer.location import Location
 from episimmer.model import BaseModel
 
+from .agent import Agent
+from .location import Location
+from .utils.time import Time
+
+
 class ReadConfiguration():
     """
-    Class for reading the configuration file of an example used in Episimmer to obtain the required file paths and file names 
+    Class for reading the configuration file of an example used in Episimmer to obtain the required file paths and file names
     needed for its simulation.
 
     Args:
-        filename: Name of the example directory 
+        filename: Name of the example directory
     """
     def __init__(self, filename):
         self.worlds: Union[int, None] = None
@@ -117,7 +117,7 @@ class ReadConfiguration():
     def get_file_paths(self, example_path: str) -> str, str, str, str, str, str:
         # File Names
         """
-        Gets the paths of the agents file, interactions files, events files, locations file, one time event file, and 
+        Gets the paths of the agents file, interactions files, events files, locations file, one time event file, and
         probabalistic interactions files from the config file.
 
         Args:
@@ -213,11 +213,11 @@ class ReadConfiguration():
 
 class ReadVDConfiguration():
     """
-    Class for reading the configuration file of an example built for Vulnerability Detection used in Episimmer to obtain the 
+    Class for reading the configuration file of an example built for Vulnerability Detection used in Episimmer to obtain the
     required file paths and file names needed for its simulation.
 
     Args:
-        filename: Name of the example directory 
+        filename: Name of the example directory
     """
     def __init__(self, filename):
         self.target: Union[str, None] = None
@@ -293,7 +293,7 @@ class ReadFilesList():
 
 class BaseReadFile():
     """
-    Base class for reading agents, locations, interactions and events from a file. 
+    Base class for reading agents, locations, interactions and events from a file.
     """
     def __init__(self):
         pass

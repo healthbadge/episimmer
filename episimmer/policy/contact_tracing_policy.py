@@ -1,7 +1,7 @@
 import copy
+from collections import deque
 from typing import Callable, Dict, List, Union, ValuesView
 from xmlrpc.client import Boolean
-from collections import deque
 
 from Healthbadge.episimmer.episimmer.agent import Agent
 from Healthbadge.episimmer.episimmer.location import Location
@@ -44,7 +44,7 @@ class CTPolicy(AgentPolicy):
                     self.attribute] in self.value_list:
                 agent_ct_state[policy_index]['contact_deque'] = deque(
                     maxlen=self.num_of_days)
-    
+
 
     def post_policy(self, agents:Dict[str,Agent], locations:ValuesView[Location], policy_index:str)->None:
         """
@@ -99,7 +99,7 @@ class CTPolicy(AgentPolicy):
         """
         Saving the contacts of agent via events.
 
-        Args: 
+        Args:
             locations: Collection of :class:`~episimmer.location.Location` objects.
             policy_index: the index of the ith contact tracing policy being run.
         """

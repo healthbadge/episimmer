@@ -1,4 +1,11 @@
 import random
+from typing import Callable, Dict, List, Tuple, Union
+
+from episimmer.agent import Agent
+from episimmer.location import Location
+from episimmer.model import BaseModel
+from episimmer.read_file import (ReadAgents, ReadConfigurations, ReadEvents,
+                                 ReadLocations, ReadOneTimeEvents)
 
 from .read_file import (ReadEvents, ReadInteractions,
                         ReadProbabilisticInteractions)
@@ -6,21 +13,10 @@ from .utils.statistics import save_stats
 from .utils.time import Time
 from .utils.visualize import save_env_graph, store_animated_dynamic_graph
 
-from typing import Callable, Dict, List, Tuple, Union
-
-from episimmer.agent import Agent
-from episimmer.location import Location
-from episimmer.read_file import ReadAgents
-from episimmer.read_file import ReadLocations
-from episimmer.read_file import ReadOneTimeEvents
-from episimmer.read_file import ReadEvents
-from episimmer.read_file import ReadConfigurations
-from episimmer.model import BaseModel
-
 
 class Simulate():
     """
-    Class for handling all the activities taking place throughout a simulation and its time steps from start till the end. 
+    Class for handling all the activities taking place throughout a simulation and its time steps from start till the end.
 
     Args:
         config_obj: A dictionary containing information from the config file of the example.
@@ -42,7 +38,7 @@ class Simulate():
 
     def onStartSimulation(self) -> None:
         """
-        Funtion to initialize the state list and states, reset policies, and update and store the state list at the start of a 
+        Funtion to initialize the state list and states, reset policies, and update and store the state list at the start of a
         simulation.
         """
         #Intitialize state list
@@ -152,7 +148,7 @@ class Simulate():
 
     def handleTimeStepForAllAgents(self) -> None:
         """
-        Updates next state of every agent to ensure concurrency and following this updates the states of all the agents. 
+        Updates next state of every agent to ensure concurrency and following this updates the states of all the agents.
         """
         #Too ensure concurrency we update agent.next_state in method handleTimeStepAsAgent
         #After every agent has updated next_state we update states of all agents in method handleTimeStep()
@@ -223,7 +219,7 @@ class Simulate():
 
     def save_valid_interactions_events(self) -> None:
         """
-        Saves all the valid interactions of an agent from its contact list, and saves valid event information of a location. 
+        Saves all the valid interactions of an agent from its contact list, and saves valid event information of a location.
         """
         for agent in self.agents_obj.agents.values():
             agent.contact_list[:] = [
@@ -238,13 +234,13 @@ class Simulate():
     @store_animated_dynamic_graph()
     def endSimulation(self) -> Dict[str, List[int]]:
         """
-        Returns the state history at the end of the simulation. 
+        Returns the state history at the end of the simulation.
         """
         return self.state_history
 
     def store_state(self) -> return None:
         """
-        Stores the number of agents in each state in the state history at the end of the simulation. 
+        Stores the number of agents in each state in the state history at the end of the simulation.
         """
         for state in self.state_history.keys():
             self.state_history[state].append(len(self.state_list[state]))
