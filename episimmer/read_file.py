@@ -5,14 +5,15 @@ import random
 import re
 from csv import DictReader
 from typing import Callable, Dict, List, Tuple, Union
-
 from episimmer.agent import Agent
 from episimmer.location import Location
-from episimmer.model import BaseModel
+from episimmer.utils.time import Time
 
-from .agent import Agent
-from .location import Location
-from .utils.time import Time
+from typing import TYPE_CHECKING
+if TYPE_CHECKING:
+    from episimmer.model import BaseModel
+    
+
 
 
 class ReadConfiguration():
@@ -23,12 +24,12 @@ class ReadConfiguration():
     Args:
         filename: Name of the example directory
     """
-    def __init__(self, filename):
-        self.worlds: Union[int, None] = None
-        self.time_steps: Union[int, None] = None
-        self.starting_exposed_percentage: Union[float, None] = None
-        self.agent_info_keys: Union[str, None] = None
-        self.interaction_info_keys: Union[str, None] = None
+    def __init__(self, filename: str):
+        self.worlds: int = None
+        self.time_steps: int = None
+        self.starting_exposed_percentage: float = None
+        self.agent_info_keys: str = None
+        self.interaction_info_keys: str = None
         self.example_path: str = osp.dirname(filename)
 
         f = open(filename, 'r')
@@ -41,19 +42,19 @@ class ReadConfiguration():
         self.time_steps = (int)(self.get_value_config(f.readline()))
 
         self.agent_info_keys = self.get_value_config(f.readline())
-        self.agents_filename: Union[str, None] = self.get_value_config(f.readline())
+        self.agents_filename: str = self.get_value_config(f.readline())
         self.interaction_info_keys = self.get_value_config(f.readline())
-        self.interactions_files_list_list: Union[List[str], None] = (self.get_value_config(
+        self.interactions_files_list_list: List[str] = (self.get_value_config(
             f.readline())).split(',')
-        self.probabilistic_interactions_files_list_list: Union[List[str], None] = (
+        self.probabilistic_interactions_files_list_list: List[str] = (
             self.get_value_config(f.readline())).split(',')
 
-        self.location_info_keys: Union[str, None] = self.get_value_config(f.readline())
-        self.locations_filename: Union[str, None] = self.get_value_config(f.readline())
-        self.event_info_keys: Union[str, None] = self.get_value_config(f.readline())
-        self.events_files_list_list: Union[List[str], None] = (self.get_value_config(
+        self.location_info_keys: str = self.get_value_config(f.readline())
+        self.locations_filename: str = self.get_value_config(f.readline())
+        self.event_info_keys: str = self.get_value_config(f.readline())
+        self.events_files_list_list: List[str] = (self.get_value_config(
             f.readline())).split(',')
-        self.one_time_event_file: Union[str, None] = self.get_value_config(f.readline())
+        self.one_time_event_file: str = self.get_value_config(f.readline())
         f.close()
 
         if 'Agent Index' not in self.agent_info_keys.split(':'):
@@ -217,7 +218,6 @@ class ReadConfiguration():
                 list(map(lambda x: osp.join(example_path, x), obj.file_list))
                 for obj in eventFiles_obj
             ]
-
         return interactions_files_list, events_files_list, probabilistic_interactions_files_list
 
 
@@ -229,13 +229,13 @@ class ReadVDConfiguration():
     Args:
         filename: Name of the example directory
     """
-    def __init__(self, filename):
-        self.target: Union[str, None] = None
-        self.algorithm: Union[str, None] = None
+    def __init__(self, filename: str):
+        self.target: str = None
+        self.algorithm: str = None
         self.parameter_dict: Dict[str, Union[List[str], int]] = {}
-        self.pre_process: Union[str, None] = None
-        self.post_process: Union[str, None] = None
-        self.output_mode: Union[str, None] = None
+        self.pre_process: str = None
+        self.post_process: str = None
+        self.output_mode: str = None
         self.example_path: str = osp.dirname(filename)
 
         f = open(filename, 'r')
@@ -292,7 +292,7 @@ class ReadFilesList():
     """
     Reads environment components that contains the list of file lists files.
     """
-    def __init__(self, filename):
+    def __init__(self, filename: str):
         self.file_list = []
         f = open(filename, 'r')
         lines = f.readlines()
@@ -326,20 +326,20 @@ class ReadAgents(BaseReadFile):
         filename: Name of the file containing agent information.
         config_obj: A dictionary containing information from the config file of the example.
     """
-    def __init__(self, filename, config_obj):
+    def __init__(self, filename: str, config_obj: ReadConfiguration):
         super().__init__()
 
         if filename.endswith('.txt'):
             f = open(filename, 'r')
-            self.n = int(self.get_value(f.readline()))
+            self.n: int = int(self.get_value(f.readline()))
             agent_info_keys = self.get_value(f.readline())
             if agent_info_keys != config_obj.agent_info_keys:
                 raise Exception(
                     'Error! Agent Information parameters do not match the config.txt file'
                 )
 
-            self.parameter_keys = agent_info_keys.split(':')
-            self.agents = {}
+            self.parameter_keys: List[str] = agent_info_keys.split(':')
+            self.agents: Dict[str, Agent] = {}
 
             for i in range(self.n):
                 info_dict = self.create_info_dict(
@@ -371,7 +371,7 @@ class ReadAgents(BaseReadFile):
                     agent = Agent(state, info_dict)
                     self.agents[agent.index] = agent
 
-    def create_info_dict(self, info_list: List[str]) -> Dict[str, Union[str, List[str], None]]:
+    def create_info_dict(self, info_list: List[str]) -> Dict[str, str]:
         """
         Creates a dictionary of information regarding an agent.
 
@@ -399,20 +399,20 @@ class ReadInteractions(BaseReadFile):
     """
     def __init__(self, filename: str, config_obj: ReadConfiguration, agents_obj: ReadAgents):
         super().__init__()
-        self.config_obj: Dict[str, str] = config_obj
-        self.agents_obj: Dict[str, str] = agents_obj
+        self.config_obj: ReadConfiguration = config_obj
+        self.agents_obj: ReadAgents= agents_obj
         if filename == '' or filename == None:
             return
 
         if filename.endswith('.txt'):
             f = open(filename, 'r')
-            self.no_interactions = int(self.get_value(f.readline()))
+            self.no_interactions: int = int(self.get_value(f.readline()))
             interaction_info_keys = self.get_value(f.readline())
             if interaction_info_keys != config_obj.interaction_info_keys:
                 raise Exception(
                     'Error! Interaction parameters do not match the config.txt file'
                 )
-            self.parameter_keys = interaction_info_keys.split(':')
+            self.parameter_keys: List[str] = interaction_info_keys.split(':')
 
             for i in range(self.no_interactions):
                 parameter_list = (self.get_value(f.readline())).split(':')
@@ -426,9 +426,9 @@ class ReadInteractions(BaseReadFile):
             with open(filename, 'r') as read_obj:
                 csv_dict_reader = DictReader(read_obj)
                 csv_list = list(csv_dict_reader)
-                self.n = len(csv_list)
+                self.n: int = len(csv_list)
 
-                self.parameter_keys = ':'.join(csv_dict_reader.fieldnames)
+                self.parameter_keys: str = ':'.join(csv_dict_reader.fieldnames)
                 if self.parameter_keys != config_obj.interaction_info_keys:
                     raise Exception(
                         'Error! Interaction Information parameters do not match the config.txt file'
@@ -442,7 +442,7 @@ class ReadInteractions(BaseReadFile):
                         agent_index = info_dict['Agent Index']
                         agents_obj.agents[agent_index].add_contact(info_dict)
 
-    def get_interaction(self, parameter_list: List[str]) -> Tuple[str, Dict[str, Union[str, List[str], None]]]:
+    def get_interaction(self, parameter_list: List[str]) -> Tuple[str, Dict[str, str]]:
         """
         Creates a dictionary for an agent containing interaction information.
 
@@ -465,7 +465,6 @@ class ReadInteractions(BaseReadFile):
                 or info_dict['Interacting Agent Index'] not in set(
                     self.agents_obj.agents)):
             agent_index, info_dict = None, None
-
         return agent_index, info_dict
 
 
@@ -481,15 +480,15 @@ class ReadProbabilisticInteractions(BaseReadFile):
     """
     def __init__(self, filename: str, config_obj: ReadConfiguration, agents_obj: ReadAgents):
         super().__init__()
-        self.config_obj = config_obj
-        self.agents_obj = agents_obj
+        self.config_obj: ReadConfiguration = config_obj
+        self.agents_obj: ReadAgents = agents_obj
         if filename == '' or filename == None:
             return
 
         if filename.endswith('.txt'):
             f = open(filename, 'r')
-            self.no_interaction_sets = int(self.get_value(f.readline()))
-            self.parameter_keys = self.get_value(f.readline()).split(':')
+            self.no_interaction_sets: int = int(self.get_value(f.readline()))
+            self.parameter_keys: List[str] = self.get_value(f.readline()).split(':')
             config_interaction_info_keys_list = config_obj.interaction_info_keys.split(
                 ':')
 
@@ -508,7 +507,7 @@ class ReadProbabilisticInteractions(BaseReadFile):
 
             f.close()
 
-    def get_interactions(self, parameter_list: List[str]) -> List[str]:
+    def get_interactions(self, parameter_list: List[str]) -> Union[Tuple[str, Dict[str, str]], None]:
         """
         Creates a list of interactions using probability values and agent indices according to parameter values.
 
@@ -569,27 +568,27 @@ class ReadLocations(BaseReadFile):
     def __init__(self, filename: str, config_obj: ReadConfiguration):
         super().__init__()
         self.config_obj: ReadConfiguration = config_obj
-        self.locations = {}
+        self.locations: Dict[str, ReadLocations] = {}
         if filename == '' or filename == None:
             return
         f = open(filename, 'r')
 
-        self.no_locations = int(self.get_value(f.readline()))
+        self.no_locations: int = int(self.get_value(f.readline()))
         location_info_keys = self.get_value(f.readline())
         if location_info_keys != config_obj.location_info_keys:
             raise Exception(
                 'Error! Location parameters do not match the config.txt file')
-        self.parameter_keys = location_info_keys.split(':')
+        self.parameter_keys: List[str] = location_info_keys.split(':')
 
         for i in range(self.no_locations):
             info_dict = self.create_info_dict(
                 self.get_value(f.readline()).split(':'))
             location = Location(info_dict)
             self.locations[location.index] = location
-
+        
         f.close()
 
-    def create_info_dict(self, info_list: List[str]) -> Dict[str, Union[List[str], None]]:
+    def create_info_dict(self, info_list: List[str]) -> Dict[str, str]:
         """
         Creates a dictionary of information regarding an agent.
 
@@ -623,13 +622,13 @@ class ReadEvents(BaseReadFile):
         if filename == '' or filename == None:
             return
         f = open(filename, 'r')
-        self.no_events = int(self.get_value(f.readline()))
+        self.no_events: int = int(self.get_value(f.readline()))
         event_info_keys = self.get_value(f.readline())
         if event_info_keys != config_obj.event_info_keys:
             raise Exception(
                 'Error! Event parameters do not match the config.txt file')
 
-        self.parameter_keys = event_info_keys.split(':')
+        self.parameter_keys: List[str] = event_info_keys.split(':')
 
         for i in range(self.no_events):
             parameter_list = (self.get_value(f.readline())).split(':')
@@ -640,7 +639,7 @@ class ReadEvents(BaseReadFile):
 
         f.close()
 
-    def get_event(self, parameter_list: List[str]) -> Tuple[str, Dict[str, Union[str, List[str], None]]]:
+    def get_event(self, parameter_list: List[str]) -> Tuple[str, Dict[str, Union[str, List[str]]]]:
         """
         Creates a dictionary for a location containing information about the events taking place at that location.
 
@@ -687,15 +686,15 @@ class ReadOneTimeEvents(BaseReadFile):
     """
     def __init__(self, filename: str):
         super().__init__()
-        self.filename = filename
+        self.filename: str = filename
         if self.filename == '' or self.filename == None:
             return
         f = open(self.filename, 'r')
-        self.no_events = int(self.get_value(f.readline()))
-        self.event_info_keys = self.get_value(f.readline())
-        self.one_time_parameter_keys = self.event_info_keys.split(':')
-        self.parameter_keys = self.one_time_parameter_keys[1:]
-        self.eventsAt = {}
+        self.no_events: int = int(self.get_value(f.readline()))
+        self.event_info_keys: str = self.get_value(f.readline())
+        self.one_time_parameter_keys: List[sttr] = self.event_info_keys.split(':')
+        self.parameter_keys: List[str] = self.one_time_parameter_keys[1:]
+        self.eventsAt: Dict[int, List[str]] = {}
         for i in range(self.no_events):
             line = (self.get_value(f.readline())).split(':')
             for time in line[0].split(','):
@@ -714,9 +713,9 @@ class ReadOneTimeEvents(BaseReadFile):
         """
         if self.filename == '' or self.filename == None:
             return
-        self.config_obj = config_obj
-        self.locations_obj = locations_obj
-        self.agents_obj = agents_obj
+        self.config_obj: ReadConfiguration = config_obj
+        self.locations_obj: ReadLocations = locations_obj
+        self.agents_obj: ReadLocations = agents_obj
         if self.event_info_keys != 'Time Step:' + config_obj.event_info_keys:
             raise Exception(
                 'Error! One Time Event parameters do not match the config.txt file'
@@ -726,7 +725,7 @@ class ReadOneTimeEvents(BaseReadFile):
             location_index, info_dict = self.get_event(parameter_list)
             self.locations_obj.locations[location_index].add_event(info_dict)
 
-    def get_event(self, parameter_list: List[str]) -> Tuple[str, Dict[str, Union[str, List[str], None]]]:
+    def get_event(self, parameter_list: List[str]) -> Tuple[str, Dict[str, Union[str, List[str]]]]:
         """
         Creates a dictionary for a location containing information about the one time event taking place at that location.
 
