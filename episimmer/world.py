@@ -9,13 +9,25 @@ from .utils.visualize import plot_results, store_animated_time_plot
 
 
 class World():
-    def __init__(self, config_obj, model, policy_list, event_restriction_fn,
-                 agents_filename, interaction_files_list,
-                 probabilistic_interaction_files_list, locations_filename,
-                 event_files_list, one_time_event_file):
+    """
+    Class for implementing a simulation world.
+
+    Args:
+        config_obj: A dictionary containing information from the config file of the example.
+        model: Disease model specified by the user
+        policy_list: List of all the policies part of the simulation
+        agents_filename: Name of the file that contains agents information
+        interaction_files_list: List of path names of all the interactions files
+        probabilistic_interaction_files_list: List of path names of all the prababilistic interactions files
+        locations_filename: Name of the file that contains locations information
+        event_files_list: List of path names of all the events files
+        one_time_event_file: File name of the one time event
+    """
+    def __init__(self, config_obj, model, policy_list, agents_filename,
+                 interaction_files_list, probabilistic_interaction_files_list,
+                 locations_filename, event_files_list, one_time_event_file):
         self.config_obj = config_obj
         self.policy_list = policy_list
-        self.event_restriction_fn = event_restriction_fn
         self.agents_filename = agents_filename
         self.locations_filename = locations_filename
         self.model = model
@@ -40,8 +52,7 @@ class World():
         one_time_event_obj = ReadOneTimeEvents(self.one_time_event_file)
 
         sim_obj = Simulate(self.config_obj, self.model, self.policy_list,
-                           self.event_restriction_fn, agents_obj,
-                           locations_obj)
+                           agents_obj, locations_obj)
         sim_obj.on_start_simulation()
 
         for current_time_step in range(time_steps):

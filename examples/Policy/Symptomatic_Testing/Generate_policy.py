@@ -15,7 +15,4 @@ def generate_policy():
 	ATP = lockdown_policy.TestingBasedLockdown(lambda x:random.random()<0.95,10)
 	policy_list.append(ATP)
 
-	def event_restriction_fn(agent,event_info,current_time_step):
-		return False
-
-	return policy_list,event_restriction_fn
+	return policy_list

@@ -19,8 +19,8 @@ def get_model(example_path):
 def get_policy(example_path):
     Generate_policy = module_from_file(
         'Generate_policy', osp.join(example_path, 'Generate_policy.py'))
-    policy_list, event_restriction_fn = Generate_policy.generate_policy()
-    return policy_list, event_restriction_fn
+    policy_list = Generate_policy.generate_policy()
+    return policy_list
 
 
 def get_config_path(path, filename):
@@ -47,15 +47,15 @@ def main():
 
     # User Model and Policy
     model = get_model(example_path)
-    policy_list, event_restriction_fn = get_policy(example_path)
+    policy_list = get_policy(example_path)
 
     # make a results directory
     if not osp.isdir(osp.join(config_obj.example_path, 'results')):
         os.mkdir(osp.join(config_obj.example_path, 'results'))
 
     # Creation of World object
-    world_obj = World(config_obj, model, policy_list, event_restriction_fn,
-                      agents_filename, interactions_files_list,
+    world_obj = World(config_obj, model, policy_list, agents_filename,
+                      interactions_files_list,
                       probabilistic_interactions_files_list,
                       locations_filename, events_files_list,
                       one_time_event_file)

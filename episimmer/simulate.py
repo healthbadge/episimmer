@@ -8,13 +8,12 @@ from .utils.visualize import save_env_graph, store_animated_dynamic_graph
 
 
 class Simulate():
-    def __init__(self, config_obj, model, policy_list, event_restriction_fn,
-                 agents_obj, locations_obj):
+    def __init__(self, config_obj, model, policy_list, agents_obj,
+                 locations_obj):
         self.agents_obj = agents_obj
         self.locations_obj = locations_obj
         self.model = model
         self.policy_list = policy_list
-        self.event_restriction_fn = event_restriction_fn
         self.config_obj = config_obj
         self.state_list = {}
         self.state_history = {}
@@ -111,8 +110,7 @@ class Simulate():
                 if not location.lock_down_state:
                     for event_info in location.events:
                         self.model.update_event_infection(
-                            event_info, location, self.agents_obj,
-                            self.event_restriction_fn)
+                            event_info, location, self.agents_obj)
 
     def handle_time_step_for_all_agents(self):
         # To ensure concurrency we update agent.next_state in method handleTimeStepAsAgent
