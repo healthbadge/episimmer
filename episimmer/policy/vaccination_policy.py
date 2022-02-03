@@ -30,6 +30,7 @@ class VaccineResult():
         self.agent: Agent = agent
         self.result: str = result
         self.time_stamp: int = time_step
+        self.efficacy: float = efficacy
         self.protection: int = decay_days
         self.current_dose: int = current_dose
 
@@ -44,7 +45,8 @@ class VaccineType():
         decay: Number of days of protection offered by the vaccine, a list of each dose in case of multi-dose vaccine
         efficacy: Efficacy of the vaccine
         dosage: Number of doses of the vaccine, applies only for multi-dose vaccine
-        interval: List specifying minimum days to pass before the administration of the next dose, for each dose of a multi-dose vaccine
+        interval: List specifying minimum days to pass before the administration of the next dose, for each dose of a
+                  multi-dose vaccine
     """
     def __init__(self,
                  name: str,
@@ -78,7 +80,7 @@ class VaccineType():
             Result object of vaccination
         """
         result = agent.get_policy_history(
-            'Vaccination')[-1].result if dose > 1 else self.inject_agent(agent)
+            'Vaccination')[-1].result if dose > 1 else self.inject_vaccine()
         if result == 'Successful':
             decay_days = self.decay_days[dose -
                                          1] if self.dosage else self.decay_days
@@ -89,17 +91,14 @@ class VaccineType():
 
         return result_obj
 
-    def inject_agent(self, agent: Agent) -> str:
+    def inject_vaccine(self) -> str:
         """
-        Applies the current vaccine to the agent and returns the result based on its efficacy.
-
-        Args:
-            agent: Agent to vaccinate
+        Injects an agent with the vaccine and returns the result based on vaccine's efficacy.
 
         Returns:
             Result of vaccination (Successful or Unsuccessful)
         """
-        if (random.random() < self.efficacy):
+        if random.random() < self.efficacy:
             return 'Successful'
         else:
             return 'Unsuccessful'
@@ -228,8 +227,8 @@ class VaccinationPolicy(AgentPolicy):
                            attribute: Union[str, None] = None,
                            value_list: List[str] = []) -> Callable:
         """
-        This function can be used by the user in ``Generate_policy.py`` to specify randomized vaccination to be performed for the agents.
-        This function returns a partial function of :meth:`~full_random_vaccination`.
+        This function can be used by the user in ``Generate_policy.py`` to specify randomized vaccination to be
+        performed  for the agents. This function returns a partial function of :meth:`~full_random_vaccination`.
 
         Args:
             attribute: Attribute name of agents
@@ -248,8 +247,8 @@ class VaccinationPolicy(AgentPolicy):
         """
         If the number of agents vaccinated is less than the maximum number of agents to vaccinate per time step,
         for every unvaccinated agent this function randomly chooses a vaccine from the list of vaccines and performs
-        vaccination on the agent, and for every vaccinated agent if it is time for next dose, the next dose of the same vaccine
-        is vaccinated for the agent.
+        vaccination on the agent, and for every vaccinated agent if it is time for next dose, the next dose of the same
+        vaccine is vaccinated for the agent.
         This function is valid only for multi dose vaccines.
 
         Args:
@@ -303,8 +302,8 @@ class VaccinationPolicy(AgentPolicy):
                                attribute: Union[str, None] = None,
                                value_list: List[str] = []) -> Callable:
         """
-        This function can be used by the user in ``Generate_policy.py`` to specify multi-dose vaccination to be performed for the agents.
-        This function returns a partial function of :meth:`~full_multi_dose_vaccination`.
+        This function can be used by the user in ``Generate_policy.py`` to specify multi-dose vaccination to be
+        performed for the agents. This function returns a partial function of :meth:`~full_multi_dose_vaccination`.
 
         Args:
             attribute: Attribute name of agents
@@ -416,9 +415,9 @@ class VaccinationPolicy(AgentPolicy):
         """
         for agent in agents:
             history = self.get_agent_policy_history(agent)
-            if (len(history) != 0):
-                if (history[-1].result == 'Successful'):
-                    if (history[-1].protection >= 1):
+            if len(history) != 0:
+                if history[-1].result == 'Successful':
+                    if history[-1].protection >= 1:
                         agent.protect()
 
     def get_stats(self) -> None:
