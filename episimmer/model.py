@@ -47,6 +47,30 @@ class BaseModel():
             raise ValueError(
                 "Error! Starting state proportions don't add up to 1")
 
+    def initialize_states(self, agents: Dict[str, Agent]) -> None:
+        """
+        Initializes the states of the agents based on state proportions.
+
+        Args:
+            agents: A dictionary mapping from agent indices to agent objects
+        """
+        raise NotImplementedError
+
+    def find_next_state(self, agent: Agent,
+                        agents: Dict[str, Agent]) -> Tuple[str, int]:
+        """
+        Returns next state of the agent according to the transition functions between the states and the schedule time
+        left.
+
+        Args:
+            agent: The agent whose next state is to be determined
+            agents: A dictionary mapping from agent indices to agent objects
+
+        Returns:
+            The new state of the agent, Schedule time left for the agent in current state
+        """
+        raise NotImplementedError
+
     def set_state_color(self, state: str, infectious: bool) -> None:
         """
         Sets the state color based on whether the state is infectious or not.
@@ -220,7 +244,7 @@ class StochasticModel(BaseModel):
         """
         self.transmission_prob[s1][s2] = fn
 
-    def initalize_states(self, agents: Dict[str, Agent]) -> None:
+    def initialize_states(self, agents: Dict[str, Agent]) -> None:
         """
         Initializes the states of the agents based on state proportions.
 
@@ -434,7 +458,7 @@ class ScheduledModel(BaseModel):
 
         self.set_state_color(state, infected_state)
 
-    def initalize_states(self, agents: Dict[str, Agent]) -> None:
+    def initialize_states(self, agents: Dict[str, Agent]) -> None:
         """
         Initializes the states of the agents based on state proportions.
 
@@ -489,14 +513,15 @@ class ScheduledModel(BaseModel):
     def find_next_state(self, agent: Agent,
                         agents: Dict[str, Agent]) -> Tuple[str, int]:
         """
-        Returns next state of the agent according to the transition functions between the states.
+        Returns next state of the agent according to the transition functions between the states and the schedule time
+        left.
 
         Args:
             agent: The agent whose next state is to be determined
             agents: A dictionary mapping from agent indices to agent objects
 
         Returns:
-            The new state of the agent
+            The new state of the agent, Schedule time left for the agent in current state
         """
         if agent.schedule_time_left is None:
             return self.state_transition_fn[agent.state](agent, agents)
