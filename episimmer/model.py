@@ -64,8 +64,8 @@ class BaseModel():
 
     def update_event_infection(self, event_info: Dict[str, Union[str,
                                                                  List[str]]],
-                               location: Location, agents_obj: ReadAgents,
-                               event_restriction_fn: Callable) -> None:
+                               location: Location,
+                               agents_obj: ReadAgents) -> None:
         """
         Updates the agents with event probabilities of all the events the agents attended.
 
@@ -73,23 +73,16 @@ class BaseModel():
             event_info: Dictionary containing location and participating agents of an event
             location: Location object
             agents_obj: An object of class :class:`~episimmer.read_file.ReadAgents` containing all agents
-            event_restriction_fn: User-defined function used to determine if an agent is restricted from participating in an event
         """
         ambient_infection = 0
         for agent_index in event_info['Agents']:
             agent = agents_obj.agents[agent_index]
-            if event_restriction_fn(agent, event_info,
-                                    Time.get_current_time_step()):
-                continue
             if agent_index in event_info['can_contrib']:
                 ambient_infection += self.contribute_fn(
                     agent, event_info, location, Time.get_current_time_step())
 
         for agent_index in event_info['Agents']:
             agent = agents_obj.agents[agent_index]
-            if event_restriction_fn(agent, event_info,
-                                    Time.get_current_time_step()):
-                continue
             if agent_index in event_info['can_receive']:
                 p = self.recieve_fn(agent, ambient_infection, event_info,
                                     location, Time.get_current_time_step())

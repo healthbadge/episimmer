@@ -33,7 +33,4 @@ def generate_policy():
 	policy_list.append(vp1)
 	policy_list.append(vp2)
 
-	def event_restriction_fn(agent,event_info,current_time_step):
-		return False
-
-	return policy_list,event_restriction_fn
+	return policy_list
