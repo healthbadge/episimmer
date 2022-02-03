@@ -18,7 +18,7 @@ class BaseModel():
     Args:
         name: Name of Disease Model
     """
-    def __init__(self, name):
+    def __init__(self, name: str):
         self.name: str = name
 
         self.recieve_fn: Union[Callable, None] = None

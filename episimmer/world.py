@@ -1,3 +1,5 @@
+from typing import Callable, List, Union, Tuple, Dict
+
 import numpy as np
 
 from episimmer.model import BaseModel
@@ -10,6 +12,7 @@ from .utils.arg_parser import parse_args
 from .utils.math import deep_copy_average, deep_copy_stddev
 from .utils.time import Time
 from .utils.visualize import plot_results, store_animated_time_plot
+from .policy.lockdown_policy import FullLockdown
 
 
 class World():
@@ -29,26 +32,25 @@ class World():
         eventFiles_list: List of path names of all the events files
         one_time_event_file: File name of the one time event
     """
-    def __init__(self, config_obj: ReadConfiguration, model: Union[BaseModel,
-                                                                   None],
-                 policy_list: List[str], event_restriction_fn: Callable,
-                 agents_filename: str, interactionFiles_list: List[str],
-                 probabilistic_interactionFiles_list: List[str],
-                 locations_filename: str, eventFiles_list: List[str],
-                 one_time_event_file: str):
+    def __init__(self, config_obj: ReadConfiguration, model: BaseModel,
+                 policy_list: List[FullLockdown], event_restriction_fn: Callable,
+                 agents_filename: str, interactionFiles_list: List[List[str]],
+                 probabilistic_interactionFiles_list: List[List[str]],
+                 locations_filename: str, eventFiles_list: List[List[str]],
+                 one_time_event_file: Union[str, None]):
         self.config_obj: ReadConfiguration = config_obj
-        self.policy_list: List[str] = policy_list
+        self.policy_list: List[FullLockdown] = policy_list
         self.event_restriction_fn: Callable = event_restriction_fn
         self.agents_filename: str = agents_filename
         self.locations_filename: str = locations_filename
-        self.model: Union[BaseModel, None] = model
-        self.interactionFiles_list: List[str] = interactionFiles_list
-        self.probabilistic_interactionsFiles_list: List[
-            str] = probabilistic_interactionFiles_list
-        self.eventFiles_list: List[str] = eventFiles_list
-        self.one_time_event_file: str = one_time_event_file
+        self.model: BaseModel = model
+        self.interactionFiles_list: List[List[str]] = interactionFiles_list
+        self.probabilistic_interactionsFiles_list: List[List[
+            str]] = probabilistic_interactionFiles_list
+        self.eventFiles_list: List[List[str]] = eventFiles_list
+        self.one_time_event_file: Union[str, None] = one_time_event_file
 
-    def one_world(self):
+    def one_world(self) -> Tuple[Dict[str, List[int]], ReadAgents, ReadLocations]:
         """
         Starts and ends a simulation along with saving the state of the simulation at each time step.
 
@@ -86,7 +88,7 @@ class World():
         end_state = sim_obj.endSimulation()
         return end_state, agents_obj, locations_obj
 
-    def simulate_worlds(self):
+    def simulate_worlds(self) -> Dict[str, List[float]]:
         """
         Averages over multiple simulations and plots a single plot.
 
@@ -125,5 +127,4 @@ class World():
         if anim:
             store_animated_time_plot(self.config_obj.example_path, self.model,
                                      avg_dict)
-
         return avg_dict

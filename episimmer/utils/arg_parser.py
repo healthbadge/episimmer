@@ -1,9 +1,7 @@
 import argparse
-from typing import Callable, Dict, List, Tuple, Union, ValuesView,ModuleType,Namespace
 
 
-
-def parse_args()->Namespace:
+def parse_args() -> argparse.Namespace:
     """
     This function parses the commmand-line options, arguments and sub-arguments which makes it easy to write user-friendly
     command-line interfaces.

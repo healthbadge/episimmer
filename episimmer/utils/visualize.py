@@ -3,9 +3,11 @@ import math
 import os.path as osp
 from typing import Callable, Dict, List, Tuple, Union, ValuesView
 
-
 import matplotlib.animation as ani
 import matplotlib.pyplot as plt
+import matplotlib.figure as fig
+import matplotlib.axes as axs
+import matplotlib.collections as coll
 import networkx as nx
 import numpy as np
 
@@ -14,9 +16,9 @@ from .time import Time
 
 
 def plot_results(example_path: str, model: object, avg_dict: Dict[str,
-                                                                  List[int]],
-                 stddev_dict, maxdict: Dict[str, int], mindict: Dict[str, int],
-                 plot) -> None:
+                                                                  List[float]],
+                 stddev_dict: Dict[str, List[float]], maxdict: Dict[str, List[int]], mindict: Dict[str, List[int]],
+                 plot: bool) -> None:
     """
     Plots the result of simulation.
 
@@ -51,7 +53,7 @@ def plot_results(example_path: str, model: object, avg_dict: Dict[str,
     fig.savefig(osp.join(example_path, 'results', 'results.jpg'))
 
 
-def buildgraph(i, fig, model: object, tdict) -> None:
+def buildgraph(i: int, fig: fig.Figure , model: object, tdict: Dict[str, List[float]]) -> None:
     """
     Noting down labels of graph.
 
@@ -71,7 +73,7 @@ def buildgraph(i, fig, model: object, tdict) -> None:
     plt.legend(loc='upper left', shadow=True)
 
 
-def store_animated_time_plot(example_path, model, tdict):
+def store_animated_time_plot(example_path: str, model: object, tdict: Dict[str, List[float]]):
     fig = plt.figure()
     fig.set_size_inches(8, 5)
 
@@ -83,7 +85,7 @@ def store_animated_time_plot(example_path, model, tdict):
               writer=ani.PillowWriter(fps=10))
 
 
-def get_interaction_graph_from_object(obj):
+def get_interaction_graph_from_object(obj: object) -> nx.Graph:
 
     agents_obj = obj.agents_obj
     model = obj.model
@@ -134,7 +136,7 @@ def get_interaction_graph_from_object(obj):
     return G
 
 
-def save_env_graph() -> None:
+def save_env_graph() -> Callable:
     def decorator(func):
         @functools.wraps(func)
         def wrapper(ref, *args, **kwargs):
@@ -144,13 +146,12 @@ def save_env_graph() -> None:
                 if (args.viz_dyn):
                     G = get_interaction_graph_from_object(ref)
                     ref.G_list.append(G)
-
         return wrapper
 
     return decorator
 
 
-def set_ax_params(ax, model, timestep):
+def set_ax_params(ax: axs._subplots.Axes, model: object, timestep: int) -> axs._subplots.Axes:
     ax.set_title(f'Timestep {timestep}', {'fontsize': 18})
     for state in model.individual_state_types:
         ax.scatter([0], [0], color=model.colors[state], label=state)
@@ -163,7 +164,7 @@ def set_ax_params(ax, model, timestep):
     return ax
 
 
-def draw_graph(G, ax, seed):
+def draw_graph(G: nx.Graph, ax: axs._subplots.Axes, seed: int) -> Tuple[coll.PatchCollection, coll.LineCollection]:
     """
 
     """
@@ -186,7 +187,7 @@ def draw_graph(G, ax, seed):
     return nodes, edges
 
 
-def animate_graph(timestep, fig, model, G_list, seed):
+def animate_graph(timestep: int, fig: fig.Figure, model: object, G_list: List[nx.Graph], seed: int) -> Tuple[coll.PatchCollection, coll.LineCollection]:
     if not seed:
         seed = 42
     fig.clf()
@@ -197,7 +198,7 @@ def animate_graph(timestep, fig, model, G_list, seed):
     return draw_graph(current_G, ax, seed)
 
 
-def store_animated_dynamic_graph():
+def store_animated_dynamic_graph() -> Callable:
     """
     Plots results of simulation as an animation.
     """

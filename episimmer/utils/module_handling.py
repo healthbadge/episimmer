@@ -1,8 +1,9 @@
 import importlib.util
-from typing import Callable, Dict, List, Tuple, Union, ValuesView,ModuleType
+from typing import Union
 
 
-def module_from_file(module_name: Union[str, None], file_path: Union[str, None]) -> ModuleType:
+def module_from_file(module_name: Union[str, None],
+                     file_path: Union[str, None]) -> object:
     """
     This function creates a ModuleSpec instance based on the path to a file and obtains a module from the instance. This module is
     then loaded and returned.

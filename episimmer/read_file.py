@@ -4,16 +4,14 @@ import os.path as osp
 import random
 import re
 from csv import DictReader
-from typing import Callable, Dict, List, Tuple, Union
+from typing import TYPE_CHECKING, Callable, Dict, List, Tuple, Union
+
 from episimmer.agent import Agent
 from episimmer.location import Location
 from episimmer.utils.time import Time
 
-from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from episimmer.model import BaseModel
-    
-
 
 
 class ReadConfiguration():
@@ -108,7 +106,7 @@ class ReadConfiguration():
 
         Args:
             line: Line in the config file which has a label and its respective value
-            
+
         Returns:
             Value of an entry in the config file.
         """
@@ -126,7 +124,7 @@ class ReadConfiguration():
 
         Args:
             example_path: Path of the directory of the example used in Episimmer.
-            
+
         Returns:
             Tuple containing paths of the agents file, interactions files, events files, locations file, one time event file, and
             probabalistic interactions files.
@@ -165,10 +163,11 @@ class ReadConfiguration():
 
         return agents_filename, interactions_FilesList_filename, events_FilesList_filename, locations_filename, one_time_event_file, probabilistic_interactions_FilesList_filename
 
-    def get_file_names_list(self, example_path: str,
-                            interactions_FilesList_filename: str,
-                            events_FilesList_filename: str,
-                            probabilistic_interactions_FilesList_filename: str) -> Tuple[List[str]]:
+    def get_file_names_list(
+        self, example_path: str, interactions_FilesList_filename: str,
+        events_FilesList_filename: str,
+        probabilistic_interactions_FilesList_filename: str
+    ) -> Tuple[List[str]]:
         # Reading through a file (for interactions/events) that contain file names which contain interactions and event details for a time step
         """
         Gets the list of all the interaction files, events files and probabilistic interaction files.
@@ -178,7 +177,7 @@ class ReadConfiguration():
             interactions_FilesList_filename: List of path names of all the interactions files
             events_FilesList_filename: List of path names of all the events files
             probabilistic_interactions_FilesList_filename: List of path names of all the prababilistic interactions files
-            
+
         Returns:
             Tuple containing list of interaction files, list of events files, and list of probabilistic interaction files.
         """
@@ -265,7 +264,7 @@ class ReadVDConfiguration():
 
         Args:
             line: Line in the config file which has a label and its respective value
-            
+
         Returns:
             Value of an entry in the config file.
         """
@@ -377,7 +376,7 @@ class ReadAgents(BaseReadFile):
 
         Args:
             info_list: List of values for all the parameter keys of an agent.
-            
+
         Returns:
             Information dictionary of the agent.
         """
@@ -397,10 +396,11 @@ class ReadInteractions(BaseReadFile):
         filename: Name of the file containing agent interaction information.
         config_obj: An object of class :class:`~episimmer.read_file.ReadConfiguration` containing all configurations.
     """
-    def __init__(self, filename: str, config_obj: ReadConfiguration, agents_obj: ReadAgents):
+    def __init__(self, filename: str, config_obj: ReadConfiguration,
+                 agents_obj: ReadAgents):
         super().__init__()
         self.config_obj: ReadConfiguration = config_obj
-        self.agents_obj: ReadAgents= agents_obj
+        self.agents_obj: ReadAgents = agents_obj
         if filename == '' or filename == None:
             return
 
@@ -442,13 +442,14 @@ class ReadInteractions(BaseReadFile):
                         agent_index = info_dict['Agent Index']
                         agents_obj.agents[agent_index].add_contact(info_dict)
 
-    def get_interaction(self, parameter_list: List[str]) -> Tuple[str, Dict[str, str]]:
+    def get_interaction(
+            self, parameter_list: List[str]) -> Tuple[str, Dict[str, str]]:
         """
         Creates a dictionary for an agent containing interaction information.
 
         Args:
             parameter_list: List containing agent index and interacting agent index
-            
+
         Returns:
             Agent index and information dictionary of the agent.
         """
@@ -478,7 +479,8 @@ class ReadProbabilisticInteractions(BaseReadFile):
         config_obj: An object of class :class:`~episimmer.read_file.ReadConfiguration` containing all configurations.
         agents_obj: An object of class :class:`~episimmer.read_file.ReadAgents` containing all agents
     """
-    def __init__(self, filename: str, config_obj: ReadConfiguration, agents_obj: ReadAgents):
+    def __init__(self, filename: str, config_obj: ReadConfiguration,
+                 agents_obj: ReadAgents):
         super().__init__()
         self.config_obj: ReadConfiguration = config_obj
         self.agents_obj: ReadAgents = agents_obj
@@ -488,7 +490,8 @@ class ReadProbabilisticInteractions(BaseReadFile):
         if filename.endswith('.txt'):
             f = open(filename, 'r')
             self.no_interaction_sets: int = int(self.get_value(f.readline()))
-            self.parameter_keys: List[str] = self.get_value(f.readline()).split(':')
+            self.parameter_keys: List[str] = self.get_value(
+                f.readline()).split(':')
             config_interaction_info_keys_list = config_obj.interaction_info_keys.split(
                 ':')
 
@@ -507,13 +510,15 @@ class ReadProbabilisticInteractions(BaseReadFile):
 
             f.close()
 
-    def get_interactions(self, parameter_list: List[str]) -> Union[Tuple[str, Dict[str, str]], None]:
+    def get_interactions(
+            self, parameter_list: List[str]
+    ) -> Union[Tuple[str, Dict[str, str]], None]:
         """
         Creates a list of interactions using probability values and agent indices according to parameter values.
 
         Args:
             parameter_list: List containing probability of interaction and agent indices associated with that probability.
-            
+
         Returns:
             Interaction list consisting of tuples of agent index and interaction information.
         """
@@ -585,7 +590,7 @@ class ReadLocations(BaseReadFile):
                 self.get_value(f.readline()).split(':'))
             location = Location(info_dict)
             self.locations[location.index] = location
-        
+
         f.close()
 
     def create_info_dict(self, info_list: List[str]) -> Dict[str, str]:
@@ -614,7 +619,8 @@ class ReadEvents(BaseReadFile):
         filename: Name of the file containing event information.
         config_obj: An object of class :class:`~episimmer.read_file.ReadConfiguration` containing all configurations.
     """
-    def __init__(self, filename: str, config_obj: ReadConfiguration, locations_obj: ReadLocations, agents_obj: ReadAgents):
+    def __init__(self, filename: str, config_obj: ReadConfiguration,
+                 locations_obj: ReadLocations, agents_obj: ReadAgents):
         super().__init__()
         self.config_obj: ReadConfiguration = config_obj
         self.locations_obj: ReadLocations = locations_obj
@@ -639,7 +645,9 @@ class ReadEvents(BaseReadFile):
 
         f.close()
 
-    def get_event(self, parameter_list: List[str]) -> Tuple[str, Dict[str, Union[str, List[str]]]]:
+    def get_event(
+        self, parameter_list: List[str]
+    ) -> Tuple[str, Dict[str, Union[str, List[str]]]]:
         """
         Creates a dictionary for a location containing information about the events taking place at that location.
 
@@ -692,7 +700,8 @@ class ReadOneTimeEvents(BaseReadFile):
         f = open(self.filename, 'r')
         self.no_events: int = int(self.get_value(f.readline()))
         self.event_info_keys: str = self.get_value(f.readline())
-        self.one_time_parameter_keys: List[sttr] = self.event_info_keys.split(':')
+        self.one_time_parameter_keys: List[sttr] = self.event_info_keys.split(
+            ':')
         self.parameter_keys: List[str] = self.one_time_parameter_keys[1:]
         self.eventsAt: Dict[int, List[str]] = {}
         for i in range(self.no_events):
@@ -702,7 +711,9 @@ class ReadOneTimeEvents(BaseReadFile):
                     int(time), []) + [':'.join(line[1:])]
         f.close()
 
-    def ReadOneTimeEvents(self, config_obj: ReadConfiguration, locations_obj: ReadLocations, agents_obj: ReadAgents) -> None:
+    def ReadOneTimeEvents(self, config_obj: ReadConfiguration,
+                          locations_obj: ReadLocations,
+                          agents_obj: ReadAgents) -> None:
         """
         Reads one time event information if it takes place at the current time step.
 
@@ -725,14 +736,16 @@ class ReadOneTimeEvents(BaseReadFile):
             location_index, info_dict = self.get_event(parameter_list)
             self.locations_obj.locations[location_index].add_event(info_dict)
 
-    def get_event(self, parameter_list: List[str]) -> Tuple[str, Dict[str, Union[str, List[str]]]]:
+    def get_event(
+        self, parameter_list: List[str]
+    ) -> Tuple[str, Dict[str, Union[str, List[str]]]]:
         """
         Creates a dictionary for a location containing information about the one time event taking place at that location.
 
         Args:
             parameter_list: List containing time steps at which the one time event takes place, index of the location and agent indices
             of the agents part of the event.
-        
+
         Returns: Location index and information dictionary of the location.
 
         """

@@ -3,8 +3,9 @@ from collections import deque
 from typing import Callable, Dict, List, Union, ValuesView
 from xmlrpc.client import Boolean
 
-from Healthbadge.episimmer.episimmer.agent import Agent
-from Healthbadge.episimmer.episimmer.location import Location
+from episimmer.agent import Agent
+from episimmer.location import Location
+from episimmer.model import BaseModel
 
 from .base import AgentPolicy
 
@@ -18,14 +19,18 @@ class CTPolicy(AgentPolicy):
         attribute : Used to implement contact tracing based on agent attribute if needed.
         value_list: List of attribute values of agents.
     """
-    def __init__(self, num_of_days:int, attribute: Union[str,None]=None, value_list:List[str]=[]):
+    def __init__(self,
+                 num_of_days: int,
+                 attribute: Union[str, None] = None,
+                 value_list: List[str] = []):
         super().__init__()
-        self.policy_type:str = 'Contact_Tracing'
-        self.num_of_days:int = num_of_days
-        self.attribute:str = attribute
-        self.value_list:List[str] = value_list
+        self.policy_type: str = 'Contact_Tracing'
+        self.num_of_days: int = num_of_days
+        self.attribute: str = attribute
+        self.value_list: List[str] = value_list
 
-    def reset(self, agents:ValuesView[AgentPolicy], policy_index:str)->None:
+    def reset(self, agents: ValuesView[AgentPolicy],
+              policy_index: str) -> None:
         """
         Used to reset the states of the agents at the first time step of simulation.
 
@@ -45,8 +50,9 @@ class CTPolicy(AgentPolicy):
                 agent_ct_state[policy_index]['contact_deque'] = deque(
                     maxlen=self.num_of_days)
 
-
-    def post_policy(self, agents:Dict[str,Agent], locations:ValuesView[Location], policy_index:str)->None:
+    def post_policy(self, timestep: int, agents: Dict[str, Agent],
+                    locations: ValuesView[Location], model: BaseModel,
+                    policy_index: str) -> None:
         """
         Runs all the methods that have to be called after saving valid interactions and events.
 
@@ -59,7 +65,7 @@ class CTPolicy(AgentPolicy):
         self.save_interactions(agents, policy_index)
         self.save_events(agents, locations, policy_index)
 
-    def new_day(self, agents:Dict[str,Agent], policy_index:str)->None:
+    def new_day(self, agents: Dict[str, Agent], policy_index: str) -> None:
         """
         Adds the contacts for agents in that timestep.
 
@@ -75,7 +81,8 @@ class CTPolicy(AgentPolicy):
                 agent_ct_state[policy_index]['contact_deque'].append(
                     agent_contact_set)
 
-    def save_interactions(self, agents:Dict[str,Agent], policy_index:str)->None:
+    def save_interactions(self, agents: Dict[str, Agent],
+                          policy_index: str) -> None:
         """
         Saving the contacts of the agent due to interactions.
 
@@ -95,7 +102,9 @@ class CTPolicy(AgentPolicy):
                     agent_ct_state[policy_index]['contact_deque'][-1].add(
                         agent_index)
 
-    def save_events(self, agents:Dict[str,Agent], locations:ValuesView[Location], policy_index:str)->None:
+    def save_events(self, agents: Dict[str,
+                                       Agent], locations: ValuesView[Location],
+                    policy_index: str) -> None:
         """
         Saving the contacts of agent via events.
 

@@ -9,6 +9,7 @@ from episimmer.read_file import (ReadAgents, ReadConfiguration, ReadEvents,
 
 from .read_file import (ReadEvents, ReadInteractions,
                         ReadProbabilisticInteractions)
+from .policy.lockdown_policy import FullLockdown
 from .utils.statistics import save_stats
 from .utils.time import Time
 from .utils.visualize import save_env_graph, store_animated_dynamic_graph
@@ -28,19 +29,19 @@ class Simulate():
         locations_obj: An object of class :class:`~episimmer.read_file.ReadLocations` containing all locations
     """
     def __init__(self, config_obj: ReadConfiguration, model: BaseModel,
-                 policy_list: List[str], event_restriction_fn: Callable,
+                 policy_list: List[FullLockdown], event_restriction_fn: Callable,
                  agents_obj: ReadAgents, locations_obj: ReadLocations):
         self.agents_obj: ReadAgents = agents_obj
         self.locations_obj: ReadLocations = locations_obj
         self.model: BaseModel = model
-        self.policy_list: List[str] = policy_list
+        self.policy_list: List[FullLockdown] = policy_list
         self.event_restriction_fn: Callable = event_restriction_fn
         self.config_obj: ReadConfiguration = config_obj
         self.G_list: List[nx.Graph] = []
 
     def onStartSimulation(self) -> None:
         """
-        Funtion to initialize the state list and states, reset policies, and update and store the state list at the start of a
+        Funtion to initialize the state list and states, to reset policies, and to update and store the state list at the start of a
         simulation.
         """
         #Intitialize state list
