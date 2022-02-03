@@ -128,9 +128,9 @@ class Simulate():
                            self.locations_obj, self.agents_obj)
 
         # Load One Time Events
-        one_time_event_obj.ReadOneTimeEvents(self.config_obj,
-                                             self.locations_obj,
-                                             self.agents_obj)
+        one_time_event_obj.read_one_time_events(self.config_obj,
+                                                self.locations_obj,
+                                                self.agents_obj)
 
         # Restrict agents with can_contribute_infection and can_receive_infection
         # All interactions and events restricted by removing elements in

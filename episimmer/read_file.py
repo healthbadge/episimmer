@@ -22,11 +22,11 @@ class ReadConfiguration():
         f = open(filename, 'r')
 
         self.random_seed = (self.get_value_config(f.readline()))
-        if (self.random_seed != ''):
-            random.seed((int)(self.random_seed))
+        if self.random_seed != '':
+            random.seed(int(self.random_seed))
 
-        self.worlds = (int)(self.get_value_config(f.readline()))
-        self.time_steps = (int)(self.get_value_config(f.readline()))
+        self.worlds = int(self.get_value_config(f.readline()))
+        self.time_steps = int(self.get_value_config(f.readline()))
 
         self.agent_info_keys = self.get_value_config(f.readline())
         self.agents_filename = self.get_value_config(f.readline())
@@ -50,8 +50,8 @@ class ReadConfiguration():
             )
 
         if self.interaction_info_keys.split(':') != ['']:
-            if (self.probabilistic_interactions_files_list_list != [''] and self.interactions_files_list_list != ['']) or \
-                self.interactions_files_list_list != ['']:
+            if (self.probabilistic_interactions_files_list_list != [''] and self.interactions_files_list_list != ['']) \
+                    or self.interactions_files_list_list != ['']:
                 if 'Agent Index' not in self.interaction_info_keys.split(':'):
                     raise Exception(
                         "Interaction definition does not contain parameter \'Agent Index\'"
@@ -90,27 +90,28 @@ class ReadConfiguration():
                     'Event definition does not contain parameter \'Agents\'')
 
     def get_value_config(self, line):
-        l = re.findall('\<.*?\>', line)
-        if len(l) != 1:
+        elements = re.findall('<.*?>', line)
+        if len(elements) != 1:
             raise Exception('Error! Invalid entry in config.txt')
-        value = (((l[0])[1:])[:-1])
+        value = (((elements[0])[1:])[:-1])
         return value
 
     def get_file_paths(self, example_path):
         # File Names
         locations_filename = one_time_event_file = None
-        events_FilesList_filename = interactions_FilesList_filename = []
+        events_files_list_filename = interactions_files_list_filename = []
+        probabilistic_interactions_files_list_filename = []
 
         agents_filename = osp.join(example_path, self.agents_filename)
 
         if self.interactions_files_list_list != ['']:
-            interactions_FilesList_filename = [
+            interactions_files_list_filename = [
                 osp.join(example_path, interactions_files_list) for
                 interactions_files_list in self.interactions_files_list_list
             ]
 
         if self.events_files_list_list != ['']:
-            events_FilesList_filename = [
+            events_files_list_filename = [
                 osp.join(example_path, events_files_list)
                 for events_files_list in self.events_files_list_list
             ]
@@ -124,18 +125,19 @@ class ReadConfiguration():
                                            self.one_time_event_file)
 
         if self.probabilistic_interactions_files_list_list != '':
-            probabilistic_interactions_FilesList_filename = [
+            probabilistic_interactions_files_list_filename = [
                 osp.join(example_path, interactions_files_list)
                 for interactions_files_list in
                 self.probabilistic_interactions_files_list_list
             ]
 
-        return agents_filename, interactions_FilesList_filename, events_FilesList_filename, locations_filename, one_time_event_file, probabilistic_interactions_FilesList_filename
+        return agents_filename, interactions_files_list_filename, events_files_list_filename, \
+               locations_filename, one_time_event_file, probabilistic_interactions_files_list_filename
 
     def get_file_names_list(self, example_path,
-                            interactions_FilesList_filename,
-                            events_FilesList_filename,
-                            probabilistic_interactions_FilesList_filename):
+                            interactions_files_list_filename,
+                            events_files_list_filename,
+                            probabilistic_interactions_files_list_filename):
         # Reading through a file (for interactions/events) that contain file names which contain interactions and event details for a time step
 
         interactions_files_list = events_files_list = probabilistic_interactions_files_list = []
@@ -143,35 +145,36 @@ class ReadConfiguration():
         if self.interactions_files_list_list == ['']:
             pass
         else:
-            interactionFiles_obj = [
-                ReadFilesList(file) for file in interactions_FilesList_filename
+            interaction_files_obj = [
+                ReadFilesList(file)
+                for file in interactions_files_list_filename
             ]
             interactions_files_list = [
                 list(map(lambda x: osp.join(example_path, x), obj.file_list))
-                for obj in interactionFiles_obj
+                for obj in interaction_files_obj
             ]
 
         if self.probabilistic_interactions_files_list_list == ['']:
             pass
         else:
-            probabilistic_interactionFiles_obj = [
+            probabilistic_interaction_files_obj = [
                 ReadFilesList(file)
-                for file in probabilistic_interactions_FilesList_filename
+                for file in probabilistic_interactions_files_list_filename
             ]
             probabilistic_interactions_files_list = [
                 list(map(lambda x: osp.join(example_path, x), obj.file_list))
-                for obj in probabilistic_interactionFiles_obj
+                for obj in probabilistic_interaction_files_obj
             ]
 
         if self.events_files_list_list == ['']:
             pass
         else:
-            eventFiles_obj = [
-                ReadFilesList(file) for file in events_FilesList_filename
+            event_files_obj = [
+                ReadFilesList(file) for file in events_files_list_filename
             ]
             events_files_list = [
                 list(map(lambda x: osp.join(example_path, x), obj.file_list))
-                for obj in eventFiles_obj
+                for obj in event_files_obj
             ]
 
         return interactions_files_list, events_files_list, probabilistic_interactions_files_list
@@ -198,21 +201,21 @@ class ReadVDConfiguration():
 
         f.close()
 
-        if (self.target == ''):
+        if self.target == '':
             raise Exception('Error! Target required in vd_config.txt')
 
-        if (self.algorithm == ''):
+        if self.algorithm == '':
             raise Exception('Error! Algorithm required in vd_config.txt')
 
-        if (not self.parameter_dict):
+        if not self.parameter_dict:
             raise Warning(
                 'No parameters provided in vd_config.txt. Using Defaults')
 
     def get_value_config(self, line):
-        l = re.findall('\<.*?\>', line)
-        if len(l) != 1:
+        elements = re.findall('<.*?>', line)
+        if len(elements) != 1:
             raise Exception('Error! Invalid entry in vd_config.txt')
-        value = (((l[0])[1:])[:-1])
+        value = (((elements[0])[1:])[:-1])
         return value
 
     def read_parameter_file(self, filename):
@@ -232,9 +235,9 @@ class ReadFilesList():
         lines = f.readlines()
         separator = ' '
         text = separator.join(lines)
-        l = re.findall('\<.*?\>', text)
-        for filename in l:
-            self.file_list.append(((filename)[1:])[:-1])
+        elements = re.findall('<.*?>', text)
+        for filename in elements:
+            self.file_list.append((filename[1:])[:-1])
         f.close()
 
 
@@ -267,7 +270,7 @@ class ReadAgents(BaseReadFile):
             for i in range(self.n):
                 info_dict = self.create_info_dict(
                     self.get_value(f.readline()).split(':'))
-                state = None  #config_obj.default_state
+                state = None  # config_obj.default_state
                 agent = Agent(state, info_dict)
                 self.agents[agent.index] = agent
             f.close()
@@ -290,7 +293,7 @@ class ReadAgents(BaseReadFile):
 
                 for i in range(self.n):
                     info_dict = csv_list[i]
-                    state = None  #config_obj.default_state
+                    state = None  # config_obj.default_state
                     agent = Agent(state, info_dict)
                     self.agents[agent.index] = agent
 
@@ -307,7 +310,7 @@ class ReadInteractions(BaseReadFile):
         super().__init__()
         self.config_obj = config_obj
         self.agents_obj = agents_obj
-        if filename == '' or filename == None:
+        if filename == '' or filename is None:
             return
 
         if filename.endswith('.txt'):
@@ -323,7 +326,7 @@ class ReadInteractions(BaseReadFile):
             for i in range(self.no_interactions):
                 parameter_list = (self.get_value(f.readline())).split(':')
                 agent_index, info_dict = self.get_interaction(parameter_list)
-                if (agent_index is not None and info_dict is not None):
+                if agent_index is not None and info_dict is not None:
                     agents_obj.agents[agent_index].add_contact(info_dict)
 
             f.close()
@@ -351,7 +354,6 @@ class ReadInteractions(BaseReadFile):
     def get_interaction(self, parameter_list):
         info_dict = {}
         agent_index = None
-        contact_agent_index = None
         for i, key in enumerate(self.parameter_keys):
             if key == 'Agent Index':
                 agent_index = parameter_list[i]
@@ -371,7 +373,7 @@ class ReadProbabilisticInteractions(BaseReadFile):
         super().__init__()
         self.config_obj = config_obj
         self.agents_obj = agents_obj
-        if filename == '' or filename == None:
+        if filename == '' or filename is None:
             return
 
         if filename.endswith('.txt'):
@@ -419,8 +421,8 @@ class ReadProbabilisticInteractions(BaseReadFile):
             else:
                 info_dict[key] = parameter_list[i]
 
-        for indx, agent_index1 in enumerate(agent_indexes):
-            for agent_index2 in agent_indexes[indx + 1:]:
+        for index, agent_index1 in enumerate(agent_indexes):
+            for agent_index2 in agent_indexes[index + 1:]:
                 if random.random() < interaction_probability:
 
                     temp_info_dict = copy.deepcopy(info_dict)
@@ -441,7 +443,7 @@ class ReadLocations(BaseReadFile):
         super().__init__()
         self.config_obj = config_obj
         self.locations = {}
-        if filename == '' or filename == None:
+        if filename == '' or filename is None:
             return
         f = open(filename, 'r')
 
@@ -474,7 +476,7 @@ class ReadEvents(BaseReadFile):
         self.config_obj = config_obj
         self.locations_obj = locations_obj
         self.agents_obj = agents_obj
-        if filename == '' or filename == None:
+        if filename == '' or filename is None:
             return
         f = open(filename, 'r')
         self.no_events = int(self.get_value(f.readline()))
@@ -488,7 +490,7 @@ class ReadEvents(BaseReadFile):
         for i in range(self.no_events):
             parameter_list = (self.get_value(f.readline())).split(':')
             location_index, info_dict = self.get_event(parameter_list)
-            if (location_index is not None and info_dict is not None):
+            if location_index is not None and info_dict is not None:
                 self.locations_obj.locations[location_index].add_event(
                     info_dict)
 
@@ -508,15 +510,15 @@ class ReadEvents(BaseReadFile):
             else:
                 info_dict[key] = parameter_list[i]
 
-        if (info_dict['Agents'] is None or self.agents_obj.agents is None):
+        if info_dict['Agents'] is None or self.agents_obj.agents is None:
             location_index, info_dict = None, None
 
-        elif (set(info_dict['Agents']) - set(list(self.agents_obj.agents))):
+        elif set(info_dict['Agents']) - set(list(self.agents_obj.agents)):
             to_remove = set(info_dict['Agents']) - set(
                 list(self.agents_obj.agents))
             info_dict['Agents'] = list(set(info_dict['Agents']) - to_remove)
 
-        if location_index == None:
+        if location_index is None:
             raise Exception('Error! No event to read in the event file')
         return location_index, info_dict
 
@@ -525,7 +527,7 @@ class ReadOneTimeEvents(BaseReadFile):
     def __init__(self, filename):
         super().__init__()
         self.filename = filename
-        if self.filename == '' or self.filename == None:
+        if self.filename == '' or self.filename is None:
             return
         f = open(self.filename, 'r')
         self.no_events = int(self.get_value(f.readline()))
@@ -539,9 +541,12 @@ class ReadOneTimeEvents(BaseReadFile):
                 self.eventsAt[int(time)] = self.eventsAt.get(
                     int(time), []) + [':'.join(line[1:])]
         f.close()
+        self.config_obj = None
+        self.locations_obj = None
+        self.agents_obj = None
 
-    def ReadOneTimeEvents(self, config_obj, locations_obj, agents_obj):
-        if self.filename == '' or self.filename == None:
+    def read_one_time_events(self, config_obj, locations_obj, agents_obj):
+        if self.filename == '' or self.filename is None:
             return
         self.config_obj = config_obj
         self.locations_obj = locations_obj
@@ -569,15 +574,15 @@ class ReadOneTimeEvents(BaseReadFile):
             else:
                 info_dict[key] = parameter_list[i]
 
-        if (info_dict['Agents'] is None or self.agents_obj.agents is None):
+        if info_dict['Agents'] is None or self.agents_obj.agents is None:
             location_index, info_dict = None, None
 
-        elif (set(info_dict['Agents']) - set(list(self.agents_obj.agents))):
+        elif set(info_dict['Agents']) - set(list(self.agents_obj.agents)):
             to_remove = set(info_dict['Agents']) - set(
                 list(self.agents_obj.agents))
             info_dict['Agents'] = list(set(info_dict['Agents']) - to_remove)
 
-        if location_index == None:
+        if location_index is None:
             raise Exception(
                 'Error! No event to read in the one time event file')
         return location_index, info_dict
