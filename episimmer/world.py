@@ -1,6 +1,12 @@
+from typing import Dict, List, Tuple, Union
+
 import numpy as np
 
-from .read_file import ReadAgents, ReadLocations, ReadOneTimeEvents
+from episimmer.model import BaseModel
+from episimmer.policy.base import AgentPolicy
+
+from .read_file import (ReadAgents, ReadConfiguration, ReadLocations,
+                        ReadOneTimeEvents)
 from .simulate import Simulate
 from .utils.arg_parser import parse_args
 from .utils.math import deep_copy_average, deep_copy_stddev
@@ -17,26 +23,37 @@ class World():
         model: Disease model specified by the user
         policy_list: List of all the policies part of the simulation
         agents_filename: Name of the file that contains agents information
-        interaction_files_list: List of path names of all the interactions files
-        probabilistic_interaction_files_list: List of path names of all the prababilistic interactions files
-        locations_filename: Name of the file that contains locations information
-        event_files_list: List of path names of all the events files
+        interaction_files_list: List of path names of all the interactions list files
+        probabilistic_interaction_files_list: List of path names of all the probabilistic interactions list files
+        locations_filename: Name of the file that contains location information
+        event_files_list: List of path names of all the events list files
         one_time_event_file: File name of the one time event
     """
-    def __init__(self, config_obj, model, policy_list, agents_filename,
-                 interaction_files_list, probabilistic_interaction_files_list,
-                 locations_filename, event_files_list, one_time_event_file):
-        self.config_obj = config_obj
-        self.policy_list = policy_list
-        self.agents_filename = agents_filename
-        self.locations_filename = locations_filename
-        self.model = model
-        self.interaction_files_list = interaction_files_list
-        self.probabilistic_interaction_files_list = probabilistic_interaction_files_list
-        self.event_files_list = event_files_list
-        self.one_time_event_file = one_time_event_file
+    def __init__(self, config_obj: ReadConfiguration, model: BaseModel,
+                 policy_list: List[AgentPolicy], agents_filename: str,
+                 interaction_files_list: List[List[str]],
+                 probabilistic_interaction_files_list: List[List[str]],
+                 locations_filename: str, event_files_list: List[List[str]],
+                 one_time_event_file: Union[str, None]):
+        self.config_obj: ReadConfiguration = config_obj
+        self.policy_list: List[AgentPolicy] = policy_list
+        self.agents_filename: str = agents_filename
+        self.locations_filename: str = locations_filename
+        self.model: BaseModel = model
+        self.interaction_files_list: List[List[str]] = interaction_files_list
+        self.probabilistic_interaction_files_list: List[
+            List[str]] = probabilistic_interaction_files_list
+        self.event_files_list: List[List[str]] = event_files_list
+        self.one_time_event_file: Union[str, None] = one_time_event_file
 
-    def one_world(self):
+    def one_world(
+            self) -> Tuple[Dict[str, List[int]], ReadAgents, ReadLocations]:
+        """
+        Runs a single simulation world
+
+        Returns:
+            State of the world at the end of a simulation, ReadAgents object, and ReadLocations object
+        """
 
         time_steps = self.config_obj.time_steps
 
@@ -66,8 +83,14 @@ class World():
         end_state = sim_obj.end_simulation()
         return end_state, agents_obj, locations_obj
 
-    # Averages multiple simulations and plots a single plot
-    def simulate_worlds(self):
+    def simulate_worlds(self) -> Dict[str, List[float]]:
+        """
+        Simulates multiple worlds and saves the epidemic trajectory plot. It also plots it by default (which can be
+        disabled with command line flags).
+
+        Returns:
+            Averaged epidemic trajectory dictionary
+        """
 
         args = parse_args()
         plot = args.noplot
