@@ -22,6 +22,7 @@ class BaseModel():
         self.name: str = name
 
         self.infected_states: List[str] = []
+        self.state_proportion: Dict[str, float] = {}
         self.recieve_fn: Union[Callable, None] = None
         self.contribute_fn: Union[Callable, None] = None
         self.external_prev_fn: Callable = lambda x, y: 0.0
@@ -99,7 +100,8 @@ class BaseModel():
 
     def set_event_recieve_fn(self, fn: Union[Callable, None]) -> None:
         """
-        Sets the event receive function specifying the probability of infection for an agent from the ambient infection of an event.
+        Sets the event receive function specifying the probability of infection for an agent from the ambient infection
+        of an event.
 
         Args:
             fn: User-defined function used to determine the probability of an agent receiving an ambient infection
@@ -117,7 +119,8 @@ class BaseModel():
 
     def set_symptomatic_states(self, states: List[str]) -> None:
         """
-        Sets the symptomatic states of the disease model. These agents in these states have visible symptoms of the disease.
+        Sets the symptomatic states of the disease model. These agents in these states have visible symptoms of the
+        disease.
 
         Args:
             states: List of disease model states that are symptomatic
@@ -139,7 +142,8 @@ class BaseModel():
         * External Prevalence
 
         Args:
-            fn: User-defined function defining the probability of infection based on individual/probabilistic interactions
+            fn: User-defined function defining the probability of infection based on individual/probabilistic
+                interactions
             p_infected_states_list: List of probabilities that can be used in the user-defined function fn
             agent: Current agent object
             agents: A dictionary mapping from agent indices to agent objects
@@ -242,7 +246,8 @@ class StochasticModel(BaseModel):
     def find_next_state(self, agent: Agent,
                         agents: Dict[str, Agent]) -> Tuple[str, None]:
         """
-        Returns next state of the agent according to the transition functions between the states stored in transmission_prob.
+        Returns next state of the agent according to the transition functions between the states stored in
+        transmission_prob.
 
         Args:
             agent: The current agent whose next state is to be determined
@@ -258,7 +263,7 @@ class StochasticModel(BaseModel):
             p += self.transmission_prob[agent.state][new_state](agent, agents)
             if r < p:
                 return new_state, scheduled_time
-                break
+
         return agent.state, scheduled_time
 
     def full_p_standard(self, p: float, agent: Agent,
@@ -278,8 +283,8 @@ class StochasticModel(BaseModel):
 
     def p_standard(self, p: float) -> Callable:
         """
-        This function can be used by the user in ``UserModel.py`` to specify an independent transition with a fixed probability.
-        It returns a partial function of :meth:`~full_p_standard`.
+        This function can be used by the user in ``UserModel.py`` to specify an independent transition with a fixed
+        probability. It returns a partial function of :meth:`~full_p_standard`.
 
         Args:
             p: Probability of transition
@@ -326,7 +331,8 @@ class StochasticModel(BaseModel):
         all types of interaction between the current agent and other agents.
 
         Args:
-            fn: User-defined function defining the probability of infection based on individual/probabilistic interactions
+            fn: User-defined function defining the probability of infection based on individual/probabilistic
+                interactions
             p_infected_states_list: List of probabilities that can be used in the user-defined function fn
             agent: Current agent object
             agents: A dictionary mapping from agent indices to agent objects
@@ -403,7 +409,8 @@ class ScheduledModel(BaseModel):
                             proportion: float) -> None:
         """
         Inserts a state into the model and schedules the agent for this state using a custom distribution
-        specified by the user-defined function. The user must specify one of the following functions for the transition function
+        specified by the user-defined function. The user must specify one of the following functions for the transition
+        function
 
         * :meth:`~scheduled`
 
@@ -464,10 +471,10 @@ class ScheduledModel(BaseModel):
         Returns:
             The scheduled time of transition for the state
         """
-        if (self.state_fn[state] == None):
+        if self.state_fn[state] is None:
             mean = self.state_mean[state]
             vary = self.state_vary[state]
-            if mean == None or vary == None:
+            if mean is None or vary is None:
                 scheduled_time = None
             else:
                 scheduled_time = max(
@@ -490,7 +497,7 @@ class ScheduledModel(BaseModel):
         Returns:
             The new state of the agent
         """
-        if agent.schedule_time_left == None:
+        if agent.schedule_time_left is None:
             return self.state_transition_fn[agent.state](agent, agents)
 
         return agent.state, agent.schedule_time_left
@@ -514,7 +521,7 @@ class ScheduledModel(BaseModel):
                 new_state = state
                 break
 
-        if new_state == None:
+        if new_state is None:
             raise ValueError('Error! State probabilities do not add to 1')
         return new_state
 
@@ -559,7 +566,8 @@ class ScheduledModel(BaseModel):
         all types of interaction between the current agent and other agents.
 
         Args:
-            fn: User-defined function defining the probability of infection based on individual/probabilistic interactions
+            fn: User-defined function defining the probability of infection based on individual/probabilistic
+                interactions
             p_infected_states_list: List of probabilities that can be used in the user-defined function fn
             new_states: A dictionary mapping states to proportions an agent from the current state can transition to
             agent: Current agent object
@@ -588,7 +596,8 @@ class ScheduledModel(BaseModel):
 
         Args:
             p_infected_states_list: List of probabilities that can be used in the user-defined function fn
-            fn: User-defined function defining the probability of infection based on individual/probabilistic interactions
+            fn: User-defined function defining the probability of infection based on individual/probabilistic
+                interactions
             new_states: A dictionary mapping states to proportions an agent from the current state can transition to
 
         Returns:
