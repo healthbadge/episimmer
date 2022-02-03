@@ -4,7 +4,7 @@ from typing import Callable, Dict, List, Tuple, Union
 from episimmer.agent import Agent
 from episimmer.location import Location
 from episimmer.model import BaseModel
-from episimmer.read_file import (ReadAgents, ReadConfigurations, ReadEvents,
+from episimmer.read_file import (ReadAgents, ReadConfiguration, ReadEvents,
                                  ReadLocations, ReadOneTimeEvents)
 
 from .read_file import (ReadEvents, ReadInteractions,
@@ -12,6 +12,7 @@ from .read_file import (ReadEvents, ReadInteractions,
 from .utils.statistics import save_stats
 from .utils.time import Time
 from .utils.visualize import save_env_graph, store_animated_dynamic_graph
+import networkx as nx
 
 
 class Simulate():
@@ -26,15 +27,16 @@ class Simulate():
         agents_obj: An object of class :class:`~episimmer.read_file.ReadAgents` containing all agents
         locations_obj: An object of class :class:`~episimmer.read_file.ReadLocations` containing all locations
     """
-    def __init__(self, config_obj: Dict[str, str], model: Union[BaseModel, None], policy_list: List[str], event_restriction_fn: Callable,
+    def __init__(self, config_obj: ReadConfiguration, model: BaseModel,
+                 policy_list: List[str], event_restriction_fn: Callable,
                  agents_obj: ReadAgents, locations_obj: ReadLocations):
         self.agents_obj: ReadAgents = agents_obj
         self.locations_obj: ReadLocations = locations_obj
-        self.model: Union[BaseModel, None] = model
+        self.model: BaseModel = model
         self.policy_list: List[str] = policy_list
         self.event_restriction_fn: Callable = event_restriction_fn
-        self.config_obj: object = config_obj
-        self.G_list = []
+        self.config_obj: ReadConfiguration = config_obj
+        self.G_list: List[nx.Graph] = []
 
     def onStartSimulation(self) -> None:
         """
@@ -66,7 +68,8 @@ class Simulate():
     @save_stats([('agents_obj', 3)], 'Agents', ['state'])
     def onStartTimeStep(self, interactionFiles_listOfList: List[List[str]],
                         eventFiles_listOfList: List[List[str]],
-                        probabilistic_interactionFiles_listOfList: List[List[str]],
+                        probabilistic_interactionFiles_listOfList: List[
+                            List[str]],
                         oneTimeEvent_obj: ReadOneTimeEvents) -> None:
         """
         Function to initialize filenames, to load interactions, probabilistic interactions, events and one time events, to save valid
@@ -78,7 +81,6 @@ class Simulate():
             probabilistic_interactionFiles_listOfList: List of path names of all the prababilistic interactions files
             oneTimeEvent_obj: An object of class :class:`~episimmer.read_file.ReadOneTimeEvents` containing all one time events
         """
-
         for agent in self.agents_obj.agents.values():
             agent.new_time_step()
 
@@ -186,7 +188,7 @@ class Simulate():
         Args:
             agent: Agent whose next state is to be set
             c_dict: Cotact dictionary of an agent with agent index as the key and interacting agent index as the value
-        
+
         Returns:
             Boolean representing validity of the interaction.
         """
@@ -200,13 +202,14 @@ class Simulate():
             return True
         return False
 
-    def store_event_lists(self, event_info: ReadEvents) -> None:
+    def store_event_lists(self, event_info: Dict[str, Union[str, List[str]]]) -> None:
         """
         Checks which agents part of an event can contribute infection to the event and which ones can receive infection from
         the event.
 
         Args:
-            event_info: An object of class :class:`~episimmer.read_file.ReadEvents` containing all events
+            event_info: A dictionary containing event information of a location that contains all the agents part of the event at 
+            that location along with those that can contribute infection and those that can receive infection.
         """
         event_info['can_contrib'] = []
         event_info['can_receive'] = []
@@ -219,6 +222,7 @@ class Simulate():
 
             if not agent.under_protection and r < agent.can_recieve_infection:
                 event_info['can_receive'].append(agent_index)
+
 
     def save_valid_interactions_events(self) -> None:
         """
@@ -248,7 +252,7 @@ class Simulate():
         for state in self.state_history.keys():
             self.state_history[state].append(len(self.state_list[state]))
 
-    def convert_state(self, agent) -> None:
+    def convert_state(self, agent: Agent) -> None:
         """
         Updates state list when an agent transitions from one state to another.
 
