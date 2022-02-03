@@ -9,8 +9,8 @@ class Agent():
     state: The state of the agent.
     info_dict: Information of each agent taken from the agents file.
     """
-    def __init__(self, state: str, info_dict: Dict[str, str]):
-        self.state: str = state
+    def __init__(self, state: Union[str, None], info_dict: Dict[str, str]):
+        self.state: Union[str, None] = state
         self.next_state: Union[str, None] = None
         self.contact_list: List[Dict[str, str]] = []
         self.info: Dict[str, str] = info_dict
