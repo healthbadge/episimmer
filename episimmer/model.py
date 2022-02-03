@@ -21,6 +21,7 @@ class BaseModel():
     def __init__(self, name: str):
         self.name: str = name
 
+        self.individual_state_types: List[str] = []
         self.infected_states: List[str] = []
         self.state_proportion: Dict[str, float] = {}
         self.recieve_fn: Union[Callable, None] = None
