@@ -42,9 +42,8 @@ class Simulate():
 
     @save_env_graph()
     @save_stats([('agents_obj', 3)], 'Agents', ['state'])
-    def on_start_time_step(self, interaction_files_list_of_list,
-                           event_files_list_of_list,
-                           probabilistic_interaction_files_list_of_list,
+    def on_start_time_step(self, interaction_files_list, event_files_list,
+                           probabilistic_interaction_files_list,
                            one_time_event_obj):
 
         for agent in self.agents_obj.agents.values():
@@ -57,7 +56,7 @@ class Simulate():
         interactions_filename = events_filename = None
 
         # Load interactions
-        for interaction_files_list in interaction_files_list_of_list:
+        for interaction_files_list in interaction_files_list:
             if interaction_files_list:
                 interactions_filename = interaction_files_list[
                     Time.get_current_time_step() % len(interaction_files_list)]
@@ -65,7 +64,7 @@ class Simulate():
                                  self.agents_obj)
 
         # Load probabilistic interactions
-        for probabilistic_interaction_files_list in probabilistic_interaction_files_list_of_list:
+        for probabilistic_interaction_files_list in probabilistic_interaction_files_list:
             if probabilistic_interaction_files_list:
                 probabilistic_interactions_filename = probabilistic_interaction_files_list[
                     Time.get_current_time_step() %
@@ -75,7 +74,7 @@ class Simulate():
                     self.agents_obj)
 
         # Load Events
-        for event_files_list in event_files_list_of_list:
+        for event_files_list in event_files_list:
             if event_files_list:
                 events_filename = event_files_list[
                     Time.get_current_time_step() % len(event_files_list)]
