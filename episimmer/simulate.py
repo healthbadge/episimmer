@@ -16,37 +16,36 @@ class Simulate():
         self.policy_list = policy_list
         self.event_restriction_fn = event_restriction_fn
         self.config_obj = config_obj
-        self.G_list = []
-
-    def onStartSimulation(self):
-
-        #Intitialize state list
         self.state_list = {}
         self.state_history = {}
+        self.G_list = []
+
+    def on_start_simulation(self):
+        # Initialize state list
         for state in self.model.individual_state_types:
             self.state_list[state] = []
             self.state_history[state] = []
 
-        #Initialize states
+        # Initialize states
         self.model.initalize_states(self.agents_obj.agents)
 
-        #Reset Policies
+        # Reset Policies
         for policy_index, policy in enumerate(self.policy_list):
             policy.reset(self.agents_obj.agents.values(), policy_index)
 
-        #Update State list
+        # Update State list
         for agent in self.agents_obj.agents.values():
             self.state_list[agent.state].append(agent.index)
 
-        #Store state list
+        # Store state list
         self.store_state()
 
     @save_env_graph()
     @save_stats([('agents_obj', 3)], 'Agents', ['state'])
-    def onStartTimeStep(self, interactionFiles_listOfList,
-                        eventFiles_listOfList,
-                        probabilistic_interactionFiles_listOfList,
-                        oneTimeEvent_obj):
+    def on_start_time_step(self, interaction_files_list_of_list,
+                           event_files_list_of_list,
+                           probabilistic_interaction_files_list_of_list,
+                           one_time_event_obj):
 
         for agent in self.agents_obj.agents.values():
             agent.new_time_step()
@@ -58,36 +57,37 @@ class Simulate():
         interactions_filename = events_filename = None
 
         # Load interactions
-        for interactionFiles_list in interactionFiles_listOfList:
-            if interactionFiles_list != []:
-                interactions_filename = interactionFiles_list[
-                    Time.get_current_time_step() % len(interactionFiles_list)]
+        for interaction_files_list in interaction_files_list_of_list:
+            if interaction_files_list:
+                interactions_filename = interaction_files_list[
+                    Time.get_current_time_step() % len(interaction_files_list)]
                 ReadInteractions(interactions_filename, self.config_obj,
                                  self.agents_obj)
 
         # Load probabilistic interactions
-        for probabilistic_interactionFiles_list in probabilistic_interactionFiles_listOfList:
-            if probabilistic_interactionFiles_list != []:
-                probabilistic_interactions_filename = probabilistic_interactionFiles_list[
+        for probabilistic_interaction_files_list in probabilistic_interaction_files_list_of_list:
+            if probabilistic_interaction_files_list:
+                probabilistic_interactions_filename = probabilistic_interaction_files_list[
                     Time.get_current_time_step() %
-                    len(probabilistic_interactionFiles_list)]
+                    len(probabilistic_interaction_files_list)]
                 ReadProbabilisticInteractions(
                     probabilistic_interactions_filename, self.config_obj,
                     self.agents_obj)
 
         # Load Events
-        for eventFiles_list in eventFiles_listOfList:
-            if eventFiles_list != []:
-                events_filename = eventFiles_list[Time.get_current_time_step()
-                                                  % len(eventFiles_list)]
+        for event_files_list in event_files_list_of_list:
+            if event_files_list:
+                events_filename = event_files_list[
+                    Time.get_current_time_step() % len(event_files_list)]
                 ReadEvents(events_filename, self.config_obj,
                            self.locations_obj, self.agents_obj)
 
         # Load One Time Events
-        oneTimeEvent_obj.ReadOneTimeEvents(self.config_obj, self.locations_obj,
-                                           self.agents_obj)
+        one_time_event_obj.ReadOneTimeEvents(self.config_obj,
+                                             self.locations_obj,
+                                             self.agents_obj)
 
-        #Enact policies by updating agent and location states.
+        # Enact policies by updating agent and location states.
         for policy_index, policy in enumerate(self.policy_list):
             policy.enact_policy(Time.get_current_time_step(),
                                 self.agents_obj.agents,
@@ -99,15 +99,15 @@ class Simulate():
         # agent.contact_list and location.events
         self.save_valid_interactions_events()
 
-        #Enact post-policy procedures after updating agent contacts and event lists.
+        # Enact post-policy procedures after updating agent contacts and event lists.
         for policy_index, policy in enumerate(self.policy_list):
             policy.post_policy(Time.get_current_time_step(),
                                self.agents_obj.agents,
                                self.locations_obj.locations.values(),
                                self.model, policy_index)
 
-        if events_filename != None:
-            #Update event info to agents from location
+        if events_filename is not None:
+            # Update event info to agents from location
             for location in self.locations_obj.locations.values():
                 if not location.lock_down_state:
                     for event_info in location.events:
@@ -115,25 +115,25 @@ class Simulate():
                             event_info, location, self.agents_obj,
                             self.event_restriction_fn)
 
-    def handleTimeStepForAllAgents(self):
-        #Too ensure concurrency we update agent.next_state in method handleTimeStepAsAgent
-        #After every agent has updated next_state we update states of all agents in method handleTimeStep()
+    def handle_time_step_for_all_agents(self):
+        # To ensure concurrency we update agent.next_state in method handleTimeStepAsAgent
+        # After every agent has updated next_state we update states of all agents in method handleTimeStep()
 
         for agent in self.agents_obj.agents.values():
-            self.handleTimeStepAsAgent(agent)
+            self.handle_time_step_as_agent(agent)
 
         for agent in self.agents_obj.agents.values():
             self.convert_state(agent)
 
-    def handleTimeStepAsAgent(self, agent):
-        #Too ensure concurrency we update agent.next_state in method handleTimeStepAsAgent
-        #After every agent has updated next_state we update states of all agents in method handleTimeStep()
+    def handle_time_step_as_agent(self, agent):
+        # To ensure concurrency we update agent.next_state in method handleTimeStepAsAgent
+        # After every agent has updated next_state we update states of all agents in method handleTimeStep()
 
-        #Finding next_state
+        # Finding next_state
         agent.set_next_state(
             self.model.find_next_state(agent, self.agents_obj.agents))
 
-    def endTimeStep(self):
+    def end_time_step(self):
         self.store_state()
 
     def valid_interaction(self, agent, c_dict):
@@ -172,7 +172,7 @@ class Simulate():
                 self.store_event_lists(event_info)
 
     @store_animated_dynamic_graph()
-    def endSimulation(self):
+    def end_simulation(self):
         return self.state_history
 
     def store_state(self):
