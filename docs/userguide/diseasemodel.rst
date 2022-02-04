@@ -199,7 +199,7 @@ The transition functions available are
                   'Recovered':0
                 }
         model.StochasticModel.__init__(self,individual_types,infected_states,state_proportion)  # We use the inbuilt model in the package
-        self.set_transition('Susceptible', 'Infected', self.p_infection(None, None))  # Adding S-> I transition which is redundant in this case as we use the event_contribute and event_recieve function
+        self.set_transition('Susceptible', 'Infected', self.p_infection(None, None))  # Adding S-> I transition which is redundant in this case as we use the event_contribute and event_receive function
         self.set_transition('Infected', 'Recovered', self.p_standard(0.2))  # Adding the I->R transition
 
 
@@ -261,7 +261,7 @@ Let us define both here.
 .. code-block:: python
     :linenos:
 
-    # The two functions event_contribute_fn and event_recieve_fn together control the spread of infection
+    # The two functions event_contribute_fn and event_receive_fn together control the spread of infection
 
     # This function states the amount an agent contributes to ambient infection in the region
     # note that only infected agents contibute to the ambient infection
@@ -271,13 +271,13 @@ Let us define both here.
         return 0
 
     #This function states the probability of an agent becoming infected from the ambient infection
-    def event_recieve_fn(agent,ambient_infection,event_info,location,current_time_step):
+    def event_receive_fn(agent,ambient_infection,event_info,location,current_time_step):
       beta=0.001
       return ambient_infection*beta
 
 As shown above, we see that both functions return a value for a single agent. In the event_contribute_fn, if the agent is Infected,
 he returns 1. This value will be accumulated and finally represent the ambient infection of the event. When it is 1, it actually represents the
-total number of infected agents in the Event. In the event_recieve_fn, a probability of infection is returned based on the ambient infection.
+total number of infected agents in the Event. In the event_receive_fn, a probability of infection is returned based on the ambient infection.
 
 
 .. note::
@@ -293,7 +293,7 @@ Now, we can link the user-defined functions for both Interactions and Events. Fi
 
     import episimmer.model as model
 
-    # The two functions event_contribute_fn and event_recieve_fn together control the spread of infection
+    # The two functions event_contribute_fn and event_receive_fn together control the spread of infection
 
     # This function states the amount an agent contributes to ambient infection in the region
     # note that only infected agents contibute to the ambient infection
@@ -303,7 +303,7 @@ Now, we can link the user-defined functions for both Interactions and Events. Fi
         return 0
 
     #This function states the probability of an agent becoming infected from the ambient infection
-    def event_recieve_fn(agent,ambient_infection,event_info,location,current_time_step):
+    def event_receive_fn(agent,ambient_infection,event_info,location,current_time_step):
       beta=0.001
       return ambient_infection*beta
 
@@ -324,18 +324,18 @@ Now, we can link the user-defined functions for both Interactions and Events. Fi
                   'Recovered':0
                 }
         model.StochasticModel.__init__(self,individual_types,infected_states,state_proportion)  # We use the inbuilt model in the package
-        self.set_transition('Susceptible', 'Infected', self.p_infection([0.1],probabilityOfInfection_fn))  # Adding S-> I transition which is redundant in this case as we use the event_contribute and event_recieve function
+        self.set_transition('Susceptible', 'Infected', self.p_infection([0.1],probabilityOfInfection_fn))  # Adding S-> I transition which is redundant in this case as we use the event_contribute and event_receive function
         self.set_transition('Infected', 'Recovered', self.p_standard(0.2))  # Adding the I->R transition
 
         self.set_event_contribution_fn(event_contribute_fn)  #Setting the above defined fucntion into the model
-        self.set_event_recieve_fn(event_recieve_fn)  #Setting the above defined fucntion into the model
+        self.set_event_receive_fn(event_receive_fn)  #Setting the above defined fucntion into the model
 
         self.name='Stochastic SIR'
 
 We link the probability of interaction function and the optional list of probabilities in the p_infection function. Since we pass a list, we might as well use it. Thus, in line 21, we see the the first
 element of the list being used (Since there is only a single infectious state, we pass only a single value in the list).
 
-Then, we link the event functions with the set_event_contribution_fn() and set_event_recieve_fn() functions.
+Then, we link the event functions with the set_event_contribution_fn() and set_event_receive_fn() functions.
 
 We can also provide a name for the model which would be used in visualization.
 
@@ -472,7 +472,7 @@ Let us define both here.
 .. code-block:: python
     :linenos:
 
-    # The two functions event_contribute_fn and event_recieve_fn together control the spread of infection
+    # The two functions event_contribute_fn and event_receive_fn together control the spread of infection
 
     # This function states the amount an agent contributes to ambient infection in the region
     # note that only infected agents contibute to the ambient infection
@@ -482,13 +482,13 @@ Let us define both here.
         return 0
 
     #This function states the probability of an agent becoming infected from the ambient infection
-    def event_recieve_fn(agent,ambient_infection,event_info,location,current_time_step):
+    def event_receive_fn(agent,ambient_infection,event_info,location,current_time_step):
       beta=0.001
       return ambient_infection*beta
 
 As shown above, we see that both functions return a value for a single agent. In the event_contribute_fn, if the agent is Infected,
 he returns 1. This value will be accumulated and finally represent the ambient infection of the event. When it is 1, it actually represents the
-total number of infected agents in the Event. In the event_recieve_fn, a probability of infection is returned based on the ambient infection.
+total number of infected agents in the Event. In the event_receive_fn, a probability of infection is returned based on the ambient infection.
 
 
 .. note::
@@ -505,7 +505,7 @@ Now, we can link the user-defined functions for both Interactions and Events. Fi
 
     import episimmer.model as model
 
-    # The two functions event_contribute_fn and event_recieve_fn together control the spread of infection
+    # The two functions event_contribute_fn and event_receive_fn together control the spread of infection
 
     # This function states the amount an agent contributes to ambient infection in the region
     # note that only infected agents contibute to the ambient infection
@@ -515,7 +515,7 @@ Now, we can link the user-defined functions for both Interactions and Events. Fi
         return 0
 
     #This function states the probability of an agent becoming infected from the ambient infection
-    def event_recieve_fn(agent,ambient_infection,event_info,location,current_time_step):
+    def event_receive_fn(agent,ambient_infection,event_info,location,current_time_step):
       beta=0.001
       return ambient_infection*beta
 
@@ -534,14 +534,14 @@ Now, we can link the user-defined functions for both Interactions and Events. Fi
         self.insert_state('Recovered',0, 0,self.scheduled({'Recovered':1}),False,0)
 
         self.set_event_contribution_fn(event_contribute_fn)
-        self.set_event_recieve_fn(event_recieve_fn)
+        self.set_event_receive_fn(event_receive_fn)
 
         self.name='Scheduled SIR'
 
 We link the probability of interaction function and the optional list of probabilities in the p_infection function. Since we pass a list, we might as well use it. Thus, in line 21, we see the the first
 element of the list being used (Since there is only a single infectious state, we pass only a single value in the list).
 
-Then, we link the event functions with the set_event_contribution_fn() and set_event_recieve_fn() functions.
+Then, we link the event functions with the set_event_contribution_fn() and set_event_receive_fn() functions.
 
 
 We can also provide a name for the model which would be used in visualization.
@@ -619,7 +619,7 @@ You may also set the states that represent the symptomatic states of the disease
         self.set_transition('Asymptomatic', 'Recovered', self.p_standard(0.1))
 
         self.set_event_contribution_fn(event_contribute_fn)
-        self.set_event_recieve_fn(event_recieve_fn)
+        self.set_event_receive_fn(event_receive_fn)
         self.set_symptomatic_states(['Symptomatic'])
 
 This is useful for modules such as the Testing Policy. You may choose to test the agents that are only symptomatic

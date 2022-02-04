@@ -184,7 +184,7 @@ class Simulate():
         Checks whether the contact of an agent will interact with the agent. If the current agent is under the
         protection of a vaccine, the contact is said to not occur. Other factors include variables set by lockdown
         (restriction) policies that change the probability of the current agent locking himself down. This is done
-        with the `can_contribute_infection` and `can_recieve_infection` variables.
+        with the `can_contribute_infection` and `can_receive_infection` variables.
 
         Args:
             agent: The current agent
@@ -199,7 +199,7 @@ class Simulate():
         r = random.random()
         contact_index = c_dict['Interacting Agent Index']
         contact_agent = self.agents_obj.agents[contact_index]
-        if r < contact_agent.can_contribute_infection and r < agent.can_recieve_infection:
+        if r < contact_agent.can_contribute_infection and r < agent.can_receive_infection:
             return True
         return False
 
@@ -222,7 +222,7 @@ class Simulate():
             if r < agent.can_contribute_infection:
                 event_info['can_contrib'].append(agent_index)
 
-            if not agent.under_protection and r < agent.can_recieve_infection:
+            if not agent.under_protection and r < agent.can_receive_infection:
                 event_info['can_receive'].append(agent_index)
 
     def save_valid_interactions_events(self) -> None:

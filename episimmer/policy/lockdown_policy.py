@@ -10,7 +10,7 @@ class LockdownPolicy(AgentPolicy):
         self.p = p
 
     def lockdown_agent(self, agent):
-        agent.update_recieve_infection(self.p)
+        agent.update_receive_infection(self.p)
         agent.update_contribute_infection(self.p)
 
 

@@ -13,7 +13,7 @@ def event_contribute_fn(agent,event_info,location,current_time_step):
 			return 1
 		return 0
 
-def event_recieve_fn(agent,ambient_infection,event_info,location,current_time_step):
+def event_receive_fn(agent,ambient_infection,event_info,location,current_time_step):
 	#Example 1
 	#6th to 10th day lockdown so no spread, after that precations are taken so rate of infection decreases
 	if current_time_step<5:
@@ -44,4 +44,4 @@ class UserModel(model.StochasticModel):
 		self.set_transition('ICU', 'Dead', self.p_standard(0.05))
 
 		self.set_event_contribution_fn(event_contribute_fn)
-		self.set_event_recieve_fn(event_recieve_fn)
+		self.set_event_receive_fn(event_receive_fn)
