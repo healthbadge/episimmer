@@ -93,7 +93,7 @@ class Agent():
 
     def new_time_step(self) -> None:
         """
-        Resets all attributes of agent at the beginning of a timestep of the simulation.
+        Resets all attributes of agent at the beginning of a time step of the simulation.
         """
         self.can_receive_infection = 1.0
         self.can_contribute_infection = 1.0
