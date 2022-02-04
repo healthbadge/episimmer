@@ -629,6 +629,7 @@ class ReadProbabilisticInteractions(BaseReadFile):
                 agent_indexes = list(set(parameter_list[i].split(',')))
                 agent_indexes = list(
                     set(agent_indexes) & set(self.agents_obj.agents))
+                agent_indexes.sort()
 
             else:
                 info_dict[key] = parameter_list[i]
