@@ -100,6 +100,11 @@ class BaseModel():
             location: Location object
             agents_obj: An object of class :class:`~episimmer.read_file.ReadAgents` containing all agents
         """
+        if self.contribute_fn is None or self.receive_fn is None:
+            raise Exception(
+                'You have included events in your simulation but the disease model does not have the '
+                'event receive and contribute functions set to a Callable function.'
+            )
         ambient_infection = 0
         for agent_index in event_info['Agents']:
             agent = agents_obj.agents[agent_index]
