@@ -4,16 +4,13 @@ import os.path as osp
 import random
 import re
 from csv import DictReader
-from typing import TYPE_CHECKING, Dict, List, Tuple, Union
+from typing import Dict, List, Tuple, Union
 
 import numpy as np
 
 from .agent import Agent
 from .location import Location
 from .utils.time import Time
-
-if TYPE_CHECKING:
-    from episimmer.model import BaseModel
 
 
 class ReadConfiguration():
@@ -25,6 +22,7 @@ class ReadConfiguration():
     """
     def __init__(self, filename: str):
 
+        self.filename: str = filename
         self.example_path: str = osp.dirname(filename)
         self.random_seed: str = ''
         self.worlds: int = 0
@@ -40,16 +38,13 @@ class ReadConfiguration():
         self.events_files_list_list: List[str] = []
         self.one_time_event_file: str = ''
 
-        self.read_config_file(filename)
+        self.read_config_file()
 
-    def read_config_file(self, filename) -> None:
+    def read_config_file(self) -> None:
         """
         Reads the config.txt file and populates the class with the parameters passed
-
-        Args:
-            filename: Name of the directory containing simulation files
         """
-        f = open(filename, 'r')
+        f = open(self.filename, 'r')
 
         self.random_seed = (self.get_value_config(f.readline()))
         if self.random_seed != '':
@@ -254,7 +249,7 @@ class ReadVDConfiguration():
         filename: Name of the directory containing simulation files
     """
     def __init__(self, filename: str):
-
+        self.filename: str = filename
         self.example_path: str = osp.dirname(filename)
         self.target: str = ''
         self.algorithm: str = ''
@@ -263,17 +258,14 @@ class ReadVDConfiguration():
         self.post_process: str = ''
         self.output_mode: str = ''
 
-        self.read_vd_config_file(filename)
+        self.read_vd_config_file()
 
-    def read_vd_config_file(self, filename) -> None:
+    def read_vd_config_file(self) -> None:
         """
         Reads the vd_config.txt file and populates the class with the parameters passed
-
-        Args:
-            filename: Name of the directory containing simulation files
         """
 
-        f = open(filename, 'r')
+        f = open(self.filename, 'r')
 
         self.target = self.get_value_config(f.readline())
         self.algorithm = self.get_value_config(f.readline())
@@ -331,18 +323,17 @@ class ReadFilesList():
         filename: Name of the files list file
     """
     def __init__(self, filename: str):
+        self.filename: str = filename
         self.file_list: List[str] = []
-        self.read_files_list(filename)
 
-    def read_files_list(self, filename) -> None:
+        self.read_files_list()
+
+    def read_files_list(self) -> None:
         """
         Reads the files list file and generates a list containing all the files
-
-        Args:
-            filename: Name of the files list file
         """
 
-        f = open(filename, 'r')
+        f = open(self.filename, 'r')
         lines = f.readlines()
         separator = ' '
         text = separator.join(lines)
@@ -361,12 +352,13 @@ class BaseReadFile():
 
     def get_value(self, line) -> str:
         """
-        Takes a single line and clips the \n string
+        Takes a single line and clips the backslash n element
+
         Args:
             line: A string line
 
         Returns:
-            A string line without \n
+            A string line without the backslash n  element
 
         """
         if line.endswith('\n'):
@@ -376,35 +368,34 @@ class BaseReadFile():
 
 class ReadAgents(BaseReadFile):
     """
-    Class for reading and storing agent information from a file.
-    Inherits :class:`~episimmer.read_file.BaseReadFile` class.
+    Class for reading and storing agent information from the agents file.
+    Inherits :class:`BaseReadFile` class.
 
     Args:
         filename: Name of the file containing agent information.
-        config_obj: A dictionary containing information from the config file
+        config_obj: An object of class :class:`~episimmer.read_file.ReadConfiguration` containing the simulation
+                    configurations.
     """
-    def __init__(self, filename, config_obj):
+    def __init__(self, filename: str, config_obj: ReadConfiguration):
         super().__init__()
+        self.filename: str = filename
+        self.config_obj: ReadConfiguration = config_obj
         self.n: Union[int, None] = None
         self.parameter_keys: List[str] = []
         self.agents: Dict[str, Agent] = {}
 
-        self.read_agent_file(filename, config_obj)
+        self.read_agents_file()
 
-    def read_agent_file(self, filename, config_obj) -> None:
+    def read_agents_file(self) -> None:
         """
         Reads the agents file (either a txt or csv file) and generates a dictionary mapping agent indices to
         :class:`~episimmer.agent.Agent` objects with the information from the file.
-
-        Args:
-            filename: Name of the file containing agent information.
-            config_obj: A dictionary containing information from the config file
         """
-        if filename.endswith('.txt'):
-            f = open(filename, 'r')
+        if self.filename.endswith('.txt'):
+            f = open(self.filename, 'r')
             self.n = int(self.get_value(f.readline()))
             agent_info_keys = self.get_value(f.readline())
-            if agent_info_keys != config_obj.agent_info_keys:
+            if agent_info_keys != self.config_obj.agent_info_keys:
                 raise Exception(
                     'Error! Agent Information parameters do not match the config.txt file'
                 )
@@ -419,15 +410,15 @@ class ReadAgents(BaseReadFile):
                 self.agents[agent.index] = agent
             f.close()
 
-        elif filename.endswith('.csv'):
-            with open(filename, 'r') as read_obj:
+        elif self.filename.endswith('.csv'):
+            with open(self.filename, 'r') as read_obj:
                 csv_dict_reader = DictReader(read_obj)
                 csv_list = list(csv_dict_reader)
                 self.n = len(csv_list)
 
                 # Assuming that we have a config file that is .txt file.
                 agent_info_keys = ':'.join(csv_dict_reader.fieldnames)
-                if agent_info_keys != config_obj.agent_info_keys:
+                if agent_info_keys != self.config_obj.agent_info_keys:
                     raise Exception(
                         'Error! Agent Information parameters do not match the config.txt file'
                     )
@@ -458,18 +449,40 @@ class ReadAgents(BaseReadFile):
 
 
 class ReadInteractions(BaseReadFile):
-    def __init__(self, filename, config_obj, agents_obj):
+    """
+    Class for reading and storing individual interaction information from the interactions file.
+    Inherits :class:`BaseReadFile` class.
+
+    Args:
+        filename: Name of the file containing individual interaction information.
+        config_obj: An object of class :class:`ReadConfiguration` containing the simulation
+                    configurations.
+        agents_obj: An object of class :class:`ReadAgents` containing agent information
+    """
+    def __init__(self, filename: str, config_obj: ReadConfiguration,
+                 agents_obj: ReadAgents):
         super().__init__()
-        self.config_obj = config_obj
-        self.agents_obj = agents_obj
-        if filename == '' or filename is None:
+        self.filename: str = filename
+        self.config_obj: ReadConfiguration = config_obj
+        self.agents_obj: ReadAgents = agents_obj
+        self.no_interactions: int = 0
+        self.parameter_keys: List[str] = []
+
+        self.read_interactions_file()
+
+    def read_interactions_file(self) -> None:
+        """
+        Reads the interaction file (either a txt or csv file) and adds contact information from the interactions file
+        to the :class:`~episimmer.agent.Agent` objects.
+        """
+        if self.filename == '' or self.filename is None:
             return
 
-        if filename.endswith('.txt'):
-            f = open(filename, 'r')
+        if self.filename.endswith('.txt'):
+            f = open(self.filename, 'r')
             self.no_interactions = int(self.get_value(f.readline()))
             interaction_info_keys = self.get_value(f.readline())
-            if interaction_info_keys != config_obj.interaction_info_keys:
+            if interaction_info_keys != self.config_obj.interaction_info_keys:
                 raise Exception(
                     'Error! Interaction parameters do not match the config.txt file'
                 )
@@ -479,31 +492,43 @@ class ReadInteractions(BaseReadFile):
                 parameter_list = (self.get_value(f.readline())).split(':')
                 agent_index, info_dict = self.get_interaction(parameter_list)
                 if agent_index is not None and info_dict is not None:
-                    agents_obj.agents[agent_index].add_contact(info_dict)
+                    self.agents_obj.agents[agent_index].add_contact(info_dict)
 
             f.close()
 
-        elif filename.endswith('.csv'):
-            with open(filename, 'r') as read_obj:
+        elif self.filename.endswith('.csv'):
+            with open(self.filename, 'r') as read_obj:
                 csv_dict_reader = DictReader(read_obj)
                 csv_list = list(csv_dict_reader)
-                self.n = len(csv_list)
+                self.no_interactions = len(csv_list)
 
-                self.parameter_keys = ':'.join(csv_dict_reader.fieldnames)
-                if self.parameter_keys != config_obj.interaction_info_keys:
+                interaction_info_keys = ':'.join(csv_dict_reader.fieldnames)
+                if interaction_info_keys != self.config_obj.interaction_info_keys:
                     raise Exception(
                         'Error! Interaction Information parameters do not match the config.txt file'
                     )
+                self.parameter_keys = csv_dict_reader.fieldnames
 
-                for i in range(self.n):
+                for i in range(self.no_interactions):
                     info_dict = csv_list[i]
                     if (info_dict['Agent Index'] in set(self.agents_obj.agents)
                             and info_dict['Interacting Agent Index'] in set(
                                 self.agents_obj.agents)):
                         agent_index = info_dict['Agent Index']
-                        agents_obj.agents[agent_index].add_contact(info_dict)
+                        self.agents_obj.agents[agent_index].add_contact(
+                            info_dict)
 
-    def get_interaction(self, parameter_list):
+    def get_interaction(
+            self, parameter_list: List[str]) -> Tuple[str, Dict[str, str]]:
+        """
+         Creates a dictionary containing information of a single interaction.
+
+        Args:
+            parameter_list: List of values for all the parameter keys of an interaction.
+
+        Returns:
+            Information dictionary of the interaction.
+        """
         info_dict = {}
         agent_index = None
         for i, key in enumerate(self.parameter_keys):
@@ -521,18 +546,40 @@ class ReadInteractions(BaseReadFile):
 
 
 class ReadProbabilisticInteractions(BaseReadFile):
-    def __init__(self, filename, config_obj, agents_obj):
+    """
+    Class for reading and storing probabilistic interaction information from the probabilistic interactions file.
+    Inherits :class:`BaseReadFile` class.
+
+    Args:
+        filename: Name of the file containing probabilistic interaction information.
+        config_obj: An object of class :class:`ReadConfiguration` containing the simulation
+                    configurations.
+        agents_obj: An object of class :class:`ReadAgents` containing agent information
+    """
+    def __init__(self, filename: str, config_obj: ReadConfiguration,
+                 agents_obj: ReadAgents):
         super().__init__()
-        self.config_obj = config_obj
-        self.agents_obj = agents_obj
-        if filename == '' or filename is None:
+        self.filename: str = filename
+        self.config_obj: ReadConfiguration = config_obj
+        self.agents_obj: ReadAgents = agents_obj
+        self.no_interaction_sets: int = 0
+        self.parameter_keys: List[str] = []
+
+        self.read_prob_interactions_file()
+
+    def read_prob_interactions_file(self) -> None:
+        """
+        Reads the probabilistic interaction file (a txt file) and adds contact information from the file
+        to the :class:`~episimmer.agent.Agent` objects.
+        """
+        if self.filename == '' or self.filename is None:
             return
 
-        if filename.endswith('.txt'):
-            f = open(filename, 'r')
+        if self.filename.endswith('.txt'):
+            f = open(self.filename, 'r')
             self.no_interaction_sets = int(self.get_value(f.readline()))
             self.parameter_keys = self.get_value(f.readline()).split(':')
-            config_interaction_info_keys_list = config_obj.interaction_info_keys.split(
+            config_interaction_info_keys_list = self.config_obj.interaction_info_keys.split(
                 ':')
 
             if self.parameter_keys != config_interaction_info_keys_list and self.parameter_keys[
@@ -546,11 +593,24 @@ class ReadProbabilisticInteractions(BaseReadFile):
                 parameter_list = (self.get_value(f.readline())).split(':')
                 interactions_list = self.get_interactions(parameter_list)
                 for (agent_index, info_dict) in interactions_list:
-                    agents_obj.agents[agent_index].add_contact(info_dict)
+                    self.agents_obj.agents[agent_index].add_contact(info_dict)
 
             f.close()
 
-    def get_interactions(self, parameter_list):
+    def get_interactions(
+            self,
+            parameter_list: List[str]) -> List[Tuple[str, Dict[str, str]]]:
+        """
+         Generates the interactions using probability values and agent indices given in the probabilistic
+         interactions file.
+
+        Args:
+            parameter_list: List containing probability of interaction and agent indices associated with
+                            that probability.
+
+        Returns:
+            Interaction list consisting of tuples of agent index and interaction information (as a dictionary).
+        """
         info_dict = {}
         agent_indexes = []
         interactions_list = []
@@ -591,17 +651,37 @@ class ReadProbabilisticInteractions(BaseReadFile):
 
 
 class ReadLocations(BaseReadFile):
-    def __init__(self, filename, config_obj):
+    """
+    Class for reading and storing location information from the locations file.
+    Inherits :class:`BaseReadFile` class.
+
+    Args:
+        filename: Name of the file containing location information.
+        config_obj: An object of class :class:`ReadConfiguration` containing the simulation
+                    configurations.
+    """
+    def __init__(self, filename: str, config_obj: ReadConfiguration):
         super().__init__()
-        self.config_obj = config_obj
-        self.locations = {}
-        if filename == '' or filename is None:
+        self.filename: str = filename
+        self.config_obj: ReadConfiguration = config_obj
+        self.locations: Dict[str, Location] = {}
+        self.no_locations: int = 0
+        self.parameter_keys: List[str] = []
+
+        self.read_locations_file()
+
+    def read_locations_file(self) -> None:
+        """
+        Reads the locations file (a txt file) and adds the information from the file
+        to the :class:`~episimmer.agent.Agent` objects.
+        """
+        if self.filename == '' or self.filename is None:
             return
-        f = open(filename, 'r')
+        f = open(self.filename, 'r')
 
         self.no_locations = int(self.get_value(f.readline()))
         location_info_keys = self.get_value(f.readline())
-        if location_info_keys != config_obj.location_info_keys:
+        if location_info_keys != self.config_obj.location_info_keys:
             raise Exception(
                 'Error! Location parameters do not match the config.txt file')
         self.parameter_keys = location_info_keys.split(':')
@@ -614,7 +694,16 @@ class ReadLocations(BaseReadFile):
 
         f.close()
 
-    def create_info_dict(self, info_list):
+    def create_info_dict(self, info_list: List[str]) -> Dict[str, str]:
+        """
+         Creates a dictionary containing information of a single location.
+
+        Args:
+            info_list: List of values for all the parameter keys of a location.
+
+        Returns:
+            Information dictionary of the location.
+        """
         info_dict = {}
         for i, key in enumerate(self.parameter_keys):
             info_dict[key] = info_list[i]
@@ -623,17 +712,44 @@ class ReadLocations(BaseReadFile):
 
 
 class ReadEvents(BaseReadFile):
-    def __init__(self, filename, config_obj, locations_obj, agents_obj):
+    """
+    Class for reading and storing simple event information from the events file.
+    Inherits :class:`BaseReadFile` class.
+
+    Args:
+        filename: Name of the file containing event information.
+        config_obj: An object of class :class:`ReadConfiguration` containing the simulation
+                    configurations.
+        locations_obj: An object of class :class:`ReadLocations` containing location information
+        agents_obj: An object of class :class:`ReadAgents` containing agent information
+    """
+    def __init__(self,
+                 filename: str,
+                 config_obj: Union[ReadConfiguration, None] = None,
+                 locations_obj: Union[ReadLocations, None] = None,
+                 agents_obj: Union[ReadAgents, None] = None):
         super().__init__()
-        self.config_obj = config_obj
-        self.locations_obj = locations_obj
-        self.agents_obj = agents_obj
-        if filename == '' or filename is None:
+        self.filename: str = filename
+        self.config_obj: Union[ReadConfiguration, None] = config_obj
+        self.locations_obj: Union[ReadLocations, None] = locations_obj
+        self.agents_obj: Union[ReadAgents, None] = agents_obj
+        self.no_events: int = 0
+        self.parameter_keys: List[str] = []
+
+        if config_obj:
+            self.read_events_file()
+
+    def read_events_file(self) -> None:
+        """
+        Reads the events file (a txt file) and adds the information from the file
+        to the :class:`~episimmer.location.Location` objects.
+        """
+        if self.filename == '' or self.filename is None:
             return
-        f = open(filename, 'r')
+        f = open(self.filename, 'r')
         self.no_events = int(self.get_value(f.readline()))
         event_info_keys = self.get_value(f.readline())
-        if event_info_keys != config_obj.event_info_keys:
+        if event_info_keys != self.config_obj.event_info_keys:
             raise Exception(
                 'Error! Event parameters do not match the config.txt file')
 
@@ -648,7 +764,18 @@ class ReadEvents(BaseReadFile):
 
         f.close()
 
-    def get_event(self, parameter_list):
+    def get_event(
+        self, parameter_list: List[str]
+    ) -> Tuple[str, Dict[str, Union[str, List[str]]]]:
+        """
+         Creates a dictionary containing information of a single event.
+
+        Args:
+            parameter_list: List of values for all the parameter keys of an event.
+
+        Returns:
+            Information dictionary of the event.
+        """
         info_dict = {}
         location_index = None
         for i, key in enumerate(self.parameter_keys):
@@ -675,10 +802,27 @@ class ReadEvents(BaseReadFile):
         return location_index, info_dict
 
 
-class ReadOneTimeEvents(BaseReadFile):
-    def __init__(self, filename):
-        super().__init__()
-        self.filename = filename
+class ReadOneTimeEvents(ReadEvents):
+    """
+    Class for reading and storing one time event information from the one time event file.
+    Inherits :class:`ReadEvents` class.
+
+    Args:
+        filename: Name of the file containing one time event information.
+    """
+    def __init__(self, filename: str):
+        super().__init__(filename)
+        self.event_info_keys: str = ''
+        self.one_time_parameter_keys: List[str] = []
+        self.eventsAt: Dict[int, List[str]] = {}
+
+        self.read_one_time_events_file()
+
+    def read_one_time_events_file(self) -> None:
+        """
+        Reads the one time events file (a txt file) and populates a dictionary mapping from time step to event
+        information
+        """
         if self.filename == '' or self.filename is None:
             return
         f = open(self.filename, 'r')
@@ -693,11 +837,19 @@ class ReadOneTimeEvents(BaseReadFile):
                 self.eventsAt[int(time)] = self.eventsAt.get(
                     int(time), []) + [':'.join(line[1:])]
         f.close()
-        self.config_obj = None
-        self.locations_obj = None
-        self.agents_obj = None
 
-    def read_one_time_events(self, config_obj, locations_obj, agents_obj):
+    def populate_one_time_events(self, config_obj: ReadConfiguration,
+                                 locations_obj: ReadLocations,
+                                 agents_obj: ReadAgents) -> None:
+        """
+        Populates the locations objects with one time events at the current time step
+
+        Args:
+            config_obj: An object of class :class:`ReadConfiguration` containing the simulation
+                        configurations.
+            locations_obj: An object of class :class:`ReadLocations` containing location information
+            agents_obj: An object of class :class:`ReadAgents` containing agent information
+        """
         if self.filename == '' or self.filename is None:
             return
         self.config_obj = config_obj
@@ -711,30 +863,3 @@ class ReadOneTimeEvents(BaseReadFile):
             parameter_list = (self.get_value(event)).split(':')
             location_index, info_dict = self.get_event(parameter_list)
             self.locations_obj.locations[location_index].add_event(info_dict)
-
-    def get_event(self, parameter_list):
-        info_dict = {}
-        location_index = None
-        for i, key in enumerate(self.parameter_keys):
-            if key == 'Location Index':
-                location_index = parameter_list[i]
-
-            if key == 'Agents':
-                info_dict[key] = list(set(parameter_list[i].split(',')))
-                if info_dict[key][-1] == '':
-                    info_dict[key] = info_dict[:-1]
-            else:
-                info_dict[key] = parameter_list[i]
-
-        if info_dict['Agents'] is None or self.agents_obj.agents is None:
-            location_index, info_dict = None, None
-
-        elif set(info_dict['Agents']) - set(list(self.agents_obj.agents)):
-            to_remove = set(info_dict['Agents']) - set(
-                list(self.agents_obj.agents))
-            info_dict['Agents'] = list(set(info_dict['Agents']) - to_remove)
-
-        if location_index is None:
-            raise Exception(
-                'Error! No event to read in the one time event file')
-        return location_index, info_dict
