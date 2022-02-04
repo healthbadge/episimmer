@@ -24,7 +24,7 @@ class BaseModel():
         self.individual_state_types: List[str] = []
         self.infected_states: List[str] = []
         self.state_proportion: Dict[str, float] = {}
-        self.recieve_fn: Union[Callable, None] = None
+        self.receive_fn: Union[Callable, None] = None
         self.contribute_fn: Union[Callable, None] = None
         self.external_prev_fn: Callable = lambda x, y: 0.0
         self.symptomatic_states: List[str] = []
@@ -110,7 +110,7 @@ class BaseModel():
         for agent_index in event_info['Agents']:
             agent = agents_obj.agents[agent_index]
             if agent_index in event_info['can_receive']:
-                p = self.recieve_fn(agent, ambient_infection, event_info,
+                p = self.receive_fn(agent, ambient_infection, event_info,
                                     location, Time.get_current_time_step())
                 agent.add_event_result(p)
 
@@ -123,7 +123,7 @@ class BaseModel():
         """
         self.contribute_fn = fn
 
-    def set_event_recieve_fn(self, fn: Union[Callable, None]) -> None:
+    def set_event_receive_fn(self, fn: Union[Callable, None]) -> None:
         """
         Sets the event receive function specifying the probability of infection for an agent from the ambient infection
         of an event.
@@ -131,7 +131,7 @@ class BaseModel():
         Args:
             fn: User-defined function used to determine the probability of an agent receiving an ambient infection
         """
-        self.recieve_fn = fn
+        self.receive_fn = fn
 
     def set_external_prevalence_fn(self, fn: Callable) -> None:
         """

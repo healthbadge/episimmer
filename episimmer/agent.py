@@ -18,7 +18,7 @@ class Agent():
         self.event_probabilities: List[float] = []
 
         self.schedule_time_left: Union[int, None] = None
-        self.can_recieve_infection: float = 1.0
+        self.can_receive_infection: float = 1.0
         self.can_contribute_infection: float = 1.0
         self.under_protection: bool = False
 
@@ -95,7 +95,7 @@ class Agent():
         """
         Resets all attributes of agent at the beginning of a timestep of the simulation.
         """
-        self.can_recieve_infection = 1.0
+        self.can_receive_infection = 1.0
         self.can_contribute_infection = 1.0
         self.next_state = None
         self.contact_list = []
@@ -125,14 +125,14 @@ class Agent():
         self.next_state = next_state
         self.schedule_time_left = schedule_time
 
-    def update_recieve_infection(self, p: float) -> None:
+    def update_receive_infection(self, p: float) -> None:
         """
         Updates agent's probability to receive infection.
 
         Args:
             p: Probability of receiving infection
         """
-        self.can_recieve_infection = p
+        self.can_receive_infection = p
 
     def update_contribute_infection(self, p: float) -> None:
         """
