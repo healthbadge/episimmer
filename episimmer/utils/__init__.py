@@ -1,6 +1,6 @@
 from .arg_parser import parse_args
 from .math import deep_copy_average, deep_copy_stddev
-from .module_handling import module_from_file
+from .module_handling import get_model, get_policy, module_from_file
 from .statistics import (Stats, expand_levels, expand_levels_recursion,
                          get_pretty_print_str, process_dict,
                          process_dict_recursion, save_pickle, save_stats,
@@ -13,7 +13,7 @@ from .visualize import (animate_graph, buildgraph, draw_graph,
 
 ap_funcs = ['parse_args']
 math_funcs = ['deep_copy_average', 'deep_copy_stddev']
-module_funcs = ['module_from_file']
+module_funcs = ['module_from_file', 'get_policy', 'get_model']
 stats_funcs = ['expand_levels_recursion', 'expand_levels', 'process_dict_recursion','process_dict',\
                 'get_pretty_print_str', 'save_pickle', 'save_to_text_file', 'save_stats', 'write_stats']
 stats_classes = ['Stats']

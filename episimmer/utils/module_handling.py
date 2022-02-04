@@ -11,6 +11,7 @@ if TYPE_CHECKING:
 def module_from_file(module_name: str, file_path: str) -> ModuleType:
     """
     Returns the module from the file passed
+
     Args:
         module_name: Name of module
         file_path: Path to file used to create module
