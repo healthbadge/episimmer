@@ -1,0 +1,7 @@
+5
+Agent Index:Interacting Agent Index:duration
+8:9:1
+10:11:12
+23:34:32
+12:34:4
+200:300:5
