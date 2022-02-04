@@ -1,7 +1,13 @@
 import argparse
 
 
-def parse_args():
+def parse_args() -> argparse.Namespace:
+    """
+    This function parses the command-line arguments
+
+    Returns:
+        Parsed arguments
+    """
     arg_parser = argparse.ArgumentParser()
 
     # input argument options
