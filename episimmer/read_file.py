@@ -10,7 +10,6 @@ import numpy as np
 
 from .agent import Agent
 from .location import Location
-from .utils.time import Time
 
 
 class ReadConfiguration():
@@ -841,7 +840,8 @@ class ReadOneTimeEvents(ReadEvents):
 
     def populate_one_time_events(self, config_obj: ReadConfiguration,
                                  locations_obj: ReadLocations,
-                                 agents_obj: ReadAgents) -> None:
+                                 agents_obj: ReadAgents,
+                                 time_step: int) -> None:
         """
         Populates the locations objects with one time events at the current time step
 
@@ -850,6 +850,7 @@ class ReadOneTimeEvents(ReadEvents):
                         configurations.
             locations_obj: An object of class :class:`ReadLocations` containing location information
             agents_obj: An object of class :class:`ReadAgents` containing agent information
+            time_step: current time step
         """
         if self.filename == '' or self.filename is None:
             return
@@ -860,7 +861,7 @@ class ReadOneTimeEvents(ReadEvents):
             raise Exception(
                 'Error! One Time Event parameters do not match the config.txt file'
             )
-        for event in self.eventsAt.get(Time.get_current_time_step(), []):
+        for event in self.eventsAt.get(time_step, []):
             parameter_list = (self.get_value(event)).split(':')
             location_index, info_dict = self.get_event(parameter_list)
             self.locations_obj.locations[location_index].add_event(info_dict)
