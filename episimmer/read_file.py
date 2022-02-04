@@ -426,7 +426,7 @@ class ReadAgents(BaseReadFile):
                 self.parameter_keys = csv_dict_reader.fieldnames
 
                 for i in range(self.n):
-                    info_dict = csv_list[i]
+                    info_dict = dict(csv_list[i])
                     state = None  # config_obj.default_state
                     agent = Agent(state, info_dict)
                     self.agents[agent.index] = agent
@@ -510,7 +510,7 @@ class ReadInteractions(BaseReadFile):
                 self.parameter_keys = csv_dict_reader.fieldnames
 
                 for i in range(self.no_interactions):
-                    info_dict = csv_list[i]
+                    info_dict = dict(csv_list[i])
                     if (info_dict['Agent Index'] in set(self.agents_obj.agents)
                             and info_dict['Interacting Agent Index'] in set(
                                 self.agents_obj.agents)):
