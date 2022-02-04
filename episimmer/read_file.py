@@ -4,26 +4,57 @@ import os.path as osp
 import random
 import re
 from csv import DictReader
+from typing import TYPE_CHECKING, Dict, List, Tuple, Union
+
+import numpy as np
 
 from .agent import Agent
 from .location import Location
 from .utils.time import Time
 
+if TYPE_CHECKING:
+    from episimmer.model import BaseModel
+
 
 class ReadConfiguration():
-    def __init__(self, filename):
-        self.worlds = None
-        self.time_steps = None
-        self.starting_exposed_percentage = None
-        self.agent_info_keys = None
-        self.interaction_info_keys = None
-        self.example_path = osp.dirname(filename)
+    """
+    Class for reading the simulation configuration file
 
+    Args:
+        filename: Name of the directory containing simulation files
+    """
+    def __init__(self, filename: str):
+
+        self.example_path: str = osp.dirname(filename)
+        self.random_seed: str = ''
+        self.worlds: int = 0
+        self.time_steps: int = 0
+        self.agent_info_keys: str = ''
+        self.agents_filename: str = ''
+        self.interaction_info_keys: str = ''
+        self.interactions_files_list_list: List[str] = []
+        self.probabilistic_interactions_files_list_list: List[str] = []
+        self.location_info_keys: str = ''
+        self.locations_filename: str = ''
+        self.event_info_keys: str = ''
+        self.events_files_list_list: List[str] = []
+        self.one_time_event_file: str = ''
+
+        self.read_config_file(filename)
+
+    def read_config_file(self, filename) -> None:
+        """
+        Reads the config.txt file and populates the class with the parameters passed
+
+        Args:
+            filename: Name of the directory containing simulation files
+        """
         f = open(filename, 'r')
 
         self.random_seed = (self.get_value_config(f.readline()))
         if self.random_seed != '':
             random.seed(int(self.random_seed))
+            np.random.seed(int(self.random_seed))
 
         self.worlds = int(self.get_value_config(f.readline()))
         self.time_steps = int(self.get_value_config(f.readline()))
@@ -89,14 +120,36 @@ class ReadConfiguration():
                 raise Exception(
                     'Event definition does not contain parameter \'Agents\'')
 
-    def get_value_config(self, line):
+    def get_value_config(self, line: str) -> str:
+        """
+        Gets the value between the brackets <> in a line of the config file.
+
+        Args:
+            line: A single line of string
+
+        Returns:
+            Value of the entry in the config file.
+        """
         elements = re.findall('<.*?>', line)
         if len(elements) != 1:
             raise Exception('Error! Invalid entry in config.txt')
         value = (((elements[0])[1:])[:-1])
         return value
 
-    def get_file_paths(self, example_path):
+    def get_file_paths(
+        self, example_path: str
+    ) -> Tuple[str, List[str], List[str], str, str, List[str]]:
+        """
+        Gets the paths of the agents file, interactions files, events files, locations file, one time event file, and
+        probabilistic interactions files from the config file.
+
+        Args:
+            example_path: Path of the directory containing the simulation files.
+
+        Returns:
+            Tuple containing paths of the agents file, interactions files, events files, locations file, one time
+            event file and probabilistic interactions files.
+        """
         # File Names
         locations_filename = one_time_event_file = None
         events_files_list_filename = interactions_files_list_filename = []
@@ -134,11 +187,24 @@ class ReadConfiguration():
         return agents_filename, interactions_files_list_filename, events_files_list_filename, \
                locations_filename, one_time_event_file, probabilistic_interactions_files_list_filename
 
-    def get_file_names_list(self, example_path,
-                            interactions_files_list_filename,
-                            events_files_list_filename,
-                            probabilistic_interactions_files_list_filename):
-        # Reading through a file (for interactions/events) that contain file names which contain interactions and event details for a time step
+    def get_file_names_list(self, example_path: str, interactions_files_list_filename: List[str],
+                            events_files_list_filename: List[str],
+                            probabilistic_interactions_files_list_filename: List[str]) -> \
+                            Tuple[List[List[str]], List[List[str]], List[List[str]]]:
+        """
+        Gets the lists of all the paths to the interaction files, events files and probabilistic interaction files.
+
+        Args:
+            example_path: Path of the directory containing simulation files
+            interactions_files_list_filename: List of path names of all the interactions files
+            events_files_list_filename: List of path names of all the events files
+            probabilistic_interactions_files_list_filename: List of path names of all the probabilistic interactions
+                                                            files
+
+        Returns:
+            Tuple containing list of interaction files, list of events files, and list of probabilistic interaction
+            files.
+        """
 
         interactions_files_list = events_files_list = probabilistic_interactions_files_list = []
 
@@ -181,19 +247,36 @@ class ReadConfiguration():
 
 
 class ReadVDConfiguration():
-    def __init__(self, filename):
-        self.target = None
-        self.algorithm = None
-        self.parameter_dict = {}
-        self.pre_process = None
-        self.post_process = None
-        self.output_mode = None
-        self.example_path = osp.dirname(filename)
+    """
+    Class for reading the Vulnerability Detection configuration file
+
+    Args:
+        filename: Name of the directory containing simulation files
+    """
+    def __init__(self, filename: str):
+
+        self.example_path: str = osp.dirname(filename)
+        self.target: str = ''
+        self.algorithm: str = ''
+        self.parameter_dict: Dict[str, Union[List[str], int, List[int]]] = {}
+        self.pre_process: str = ''
+        self.post_process: str = ''
+        self.output_mode: str = ''
+
+        self.read_vd_config_file(filename)
+
+    def read_vd_config_file(self, filename) -> None:
+        """
+        Reads the vd_config.txt file and populates the class with the parameters passed
+
+        Args:
+            filename: Name of the directory containing simulation files
+        """
 
         f = open(filename, 'r')
 
-        self.target = (self.get_value_config(f.readline()))
-        self.algorithm = (self.get_value_config(f.readline()))
+        self.target = self.get_value_config(f.readline())
+        self.algorithm = self.get_value_config(f.readline())
         self.read_parameter_file(self.get_value_config(f.readline()))
         self.pre_process = self.get_value_config(f.readline())
         self.post_process = self.get_value_config(f.readline())
@@ -211,14 +294,29 @@ class ReadVDConfiguration():
             raise Warning(
                 'No parameters provided in vd_config.txt. Using Defaults')
 
-    def get_value_config(self, line):
+    def get_value_config(self, line: str) -> str:
+        """
+        Gets the value between the brackets <> in a line of the vd config file.
+
+        Args:
+            line: A single line of string
+
+        Returns:
+            Value of the entry in the config file.
+        """
         elements = re.findall('<.*?>', line)
         if len(elements) != 1:
             raise Exception('Error! Invalid entry in vd_config.txt')
         value = (((elements[0])[1:])[:-1])
         return value
 
-    def read_parameter_file(self, filename):
+    def read_parameter_file(self, filename: str) -> None:
+        """
+        Reads and saves the parameters from the parameters.json file.
+
+        Args:
+            filename: Name of the json file containing the parameters
+        """
         f = open(osp.join(self.example_path, filename), 'r')
         data = json.load(f)
         self.parameter_dict = data
@@ -227,10 +325,23 @@ class ReadVDConfiguration():
 
 class ReadFilesList():
     """
-    Reads environment components that contains the list of file lists files.
+    Reads and saves the list of file names from the files list file
+
+    Args:
+        filename: Name of the files list file
     """
-    def __init__(self, filename):
-        self.file_list = []
+    def __init__(self, filename: str):
+        self.file_list: List[str] = []
+        self.read_files_list(filename)
+
+    def read_files_list(self, filename) -> None:
+        """
+        Reads the files list file and generates a list containing all the files
+
+        Args:
+            filename: Name of the files list file
+        """
+
         f = open(filename, 'r')
         lines = f.readlines()
         separator = ' '
@@ -242,19 +353,53 @@ class ReadFilesList():
 
 
 class BaseReadFile():
+    """
+    Base class for reading agents, locations, interactions and events from a file.
+    """
     def __init__(self):
         pass
 
-    def get_value(self, line):
+    def get_value(self, line) -> str:
+        """
+        Takes a single line and clips the \n string
+        Args:
+            line: A string line
+
+        Returns:
+            A string line without \n
+
+        """
         if line.endswith('\n'):
             line = line[:-1]
         return line
 
 
 class ReadAgents(BaseReadFile):
+    """
+    Class for reading and storing agent information from a file.
+    Inherits :class:`~episimmer.read_file.BaseReadFile` class.
+
+    Args:
+        filename: Name of the file containing agent information.
+        config_obj: A dictionary containing information from the config file
+    """
     def __init__(self, filename, config_obj):
         super().__init__()
+        self.n: Union[int, None] = None
+        self.parameter_keys: List[str] = []
+        self.agents: Dict[str, Agent] = {}
 
+        self.read_agent_file(filename, config_obj)
+
+    def read_agent_file(self, filename, config_obj) -> None:
+        """
+        Reads the agents file (either a txt or csv file) and generates a dictionary mapping agent indices to
+        :class:`~episimmer.agent.Agent` objects with the information from the file.
+
+        Args:
+            filename: Name of the file containing agent information.
+            config_obj: A dictionary containing information from the config file
+        """
         if filename.endswith('.txt'):
             f = open(filename, 'r')
             self.n = int(self.get_value(f.readline()))
@@ -265,7 +410,6 @@ class ReadAgents(BaseReadFile):
                 )
 
             self.parameter_keys = agent_info_keys.split(':')
-            self.agents = {}
 
             for i in range(self.n):
                 info_dict = self.create_info_dict(
@@ -289,7 +433,6 @@ class ReadAgents(BaseReadFile):
                     )
 
                 self.parameter_keys = csv_list
-                self.agents = {}
 
                 for i in range(self.n):
                     info_dict = csv_list[i]
@@ -297,7 +440,16 @@ class ReadAgents(BaseReadFile):
                     agent = Agent(state, info_dict)
                     self.agents[agent.index] = agent
 
-    def create_info_dict(self, info_list):
+    def create_info_dict(self, info_list: List[str]) -> Dict[str, str]:
+        """
+        Creates a dictionary of information regarding an agent.
+
+        Args:
+            info_list: List of values for all the parameter keys of an agent.
+
+        Returns:
+            Information dictionary of the agent.
+        """
         info_dict = {}
         for i, key in enumerate(self.parameter_keys):
             info_dict[key] = info_list[i]
