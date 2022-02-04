@@ -15,12 +15,12 @@ Reading Configuration Files API
     :members:
     :undoc-members:
 
+Reading Single Files API
+----------------------------
+
 .. autoclass:: episimmer.read_file.ReadFilesList
     :members:
     :undoc-members:
-
-Reading Single Files API
-----------------------------
 
 .. autoclass:: episimmer.read_file.BaseReadFile
     :members:
