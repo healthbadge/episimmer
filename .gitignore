@@ -9,7 +9,6 @@ results
 *graph.html
 interactions_list.html
 UserModel.html
-/tests/unit/
 /tests/integration/
 event_vd
 event_vd_algorithms.py
