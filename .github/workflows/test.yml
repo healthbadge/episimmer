@@ -2,6 +2,9 @@ name: Testing
 
 on:
   push:
+    branches:
+      - master
+  pull_request:
 jobs:
   Code-Testing:
     runs-on: ubuntu-latest

@@ -1,0 +1,4 @@
+{
+    "states":["Infected","Recovered"],
+    "num_runs":100
+}
