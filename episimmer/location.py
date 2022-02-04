@@ -16,7 +16,7 @@ class Location():
 
     def new_time_step(self) -> None:
         """
-        Resets the lockdown state and events of the location at the start of each timestep
+        Resets the lockdown state and events of the location at the start of each time step
         """
         self.lock_down_state = False
         self.events = []
