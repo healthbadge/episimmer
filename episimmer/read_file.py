@@ -423,7 +423,7 @@ class ReadAgents(BaseReadFile):
                         'Error! Agent Information parameters do not match the config.txt file'
                     )
 
-                self.parameter_keys = csv_list
+                self.parameter_keys = csv_dict_reader.fieldnames
 
                 for i in range(self.n):
                     info_dict = csv_list[i]
