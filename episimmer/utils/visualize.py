@@ -11,16 +11,16 @@ from .arg_parser import parse_args
 from .time import Time
 
 
-def plot_results(example_path, model, avg_dict, stddev_dict, maxdict, mindict,
-                 plot):
+def plot_results(example_path, model, avg_dict, stddev_dict, max_dict,
+                 min_dict, plot):
     for state in avg_dict.keys():
         x = np.arange(0, len(avg_dict[state]))
         plt.plot(avg_dict[state], color=model.colors[state])
-        #y=np.array(avg_dict[state])
-        #error=np.array(stddev_dict[state])
+        # y=np.array(avg_dict[state])
+        # error=np.array(stddev_dict[state])
         plt.fill_between(x,
-                         mindict[state],
-                         maxdict[state],
+                         min_dict[state],
+                         max_dict[state],
                          alpha=0.2,
                          facecolor=model.colors[state],
                          linewidth=0)
@@ -38,7 +38,7 @@ def plot_results(example_path, model, avg_dict, stddev_dict, maxdict, mindict,
     fig.savefig(osp.join(example_path, 'results', 'results.jpg'))
 
 
-def buildgraph(i, fig, model, tdict):
+def buildgraph(i, model, tdict):
     plt.clf()
     plt.title(model.name + ' Plot')
     plt.ylabel('Population')
@@ -58,7 +58,7 @@ def store_animated_time_plot(example_path, model, tdict):
     anim = ani.FuncAnimation(fig,
                              buildgraph,
                              interval=100,
-                             fargs=(fig, model, tdict))
+                             fargs=(model, tdict))
     anim.save(osp.join(example_path, 'results', 'time_plot.gif'),
               writer=ani.PillowWriter(fps=10))
 
@@ -74,44 +74,45 @@ def get_interaction_graph_from_object(obj):
     agents_dict = agents_obj.agents
     infected_states = model.infected_states
 
-    G = nx.Graph()
+    g = nx.Graph()
 
     # Agent Nodes
     for i, agent in enumerate(agents_dict.values()):
-        if (agent.state in infected_states):
-            G.add_node(agent.index,
+        if agent.state in infected_states:
+            g.add_node(agent.index,
                        color=model.colors[agent.state],
                        pos=(500 * (i % root_num), 500 * (i / root_num)))
         else:
-            G.add_node(agent.index,
+            g.add_node(agent.index,
                        color=model.colors[agent.state],
                        pos=(500 * (i % root_num), 500 * (i / root_num)))
 
     # Interactions
     for agent in agents_dict.values():
-        if (agent.can_contribute_infection > 0):
+        if agent.can_contribute_infection > 0:
             for int_agent in agent.contact_list:
                 int_agent_indx = int_agent['Interacting Agent Index']
                 if (agents_obj.agents[int_agent_indx].can_receive_infection >
                         0):
-                    G.add_edge(agent.index, int_agent_indx, color='black')
+                    g.add_edge(agent.index, int_agent_indx, color='black')
 
     # Events
     for j, location in enumerate(locations_obj.locations.values()):
         if not location.lock_down_state:
             for i, event_info in enumerate(location.events):
-                G.add_node(event_info['Location Index'] + '_event' + str(i), color='#40E0D0',\
-                             pos=(-1500 - 500 * j, 500 * i))
+                g.add_node(event_info['Location Index'] + '_event' + str(i),
+                           color='#40E0D0',
+                           pos=(-1500 - 500 * j, 500 * i))
                 for agent in event_info['Agents']:
                     if (agents_obj.agents[agent].can_receive_infection > 0 or
                             agents_obj.agents[agent].can_contribute_infection >
                             0):
-                        G.add_edge(event_info['Location Index'] + '_event' +
+                        g.add_edge(event_info['Location Index'] + '_event' +
                                    str(i),
                                    agent,
                                    color='black')
 
-    return G
+    return g
 
 
 def save_env_graph():
@@ -121,17 +122,17 @@ def save_env_graph():
             func(ref, *args, **kwargs)
             if ref.config_obj.worlds - 1 == Time.get_current_world():
                 args = parse_args()
-                if (args.viz_dyn):
-                    G = get_interaction_graph_from_object(ref)
-                    ref.G_list.append(G)
+                if args.viz_dyn:
+                    g = get_interaction_graph_from_object(ref)
+                    ref.g_list.append(g)
 
         return wrapper
 
     return decorator
 
 
-def set_ax_params(ax, model, timestep):
-    ax.set_title(f'Timestep {timestep}', {'fontsize': 18})
+def set_ax_params(ax, model, time_step):
+    ax.set_title(f'Time step {time_step}', {'fontsize': 18})
     for state in model.individual_state_types:
         ax.scatter([0], [0], color=model.colors[state], label=state)
 
@@ -143,9 +144,9 @@ def set_ax_params(ax, model, timestep):
     return ax
 
 
-def draw_graph(G, ax, seed):
-    pos = nx.get_node_attributes(G, 'pos')
-    color = nx.get_node_attributes(G, 'color')
+def draw_graph(g, ax, seed):
+    pos = nx.get_node_attributes(g, 'pos')
+    color = nx.get_node_attributes(g, 'color')
 
     # Shuffling positions
     # temp = list(pos.values())
@@ -153,25 +154,25 @@ def draw_graph(G, ax, seed):
     # pos = dict(zip(pos, temp))
 
     # Layout positions
-    pos = nx.spring_layout(G, seed=int(seed))
+    pos = nx.spring_layout(g, seed=int(seed))
 
-    nodes = nx.draw_networkx_nodes(G, pos, node_color=color.values(), ax=ax)
-    edges = nx.draw_networkx_edges(G,
+    nodes = nx.draw_networkx_nodes(g, pos, node_color=color.values(), ax=ax)
+    edges = nx.draw_networkx_edges(g,
                                    pos,
                                    ax=ax,
                                    connectionstyle='arc3, rad = 0.1')
     return nodes, edges
 
 
-def animate_graph(timestep, fig, model, G_list, seed):
+def animate_graph(time_step, fig, model, g_list, seed):
     if not seed:
         seed = 42
     fig.clf()
     ax = fig.gca()
-    ax = set_ax_params(ax, model, timestep)
+    ax = set_ax_params(ax, model, time_step)
 
-    current_G = G_list[timestep % len(G_list)]
-    return draw_graph(current_G, ax, seed)
+    current_g = g_list[time_step % len(g_list)]
+    return draw_graph(current_g, ax, seed)
 
 
 def store_animated_dynamic_graph():
@@ -180,7 +181,7 @@ def store_animated_dynamic_graph():
         def wrapper(ref, *args, **kwargs):
             if ref.config_obj.worlds - 1 == Time.get_current_world():
                 cmd_args = parse_args()
-                if (cmd_args.viz_dyn):
+                if cmd_args.viz_dyn:
 
                     fig = plt.figure()
                     fig.set_size_inches(20, 14)
@@ -188,7 +189,7 @@ def store_animated_dynamic_graph():
                         fig,
                         animate_graph,
                         frames=ref.config_obj.time_steps,
-                        fargs=(fig, ref.model, ref.G_list,
+                        fargs=(fig, ref.model, ref.g_list,
                                ref.config_obj.random_seed))
                     anim.save(osp.join(ref.config_obj.example_path, 'results',
                                        'dyn_graph.gif'),
