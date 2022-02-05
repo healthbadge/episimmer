@@ -1,4 +1,3 @@
-import copy
 from collections import deque
 
 from .base import AgentPolicy
@@ -25,12 +24,12 @@ class CTPolicy(AgentPolicy):
                 agent_ct_state[policy_index]['contact_deque'] = deque(
                     maxlen=self.num_of_days)
 
-    def post_policy(self, timestep, agents, locations, model, policy_index):
-        self.new_day(agents, policy_index)
+    def post_policy(self, time_step, agents, locations, model, policy_index):
+        self.new_time_step(agents, policy_index)
         self.save_interactions(agents, policy_index)
         self.save_events(agents, locations, policy_index)
 
-    def new_day(self, agents, policy_index):
+    def new_time_step(self, agents, policy_index):
         for agent in agents.values():
             if self.attribute is None or agent.info[
                     self.attribute] in self.value_list:

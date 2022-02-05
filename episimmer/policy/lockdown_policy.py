@@ -1,10 +1,9 @@
-import copy
-
 from .base import AgentPolicy
 
 
 class LockdownPolicy(AgentPolicy):
     def __init__(self, do_lockdown_fn, p):
+        super().__init__()
         self.policy_type = 'Restrict'
         self.do_lockdown_fn = do_lockdown_fn
         self.p = p
@@ -31,9 +30,9 @@ class FullLockdown(LockdownPolicy):
 
 
 class AgentLockdown(LockdownPolicy):
-    def __init__(self, parameter, value_list, do_lockdown_fn, p=0.0):
+    def __init__(self, attribute, value_list, do_lockdown_fn, p=0.0):
         super().__init__(do_lockdown_fn, p)
-        self.parameter = parameter
+        self.attribute = attribute
         self.value_list = value_list
 
     def enact_policy(self,
@@ -45,7 +44,7 @@ class AgentLockdown(LockdownPolicy):
         if self.do_lockdown_fn(time_step):
             agents = agents.values()
             for agent in agents:
-                if agent.info[self.parameter] in self.value_list:
+                if agent.info[self.attribute] in self.value_list:
                     self.lockdown_agent(agent)
 
 
@@ -77,10 +76,9 @@ class TestingBasedLockdown(LockdownPolicy):
             agent_ct_state = agent.get_policy_state('Contact_Tracing')
             if agent_ct_state is not None:
                 for ct_policy_index in agent_ct_state.keys():
-                    self.reduce_schedule_time(agent, agent_ct_state,
-                                              ct_policy_index)
+                    self.reduce_schedule_time(agent_ct_state, ct_policy_index)
 
-    def reduce_schedule_time(self, agent, policy_state, policy_num):
+    def reduce_schedule_time(self, policy_state, policy_num):
         agent_ct_scheduled_time = policy_state[policy_num]['schedule_time']
         if agent_ct_scheduled_time > 0:
             policy_state[policy_num]['schedule_time'] -= 1
@@ -88,18 +86,18 @@ class TestingBasedLockdown(LockdownPolicy):
     def lockdown_positive_agents(self, agents, time_step):
         for agent in agents.values():
             result = self.get_agent_test_result(agent, time_step)
-            if (result == 'Positive'):
+            if result == 'Positive':
                 self.lockdown_agent(agent)
-                if (self.contact_tracing):
+                if self.contact_tracing:
                     contacts = self.obtain_contact_set(agent)
                     if contacts:
                         self.set_schedule_time(agents, contacts)
 
     def get_agent_test_result(self, agent, time_step):
         history = agent.get_policy_history('Testing')
-        if (len(history)):
+        if len(history):
             last_time_step = history[-1].time_step
-            if (time_step - last_time_step < self.time_period):
+            if time_step - last_time_step < self.time_period:
                 result = self.get_accumulated_test_result(
                     history, last_time_step)
                 return result
@@ -107,8 +105,8 @@ class TestingBasedLockdown(LockdownPolicy):
 
     def get_accumulated_test_result(self, history, last_time_step):
         indx = len(history) - 1
-        while (indx >= 0 and history[indx].time_step == last_time_step):
-            if (history[indx].result == 'Negative'):
+        while indx >= 0 and history[indx].time_step == last_time_step:
+            if history[indx].result == 'Negative':
                 return 'Negative'
             indx -= 1
         return 'Positive'
