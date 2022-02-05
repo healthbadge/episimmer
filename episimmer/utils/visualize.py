@@ -1,18 +1,42 @@
 import functools
 import math
 import os.path as osp
+from typing import TYPE_CHECKING, Callable, Dict, List, Tuple, Union
 
 import matplotlib.animation as ani
+import matplotlib.collections as collections
+import matplotlib.figure as figure
 import matplotlib.pyplot as plt
 import networkx as nx
 import numpy as np
+from matplotlib.axes import Axes
 
 from .arg_parser import parse_args
 from .time import Time
 
+if TYPE_CHECKING:
+    from episimmer.model import BaseModel
+    from episimmer.simulate import Simulate
 
-def plot_results(example_path, model, avg_dict, stddev_dict, max_dict,
-                 min_dict, plot):
+
+def plot_results(example_path: str, model: 'BaseModel',
+                 avg_dict: Dict[str, List[float]],
+                 stddev_dict: Dict[str,
+                                   List[float]], max_dict: Dict[str,
+                                                                List[int]],
+                 min_dict: Dict[str, List[int]], plot: bool) -> None:
+    """
+    Plots the epidemic trajectory
+
+    Args:
+        example_path: Path to directory containing simulation files
+        model: Disease model used
+        avg_dict: Average of epidemic trajectory
+        stddev_dict: Standard deviation of epidemic trajectory
+        max_dict: Maximum values of epidemic trajectory across worlds
+        min_dict: Minimum values of epidemic trajectory across worlds
+        plot: Boolean used to plot the epidemic trajectory
+    """
     for state in avg_dict.keys():
         x = np.arange(0, len(avg_dict[state]))
         plt.plot(avg_dict[state], color=model.colors[state])
@@ -38,7 +62,16 @@ def plot_results(example_path, model, avg_dict, stddev_dict, max_dict,
     fig.savefig(osp.join(example_path, 'results', 'results.jpg'))
 
 
-def buildgraph(i, model, tdict):
+def buildgraph(i: int, model: 'BaseModel',
+               avg_dict: Dict[str, List[float]]) -> None:
+    """
+    Builds the epidemic trajectory graph for current frame i
+
+    Args:
+        i: Current frame
+        model: Disease model used
+        avg_dict: Average of epidemic trajectory
+    """
     plt.clf()
     plt.title(model.name + ' Plot')
     plt.ylabel('Population')
@@ -46,25 +79,42 @@ def buildgraph(i, model, tdict):
     plt.grid(b=True, which='major', color='#666666', linestyle='-')
     plt.minorticks_on()
     plt.grid(b=True, which='minor', color='#999999', linestyle='-', alpha=0.2)
-    for state in tdict.keys():
-        plt.plot(tdict[state][:i], label=state, color=model.colors[state])
+    for state in avg_dict.keys():
+        plt.plot(avg_dict[state][:i], label=state, color=model.colors[state])
     plt.legend(loc='upper left', shadow=True)
 
 
-def store_animated_time_plot(example_path, model, tdict):
+def store_animated_time_plot(example_path: str, model: 'BaseModel',
+                             avg_dict: Dict[str, List[float]]) -> None:
+    """
+    Saves the animation of epidemic trajectory to a gif file
+
+    Args:
+        example_path: Path to directory containing simulation files
+        model: Disease model used
+        avg_dict: Average of epidemic trajectory
+    """
     fig = plt.figure()
     fig.set_size_inches(8, 5)
 
     anim = ani.FuncAnimation(fig,
                              buildgraph,
                              interval=100,
-                             fargs=(model, tdict))
+                             fargs=(model, avg_dict))
     anim.save(osp.join(example_path, 'results', 'time_plot.gif'),
               writer=ani.PillowWriter(fps=10))
 
 
-def get_interaction_graph_from_object(obj):
+def get_interaction_graph_from_object(obj: 'Simulate') -> nx.Graph:
+    """
+    Generates the interaction graph from the simulation object
 
+    Args:
+        obj: Simulation object
+
+    Returns:
+        Interaction graph
+    """
     agents_obj = obj.agents_obj
     model = obj.model
     locations_obj = obj.locations_obj
@@ -115,10 +165,16 @@ def get_interaction_graph_from_object(obj):
     return g
 
 
-def save_env_graph():
-    def decorator(func):
+def save_env_graph() -> Callable:
+    """
+    Decorator to save the interactions graph to the :class:`~episimmer.simulate.Simulate` object
+
+    Returns:
+        Callable function
+    """
+    def decorator(func: Callable) -> Callable:
         @functools.wraps(func)
-        def wrapper(ref, *args, **kwargs):
+        def wrapper(ref: 'Simulate', *args, **kwargs) -> None:
             func(ref, *args, **kwargs)
             if ref.config_obj.worlds - 1 == Time.get_current_world():
                 args = parse_args()
@@ -131,7 +187,18 @@ def save_env_graph():
     return decorator
 
 
-def set_ax_params(ax, model, time_step):
+def set_ax_params(ax: Axes, model: 'BaseModel', time_step: int) -> Axes:
+    """
+    Sets the title and legend of the Axes for the interaction graph
+
+    Args:
+        ax: Axes
+        model: Disease model used
+        time_step: Current time step
+
+    Returns:
+        Axes
+    """
     ax.set_title(f'Time step {time_step}', {'fontsize': 18})
     for state in model.individual_state_types:
         ax.scatter([0], [0], color=model.colors[state], label=state)
@@ -144,7 +211,21 @@ def set_ax_params(ax, model, time_step):
     return ax
 
 
-def draw_graph(g, ax, seed):
+def draw_graph(
+    g: nx.Graph, ax: Axes, seed: Union[str, int]
+) -> Tuple[collections.PatchCollection, collections.LineCollection]:
+    """
+    Sets the node positions and edges according to the spring layout and returns them.
+
+    Args:
+        g: Current interaction graph
+        ax: Axes
+        seed: Seed for consistent graph
+
+    Returns:
+        Nodes and Edges
+
+    """
     pos = nx.get_node_attributes(g, 'pos')
     color = nx.get_node_attributes(g, 'color')
 
@@ -164,7 +245,23 @@ def draw_graph(g, ax, seed):
     return nodes, edges
 
 
-def animate_graph(time_step, fig, model, g_list, seed):
+def animate_graph(
+    time_step: int, fig: figure.Figure, model: 'BaseModel',
+    g_list: List[nx.Graph], seed: Union[str, int]
+) -> Tuple[collections.PatchCollection, collections.LineCollection]:
+    """
+    Sets up the figure to plot the current time step interaction network
+
+    Args:
+        time_step: Current time step
+        fig: Figure used to plot
+        model: Disease model used
+        g_list: List of interaction graphs for every time step
+        seed: Seed for consistent graph
+
+    Returns:
+        Nodes and edges for current time step
+    """
     if not seed:
         seed = 42
     fig.clf()
@@ -175,10 +272,16 @@ def animate_graph(time_step, fig, model, g_list, seed):
     return draw_graph(current_g, ax, seed)
 
 
-def store_animated_dynamic_graph():
-    def decorator(func):
+def store_animated_dynamic_graph() -> Callable:
+    """
+    Decorator to store the evolving interactions graph as a gif.
+
+    Returns:
+        Callable function
+    """
+    def decorator(func: Callable) -> Callable:
         @functools.wraps(func)
-        def wrapper(ref, *args, **kwargs):
+        def wrapper(ref: 'Simulate', *args, **kwargs) -> None:
             if ref.config_obj.worlds - 1 == Time.get_current_world():
                 cmd_args = parse_args()
                 if cmd_args.viz_dyn:
