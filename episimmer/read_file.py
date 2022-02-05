@@ -510,9 +510,10 @@ class ReadInteractions(BaseReadFile):
 
                 for i in range(self.no_interactions):
                     info_dict = dict(csv_list[i])
-                    if (info_dict['Agent Index'] in set(self.agents_obj.agents)
-                            and info_dict['Interacting Agent Index'] in set(
-                                self.agents_obj.agents)):
+                    if (info_dict['Agent Index']
+                            in self.agents_obj.agents.keys()
+                            and info_dict['Interacting Agent Index']
+                            in self.agents_obj.agents):
                         agent_index = info_dict['Agent Index']
                         self.agents_obj.agents[agent_index].add_contact(
                             info_dict)
@@ -537,9 +538,9 @@ class ReadInteractions(BaseReadFile):
 
             info_dict[key] = parameter_list[i]
 
-        if (agent_index not in set(self.agents_obj.agents)
-                or info_dict['Interacting Agent Index'] not in set(
-                    self.agents_obj.agents)):
+        if (agent_index not in self.agents_obj.agents.keys()
+                or info_dict['Interacting Agent Index']
+                not in self.agents_obj.agents.keys()):
             agent_index, info_dict = None, None
 
         return agent_index, info_dict
@@ -626,10 +627,13 @@ class ReadProbabilisticInteractions(BaseReadFile):
                     return []
 
             elif key == 'Agents':
-                agent_indexes = list(set(parameter_list[i].split(',')))
-                agent_indexes = list(
-                    set(agent_indexes) & set(self.agents_obj.agents))
-                agent_indexes.sort()
+                agent_indexes = parameter_list[i].split(',')
+                agent_indexes = list(dict.fromkeys(
+                    agent_indexes))  # Convert to unique list (with same order)
+                agent_indexes = [
+                    index for index in agent_indexes
+                    if index in self.agents_obj.agents.keys()
+                ]
 
             else:
                 info_dict[key] = parameter_list[i]
@@ -785,22 +789,28 @@ class ReadEvents(BaseReadFile):
                 location_index = parameter_list[i]
 
             if key == 'Agents':
-                info_dict[key] = list(set(parameter_list[i].split(',')))
+                info_dict[key] = parameter_list[i].split(',')
+
                 if info_dict[key][-1] == '':
                     info_dict[key] = info_dict[:-1]
+
+                info_dict[key] = list(
+                    dict.fromkeys(info_dict[key])
+                )  # Convert to unique list (with same order)
+
+                if set(info_dict[key]) - set(list(self.agents_obj.agents)):
+                    to_remove = set(info_dict[key]) - set(
+                        list(self.agents_obj.agents))
+                    info_dict[key] = [
+                        index for index in info_dict[key]
+                        if index not in to_remove
+                    ]
+
             else:
                 info_dict[key] = parameter_list[i]
 
         if info_dict['Agents'] is None or self.agents_obj.agents is None:
             location_index, info_dict = None, None
-
-        elif set(info_dict['Agents']) - set(list(self.agents_obj.agents)):
-            to_remove = set(info_dict['Agents']) - set(
-                list(self.agents_obj.agents))
-            info_dict['Agents'] = list(set(info_dict['Agents']) - to_remove)
-
-        if info_dict['Agents']:
-            info_dict['Agents'].sort()
 
         if location_index is None:
             raise Exception('Error! No event to read in the event file')
