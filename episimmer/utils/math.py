@@ -14,7 +14,7 @@ def deep_copy_average(tdict: Dict[str, List[int]],
         number: Number of worlds
 
     Returns:
-        Average of epidemic trajectory in a dictionary
+        Average of epidemic trajectory
     """
     avg_dict = copy.deepcopy(tdict)
     for k in avg_dict.keys():
@@ -36,7 +36,7 @@ def deep_copy_stddev(tdict: Dict[str, List[int]], t2_dict: Dict[str,
         number: Number of worlds
 
     Returns:
-        Standard Deviation of epidemic trajectory in a dictionary
+        Standard Deviation of epidemic trajectory
     """
     stddev_dict = copy.deepcopy(tdict)
     for k in stddev_dict.keys():
