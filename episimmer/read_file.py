@@ -518,7 +518,8 @@ class ReadInteractions(BaseReadFile):
                             info_dict)
 
     def get_interaction(
-            self, parameter_list: List[str]) -> Tuple[str, Dict[str, str]]:
+        self, parameter_list: List[str]
+    ) -> Tuple[Union[str, None], Union[Dict[str, str], None]]:
         """
          Creates a dictionary containing information of a single interaction.
 
@@ -766,7 +767,8 @@ class ReadEvents(BaseReadFile):
 
     def get_event(
         self, parameter_list: List[str]
-    ) -> Tuple[str, Dict[str, Union[str, List[str]]]]:
+    ) -> Tuple[Union[str, None], Union[Dict[str, Union[str, List[str]]],
+                                       None]]:
         """
          Creates a dictionary containing information of a single event.
 
