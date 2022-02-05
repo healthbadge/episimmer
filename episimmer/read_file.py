@@ -799,6 +799,9 @@ class ReadEvents(BaseReadFile):
                 list(self.agents_obj.agents))
             info_dict['Agents'] = list(set(info_dict['Agents']) - to_remove)
 
+        if info_dict['Agents']:
+            info_dict['Agents'].sort()
+
         if location_index is None:
             raise Exception('Error! No event to read in the event file')
         return location_index, info_dict
