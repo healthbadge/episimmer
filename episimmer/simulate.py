@@ -34,7 +34,7 @@ class Simulate():
         self.model: BaseModel = model
         self.policy_list: List[AgentPolicy] = policy_list
         self.config_obj: ReadConfiguration = config_obj
-        self.G_list: List[nx.Graph] = []
+        self.g_list: List[nx.Graph] = []
         self.state_list: Dict[str, List[str]] = {}
         self.state_history: Dict[str, List[int]] = {}
 
