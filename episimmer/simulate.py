@@ -1,19 +1,20 @@
 import random
 from typing import Callable, Dict, List, Tuple, Union
 
+import networkx as nx
+
 from episimmer.agent import Agent
 from episimmer.location import Location
 from episimmer.model import BaseModel
 from episimmer.read_file import (ReadAgents, ReadConfiguration, ReadEvents,
                                  ReadLocations, ReadOneTimeEvents)
 
+from .policy.base import AgentPolicy
 from .read_file import (ReadEvents, ReadInteractions,
                         ReadProbabilisticInteractions)
-from .policy.lockdown_policy import FullLockdown
 from .utils.statistics import save_stats
 from .utils.time import Time
 from .utils.visualize import save_env_graph, store_animated_dynamic_graph
-import networkx as nx
 
 
 class Simulate():
@@ -29,12 +30,13 @@ class Simulate():
         locations_obj: An object of class :class:`~episimmer.read_file.ReadLocations` containing all locations
     """
     def __init__(self, config_obj: ReadConfiguration, model: BaseModel,
-                 policy_list: List[FullLockdown], event_restriction_fn: Callable,
-                 agents_obj: ReadAgents, locations_obj: ReadLocations):
+                 policy_list: List[AgentPolicy],
+                 event_restriction_fn: Callable, agents_obj: ReadAgents,
+                 locations_obj: ReadLocations):
         self.agents_obj: ReadAgents = agents_obj
         self.locations_obj: ReadLocations = locations_obj
         self.model: BaseModel = model
-        self.policy_list: List[FullLockdown] = policy_list
+        self.policy_list: List[AgentPolicy] = policy_list
         self.event_restriction_fn: Callable = event_restriction_fn
         self.config_obj: ReadConfiguration = config_obj
         self.G_list: List[nx.Graph] = []
@@ -203,13 +205,14 @@ class Simulate():
             return True
         return False
 
-    def store_event_lists(self, event_info: Dict[str, Union[str, List[str]]]) -> None:
+    def store_event_lists(
+            self, event_info: Dict[str, Union[str, List[str]]]) -> None:
         """
         Checks which agents part of an event can contribute infection to the event and which ones can receive infection from
         the event.
 
         Args:
-            event_info: A dictionary containing event information of a location that contains all the agents part of the event at 
+            event_info: A dictionary containing event information of a location that contains all the agents part of the event at
             that location along with those that can contribute infection and those that can receive infection.
         """
         event_info['can_contrib'] = []
@@ -223,7 +226,6 @@ class Simulate():
 
             if not agent.under_protection and r < agent.can_recieve_infection:
                 event_info['can_receive'].append(agent_index)
-
 
     def save_valid_interactions_events(self) -> None:
         """
@@ -248,7 +250,7 @@ class Simulate():
 
     def store_state(self) -> None:
         """
-        Stores the number of agents in each state in the state history at the end of the simulation.
+        Stores the number of agents in each state in the state history in every time step.
         """
         for state in self.state_history.keys():
             self.state_history[state].append(len(self.state_list[state]))

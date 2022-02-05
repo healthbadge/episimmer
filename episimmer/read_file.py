@@ -4,14 +4,11 @@ import os.path as osp
 import random
 import re
 from csv import DictReader
-from typing import TYPE_CHECKING, Callable, Dict, List, Tuple, Union
+from typing import Callable, Dict, List, Tuple, Union
 
 from episimmer.agent import Agent
 from episimmer.location import Location
 from episimmer.utils.time import Time
-
-if TYPE_CHECKING:
-    from episimmer.model import BaseModel
 
 
 class ReadConfiguration():
@@ -116,7 +113,7 @@ class ReadConfiguration():
         value = (((l[0])[1:])[:-1])
         return value
 
-    def get_file_paths(self, example_path: str) -> Tuple[str]:
+    def get_file_paths(self, example_path: str) -> Tuple[Union[str, List[str]]]:
         # File Names
         """
         Gets the paths of the agents file, interactions files, events files, locations file, one time event file, and
@@ -164,13 +161,13 @@ class ReadConfiguration():
         return agents_filename, interactions_FilesList_filename, events_FilesList_filename, locations_filename, one_time_event_file, probabilistic_interactions_FilesList_filename
 
     def get_file_names_list(
-        self, example_path: str, interactions_FilesList_filename: str,
-        events_FilesList_filename: str,
-        probabilistic_interactions_FilesList_filename: str
-    ) -> Tuple[List[str]]:
+        self, example_path: str, interactions_FilesList_filename: List[str],
+        events_FilesList_filename: List[str],
+        probabilistic_interactions_FilesList_filename: List[str]
+    ) -> Tuple[List[List[str]]]:
         # Reading through a file (for interactions/events) that contain file names which contain interactions and event details for a time step
         """
-        Gets the list of all the interaction files, events files and probabilistic interaction files.
+        Reads through a file that contains file names which inturn contain interaction and event details for a time step.
 
         Args:
             example_path: Path of the directory of the example used in Episimmer
@@ -236,6 +233,7 @@ class ReadVDConfiguration():
         self.post_process: str = None
         self.output_mode: str = None
         self.example_path: str = osp.dirname(filename)
+        print(parameter_dict)
 
         f = open(filename, 'r')
 
@@ -245,7 +243,7 @@ class ReadVDConfiguration():
         self.pre_process = self.get_value_config(f.readline())
         self.post_process = self.get_value_config(f.readline())
         self.output_mode = self.get_value_config(f.readline())
-
+        
         f.close()
 
         if (self.target == ''):
@@ -257,6 +255,7 @@ class ReadVDConfiguration():
         if (not self.parameter_dict):
             raise Warning(
                 'No parameters provided in vd_config.txt. Using Defaults')
+        print(parameter_dict)
 
     def get_value_config(self, line: str) -> str:
         """
@@ -512,7 +511,7 @@ class ReadProbabilisticInteractions(BaseReadFile):
 
     def get_interactions(
             self, parameter_list: List[str]
-    ) -> Union[Tuple[str, Dict[str, str]], None]:
+    ) -> List[Tuple[str, Dict[str, str]]]:
         """
         Creates a list of interactions using probability values and agent indices according to parameter values.
 
@@ -557,7 +556,7 @@ class ReadProbabilisticInteractions(BaseReadFile):
                     temp_info_dict['Agent Index'] = agent_index2
                     temp_info_dict['Interacting Agent Index'] = agent_index1
                     interactions_list.append((agent_index2, temp_info_dict))
-
+        print(interaction_list)
         return interactions_list
 
 
@@ -573,7 +572,7 @@ class ReadLocations(BaseReadFile):
     def __init__(self, filename: str, config_obj: ReadConfiguration):
         super().__init__()
         self.config_obj: ReadConfiguration = config_obj
-        self.locations: Dict[str, ReadLocations] = {}
+        self.locations: Dict[str, Location] = {}
         if filename == '' or filename == None:
             return
         f = open(filename, 'r')
@@ -590,7 +589,6 @@ class ReadLocations(BaseReadFile):
                 self.get_value(f.readline()).split(':'))
             location = Location(info_dict)
             self.locations[location.index] = location
-
         f.close()
 
     def create_info_dict(self, info_list: List[str]) -> Dict[str, str]:
