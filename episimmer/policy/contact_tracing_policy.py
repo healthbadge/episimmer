@@ -239,8 +239,7 @@ class CTPolicy(AgentPolicy):
     @staticmethod
     def get_contact_list(agent: Agent, policy_index: int) -> List[str]:
         """
-        Gets the contacts saved in an agent's contact tracing policy state for a particular policy index and returns
-        them.
+        Gets the contacts saved in an agent's contact tracing policy state for a particular policy index.
 
         Args:
             agent: Agent whose contacts are to be returned
