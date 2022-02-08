@@ -1,28 +1,68 @@
+from typing import Callable, Dict, List, Union, ValuesView
+
+from episimmer.agent import Agent
+from episimmer.location import Location
+from episimmer.model import BaseModel
+
 from .base import AgentPolicy
+from .contact_tracing_policy import CTPolicy
+from .testing_policy import TestPolicy
 
 
 class LockdownPolicy(AgentPolicy):
-    def __init__(self, do_lockdown_fn, p):
-        super().__init__()
-        self.policy_type = 'Restrict'
-        self.do_lockdown_fn = do_lockdown_fn
-        self.p = p
+    """
+    Base class for implementing the lockdown policy.
 
-    def lockdown_agent(self, agent):
+    Args:
+        do_lockdown_fn: User-defined function to specify which time step(s) to enforce lockdown in
+        p: Probability of agent to contribute and receive infection from any source of infection
+    """
+    def __init__(self, do_lockdown_fn: Callable, p: float):
+        super().__init__()
+        self.policy_type: str = 'Restrict'
+        self.do_lockdown_fn: Callable = do_lockdown_fn
+        self.p: float = p
+
+    def lockdown_agent(self, agent: Agent) -> None:
+        """
+        Updates the agent's probability to contribute and receive infection.
+
+        Args:
+            agent: Current agent
+        """
         agent.update_receive_infection(self.p)
         agent.update_contribute_infection(self.p)
 
 
 class FullLockdown(LockdownPolicy):
-    def __init__(self, do_lockdown_fn, p=0.0):
+    """
+    Class for implementing a lockdown policy common for all agents.
+    Inherits :class:`LockdownPolicy` class.
+
+    Args:
+        do_lockdown_fn: User-defined function to specify which time step(s) to enforce lockdown in
+        p: Probability of agent to contribute and receive infection from any source of infection
+    """
+    def __init__(self, do_lockdown_fn: Callable, p: float = 0.0):
         super().__init__(do_lockdown_fn, p)
 
     def enact_policy(self,
-                     time_step,
-                     agents,
-                     locations,
-                     model=None,
-                     policy_index=None):
+                     time_step: int,
+                     agents: Dict[str, Agent],
+                     locations: ValuesView[Location],
+                     model: Union[BaseModel, None] = None,
+                     policy_index: Union[int, None] = None) -> None:
+        """
+        If lockdown policy is enforced in the current time step, it restricts all agents from receiving and
+        contributing disease.
+
+        Args:
+            time_step: Current time step
+            agents: Dictionary mapping from agent indices to :class:`~episimmer.agent.Agent` objects
+            locations: Collection of :class:`~episimmer.location.Location` objects
+            model: Disease model specified by the user
+            policy_index: Policy index passed to differentiate policies
+        """
         if self.do_lockdown_fn(time_step):
             agents = agents.values()
             for agent in agents:
@@ -30,17 +70,43 @@ class FullLockdown(LockdownPolicy):
 
 
 class AgentLockdown(LockdownPolicy):
-    def __init__(self, attribute, value_list, do_lockdown_fn, p=0.0):
+    """
+    Class for implementing the lockdown policy for agents based on a fixed attribute of the agent.
+    Inherits :class:`~episimmer.policy.lockdown_policy.LockdownPolicy` class.
+
+    Args:
+        attribute: Parameter (attribute) type of agents
+        value_list: List of attribute values of agents
+        do_lockdown_fn: User-defined function to specify which time step(s) to enforce lockdown in
+        p: Probability of agent to contribute and receive infection from any source of infection
+    """
+    def __init__(self,
+                 attribute: str,
+                 value_list: List[str],
+                 do_lockdown_fn: Callable,
+                 p: float = 0.0):
         super().__init__(do_lockdown_fn, p)
-        self.attribute = attribute
-        self.value_list = value_list
+        self.attribute: str = attribute
+        self.value_list: List[str] = value_list
+        super().__init__(do_lockdown_fn, p)
 
     def enact_policy(self,
-                     time_step,
-                     agents,
-                     locations,
-                     model=None,
-                     policy_index=None):
+                     time_step: int,
+                     agents: Dict[str, Agent],
+                     locations: ValuesView[Location],
+                     model: Union[BaseModel, None] = None,
+                     policy_index: Union[int, None] = None) -> None:
+        """
+       If lockdown policy is enforced in the current time step, it restricts a subset of agents from receiving and
+       contributing disease. The agents selected are based on an agent attribute and the value list for that attribute.
+
+        Args:
+            time_step: Current time step
+            agents: Dictionary mapping from agent indices to :class:`~episimmer.agent.Agent` objects
+            locations: Collection of :class:`~episimmer.location.Location` objects
+            model: Disease model specified by the user
+            policy_index: Policy index passed to differentiate policies
+        """
         if self.do_lockdown_fn(time_step):
             agents = agents.values()
             for agent in agents:
@@ -49,101 +115,86 @@ class AgentLockdown(LockdownPolicy):
 
 
 class TestingBasedLockdown(LockdownPolicy):
+    """
+    Class for implementing the lockdown policy for agents taking into account their test results. This policy also
+    handles locking down contacts of positively tested agents.
+    Inherits :class:`~episimmer.policy.lockdown_policy.LockdownPolicy` class.
+
+    Args:
+        do_lockdown_fn: User-defined function to specify which time steps to enforce lockdown in
+        time_period: Number of time steps for which an agent has to lock down
+        contact_tracing: Boolean specifying whether lockdown for contacts of positively tested agents is enabled or not
+        p: Probability of agent to contribute and receive infection from any source of infection
+    """
     def __init__(self,
-                 do_lockdown_fn,
-                 time_period,
-                 contact_tracing=False,
-                 p=0.0):
+                 do_lockdown_fn: Callable,
+                 time_period: int,
+                 contact_tracing: bool = False,
+                 p: float = 0.0):
         super().__init__(do_lockdown_fn, p)
-        self.time_period = time_period
-        self.contact_tracing = contact_tracing
+        self.time_period: int = time_period
+        self.contact_tracing: bool = contact_tracing
 
     def enact_policy(self,
-                     time_step,
-                     agents,
-                     locations,
-                     model=None,
-                     policy_index=None):
+                     time_step: int,
+                     agents: Dict[str, Agent],
+                     locations: ValuesView[Location],
+                     model: Union[BaseModel, None] = None,
+                     policy_index: Union[int, None] = None) -> None:
+        """
+        If lockdown policy is enforced in the current time step, it restricts positively tested agents from receiving
+        and contributing disease. If contact tracing is enabled, contacts of positively tested agents are also
+        lockdown.
 
-        self.reduce_agent_schedule_time(agents)
+        Args:
+            time_step: Current time step
+            agents: Dictionary mapping from agent indices to :class:`~episimmer.agent.Agent` objects
+            locations: Collection of :class:`~episimmer.location.Location` objects
+            model: Disease model specified by the user
+            policy_index: Policy index passed to differentiate policies
+        """
+        if self.contact_tracing:
+            CTPolicy.reduce_agents_schedule_time(agents)
         if self.do_lockdown_fn(time_step):
             self.lockdown_positive_agents(agents, time_step)
             if self.contact_tracing:
                 self.lockdown_contacts(agents)
 
-    def reduce_agent_schedule_time(self, agents):
-        for agent in agents.values():
-            agent_ct_state = agent.get_policy_state('Contact_Tracing')
-            if agent_ct_state is not None:
-                for ct_policy_index in agent_ct_state.keys():
-                    self.reduce_schedule_time(agent_ct_state, ct_policy_index)
+    def lockdown_positive_agents(self, agents: Dict[str, Agent],
+                                 time_step: int) -> None:
+        """
+        Locks down positively tested agents. If contact tracing is enabled, contacts of positively tested agents
+        are lockdown for a fixed time period. Each contact will save this period as a scheduled time left for lockdown
+        and this value is reduced each time step.
 
-    def reduce_schedule_time(self, policy_state, policy_num):
-        agent_ct_scheduled_time = policy_state[policy_num]['schedule_time']
-        if agent_ct_scheduled_time > 0:
-            policy_state[policy_num]['schedule_time'] -= 1
-
-    def lockdown_positive_agents(self, agents, time_step):
+        Args:
+            agents: Dictionary mapping from agent indices to :class:`~episimmer.agent.Agent` objects
+            time_step: Current time step
+        """
         for agent in agents.values():
-            result = self.get_agent_test_result(agent, time_step)
+            result = TestPolicy.get_agent_test_result(
+                agent, time_step, self.time_period)  # The number of time steps
+            # an agent must be lockdown is considered to be the same as the number of time steps a test is valid.
             if result == 'Positive':
                 self.lockdown_agent(agent)
                 if self.contact_tracing:
-                    contacts = self.obtain_contact_set(agent)
-                    if contacts:
-                        self.set_schedule_time(agents, contacts)
+                    policy_index_list = CTPolicy.get_policy_index_list(agent)
+                    for policy_index in policy_index_list:
+                        contacts = CTPolicy.get_contact_list(
+                            agent, policy_index)
+                        if contacts:
+                            CTPolicy.set_contacts_schedule_time(
+                                agents, contacts, policy_index,
+                                self.time_period)
 
-    def get_agent_test_result(self, agent, time_step):
-        history = agent.get_policy_history('Testing')
-        if len(history):
-            last_time_step = history[-1].time_step
-            if time_step - last_time_step < self.time_period:
-                result = self.get_accumulated_test_result(
-                    history, last_time_step)
-                return result
-        return None
+    def lockdown_contacts(self, agents: Dict[str, Agent]) -> None:
+        """
+        Locks down a contact if its scheduled time left for lockdown is greater than 0.
 
-    def get_accumulated_test_result(self, history, last_time_step):
-        indx = len(history) - 1
-        while indx >= 0 and history[indx].time_step == last_time_step:
-            if history[indx].result == 'Negative':
-                return 'Negative'
-            indx -= 1
-        return 'Positive'
-
-    def obtain_contact_set(self, agent):
-        agent_ct_state = agent.get_policy_state('Contact_Tracing')
-        contacts = set()
-        if agent_ct_state is not None:
-            for ct_policy_index in agent_ct_state.keys():
-                if 'contact_deque' in agent_ct_state[ct_policy_index].keys():
-                    contacts_deque = agent_ct_state[ct_policy_index][
-                        'contact_deque']
-                    for contact in contacts_deque:
-                        contacts = contacts.union(set(contact))
-        return contacts
-
-    def set_schedule_time(self, agents, contacts):
-        for contact_index in contacts:
-            contact_agent = agents[contact_index]
-            contact_ct_state = contact_agent.get_policy_state(
-                'Contact_Tracing')
-            for contact_ct_policy_index in contact_ct_state.keys():
-                if contact_ct_state[contact_ct_policy_index][
-                        'schedule_time'] == 0:
-                    contact_ct_state[contact_ct_policy_index][
-                        'schedule_time'] = self.time_period
-
-    def lockdown_contacts(self, agents):
+        Args:
+            agents: Collection of :class:`~episimmer.agent.Agent` objects.
+        """
         for agent in agents.values():
-            max_schedule_time = 0
-            agent_ct_policy = agent.get_policy_state('Contact_Tracing')
-            if agent_ct_policy is not None:
-                for policy_index in agent_ct_policy.keys():
-                    agent_ct_scheduled_time = agent_ct_policy[policy_index][
-                        'schedule_time']
-                    if agent_ct_scheduled_time is not None:
-                        max_schedule_time = max(max_schedule_time,
-                                                agent_ct_scheduled_time)
-                if max_schedule_time > 0:
-                    self.lockdown_agent(agent)
+            max_schedule_time = CTPolicy.get_max_schedule_time(agent)
+            if max_schedule_time > 0:
+                self.lockdown_agent(agent)
