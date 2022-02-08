@@ -34,6 +34,15 @@ class VaccineResult():
         self.protection: int = decay_days
         self.current_dose: int = current_dose
 
+    def __repr__(self) -> str:
+        """
+        Shows the representation of the object as the string result
+
+        Returns:
+            The result of vaccination in string format
+        """
+        return self.result
+
 
 class VaccineType():
     """
@@ -143,7 +152,7 @@ class VaccinationPolicy(AgentPolicy):
 
         Args:
             time_step: Time step in which the policy is enacted
-            agents: Collection of :class:`~episimmer.agent.Agent` objects
+            agents: Dictionary mapping from agent indices to :class:`~episimmer.agent.Agent` objects
             locations: Collection of :class:`~episimmer.location.Location` objects
             model: Disease model specified by the user
             policy_index: Policy index passed to differentiate policies.
