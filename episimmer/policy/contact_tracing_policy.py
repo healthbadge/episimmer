@@ -29,14 +29,14 @@ class CTPolicy(AgentPolicy):
         self.attribute: str = attribute
         self.value_list: List[str] = value_list
 
-    def reset(self, agents: ValuesView[AgentPolicy],
-              policy_index: str) -> None:
+    def reset(self, agents: Dict[str, Agent],
+              policy_index: Union[int, None]) -> None:
         """
         Used to reset the states of the agents at the first time step of simulation.
 
         Args:
             agents: Collection of :class:`~episimmer.agent.Agent` objects.
-            policy_index: the index of the ith contact tracing policy being run.
+            policy_index: Policy index passed to differentiate policies.
         """
         for agent in agents:
             agent_ct_state = self.get_agent_policy_state(agent)
@@ -52,26 +52,27 @@ class CTPolicy(AgentPolicy):
 
     def post_policy(self, timestep: int, agents: Dict[str, Agent],
                     locations: ValuesView[Location], model: BaseModel,
-                    policy_index: str) -> None:
+                    policy_index: Union[int, None]) -> None:
         """
         Runs all the methods that have to be called after saving valid interactions and events.
 
         Args:
             agents: Collection of :class:`~episimmer.agent.Agent` objects.
             locations: Collection of :class:`~episimmer.location.Location` objects.
-            policy_index: the index of the ith contact tracing policy being run.
+            policy_index: Policy index passed to differentiate policies.
         """
         self.new_day(agents, policy_index)
         self.save_interactions(agents, policy_index)
         self.save_events(agents, locations, policy_index)
 
-    def new_day(self, agents: Dict[str, Agent], policy_index: str) -> None:
+    def new_day(self, agents: Dict[str, Agent],
+                policy_index: Union[int, None]) -> None:
         """
-        Adds the contacts for agents in that timestep.
+        Adds the contacts for agents in previous timestep.
 
         Args:
             agents: Collection of :class:`~episimmer.agent.Agent` objects.
-            policy_index: the index of the ith contact tracing policy being run.
+            policy_index: Policy index passed to differentiate policies.
         """
         for agent in agents.values():
             if self.attribute is None or agent.info[
@@ -82,13 +83,13 @@ class CTPolicy(AgentPolicy):
                     agent_contact_set)
 
     def save_interactions(self, agents: Dict[str, Agent],
-                          policy_index: str) -> None:
+                          policy_index: Union[int, None]) -> None:
         """
         Saving the contacts of the agent due to interactions.
 
         Args:
             agents: Collection of :class:`~episimmer.agent.Agent` objects.
-            policy_index: the index of the ith contact tracing policy being run.
+            policy_index: Policy index passed to differentiate policies.
         """
         for agent_index in agents.keys():
             for contact_dict in agents[agent_index].contact_list:
@@ -104,13 +105,13 @@ class CTPolicy(AgentPolicy):
 
     def save_events(self, agents: Dict[str,
                                        Agent], locations: ValuesView[Location],
-                    policy_index: str) -> None:
+                    policy_index: Union[int, None]) -> None:
         """
         Saving the contacts of agent via events.
 
         Args:
             locations: Collection of :class:`~episimmer.location.Location` objects.
-            policy_index: the index of the ith contact tracing policy being run.
+            policy_index: Policy index passed to differentiate policies.
         """
         for location in locations:
             for event_dict in location.events:
