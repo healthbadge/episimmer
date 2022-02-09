@@ -8,9 +8,12 @@ from episimmer.model import BaseModel
 class AgentPolicy():
     """
     Class for implementing an Agent policy.
+
+    Args:
+        policy_type: Type of Agent Policy
     """
-    def __init__(self):
-        self.policy_type: Union[str, None] = None
+    def __init__(self, policy_type: str):
+        self.policy_type: str = policy_type
 
     def reset(self, agents: ValuesView[Agent], policy_index: int) -> None:
         """

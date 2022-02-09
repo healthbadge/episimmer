@@ -122,11 +122,10 @@ class VaccinationPolicy(AgentPolicy):
         agents_per_step_fn: User-defined function to specify the number of agents to vaccinate per time step
     """
     def __init__(self, agents_per_step_fn: Callable):
-        super().__init__()
+        super().__init__('Vaccination')
 
         self.num_agents_to_vaccinate: int = 0
         self.results: List[VaccineResult] = []
-        self.policy_type: str = 'Vaccination'
         self.available_vaccines: Dict[str, Dict[str,
                                                 Union[int, float, List[int],
                                                       str]]] = {}

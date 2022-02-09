@@ -340,8 +340,7 @@ class TestPolicy(AgentPolicy):
         agents_per_step_fn: User-defined function to specify the number of agents to test per time step
     """
     def __init__(self, agents_per_step_fn: Callable):
-        super().__init__()
-        self.policy_type: str = 'Testing'
+        super().__init__('Testing')
         self.register_agent_testtube_func: Union[Callable, None] = None
         self.cur_testtubes: Union[List[TestTube], None] = None
         self.ready_queue: Deque[TestTube] = deque()

@@ -18,8 +18,7 @@ class LockdownPolicy(AgentPolicy):
         p: Probability of agent to contribute and receive infection from any source of infection
     """
     def __init__(self, do_lockdown_fn: Callable, p: float):
-        super().__init__()
-        self.policy_type: str = 'Restrict'
+        super().__init__('Restrict')
         self.do_lockdown_fn: Callable = do_lockdown_fn
         self.p: float = p
 
