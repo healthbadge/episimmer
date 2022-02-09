@@ -5,10 +5,11 @@ from .agent import Agent
 from .location import Location
 from .main import main
 from .model import BaseModel, ScheduledModel, StochasticModel
-from .policy import (AgentLockdown, AgentLockdownPolicy, CTPolicy,
-                     FullLockdown, Machine, TestingBasedLockdown, TestPolicy,
-                     TestResult, TestTube, VaccinationPolicy, VaccineResult,
-                     VaccineType)
+from .policy import (AgentLockdown, AgentLockdownPolicy, AgentPolicy, CTPolicy,
+                     EventLockdown, EventLockdownPolicy, EventPolicy,
+                     FullLockdown, Machine, Policy, TestingBasedLockdown,
+                     TestPolicy, TestResult, TestTube, VaccinationPolicy,
+                     VaccineResult, VaccineType)
 from .read_file import (ReadAgents, ReadConfiguration, ReadEvents,
                         ReadInteractions, ReadLocations, ReadOneTimeEvents,
                         ReadProbabilisticInteractions, ReadVDConfiguration)
