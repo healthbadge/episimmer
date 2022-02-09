@@ -85,12 +85,15 @@ class CTPolicy(AgentPolicy):
 
         CTPolicy.reduce_flag = True
 
-    def reset(self, agents: ValuesView[Agent], policy_index: int) -> None:
+    def reset(self, agents: ValuesView[Agent], locations: ValuesView[Location],
+              model: BaseModel, policy_index: int) -> None:
         """
         Resets all the agents contact tracing policy state for a new world.
 
         Args:
             agents: Collection of :class:`~episimmer.agent.Agent` objects
+            locations: Collection of :class:`~episimmer.location.Location` objects
+            model: Disease model specified by the user
             policy_index: Policy index passed to differentiate policies.
         """
         for agent in agents:
@@ -174,16 +177,16 @@ class CTPolicy(AgentPolicy):
         """
         for location in locations:
             for event_dict in location.events:
-                for agent_index in event_dict['can_contrib']:
+                for agent_index in event_dict['_can_contrib']:
                     if self.attribute is None or agents[agent_index].info[
                             self.attribute] in self.value_list:
                         agent_ct_state = self.get_agent_policy_state(
                             agents[agent_index])
                         ct_deque = agent_ct_state[policy_index][
                             'contact_deque']
-                        for contact in event_dict['can_receive']:
+                        for contact in event_dict['_can_receive']:
                             ct_deque[-1].add_contact(contact)
-                        if agent_index in event_dict['can_receive']:
+                        if agent_index in event_dict['_can_receive']:
                             ct_deque[-1].remove_contact(agent_index)
 
     @staticmethod

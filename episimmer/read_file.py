@@ -771,7 +771,7 @@ class ReadEvents(BaseReadFile):
 
     def get_event(
         self, parameter_list: List[str]
-    ) -> Tuple[Union[str, None], Union[Dict[str, Union[str, List[str]]],
+    ) -> Tuple[Union[str, None], Union[Dict[str, Union[float, str, List[str]]],
                                        None]]:
         """
          Creates a dictionary containing information of a single event.

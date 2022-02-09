@@ -88,7 +88,7 @@ class BaseModel():
                                                     len(self.normal_colors)]
             self.color_index[1] += 1
 
-    def update_event_infection(self, event_info: Dict[str, Union[str,
+    def update_event_infection(self, event_info: Dict[str, Union[float, str,
                                                                  List[str]]],
                                location: Location,
                                agents_obj: ReadAgents) -> None:
@@ -108,13 +108,13 @@ class BaseModel():
         ambient_infection = 0
         for agent_index in event_info['Agents']:
             agent = agents_obj.agents[agent_index]
-            if agent_index in event_info['can_contrib']:
+            if agent_index in event_info['_can_contrib']:
                 ambient_infection += self.contribute_fn(
                     agent, event_info, location, Time.get_current_time_step())
 
         for agent_index in event_info['Agents']:
             agent = agents_obj.agents[agent_index]
-            if agent_index in event_info['can_receive']:
+            if agent_index in event_info['_can_receive']:
                 p = self.receive_fn(agent, ambient_infection, event_info,
                                     location, Time.get_current_time_step())
                 agent.add_event_result(p)

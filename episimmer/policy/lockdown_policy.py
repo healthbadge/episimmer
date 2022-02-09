@@ -4,18 +4,19 @@ from episimmer.agent import Agent
 from episimmer.location import Location
 from episimmer.model import BaseModel
 
-from .base import AgentPolicy
+from .base import AgentPolicy, EventPolicy
 from .contact_tracing_policy import CTPolicy
 from .testing_policy import TestPolicy
 
 
-class LockdownPolicy(AgentPolicy):
+class AgentLockdownPolicy(AgentPolicy):
     """
-    Base class for implementing the lockdown policy.
+    Base class for implementing the lockdown policy for agents.
+    Inherits :class:`~episimmer.policy.base.AgentPolicy` class.
 
     Args:
         do_lockdown_fn: User-defined function to specify which time step(s) to enforce lockdown in
-        p: Probability of agent to contribute and receive infection from any source of infection
+        p: Probability of agent to contribute and receive infection from any source of infection under lockdown
     """
     def __init__(self, do_lockdown_fn: Callable, p: float):
         super().__init__('Restrict')
@@ -33,14 +34,14 @@ class LockdownPolicy(AgentPolicy):
         agent.update_contribute_infection(self.p)
 
 
-class FullLockdown(LockdownPolicy):
+class FullLockdown(AgentLockdownPolicy):
     """
     Class for implementing a lockdown policy common for all agents.
-    Inherits :class:`LockdownPolicy` class.
+    Inherits :class:`AgentLockdownPolicy` class.
 
     Args:
         do_lockdown_fn: User-defined function to specify which time step(s) to enforce lockdown in
-        p: Probability of agent to contribute and receive infection from any source of infection
+        p: Probability of agent to contribute and receive infection from any source of infection under lockdown
     """
     def __init__(self, do_lockdown_fn: Callable, p: float = 0.0):
         super().__init__(do_lockdown_fn, p)
@@ -68,16 +69,16 @@ class FullLockdown(LockdownPolicy):
                 self.lockdown_agent(agent)
 
 
-class AgentLockdown(LockdownPolicy):
+class AgentLockdown(AgentLockdownPolicy):
     """
     Class for implementing the lockdown policy for agents based on a fixed attribute of the agent.
-    Inherits :class:`~episimmer.policy.lockdown_policy.LockdownPolicy` class.
+    Inherits :class:`~episimmer.policy.lockdown_policy.AgentLockdownPolicy` class.
 
     Args:
         attribute: Parameter (attribute) type of agents
         value_list: List of attribute values of agents
         do_lockdown_fn: User-defined function to specify which time step(s) to enforce lockdown in
-        p: Probability of agent to contribute and receive infection from any source of infection
+        p: Probability of agent to contribute and receive infection from any source of infection under lockdown
     """
     def __init__(self,
                  attribute: str,
@@ -113,17 +114,17 @@ class AgentLockdown(LockdownPolicy):
                     self.lockdown_agent(agent)
 
 
-class TestingBasedLockdown(LockdownPolicy):
+class TestingBasedLockdown(AgentLockdownPolicy):
     """
     Class for implementing the lockdown policy for agents taking into account their test results. This policy also
     handles locking down contacts of positively tested agents.
-    Inherits :class:`~episimmer.policy.lockdown_policy.LockdownPolicy` class.
+    Inherits :class:`~episimmer.policy.lockdown_policy.AgentLockdownPolicy` class.
 
     Args:
         do_lockdown_fn: User-defined function to specify which time steps to enforce lockdown in
         time_period: Number of time steps for which an agent has to lock down
         contact_tracing: Boolean specifying whether lockdown for contacts of positively tested agents is enabled or not
-        p: Probability of agent to contribute and receive infection from any source of infection
+        p: Probability of agent to contribute and receive infection from any source of infection under lockdown
     """
     def __init__(self,
                  do_lockdown_fn: Callable,
@@ -197,3 +198,73 @@ class TestingBasedLockdown(LockdownPolicy):
             max_schedule_time = CTPolicy.get_max_schedule_time(agent)
             if max_schedule_time > 0:
                 self.lockdown_agent(agent)
+
+
+class EventLockdownPolicy(EventPolicy):
+    """
+    Base class for implementing the lockdown policy for events.
+    Inherits :class:`~episimmer.policy.base.EventPolicy` class.
+
+    Args:
+        do_lockdown_fn: User-defined function to specify which time step(s) to enforce lockdown in
+        p: Probability of an event occurring during lockdown
+    """
+    def __init__(self, do_lockdown_fn: Callable, p: float):
+        super().__init__('Restrict')
+        self.do_lockdown_fn: Callable = do_lockdown_fn
+        self.p: float = p
+
+    def lockdown_event(
+            self, event_info: Dict[str, Union[float, str, List[str]]]) -> None:
+        """
+        Updates the event's probability of occurring
+
+        Args:
+            event_info: A dictionary containing event information at a location that contains all the agents part of
+            the event.
+        """
+        event_info['_prob_of_occur'] = self.p
+
+
+class EventLockdown(EventLockdownPolicy):
+    """
+    Class for implementing the lockdown policy for events based on a fixed attribute of the event.
+    Inherits :class:`~episimmer.policy.lockdown_policy.EventLockdownPolicy` class.
+
+    Args:
+        attribute: Parameter (attribute) type of events
+        value_list: List of attribute values of events
+        do_lockdown_fn: User-defined function to specify which time step(s) to enforce lockdown in
+        p: Probability of an event occurring during lockdown
+    """
+    def __init__(self,
+                 attribute: str,
+                 value_list: List[str],
+                 do_lockdown_fn: Callable,
+                 p: float = 0.0):
+        super().__init__(do_lockdown_fn, p)
+        self.attribute: str = attribute
+        self.value_list: List[str] = value_list
+
+    def enact_policy(self,
+                     time_step: int,
+                     agents: Dict[str, Agent],
+                     locations: ValuesView[Location],
+                     model: Union[BaseModel, None] = None,
+                     policy_index: Union[int, None] = None) -> None:
+        """
+       If lockdown policy is enforced in the current time step, it restricts a subset of events from occurring. The
+       events selected are based on an event attribute and the value list for that attribute.
+
+        Args:
+            time_step: Current time step
+            agents: Dictionary mapping from agent indices to :class:`~episimmer.agent.Agent` objects
+            locations: Collection of :class:`~episimmer.location.Location` objects
+            model: Disease model specified by the user
+            policy_index: Policy index passed to differentiate policies
+        """
+        if self.do_lockdown_fn(time_step):
+            for location in locations:
+                for event_info in location.events:
+                    if event_info[self.attribute] in self.value_list:
+                        self.lockdown_event(event_info)
