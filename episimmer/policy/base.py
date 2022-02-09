@@ -8,17 +8,20 @@ from episimmer.model import BaseModel
 class AgentPolicy():
     """
     Class for implementing an Agent policy.
+
+    Args:
+        policy_type: Type of Agent Policy
     """
-    def __init__(self):
-        self.policy_type: Union[str, None] = None
+    def __init__(self, policy_type: str):
+        self.policy_type: str = policy_type
 
     def reset(self, agents: ValuesView[Agent], policy_index: int) -> None:
         """
-        Resets the class for a new world.
+        Resets the policy for a new world.
 
         Args:
             agents: Collection of :class:`~episimmer.agent.Agent` objects
-            policy_index: Policy index passed to differentiate policies.
+            policy_index: Policy index passed to differentiate policies
         """
         pass
 
@@ -29,11 +32,11 @@ class AgentPolicy():
         Executes a policy for the given time step.
 
         Args:
-            time_step: Time step in which the policy is enacted
-            agents: Collection of :class:`~episimmer.agent.Agent` objects
+            time_step: Current time step
+            agents: Dictionary mapping from agent indices to :class:`~episimmer.agent.Agent` objects
             locations: Collection of :class:`~episimmer.location.Location` objects
             model: Disease model specified by the user
-            policy_index: Policy index passed to differentiate policies.
+            policy_index: Policy index passed to differentiate policies
         """
         pass
 
@@ -45,8 +48,8 @@ class AgentPolicy():
         are going to take place in the current time step.
 
         Args:
-            time_step: Time step in which the policy is enacted
-            agents: Collection of :class:`~episimmer.agent.Agent` objects
+            time_step: Current time step
+            agents: Dictionary mapping from agent indices to :class:`~episimmer.agent.Agent` objects
             locations: Collection of :class:`~episimmer.location.Location` objects
             model: Disease model specified by the user
             policy_index: Policy index passed to differentiate policies.

@@ -4,11 +4,18 @@ episimmer.utils
 .. contents:: Contents
     :local:
 
+ArgParse API
+------------------------------
+
 .. currentmodule:: episimmer.utils
 {% for func in episimmer.utils.ap_funcs %}
 .. autofunction:: {{ func }}
 {% endfor %}
 
+Module Handling API
+------------------------------
+
+.. currentmodule:: episimmer.utils
 {% for func in episimmer.utils.module_funcs %}
 .. autofunction:: {{ func }}
 {% endfor %}

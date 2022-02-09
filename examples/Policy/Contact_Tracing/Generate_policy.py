@@ -24,7 +24,4 @@ def generate_policy():
     policy_list.append(CT_object2)
     policy_list.append(Lockdown_object)
 
-    def event_restriction_fn(agent,event_info,current_time_step):
-        return False
-
-    return policy_list,event_restriction_fn
+    return policy_list

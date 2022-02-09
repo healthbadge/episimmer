@@ -22,6 +22,6 @@ class UserModel(model.StochasticModel):
 
 
 		self.set_event_contribution_fn(None)
-		self.set_event_recieve_fn(None)
+		self.set_event_receive_fn(None)
 
 		self.name='Stochastic SIR on complete graph'

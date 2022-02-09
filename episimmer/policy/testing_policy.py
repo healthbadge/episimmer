@@ -51,6 +51,15 @@ class TestResult():
         """
         return self.result
 
+    def __repr__(self) -> str:
+        """
+        Shows the representation of the object as the string result
+
+        Returns:
+            The result of test in string format
+        """
+        return self.result
+
 
 class TestTube():
     """
@@ -331,8 +340,7 @@ class TestPolicy(AgentPolicy):
         agents_per_step_fn: User-defined function to specify the number of agents to test per time step
     """
     def __init__(self, agents_per_step_fn: Callable):
-        super().__init__()
-        self.policy_type: str = 'Testing'
+        super().__init__('Testing')
         self.register_agent_testtube_func: Union[Callable, None] = None
         self.cur_testtubes: Union[List[TestTube], None] = None
         self.ready_queue: Deque[TestTube] = deque()
@@ -353,7 +361,7 @@ class TestPolicy(AgentPolicy):
 
         Args:
             agents: Collection of :class:`~episimmer.agent.Agent` objects
-            policy_index: Policy index passed to differentiate policies.
+            policy_index: Policy index passed to differentiate policies
         """
         self.statistics = {}
         self.ready_queue = deque()
@@ -375,10 +383,10 @@ class TestPolicy(AgentPolicy):
 
         Args:
             time_step: Time step in which the policy is enacted
-            agents: Collection of :class:`~episimmer.agent.Agent` objects
+            agents: Dictionary mapping from agent indices to :class:`~episimmer.agent.Agent` objects
             locations: Collection of :class:`~episimmer.location.Location` objects
             model: Disease model specified by the user
-            policy_index: Policy index passed to differentiate policies.
+            policy_index: Policy index passed to differentiate policies
         """
         self.new_time_step(time_step)
         self.populate_results_in_machine(time_step)
@@ -807,3 +815,49 @@ class TestPolicy(AgentPolicy):
         self.update_process_logs(time_step)
         with open('testing_stats.json', 'w') as outfile:
             json.dump(self.statistics, outfile, indent=4)
+
+    @staticmethod
+    def get_accumulated_test_result(history: List[TestResult],
+                                    last_time_step: int) -> str:
+        """
+        Method to get the most recent test result of an agent. In the case of pool
+        testing, if even one of the pool tests return negative, he is a negatively tested
+        agent, otherwise, if all pool tests return positive, he is a positively tested agent.
+
+        Args:
+            history: Test history of the agent
+            last_time_step: Most recent time step in which agent was tested
+
+        Returns:
+            A string either "Positive" or "Negative" representing the most recent test result of the agent
+        """
+        index = len(history) - 1
+        while index >= 0 and history[index].time_step == last_time_step:
+            if history[index].result == 'Negative':
+                return 'Negative'
+            index -= 1
+        return 'Positive'
+
+    @staticmethod
+    def get_agent_test_result(agent: Agent, time_step: int,
+                              time_period: int) -> Union[str, None]:
+        """
+        Returns the most recent test result of an agent (if it exists).
+
+        Args:
+            agent: Current Agent
+            time_step: Current time step
+            time_period: Time period of validity of test
+
+        Returns:
+            A string either "Positive" or "Negative" representing the most recent test result of the agent. None if no
+            tests done for the agent.
+        """
+        history = agent.get_policy_history('Testing')
+        if len(history):
+            last_time_step = history[-1].time_step
+            if time_step - last_time_step < time_period:
+                result = TestPolicy.get_accumulated_test_result(
+                    history, last_time_step)
+                return result
+        return None

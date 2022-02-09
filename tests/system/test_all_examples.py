@@ -6,43 +6,53 @@ import unittest
 
 class TestExamples(unittest.TestCase):
 
-    # Classic Testing
-    def test_examples(self):
-        """
-        Running classic simulation
-        """
-        print()
-        sub_examples_list = [
-            s for s in os.listdir('examples')
-            if osp.isdir(osp.join('examples', s))
+    # Classic Testing helper
+    def classic_testing_helper(self, folder_name):
+        examples_list = [
+            p for p in os.listdir(osp.join('examples', folder_name))
+            if osp.isdir(osp.join('examples', folder_name, p))
+            and osp.isfile(osp.join('examples', folder_name, p, 'config.txt'))
         ]
-        for j in sub_examples_list:
-            examples_list = [
-                p for p in os.listdir(osp.join('examples', j))
-                if osp.isdir(osp.join('examples', j, p))
-                and osp.isfile(osp.join('examples', j, p, 'config.txt'))
-            ]
-            for i, example in enumerate(examples_list):
-                main_path = osp.join('episimmer', 'main.py')
-                example_path = osp.join('examples', j, example)
-                process = subprocess.run('python3 {0} {1} -np'.format(
-                    main_path, example_path),
-                                         shell=True,
-                                         stdout=subprocess.DEVNULL)
-                if (process.returncode):
-                    raise Exception(
-                        'Example {0} could not be run!'.format(example))
-                print(
-                    'Classic Testing : {1}/{2} - {0} - {3} - complete'.format(
-                        j, i + 1, len(examples_list), example))
-        print('Classic Testing complete!')
+        for i, example in enumerate(examples_list):
+            main_path = osp.join('episimmer', 'main.py')
+            example_path = osp.join('examples', folder_name, example)
+            process = subprocess.run('python3 {0} {1} -np'.format(
+                main_path, example_path),
+                                     shell=True,
+                                     stdout=subprocess.DEVNULL)
+            if process.returncode:
+                raise Exception(
+                    'Example {0} could not be run!'.format(example))
+            print('Classic Testing : {1}/{2} - {0} - {3} - complete'.format(
+                folder_name, i + 1, len(examples_list), example))
+
+        print('Classic Testing : {0} tests complete!'.format(folder_name))
+
+    # Classic Testing - Basic_Disease_Models
+    def test_bdm_examples(self):
+        self.classic_testing_helper('Basic_Disease_Models')
+
+    # Classic Testing - Interaction_Spaces
+    def test_is_examples(self):
+        self.classic_testing_helper('Interaction_Spaces')
+
+    # Classic Testing - Miscellaneous
+    def test_misc_examples(self):
+        self.classic_testing_helper('Miscellaneous')
+
+    # Classic Testing - Policy
+    def test_policy_examples(self):
+        self.classic_testing_helper('Policy')
+
+    # Classic Testing - Vulnerability_Detection
+    def test_classic_vd_examples(self):
+        self.classic_testing_helper('Vulnerability_Detection')
 
     # Vulnerability Detection Testing
     def test_vd_examples(self):
         """
         Running vulnerability detection
         """
-        print()
         examples_list = [
             p for p in os.listdir(
                 osp.join('examples', 'Vulnerability_Detection')) if osp.isfile(
@@ -57,7 +67,7 @@ class TestExamples(unittest.TestCase):
                 main_path, example_path),
                                      shell=True,
                                      stdout=subprocess.DEVNULL)
-            if (process.returncode):
+            if process.returncode:
                 raise Exception(
                     'Example {0} could not be run!'.format(example))
             print('Vulnerability Detection Testing : {0}/{1} - {2} - complete'.
@@ -69,7 +79,6 @@ class TestExamples(unittest.TestCase):
         """
         Running visualization test
         """
-        print()
         sub_examples_list = [
             s for s in os.listdir('examples')
             if osp.isdir(osp.join('examples', s))
@@ -82,14 +91,13 @@ class TestExamples(unittest.TestCase):
             and osp.isfile(osp.join('examples', j, p, 'config.txt'))
         ]
         example = examples_list[0]
-        i = 0
         main_path = osp.join('episimmer', 'main.py')
         example_path = osp.join('examples', j, example)
         process = subprocess.run('python3 {0} {1} -viz -np -a'.format(
             main_path, example_path),
                                  shell=True,
                                  stdout=subprocess.DEVNULL)
-        if (process.returncode):
+        if process.returncode:
             raise Exception('Example {0} could not be run!'.format(example))
         print('Dynamic Viz Testing : {0} - complete'.format(example))
 
@@ -98,7 +106,6 @@ class TestExamples(unittest.TestCase):
         """
         Running statistics module
         """
-        print()
         sub_examples_list = [
             s for s in os.listdir('examples')
             if osp.isdir(osp.join('examples', s))
@@ -111,14 +118,13 @@ class TestExamples(unittest.TestCase):
             and osp.isfile(osp.join('examples', j, p, 'config.txt'))
         ]
         example = examples_list[0]
-        i = 0
         main_path = osp.join('episimmer', 'main.py')
         example_path = osp.join('examples', j, example)
         process = subprocess.run('python3 {0} {1} -s -np'.format(
             main_path, example_path),
                                  shell=True,
                                  stdout=subprocess.DEVNULL)
-        if (process.returncode):
+        if process.returncode:
             raise Exception('Example {0} could not be run!'.format(example))
         print('Statistics Testing : {0} - complete'.format(example))
 

@@ -1,6 +1,7 @@
 flake8
 matplotlib==3.4.2
 myst-parser==0.16.1
+networkx==2.6.3
 numpy==1.21.0
 pre-commit==2.16.0
 pytest
