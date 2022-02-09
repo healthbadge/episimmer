@@ -6,8 +6,8 @@ class Agent():
     Class for an agent of the simulation.
 
     Args:
-    state: The state of the agent.
-    info_dict: Information of each agent taken from the agents file.
+        state: The state of the agent.
+        info_dict: Information of each agent taken from the agents file.
     """
     def __init__(self, state: Union[str, None], info_dict: Dict[str, str]):
         self.state: Union[str, None] = state
