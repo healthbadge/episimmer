@@ -355,12 +355,16 @@ class TestPolicy(AgentPolicy):
 
     def reset(self,
               agents: Union[ValuesView[Agent], None] = None,
+              locations: Union[ValuesView[Location], None] = None,
+              model: Union[BaseModel, None] = None,
               policy_index: Union[int, None] = None) -> None:
         """
         Resets statistics, ready queue and all the machines for a new world.
 
         Args:
             agents: Collection of :class:`~episimmer.agent.Agent` objects
+            locations: Collection of :class:`~episimmer.location.Location` objects
+            model: Disease model specified by the user
             policy_index: Policy index passed to differentiate policies
         """
         self.statistics = {}
