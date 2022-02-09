@@ -78,8 +78,7 @@ class CTPolicy(AgentPolicy):
                  num_of_days: int,
                  attribute: Union[str, None] = None,
                  value_list: List[str] = []):
-        super().__init__()
-        self.policy_type: str = 'Contact_Tracing'
+        super().__init__('Contact_Tracing')
         self.num_of_days: int = num_of_days
         self.attribute: str = attribute
         self.value_list: List[str] = value_list
