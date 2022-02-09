@@ -97,8 +97,8 @@ class AgentLockdown(AgentLockdownPolicy):
                      model: Union[BaseModel, None] = None,
                      policy_index: Union[int, None] = None) -> None:
         """
-       If lockdown policy is enforced in the current time step, it restricts a subset of agents from receiving and
-       contributing disease. The agents selected are based on an agent attribute and the value list for that attribute.
+        If lockdown policy is enforced in the current time step, it restricts a subset of agents from receiving and
+        contributing disease. The agents selected are based on an agent attribute and the value list for that attribute.
 
         Args:
             time_step: Current time step
@@ -253,8 +253,8 @@ class EventLockdown(EventLockdownPolicy):
                      model: Union[BaseModel, None] = None,
                      policy_index: Union[int, None] = None) -> None:
         """
-       If lockdown policy is enforced in the current time step, it restricts a subset of events from occurring. The
-       events selected are based on an event attribute and the value list for that attribute.
+        If lockdown policy is enforced in the current time step, it restricts a subset of events from occurring. The
+        events selected are based on an event attribute and the value list for that attribute.
 
         Args:
             time_step: Current time step

@@ -7,10 +7,17 @@ episimmer.policy
 
 .. currentmodule:: episimmer.policy
 
+.. autoclass:: episimmer.policy.Policy
+    :members:
+    :undoc-members:
+
 .. autoclass:: episimmer.policy.AgentPolicy
     :members:
     :undoc-members:
 
+.. autoclass:: episimmer.policy.EventPolicy
+    :members:
+    :undoc-members:
 
 Lockdown Policy API
 ------------------------------
