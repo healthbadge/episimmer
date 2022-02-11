@@ -27,6 +27,3 @@ class UserModel(model.ScheduledModel):
 		self.insert_state('Symptomatic',11,5,self.scheduled({'Recovered':1}),True,0)
 		self.insert_state('Asymptomatic',6,3,self.scheduled({'Recovered':1}),True,0)
 		self.insert_state('Recovered',100, 0,self.scheduled({'Recovered':1}),False,0)
-
-		self.set_event_contribution_fn(None)
-		self.set_event_receive_fn(None)

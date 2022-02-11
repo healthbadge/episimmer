@@ -49,7 +49,7 @@ class UserModel(model.StochasticModel):
 		self.set_transition('E','R',self.p_standard(gamma1))
 		self.set_transition('XE','R',self.p_standard(gamma1))
 
-		self.set_event_contribution_fn(None)
-		self.set_event_receive_fn(None)
+
+
 
 		self.name='Probablistic Lockdown Model'

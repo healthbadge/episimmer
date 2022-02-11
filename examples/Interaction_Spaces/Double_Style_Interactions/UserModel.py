@@ -21,7 +21,7 @@ class UserModel(model.StochasticModel):
 		self.set_transition('Infected', 'Recovered', self.p_standard(0.2))	#Adding the I->R transition
 
 
-		self.set_event_contribution_fn(None)
-		self.set_event_receive_fn(None)
+
+
 
 		self.name='Stochastic SIR'
