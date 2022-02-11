@@ -1,5 +1,6 @@
 import random
 from functools import partial
+from inspect import signature
 from typing import Callable, Dict, List, Tuple, Union
 
 import numpy as np
@@ -100,52 +101,90 @@ class BaseModel():
             location: Location object
             agents_obj: An object of class :class:`~episimmer.read_file.ReadAgents` containing all agents
         """
-        if self.contribute_fn is None or self.receive_fn is None:
-            raise Exception(
+        if self.contribute_fn is None:
+            raise TypeError(
                 'You have included events in your simulation but the disease model does not have the '
-                'event receive and contribute functions set to a Callable function.'
-            )
+                'event contribute function set to a Callable function.')
+        elif self.receive_fn is None:
+            raise TypeError(
+                'You have included events in your simulation but the disease model does not have the '
+                'event receive function set to a Callable function.')
         ambient_infection = 0
-        for agent_index in event_info['Agents']:
+        for agent_index in event_info['_can_contrib']:
             agent = agents_obj.agents[agent_index]
-            if agent_index in event_info['_can_contrib']:
-                ambient_infection += self.contribute_fn(
-                    agent, event_info, location, Time.get_current_time_step())
+            ambient_infection += self.contribute_fn(
+                agent, event_info, location, Time.get_current_time_step())
 
-        for agent_index in event_info['Agents']:
+        for agent_index in event_info['_can_receive']:
             agent = agents_obj.agents[agent_index]
-            if agent_index in event_info['_can_receive']:
-                p = self.receive_fn(agent, ambient_infection, event_info,
-                                    location, Time.get_current_time_step())
-                agent.add_event_result(p)
+            p = self.receive_fn(agent, ambient_infection, event_info, location,
+                                Time.get_current_time_step())
+            agent.add_event_result(p)
 
-    def set_event_contribution_fn(self, fn: Union[Callable, None]) -> None:
+    def set_event_contribution_fn(self, fn: Callable) -> None:
         """
         Sets the event contribute function specifying the contribution of an agent to the ambient infection of an event.
+        It must be set to a Callable function with four parameters : agent, event_info, location and time_step. agent
+        refers to the current agent responsible for contribution to ambient infection. event_info and location refer
+        to the current event's parameters from the event and location files. time_step refers to the current time step.
 
         Args:
             fn: User-defined function used to determine the contribution of an agent to an ambient infection
         """
+        if not callable(fn) or len(signature(fn).parameters) != 4:
+            raise TypeError(
+                'You must set the event contribution function to a Callable with the following four parameters : '
+                'agent, event_info, location and time_step.')
         self.contribute_fn = fn
 
-    def set_event_receive_fn(self, fn: Union[Callable, None]) -> None:
+    def set_event_receive_fn(self, fn: Callable) -> None:
         """
         Sets the event receive function specifying the probability of infection for an agent from the ambient infection
-        of an event.
+        of an event. It must be set to a Callable function with four parameters : agent, ambient_infection, event_info,
+        location and time_step. agent refers to the current agent receiving infection from participating in the event,
+        ambient_infection is the total infection accumulated by all the agents in the event (calculated by
+        event_contribution_fn). event_info and location refer to the current event's parameters from the event and
+        location files. time_step refers to the current time step.
 
         Args:
             fn: User-defined function used to determine the probability of an agent receiving an ambient infection
         """
+        if not callable(fn) or len(signature(fn).parameters) != 5:
+            raise TypeError(
+                'You must set the event receive function to a Callable with the following four parameters : '
+                'agent, event_info, location and time_step.')
         self.receive_fn = fn
 
     def set_external_prevalence_fn(self, fn: Callable) -> None:
         """
-        Sets the external prevalence function to specify probability of infection due to external prevalence.
+        Sets the external prevalence function to specify probability of infection due to external prevalence. It must
+        be set to a Callable function with two parameters : agent and time_step. agent refers to the current agent
+        affected by external prevalence and time_step refers to the current time step.
 
         Args:
             fn: User-defined function for specifying probability of infection due to external prevalence
         """
+        if not callable(fn) or len(signature(fn).parameters) != 2:
+            raise TypeError(
+                'You must set the external prevalence function to a Callable with the following two parameters : '
+                'agent and time_step.')
         self.external_prev_fn = fn
+
+    def states_checker(self, states: List[str]) -> bool:
+        """
+        Checks whether the states list passed belong to the states in the disease model created.
+
+        Args:
+            states: List of states to be checked
+
+        Returns:
+            Boolean representing whether valid states have been passed
+        """
+        for state in states:
+            if state not in self.individual_state_types:
+                return False
+
+        return True
 
     def set_symptomatic_states(self, states: List[str]) -> None:
         """
@@ -155,6 +194,10 @@ class BaseModel():
         Args:
             states: List of disease model states that are symptomatic
         """
+        if not isinstance(states, list) or not self.states_checker(states):
+            raise TypeError(
+                'You must pass a list of valid disease states defined in the model.'
+            )
         self.symptomatic_states = states
 
     def get_final_infection_prob(self, fn: Union[Callable, None],
