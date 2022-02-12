@@ -1,4 +1,5 @@
 import random
+import warnings
 from functools import partial
 from inspect import signature
 from typing import Callable, Dict, List, Tuple, Union
@@ -434,28 +435,38 @@ class StochasticModel(BaseModel):
         return self.get_final_infection_prob(fn, p_infected_states_list, agent,
                                              agents)
 
-    def p_infection(self,
-                    p_infected_states_list: Union[List[float], None] = None,
-                    fn: Union[Callable, None] = None) -> Callable:
+    def p_infection(
+            self,
+            fn: Union[Callable, None] = None,
+            p_infected_states_list: Union[List[float],
+                                          None] = None) -> Callable:
         """
         This function can be used by the user in ``UserModel.py`` to specify a dependent transition. The transition
-        probability is based on all the types of interactions between the agents. The first parameter defines an
-        optional list of infected state probabilities to be used in the user-defined function fn. For individual
-        and probabilistic interactions, we must pass the user-defined function fn which defines the probability of
-        infection for every agent. The parameters to be passed are p_infected_states_list, contact_agent, c_dict,
-        and current_time_step. p_infected_states_list is the above-mentioned list of probabilities, contact_agent is
-        the agent that the current agent is in contact with (through an individual or probabilistic interaction),
-        c_dict is a dictionary defining the interaction and current_time_step is the current time step. If you do not
-        have any of these types of interactions, you need not pass anything.
+        probability is based on all the types of interactions between the agents. For individual
+        and probabilistic interactions, we must pass two parameters. The first parameter defines the user-defined
+        function fn which returns the probability of infection for every agent considering these two types of
+        interactions. The second parameter is an optional list of infected state probabilities to be used in
+        the user-defined function fn. The parameters to be passed in the user-defined function are
+        p_infected_states_list, contact_agent, c_dict and current_time_step. p_infected_states_list is the
+        above-mentioned list of probabilities, contact_agent is the agent that the current agent is in contact
+        with (through an individual or probabilistic interaction), c_dict is a dictionary defining the interaction
+        and current_time_step is the current time step. If you do not have any of these types of interactions,
+        you need not pass anything.
         Returns a partial function of :meth:`~full_p_infection`.
 
         Args:
-            p_infected_states_list: List of probabilities that can be used in the user-defined function fn
             fn: User-defined function defining the probability based on individual/probabilistic interactions
+            p_infected_states_list: List of probabilities that can be used in the user-defined function fn
 
         Returns:
             Partial function
         """
+        if fn is not None:
+            if not callable(fn) or len(signature(fn).parameters) != 4:
+                raise TypeError(
+                    'You must pass a callable function with the time step parameter'
+                )
+
         if p_infected_states_list is not None:
             if not isinstance(p_infected_states_list, list):
                 raise TypeError(
@@ -467,11 +478,11 @@ class StochasticModel(BaseModel):
                         'You must pass a list of float values which can be used in your user-defined '
                         'function. This is an optional parameter')
 
-        if fn is not None:
-            if not callable(fn) or len(signature(fn).parameters) != 4:
-                raise TypeError(
-                    'You must pass a callable function with the time step parameter'
-                )
+        if fn is None and p_infected_states_list is not None:
+            warnings.warn(
+                'You have passed a list but there is no user-defined function passed to use it'
+            )
+
         return partial(self.full_p_infection, fn, p_infected_states_list)
 
 

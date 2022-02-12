@@ -40,7 +40,7 @@ class UserModel(model.StochasticModel):
             state_proportion)  #We use the inbuilt model in the package
         self.set_transition(
             'Susceptible', 'Infected',
-            self.p_infection(None, probabilityOfInfection_fn)
+            self.p_infection(probabilityOfInfection_fn, None)
         )  #Adding S-> I transition which is based on probability)fInfection_fn
         self.set_transition('Infected', 'Recovered',
                             self.p_standard(0.2))  #Adding the I->R transition

@@ -174,15 +174,21 @@ class TestModel(unittest.TestCase):
                                           'Recovered': 0.0
                                       })
 
-        self.assertRaises(TypeError, stoch_model.p_infection, 6, None)
-        self.assertRaises(TypeError, stoch_model.p_infection, ['abc', 'bcd'],
-                          None)
-
-        def prob_of_inter_fn(a, b, c):
+        def prob_of_inter_fn(a, b, c, d):
             return 0.1
 
-        self.assertRaises(TypeError, stoch_model.p_infection, [],
-                          prob_of_inter_fn)
+        self.assertRaises(TypeError, stoch_model.p_infection, prob_of_inter_fn,
+                          6)
+        self.assertRaises(TypeError, stoch_model.p_infection, prob_of_inter_fn,
+                          ['abc', 'bcd'])
+
+        def prob_of_inter_fn_inc(a, b, c):
+            return 0.1
+
+        self.assertRaises(TypeError, stoch_model.p_infection,
+                          prob_of_inter_fn_inc)
+        self.assertWarns(UserWarning, stoch_model.p_infection, None,
+                         [0.1, 0.2])
 
     def test_sched_insert_state(self):
         pass

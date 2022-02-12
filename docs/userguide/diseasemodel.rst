@@ -180,7 +180,7 @@ The transition functions available are
 
     * p_function : Defines an independent transition. Takes a user-defined function and returns a probability of transition. This user defined function only takes current time step as parameter.
 
-    * p_infection : Defines a dependent transition. Takes two parameters, the list of probabilities and the user-defined function, corresponding to Individual and Probabilistic Interactions. Returns a probability of transition based on all the underlying interactions.
+    * p_infection : Defines a dependent transition. Takes two parameters, the user-defined function, corresponding to Individual and Probabilistic Interactions and the list of probabilities that can be used in the user-defined function. Returns a probability of transition based on all the underlying interactions.
 
 
 .. code-block:: python
@@ -203,7 +203,7 @@ The transition functions available are
         self.set_transition('Infected', 'Recovered', self.p_standard(0.2))  # Adding the I->R transition
 
 
-For now, just pass None, None as the two parameters in p_infection.
+For now, no parameters are required to be passed in p_infection.
 
 p_function may be used instead of p_standard to return probabilities depending on the time step. It takes a user-defined function with parameter current time step
 in contrast with p_standard which takes only a float probability. For example -
@@ -324,7 +324,7 @@ Now, we can link the user-defined functions for both Interactions and Events. Fi
                   'Recovered':0
                 }
         model.StochasticModel.__init__(self,individual_types,infected_states,state_proportion)  # We use the inbuilt model in the package
-        self.set_transition('Susceptible', 'Infected', self.p_infection([0.1],probabilityOfInfection_fn))  # Adding S-> I transition which is redundant in this case as we use the event_contribute and event_receive function
+        self.set_transition('Susceptible', 'Infected', self.p_infection(probabilityOfInfection_fn, [0.1]))  # Adding S-> I transition which is redundant in this case as we use the event_contribute and event_receive function
         self.set_transition('Infected', 'Recovered', self.p_standard(0.2))  # Adding the I->R transition
 
         self.set_event_contribution_fn(event_contribute_fn)  #Setting the above defined fucntion into the model
@@ -332,7 +332,7 @@ Now, we can link the user-defined functions for both Interactions and Events. Fi
 
         self.name='Stochastic SIR'
 
-We link the probability of interaction function and the optional list of probabilities in the p_infection function. Since we pass a list, we might as well use it. Thus, in line 21, we see the the first
+We link the probability of interaction function and the optional list of probabilities in the p_infection function. Since we pass a list, we shall use it. Thus, in line 21, we see the the first
 element of the list being used (Since there is only a single infectious state, we pass only a single value in the list).
 
 Then, we link the event functions with the set_event_contribution_fn() and set_event_receive_fn() functions.
@@ -538,7 +538,7 @@ Now, we can link the user-defined functions for both Interactions and Events. Fi
 
         self.name='Scheduled SIR'
 
-We link the probability of interaction function and the optional list of probabilities in the p_infection function. Since we pass a list, we might as well use it. Thus, in line 21, we see the the first
+We link the probability of interaction function and the optional list of probabilities in the p_infection function. Since we pass a list, we shall use it. Thus, in line 21, we see the the first
 element of the list being used (Since there is only a single infectious state, we pass only a single value in the list).
 
 Then, we link the event functions with the set_event_contribution_fn() and set_event_receive_fn() functions.
