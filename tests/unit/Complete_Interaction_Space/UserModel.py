@@ -2,8 +2,8 @@ import episimmer.model as model
 
 
 #This function represents the probability of getting infected during a single interaction/contact
-def probabilityOfInfection_fn(p_infected_states_list, contact_agent, c_dict,
-                              current_time_step):
+def probability_of_infection_fn(p_infected_states_list, contact_agent, c_dict,
+                                current_time_step):
     if contact_agent.state == 'Infected':
         return 0.8  #This is the probability of getting infected from contact in a time step isf contact is infected
     return 0  # If contact is not infected then the probability of them infecting you is 0
@@ -17,7 +17,7 @@ def event_contribute_fn(agent, event_info, location, current_time_step):
     return 0
 
 
-#This fucntion states the probability of an agent becoming infected fromt he ambient infection
+#This function states the probability of an agent becoming infected from the ambient infection
 def event_receive_fn(agent, ambient_infection, event_info, location,
                      current_time_step):
     beta = 0.001
@@ -40,7 +40,7 @@ class UserModel(model.StochasticModel):
             state_proportion)  #We use the inbuilt model in the package
         self.set_transition(
             'Susceptible', 'Infected',
-            self.p_infection(None, probabilityOfInfection_fn)
+            self.p_infection(probability_of_infection_fn, None)
         )  #Adding S-> I transition which is based on probability)fInfection_fn
         self.set_transition('Infected', 'Recovered',
                             self.p_standard(0.2))  #Adding the I->R transition

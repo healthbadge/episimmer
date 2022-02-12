@@ -12,7 +12,7 @@ def external_prevalence(agent, current_time_step):
 class UserModel(model.ScheduledModel):
 	def __init__(self):
 		model.ScheduledModel.__init__(self)
-		self.insert_state('Susceptible',None, None,self.p_infection([None,None],None,{'Infected':1}),False,0.99)
+		self.insert_state('Susceptible',None, None,self.p_infection({'Infected':1}),False,0.99)
 		self.insert_state('Infected',6,3,self.scheduled({'Recovered':1}),True,0.01)
 		self.insert_state('Recovered',0, 0,self.scheduled({'Recovered':1}),False,0)
 
