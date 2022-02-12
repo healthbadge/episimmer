@@ -37,7 +37,7 @@ class UserModel(model.StochasticModel):
 							'Dead':0
 						}
 		model.StochasticModel.__init__(self,individual_types,infected_states,state_proportion)
-		self.set_transition('Susceptible', 'Infected', self.p_infection(None,None))
+		self.set_transition('Susceptible', 'Infected', self.p_infection())
 		self.set_transition('Infected', 'Recovered', self.p_standard(0.1))
 		self.set_transition('Infected', 'ICU', self.p_function(fn2))
 		self.set_transition('ICU', 'Recovered', self.p_function(fn1))
