@@ -123,11 +123,29 @@ class BaseModel():
             agent.add_event_result(p)
 
     def set_event_contribution_fn(self, fn: Callable) -> None:
-        """
+        r"""
         Sets the event contribute function specifying the contribution of an agent to the ambient infection of an event.
         It must be set to a Callable function with four parameters : agent, event_info, location and time_step. agent
         refers to the current agent responsible for contribution to ambient infection. event_info and location refer
         to the current event's parameters from the event and location files. time_step refers to the current time step.
+
+        An example with the Stochastic Model is given below
+
+        .. code-block:: python
+            :linenos:
+            :emphasize-lines: 11
+
+            def event_contribute_fn(agent,event_info,location,current_time_step):
+                    if agent.state=='Infected':
+                        return 1
+                    return 0
+
+            class UserModel(model.StochasticModel):
+                def __init__(self):
+                    .
+                    .
+                    .
+                    self.set_event_contribution_fn(event_contribute_fn)
 
         Args:
             fn: User-defined function used to determine the contribution of an agent to an ambient infection
@@ -139,13 +157,30 @@ class BaseModel():
         self.contribute_fn = fn
 
     def set_event_receive_fn(self, fn: Callable) -> None:
-        """
+        r"""
         Sets the event receive function specifying the probability of infection for an agent from the ambient infection
         of an event. It must be set to a Callable function with four parameters : agent, ambient_infection, event_info,
         location and time_step. agent refers to the current agent receiving infection from participating in the event,
         ambient_infection is the total infection accumulated by all the agents in the event (calculated by
         event_contribution_fn). event_info and location refer to the current event's parameters from the event and
         location files. time_step refers to the current time step.
+
+        An example with the Stochastic Model is given below
+
+        .. code-block:: python
+            :linenos:
+            :emphasize-lines: 10
+
+            def event_receive_fn(agent,ambient_infection,event_info,location,current_time_step):
+                beta=0.001
+                return ambient_infection*beta
+
+            class UserModel(model.StochasticModel):
+                def __init__(self):
+                    .
+                    .
+                    .
+                    self.set_event_receive_fn(event_receive_fn)
 
         Args:
             fn: User-defined function used to determine the probability of an agent receiving an ambient infection
@@ -157,10 +192,31 @@ class BaseModel():
         self.receive_fn = fn
 
     def set_external_prevalence_fn(self, fn: Callable) -> None:
-        """
+        r"""
         Sets the external prevalence function to specify probability of infection due to external prevalence. It must
         be set to a Callable function with two parameters : agent and time_step. agent refers to the current agent
         affected by external prevalence and time_step refers to the current time step.
+
+        An example with the Stochastic Model is given below
+
+        .. code-block:: python
+            :linenos:
+            :emphasize-lines: 14
+
+            def external_prevalence(agent, current_time_step):
+                if(agent.info['Compliance'] == 'High'):
+                    return 0.1
+                elif(agent.info['Compliance'] == 'Medium'):
+                    return 0.2
+                elif(agent.info['Compliance'] == 'Low'):
+                    return 0.35
+
+            class UserModel(model.ScheduledModel):
+                def __init__(self):
+                    .
+                    .
+                    .
+                    self.set_external_prevalence_fn(external_prevalence)
 
         Args:
             fn: User-defined function for specifying probability of infection due to external prevalence
@@ -188,9 +244,37 @@ class BaseModel():
         return True
 
     def set_symptomatic_states(self, states: List[str]) -> None:
-        """
+        r"""
         Sets the symptomatic states of the disease model. These agents in these states have visible symptoms of the
         disease.
+
+        An example with the Stochastic Model is given below
+
+        .. code-block:: python
+            :linenos:
+            :emphasize-lines: 21
+
+            class UserModel(model.StochasticModel):
+              def __init__(self):
+                individual_types=['Susceptible','Exposed','Asymptomatic','Symptomatic','Recovered']
+                infected_states=['Asymptomatic','Symptomatic']
+                state_proportion={
+                          'Susceptible':0.99,
+                          'Exposed':0,
+                          'Recovered':0,
+                          'Asymptomatic':0,
+                          'Symptomatic':0.01
+                        }
+                model.StochasticModel.__init__(self,individual_types,infected_states,state_proportion)
+                self.set_transition('Susceptible', 'Exposed', self.p_infection())
+                self.set_transition('Exposed', 'Symptomatic', self.p_standard(0.15))
+                self.set_transition('Exposed', 'Asymptomatic', self.p_standard(0.2))
+                self.set_transition('Symptomatic', 'Recovered', self.p_standard(0.1))
+                self.set_transition('Asymptomatic', 'Recovered', self.p_standard(0.1))
+
+                self.set_event_contribution_fn(event_contribute_fn)
+                self.set_event_receive_fn(event_receive_fn)
+                self.set_symptomatic_states(['Symptomatic'])
 
         Args:
             states: List of disease model states that are symptomatic
@@ -279,7 +363,7 @@ class StochasticModel(BaseModel):
                 self.transmission_prob[t1][t2] = self.p_standard(0)
 
     def set_transition(self, s1: str, s2: str, fn: Callable) -> None:
-        """
+        r"""
         Adds a transition probability function between the specified states. The user must specify one of the following
         functions for the transition function
 
@@ -288,6 +372,28 @@ class StochasticModel(BaseModel):
         * :meth:`~p_function`
 
         * :meth:`~p_infection`
+
+        .. code-block:: python
+            :linenos:
+            :emphasize-lines: 15-17
+
+            def rec_to_dead_fn(time_step):
+                return 0.1
+
+            class UserModel(model.StochasticModel):
+                def __init__(self):
+                    individual_types=['Susceptible','Infected','Recovered','Dead']
+                    infected_states=['Infected']
+                    state_proportion={
+                                        'Susceptible':0.99,
+                                        'Infected':0.01,
+                                        'Recovered':0
+                                        'Dead':0
+                                    }
+                    model.StochasticModel.__init__(self,individual_types,infected_states,state_proportion)
+                    self.set_transition('Susceptible', 'Infected', self.p_infection())
+                    self.set_transition('Infected', 'Recovered', self.p_standard(0.2))
+                    self.set_transition('Recovered', 'Dead', self.p_function(rec_to_dead_fn))
 
         Args:
             s1: The first state
@@ -368,6 +474,25 @@ class StochasticModel(BaseModel):
         This function can be used by the user in ``UserModel.py`` to specify an independent transition with a fixed
         probability. It returns a partial function of :meth:`~full_p_standard`.
 
+        .. code-block:: python
+            :linenos:
+            :emphasize-lines: 14
+
+            class UserModel(model.StochasticModel):
+                def __init__(self):
+                    individual_types=['Susceptible','Infected','Recovered']
+                    infected_states=['Infected']
+                    state_proportion={
+                                        'Susceptible':0.99,
+                                        'Infected':0.01,
+                                        'Recovered':0
+                                    }
+                    model.StochasticModel.__init__(self,individual_types,infected_states,state_proportion)
+                    .
+                    .
+                    .
+                    self.set_transition('Infected', 'Recovered', self.p_standard(0.2))
+
         Args:
             p: Probability of transition
 
@@ -403,6 +528,29 @@ class StochasticModel(BaseModel):
         with a user-defined function defining the probability of transition. This user-defined function must have
         a single parameter defining the current time step of the simulation.
         It returns a partial function of :meth:`~full_p_function`.
+
+        .. code-block:: python
+            :linenos:
+            :emphasize-lines: 18
+
+            def rec_to_dead_fn(time_step):
+                return 0.1
+
+            class UserModel(model.StochasticModel):
+                def __init__(self):
+                    individual_types=['Susceptible','Infected','Recovered','Dead']
+                    infected_states=['Infected']
+                    state_proportion={
+                                        'Susceptible':0.99,
+                                        'Infected':0.01,
+                                        'Recovered':0
+                                        'Dead':0
+                                    }
+                    model.StochasticModel.__init__(self,individual_types,infected_states,state_proportion)
+                    .
+                    .
+                    .
+                    self.set_transition('Recovered', 'Dead', self.p_function(rec_to_dead_fn))
 
         Args:
             fn: User-defined function defining the probability of transition
@@ -441,7 +589,7 @@ class StochasticModel(BaseModel):
             fn: Union[Callable, None] = None,
             p_infected_states_list: Union[List[float],
                                           None] = None) -> Callable:
-        """
+        r"""
         This function can be used by the user in ``UserModel.py`` to specify a dependent transition. The transition
         probability is based on all the types of interactions between the agents. For individual
         and probabilistic interactions, we must pass two parameters. The first parameter defines the user-defined
@@ -454,6 +602,46 @@ class StochasticModel(BaseModel):
         and current_time_step is the current time step. If you do not have any of these types of interactions,
         you need not pass anything.
         Returns a partial function of :meth:`~full_p_infection`.
+
+        .. code-block:: python
+            :linenos:
+            :emphasize-lines: 11
+
+            class UserModel(model.StochasticModel):
+                def __init__(self):
+                    individual_types=['Susceptible','Infected','Recovered']
+                    infected_states=['Infected']
+                    state_proportion={
+                                        'Susceptible':0.99,
+                                        'Infected':0.01,
+                                        'Recovered':0
+                                    }
+                    model.StochasticModel.__init__(self,individual_types,infected_states,state_proportion)
+                    self.set_transition('Susceptible', 'Infected', self.p_infection())
+
+        In case of individual or probabilistic interactions, a callable function must be passed. A list can also be
+        passed optionally. In the following example, we use the list.
+
+        .. code-block:: python
+            :linenos:
+            :emphasize-lines: 1-4,16
+
+            def probability_of_infection_fn(p_infected_states_list, contact_agent ,c_dict, current_time_step):
+                if contact_agent.state=='Infected':
+                    return p_infected_states_list[0]
+                return 0
+
+            class UserModel(model.StochasticModel):
+                def __init__(self):
+                    individual_types=['Susceptible','Infected','Recovered']
+                    infected_states=['Infected']
+                    state_proportion={
+                                        'Susceptible':0.99,
+                                        'Infected':0.01,
+                                        'Recovered':0
+                                    }
+                    model.StochasticModel.__init__(self,individual_types,infected_states,state_proportion)
+                    self.set_transition('Susceptible', 'Infected', self.p_infection(probability_of_infection_fn, [0.1]))
 
         Args:
             fn: User-defined function defining the probability based on individual/probabilistic interactions
@@ -500,7 +688,7 @@ class ScheduledModel(BaseModel):
                      vary: Union[int, None], transition_fn: Callable,
                      infected_state: bool, proportion: Union[float,
                                                              int]) -> None:
-        """
+        r"""
         Inserts a state into the model and schedules the agent for this state using a Normal
         distribution. The mean and variance are passed here as parameters to the Normal distribution. The user
         must specify one of the following functions for the transition function
@@ -511,6 +699,17 @@ class ScheduledModel(BaseModel):
 
         The last two parameters define whether the state is an infected state and the initial proportion of agents
         belonging to this state.
+
+        .. code-block:: python
+            :linenos:
+            :emphasize-lines: 4-6
+
+            class UserModel(model.ScheduledModel):
+                def __init__(self):
+                    model.ScheduledModel.__init__(self)
+                    self.insert_state('Susceptible', 2, 1, self.p_infection({'Infected':1}), False, 0.99)
+                    self.insert_state('Infected', 6, 3, self.scheduled({'Recovered':1}), True, 0.01)
+                    self.insert_state('Recovered', 0, 0, self.scheduled({'Recovered':1}), False, 0)
 
         Args:
             state: The state to be inserted
@@ -576,6 +775,27 @@ class ScheduledModel(BaseModel):
 
         The last two parameters define whether the state is an infected state and the initial proportion of agents
         belonging to this state.
+
+        .. code-block:: python
+            :linenos:
+            :emphasize-lines: 16
+
+            def fn1(current_time_step):
+                r=random.random()
+                if r<0.2:
+                    return 2
+                elif r<0.8:
+                    return 3
+                else:
+                    return 4
+
+            class UserModel(model.ScheduledModel):
+                def __init__(self):
+                    model.ScheduledModel.__init__(self)
+                    .
+                    .
+                    .
+                    self.insert_state_custom('Recovered', fn1, self.scheduled({'Recovered':1}), False, 0)
 
         Args:
             state: The state to be inserted
@@ -736,6 +956,18 @@ class ScheduledModel(BaseModel):
         a dictionary mapping new states to transition proportions.
         Returns a partial function of :meth:`~full_scheduled`.
 
+        .. code-block:: python
+            :linenos:
+            :emphasize-lines: 7
+
+            class UserModel(model.ScheduledModel):
+                def __init__(self):
+                    model.ScheduledModel.__init__(self)
+                    .
+                    .
+                    .
+                    self.insert_state('Infected', 6, 3, self.scheduled({'Recovered':1}), True, 0.01)
+
         Args:
             new_states: A dictionary mapping states to proportions an agent from the current state can transition to
 
@@ -814,6 +1046,32 @@ class ScheduledModel(BaseModel):
         dictionary defining the interaction and current_time_step is the current time step. If you do not have any of
         these types of interactions, you need not pass the second and third parameters.
         Returns a partial function of :meth:`~full_p_infection`.
+
+        .. code-block:: python
+            :linenos:
+            :emphasize-lines: 4
+
+            class UserModel(model.ScheduledModel):
+                def __init__(self):
+                    model.ScheduledModel.__init__(self)
+                    self.insert_state('Susceptible',None, None,self.p_infection({'Infected':1}),False,0.99)
+
+        In case of individual or probabilistic interactions, a callable function must be passed. A list can also be
+        passed optionally. In the following example, we use the list.
+
+        .. code-block:: python
+            :linenos:
+            :emphasize-lines: 1-4, 9
+
+            def probability_of_infection_fn(p_infected_states_list, contact_agent ,c_dict, current_time_step):
+                if contact_agent.state=='Infected':
+                    return p_infected_states_list[0]
+                return 0
+
+            class UserModel(model.ScheduledModel):
+                def __init__(self):
+                    model.ScheduledModel.__init__(self)
+                    self.insert_state('Susceptible', None, None, self.p_infection({'Infected':1}, probability_of_infection_fn, [0.1]), False, 0.99)
 
         Args:
             new_states: A dictionary mapping states to proportions an agent from the current state can transition to
