@@ -112,6 +112,90 @@ class TestModel(unittest.TestCase):
             base_model.get_final_infection_prob(interactions_fn, [], agent2,
                                                 agents), expected_result3)
 
+    def test_stoch_set_transition(self):
+        stoch_model = StochasticModel(['Susceptible', 'Infected', 'Recovered'],
+                                      ['Infected'], {
+                                          'Susceptible': 0.99,
+                                          'Infected': 0.01,
+                                          'Recovered': 0.0
+                                      })
+        stoch_model.set_transition('Susceptible', 'Infected',
+                                   stoch_model.p_standard(0.1))
+        stoch_model.set_transition('Infected', 'Recovered',
+                                   stoch_model.p_infection())
+
+        def p_func(time_step):
+            return 0.1 * time_step
+
+        stoch_model.set_transition('Recovered', 'Susceptible',
+                                   stoch_model.p_function(p_func))
+
+        def custom_prob_of_trans(agent, agents):
+            if agent.index == 1:
+                return 0.8
+            else:
+                return 0.1
+
+        stoch_model.set_transition('Recovered', 'Susceptible',
+                                   custom_prob_of_trans)
+        self.assertRaises(TypeError, stoch_model.set_transition, 'Susceptible',
+                          'Recovered', 1.0)
+
+    def test_stoch_p_standard(self):
+        stoch_model = StochasticModel(['Susceptible', 'Infected', 'Recovered'],
+                                      ['Infected'], {
+                                          'Susceptible': 0.99,
+                                          'Infected': 0.01,
+                                          'Recovered': 0.0
+                                      })
+        self.assertRaises(ValueError, stoch_model.p_standard, -1)
+        self.assertRaises(ValueError, stoch_model.p_standard, 1.2)
+        self.assertRaises(TypeError, stoch_model.p_standard, 'abc')
+
+    def test_stoch_p_function(self):
+        stoch_model = StochasticModel(['Susceptible', 'Infected', 'Recovered'],
+                                      ['Infected'], {
+                                          'Susceptible': 0.99,
+                                          'Infected': 0.01,
+                                          'Recovered': 0.0
+                                      })
+
+        def p_func(a, b, c):
+            return 0.1
+
+        self.assertRaises(TypeError, stoch_model.p_function, p_func)
+        self.assertRaises(TypeError, stoch_model.p_function, 1.5)
+
+    def test_stoch_p_infection(self):
+        stoch_model = StochasticModel(['Susceptible', 'Infected', 'Recovered'],
+                                      ['Infected'], {
+                                          'Susceptible': 0.99,
+                                          'Infected': 0.01,
+                                          'Recovered': 0.0
+                                      })
+
+        self.assertRaises(TypeError, stoch_model.p_infection, 6, None)
+        self.assertRaises(TypeError, stoch_model.p_infection, ['abc', 'bcd'],
+                          None)
+
+        def prob_of_inter_fn(a, b, c):
+            return 0.1
+
+        self.assertRaises(TypeError, stoch_model.p_infection, [],
+                          prob_of_inter_fn)
+
+    def test_sched_insert_state(self):
+        pass
+
+    def test_sched_insert_state_custom(self):
+        pass
+
+    def test_sched_scheduled(self):
+        pass
+
+    def test_sched_p_infection(self):
+        pass
+
 
 if __name__ == '__main__':
     unittest.main()
