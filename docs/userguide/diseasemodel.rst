@@ -233,7 +233,7 @@ For interactions, we need additional user-defined functions, particularly the pr
 
     # This function represents the probability of getting infected during a single interaction/contact
 
-    def probabilityOfInfection_fn(p_infected_states_list,contact_agent,c_dict,current_time_step):
+    def probability_of_infection_fn(p_infected_states_list,contact_agent,c_dict,current_time_step):
       if contact_agent.state=='Infected':
         return 0.1  #This is the probability of getting infected from contact in a time step if contact is infected
       return 0 # If contact is not infected then the probability of them infecting you is 0
@@ -309,7 +309,7 @@ Now, we can link the user-defined functions for both Interactions and Events. Fi
 
     # This function represents the probability of getting infected during a single interaction/contact
 
-    def probabilityOfInfection_fn(p_infected_states_list,contact_agent,c_dict,current_time_step):
+    def probability_of_infection_fn(p_infected_states_list,contact_agent,c_dict,current_time_step):
       if contact_agent.state=='Infected':
         return p_infected_states_list[0]  #This is the probability of getting infected from contact in a time step if contact is infected
       return 0 # If contact is not infected then the probability of them infecting you is 0
@@ -324,11 +324,11 @@ Now, we can link the user-defined functions for both Interactions and Events. Fi
                   'Recovered':0
                 }
         model.StochasticModel.__init__(self,individual_types,infected_states,state_proportion)  # We use the inbuilt model in the package
-        self.set_transition('Susceptible', 'Infected', self.p_infection(probabilityOfInfection_fn, [0.1]))  #Adding the S-> I dependent transition
+        self.set_transition('Susceptible', 'Infected', self.p_infection(probability_of_infection_fn, [0.1]))  #Adding the S-> I dependent transition
         self.set_transition('Infected', 'Recovered', self.p_standard(0.2))  # Adding the I->R transition
 
-        self.set_event_contribution_fn(event_contribute_fn)  #Setting the above defined fucntion into the model
-        self.set_event_receive_fn(event_receive_fn)  #Setting the above defined fucntion into the model
+        self.set_event_contribution_fn(event_contribute_fn)  #Setting the above defined function into the model
+        self.set_event_receive_fn(event_receive_fn)  #Setting the above defined function into the model
 
         self.name='Stochastic SIR'
 
@@ -444,7 +444,7 @@ For interactions, we need additional user-defined functions, particularly the pr
 
     # This function represents the probability of getting infected during a single interaction/contact
 
-    def probabilityOfInfection_fn(p_infected_states_list,contact_agent,c_dict,current_time_step):
+    def probability_of_infection_fn(p_infected_states_list,contact_agent,c_dict,current_time_step):
       if contact_agent.state=='Infected':
         return 0.1  #This is the probability of getting infected from contact in a time step if contact is infected
       return 0 # If contact is not infected then the probability of them infecting you is 0
@@ -521,7 +521,7 @@ Now, we can link the user-defined functions for both Interactions and Events. Fi
 
     # This function represents the probability of getting infected during a single interaction/contact
 
-    def probabilityOfInfection_fn(p_infected_states_list,contact_agent,c_dict,current_time_step):
+    def probability_of_infection_fn(p_infected_states_list,contact_agent,c_dict,current_time_step):
       if contact_agent.state=='Infected':
         return p_infected_states_list[0]  #This is the probability of getting infected from contact in a time step if contact is infected
       return 0 # If contact is not infected then the probability of them infecting you is 0
@@ -529,7 +529,7 @@ Now, we can link the user-defined functions for both Interactions and Events. Fi
     class UserModel(model.ScheduledModel):
       def __init__(self):
         model.ScheduledModel.__init__(self)
-        self.insert_state('Susceptible',None, None,self.p_infection({'Infected':1}, probabilityOfInfection_fn, [0.1]),False,0.99)
+        self.insert_state('Susceptible',None, None,self.p_infection({'Infected':1}, probability_of_infection_fn, [0.1]),False,0.99)
         self.insert_state('Infected',6,3,self.scheduled({'Recovered':1}),True,0.01)
         self.insert_state('Recovered',0, 0,self.scheduled({'Recovered':1}),False,0)
 

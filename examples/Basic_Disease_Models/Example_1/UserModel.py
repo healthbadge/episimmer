@@ -6,7 +6,7 @@ import episimmer.model as model
 #User defined functions
 #This function is user defined, based on the parameters the user has inputed in agents file and interaction/contact file
 #This function represents the probability of getting infected during a single interaction/contact
-def probabilityOfInfection_fn(p_infected_states_list,contact_agent,c_dict,current_time_step):
+def probability_of_infection_fn(p_infected_states_list,contact_agent,c_dict,current_time_step):
 
 	p_inf_symp,p_inf_asymp=p_infected_states_list[0],p_infected_states_list[1]
 	#EXAMPLE 1
@@ -63,7 +63,7 @@ class UserModel(model.StochasticModel):
 							'Symptomatic':0
 						}
 		model.StochasticModel.__init__(self,individual_types,infected_states,state_proportion)
-		self.set_transition('Susceptible', 'Exposed', self.p_infection(probabilityOfInfection_fn, [0.3,0.1]))
+		self.set_transition('Susceptible', 'Exposed', self.p_infection(probability_of_infection_fn, [0.3,0.1]))
 		self.set_transition('Exposed', 'Symptomatic', self.p_standard(0.15))
 		self.set_transition('Exposed', 'Asymptomatic', self.p_standard(0.2))
 		self.set_transition('Symptomatic', 'Recovered', self.p_standard(0.2))

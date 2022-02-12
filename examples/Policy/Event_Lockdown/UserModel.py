@@ -1,6 +1,6 @@
 import episimmer.model as model
 
-#The two fucntions event_contribute_fn and event_receive_fn together control the spread of infection
+#The two functions event_contribute_fn and event_receive_fn together control the spread of infection
 
 # This function states the amount an agent contributes to ambient infection in the region
 #note that only infected agents contibute to the ambient infection
@@ -9,7 +9,7 @@ def event_contribute_fn(agent,event_info,location,current_time_step):
 			return 1
 		return 0
 
-#This fucntion states the probability of an agent becoming infected fromt he ambient infection
+#This function states the probability of an agent becoming infected from the ambient infection
 def event_receive_fn(agent,ambient_infection,event_info,location,current_time_step):
 	beta=0.1
 	return ambient_infection*beta
@@ -29,7 +29,7 @@ class UserModel(model.StochasticModel):
 		self.set_transition('Infected', 'Recovered', self.p_standard(0.2))	#Adding the I->R transition
 
 
-		self.set_event_contribution_fn(event_contribute_fn)	#Setting the above defined fucntion into the model
-		self.set_event_receive_fn(event_receive_fn)	#Setting the above defined fucntion into the model
+		self.set_event_contribution_fn(event_contribute_fn)	#Setting the above defined function into the model
+		self.set_event_receive_fn(event_receive_fn)	#Setting the above defined function into the model
 
 		self.name='Stochastic SIR'
