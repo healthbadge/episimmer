@@ -199,7 +199,7 @@ The transition functions available are
                   'Recovered':0
                 }
         model.StochasticModel.__init__(self,individual_types,infected_states,state_proportion)  # We use the inbuilt model in the package
-        self.set_transition('Susceptible', 'Infected', self.p_infection())  # Adding S-> I transition which is redundant in this case as we use the event_contribute and event_receive function
+        self.set_transition('Susceptible', 'Infected', self.p_infection())  # Adding the S-> I dependent transition
         self.set_transition('Infected', 'Recovered', self.p_standard(0.2))  # Adding the I->R transition
 
 
@@ -324,7 +324,7 @@ Now, we can link the user-defined functions for both Interactions and Events. Fi
                   'Recovered':0
                 }
         model.StochasticModel.__init__(self,individual_types,infected_states,state_proportion)  # We use the inbuilt model in the package
-        self.set_transition('Susceptible', 'Infected', self.p_infection(probabilityOfInfection_fn, [0.1]))  # Adding S-> I transition which is redundant in this case as we use the event_contribute and event_receive function
+        self.set_transition('Susceptible', 'Infected', self.p_infection(probabilityOfInfection_fn, [0.1]))  #Adding the S-> I dependent transition
         self.set_transition('Infected', 'Recovered', self.p_standard(0.2))  # Adding the I->R transition
 
         self.set_event_contribution_fn(event_contribute_fn)  #Setting the above defined fucntion into the model
@@ -386,7 +386,7 @@ The transition functions available are
 
     * scheduled : Defines an independent transition. Takes a dictionary with the keys as the next states and the values as the probability of transitioning to that state. Returns a state and scheduled time based on mean and variance passed to the insert_state function.
 
-    * p_infection : Defines a dependent transition. Takes three parameters. First two parameters are the list of probabilities and the user-defined function, corresponding to Individual and Probabilistic Interactions. The third parameter is a dictionary with the keys as the next states and the values as the probability of transitioning to that state. Returns a state and scheduled time based on mean and variance passed to the insert_state function and also depends on the underlying interactions.
+    * p_infection : Defines a dependent transition. Takes three parameters. The first parameter is a dictionary with the keys as the next states and the values as the probability of transitioning to that state. The next two parameters are the user-defined function, corresponding to Individual and Probabilistic Interactions and an optional list of probabilities that can be used in the user-defined functionn. Returns a state and scheduled time based on mean and variance passed to the insert_state function and also depends on the underlying interactions.
 
 
 
@@ -401,14 +401,14 @@ Let us consider the SIR model. The states are then - Susceptible, Infected and R
     class UserModel(model.ScheduledModel):
       def __init__(self):
         model.ScheduledModel.__init__(self)
-        self.insert_state('Susceptible',None, None,self.p_infection(None,None,{'Infected':1}),False,0.99)
+        self.insert_state('Susceptible',None, None,self.p_infection({'Infected':1}),False,0.99)
         self.insert_state('Infected',6,3,self.scheduled({'Recovered':1}),True,0.01)
         self.insert_state('Recovered',0, 0,self.scheduled({'Recovered':1}),False,0)
 
 
 insert_state in lines 6-8 have both the compartments and the transitions defined unlike how we define them separately
 
-As shown, the first transition is dependent and thus we use the p_infection function. For now, just pass None, None as the two parameters in p_infection.
+As shown, the first transition is dependent and thus we use the p_infection function. For now, just pass the first parameter new_states = {'Infected':1} in p_infection.
 
 In real life scenarios, not all distributions are symmetric about a mean (not all are Normal distributions). Custom distributions provide flexibility in terms of scheduling changes in state for user defined distributions. We can implement this using the insert_state_custom function instead of the insert_state function.
 
@@ -529,7 +529,7 @@ Now, we can link the user-defined functions for both Interactions and Events. Fi
     class UserModel(model.ScheduledModel):
       def __init__(self):
         model.ScheduledModel.__init__(self)
-        self.insert_state('Susceptible',None, None,self.p_infection([0.1],probabilityOfInfection_fn,{'Infected':1}),False,0.99)
+        self.insert_state('Susceptible',None, None,self.p_infection({'Infected':1}, probabilityOfInfection_fn, [0.1]),False,0.99)
         self.insert_state('Infected',6,3,self.scheduled({'Recovered':1}),True,0.01)
         self.insert_state('Recovered',0, 0,self.scheduled({'Recovered':1}),False,0)
 
@@ -585,7 +585,7 @@ One can also set up conditions as to who gets infected and how much as well. Thi
     class UserModel(model.ScheduledModel):
       def __init__(self):
         model.ScheduledModel.__init__(self)
-        self.insert_state('Susceptible',None, None,self.p_infection([None,None],None,{'Infected':1}),False,0.99)
+        self.insert_state('Susceptible',None, None,self.p_infection({'Infected':1}),False,0.99)
         self.insert_state('Infected',6,3,self.scheduled({'Recovered':1}),True,0.01)
         self.insert_state('Recovered',0, 0,self.scheduled({'Recovered':1}),False,0)
 

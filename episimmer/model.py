@@ -195,8 +195,12 @@ class BaseModel():
         Args:
             states: List of disease model states that are symptomatic
         """
-        if not isinstance(states, list) or not self.states_checker(states):
+        if not isinstance(states, list):
             raise TypeError(
+                'You must pass a list of valid disease states defined in the model.'
+            )
+        if not self.states_checker(states):
+            raise ValueError(
                 'You must pass a list of valid disease states defined in the model.'
             )
         self.symptomatic_states = states
@@ -373,7 +377,7 @@ class StochasticModel(BaseModel):
         Returns:
             Partial function
         """
-        if not (isinstance(p, int) or isinstance(p, float)):
+        if not isinstance(p, int) and not isinstance(p, float):
             raise TypeError('You must pass an integer or float probability')
 
         elif p < 0.0 or p > 1.0:
@@ -647,9 +651,6 @@ class ScheduledModel(BaseModel):
             if r < p:
                 new_state = state
                 break
-
-        if new_state is None:
-            raise ValueError('Error! State probabilities do not add to 1')
         return new_state
 
     def full_scheduled(self, new_states: Dict[str, float], agent: Agent,
@@ -684,19 +685,19 @@ class ScheduledModel(BaseModel):
         """
         return partial(self.full_scheduled, new_states)
 
-    def full_p_infection(self, fn: Callable,
-                         p_infected_states_list: List[Union[float, None]],
-                         new_states: Dict[str, float], agent: Agent,
-                         agents: Dict[str, Agent]) -> Tuple[str, int]:
+    def full_p_infection(self, new_states: Dict[str, float], fn: Callable,
+                         p_infected_states_list: Union[List[float], None],
+                         agent: Agent, agents: Dict[str,
+                                                    Agent]) -> Tuple[str, int]:
         """
         This function returns a new state from new_states and its scheduled time based on
         all types of interaction between the current agent and other agents.
 
         Args:
+            new_states: A dictionary mapping states to proportions an agent from the current state can transition to
             fn: User-defined function defining the probability of infection based on individual/probabilistic
                 interactions
             p_infected_states_list: List of probabilities that can be used in the user-defined function fn
-            new_states: A dictionary mapping states to proportions an agent from the current state can transition to
             agent: Current agent object
             agents: A dictionary mapping from agent indices to agent objects
 
@@ -713,22 +714,72 @@ class ScheduledModel(BaseModel):
         scheduled_time = self.find_scheduled_time(new_state)
         return new_state, scheduled_time
 
-    def p_infection(self, p_infected_states_list: List[Union[float, None]],
-                    fn: Union[Callable,
-                              None], new_states: Dict[str, float]) -> Callable:
+    def p_infection(
+            self,
+            new_states: Dict[str, float],
+            fn: Union[Callable, None] = None,
+            p_infected_states_list: Union[List[float],
+                                          None] = None) -> Callable:
         """
         This function can be used by the user in ``UserModel.py`` to specify a dependent transition. The transition
-        probability is based on all the types of interactions between the agents.
+        probability is based on all the types of interactions between the agents. It takes three parameters. The first
+        is a dictionary mapping new states to transition proportions. The next two parameters are the same parameters
+        as in the p_infection function of the Stochastic Model. The fn parameter defines the user-defined function for
+        probability of infection from individual and probabilistic interactions and the p_infected_states_list
+        parameter is a list of float probabilities that can be used in the user-defined function. The parameters to be
+        passed in the user-defined function are p_infected_states_list, contact_agent, c_dict and current_time_step.
+        p_infected_states_list is the above-mentioned list of probabilities, contact_agent is the agent that the
+        current agent is in contact with (through an individual or probabilistic interaction), c_dict is a
+        dictionary defining the interaction and current_time_step is the current time step. If you do not have any of
+        these types of interactions, you need not pass the second and third parameters.
         Returns a partial function of :meth:`~full_p_infection`.
 
         Args:
-            p_infected_states_list: List of probabilities that can be used in the user-defined function fn
+            new_states: A dictionary mapping states to proportions an agent from the current state can transition to
             fn: User-defined function defining the probability of infection based on individual/probabilistic
                 interactions
-            new_states: A dictionary mapping states to proportions an agent from the current state can transition to
+            p_infected_states_list: List of probabilities that can be used in the user-defined function fn
 
         Returns:
             A partial function of :meth:`~full_p_infection`
         """
-        return partial(self.full_p_infection, fn, p_infected_states_list,
-                       new_states)
+        if not isinstance(new_states, dict):
+            raise TypeError(
+                'You must pass a dictionary mapping destination states to valid integer or float valued transition'
+                ' proportions')
+        for val in new_states.values():
+            if not isinstance(val, float) and not isinstance(val, int):
+                raise TypeError(
+                    'You must pass a dictionary mapping destination states to valid integer or float valued '
+                    'transition proportions')
+
+        sum_proportion = 0
+        for val in new_states.values():
+            sum_proportion += val
+        if sum_proportion != 1:
+            raise ValueError('Transition proportions do not add up to 1')
+
+        if fn is not None:
+            if not callable(fn) or len(signature(fn).parameters) != 4:
+                raise TypeError(
+                    'You must pass a callable function with the time step parameter'
+                )
+
+        if p_infected_states_list is not None:
+            if not isinstance(p_infected_states_list, list):
+                raise TypeError(
+                    'You must pass a list of float values which can be used in your user-defined function. '
+                    'This is an optional parameter')
+            for val in p_infected_states_list:
+                if not isinstance(val, float):
+                    raise TypeError(
+                        'You must pass a list of float values which can be used in your user-defined '
+                        'function. This is an optional parameter')
+
+        if fn is None and p_infected_states_list is not None:
+            warnings.warn(
+                'You have passed a list but there is no user-defined function passed to use it'
+            )
+
+        return partial(self.full_p_infection, new_states, fn,
+                       p_infected_states_list)

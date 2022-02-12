@@ -25,7 +25,8 @@ class TestModel(unittest.TestCase):
                           lambda x, y, z: 1)
         self.assertRaises(TypeError, base_model.set_external_prevalence_fn, 1)
         base_model.individual_state_types = ['a', 'b', 'c']
-        self.assertRaises(TypeError, base_model.set_symptomatic_states,
+        self.assertRaises(TypeError, base_model.set_symptomatic_states, 1)
+        self.assertRaises(ValueError, base_model.set_symptomatic_states,
                           ['a', 'd'])
 
     def test_update_event_infection(self):
@@ -200,7 +201,40 @@ class TestModel(unittest.TestCase):
         pass
 
     def test_sched_p_infection(self):
-        pass
+        sched_model = ScheduledModel()
+        sched_model.insert_state('Susceptible', None, None,
+                                 sched_model.p_infection({'Infected': 1}),
+                                 False, 0.99)
+        sched_model.insert_state('Infected', 6, 3,
+                                 sched_model.scheduled({'Recovered': 1}), True,
+                                 0.01)
+        sched_model.insert_state('Recovered', 0, 0,
+                                 sched_model.scheduled({'Recovered': 1}),
+                                 False, 0)
+
+        self.assertRaises(TypeError, sched_model.p_infection, [1])
+        self.assertRaises(TypeError, sched_model.p_infection,
+                          {'Infected': 'abc'})
+        self.assertRaises(ValueError, sched_model.p_infection,
+                          {'Infected': 0.99})
+
+        new_states = {'Infected': 1}
+
+        def prob_of_inter_fn(a, b, c, d):
+            return 0.1
+
+        self.assertRaises(TypeError, sched_model.p_infection, new_states,
+                          prob_of_inter_fn, 6)
+        self.assertRaises(TypeError, sched_model.p_infection, new_states,
+                          prob_of_inter_fn, ['abc', 'bcd'])
+
+        def prob_of_inter_fn_inc(a, b, c):
+            return 0.1
+
+        self.assertRaises(TypeError, sched_model.p_infection, new_states,
+                          prob_of_inter_fn_inc)
+        self.assertWarns(UserWarning, sched_model.p_infection, new_states,
+                         None, [0.1, 0.2])
 
 
 if __name__ == '__main__':

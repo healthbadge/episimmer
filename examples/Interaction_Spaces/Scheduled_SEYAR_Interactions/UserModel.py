@@ -21,7 +21,7 @@ def event_receive_fn(agent,ambient_infection,event_info,location,current_time_st
 class UserModel(model.ScheduledModel):
 	def __init__(self):
 		model.ScheduledModel.__init__(self)
-		self.insert_state('Susceptible',None, None,self.p_infection([0.3,0.1],probabilityOfInfection_fn,{'Exposed':1}),False,0.95)
+		self.insert_state('Susceptible',None, None,self.p_infection({'Exposed':1},probabilityOfInfection_fn,[0.3,0.1]),False,0.95)
 		self.insert_state('Exposed',5,2,self.scheduled({'Symptomatic':0.3,'Asymptomatic':0.7}),False,0.02)
 		self.insert_state('Symptomatic',11,5,self.scheduled({'Recovered':1}),True,0.02)
 		self.insert_state('Asymptomatic',6,3,self.scheduled({'Recovered':1}),True,0.01)
