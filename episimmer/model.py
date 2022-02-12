@@ -25,7 +25,7 @@ class BaseModel():
 
         self.individual_state_types: List[str] = []
         self.infected_states: List[str] = []
-        self.state_proportion: Dict[str, float] = {}
+        self.state_proportion: Dict[str, Union[float, int]] = {}
         self.receive_fn: Union[Callable, None] = None
         self.contribute_fn: Union[Callable, None] = None
         self.external_prev_fn: Callable = lambda x, y: 0.0
@@ -104,11 +104,11 @@ class BaseModel():
         """
         if self.contribute_fn is None:
             raise TypeError(
-                'You have included events in your simulation but the disease model does not have the '
+                'events are included in the simulation but the disease model does not have the '
                 'event contribute function set to a Callable function.')
         elif self.receive_fn is None:
             raise TypeError(
-                'You have included events in your simulation but the disease model does not have the '
+                'events are included in the simulation but the disease model does not have the '
                 'event receive function set to a Callable function.')
         ambient_infection = 0
         for agent_index in event_info['_can_contrib']:
@@ -134,7 +134,7 @@ class BaseModel():
         """
         if not callable(fn) or len(signature(fn).parameters) != 4:
             raise TypeError(
-                'You must set the event contribution function to a Callable with the following four parameters : '
+                'The event contribution function must be set to a Callable with the following four parameters : '
                 'agent, event_info, location and time_step.')
         self.contribute_fn = fn
 
@@ -152,7 +152,7 @@ class BaseModel():
         """
         if not callable(fn) or len(signature(fn).parameters) != 5:
             raise TypeError(
-                'You must set the event receive function to a Callable with the following four parameters : '
+                'The event receive function must be set to a Callable with the following four parameters : '
                 'agent, event_info, location and time_step.')
         self.receive_fn = fn
 
@@ -167,7 +167,7 @@ class BaseModel():
         """
         if not callable(fn) or len(signature(fn).parameters) != 2:
             raise TypeError(
-                'You must set the external prevalence function to a Callable with the following two parameters : '
+                'The external prevalence function must be set to a Callable with the following two parameters : '
                 'agent and time_step.')
         self.external_prev_fn = fn
 
@@ -197,11 +197,11 @@ class BaseModel():
         """
         if not isinstance(states, list):
             raise TypeError(
-                'You must pass a list of valid disease states defined in the model.'
+                'A list of valid disease states defined in the model must be passed.'
             )
         if not self.states_checker(states):
             raise ValueError(
-                'You must pass a list of valid disease states defined in the model.'
+                'A list of valid disease states defined in the model must be passed.'
             )
         self.symptomatic_states = states
 
@@ -250,13 +250,13 @@ class StochasticModel(BaseModel):
         state_proportion: Starting proportions of each state
     """
     def __init__(self, individual_state_types: List[str],
-                 infected_states: List[str], state_proportion: Dict[str,
-                                                                    float]):
+                 infected_states: List[str],
+                 state_proportion: Dict[str, Union[float, int]]):
         super().__init__('Stochastic Model')
         self.transmission_prob: Dict[str, Dict[str, Callable]] = {}
         self.infected_states: List[str] = infected_states
         self.individual_state_types: List[str] = individual_state_types
-        self.state_proportion: Dict[str, float] = state_proportion
+        self.state_proportion: Dict[str, Union[float, int]] = state_proportion
 
         for state in individual_state_types:
             if state in infected_states:
@@ -297,11 +297,8 @@ class StochasticModel(BaseModel):
         """
         if not callable(fn) or len(signature(fn).parameters) != 2:
             raise TypeError(
-                'You may pass one of the three callable functions (templates) - p_standard, p_function or '
-                'p_infection. You may also define your own function that takes the following two '
-                'parameters - agent and agents and returns a probability of transition. agent refers to '
-                'the current agent and agents refers to the dictionary mapping from agent '
-                'indices to agent object.')
+                'One of the three callable functions (templates) - p_standard, p_function or '
+                'p_infection must be passed.')
         self.transmission_prob[s1][s2] = fn
 
     def initialize_states(self, agents: Dict[str, Agent]) -> None:
@@ -378,10 +375,10 @@ class StochasticModel(BaseModel):
             Partial function
         """
         if not isinstance(p, int) and not isinstance(p, float):
-            raise TypeError('You must pass an integer or float probability')
+            raise TypeError('p must be an integer or float probability')
 
         elif p < 0.0 or p > 1.0:
-            raise ValueError('You must pass a probability from 0.0 to 1.0')
+            raise ValueError('p must be a probability from 0.0 to 1.0')
 
         return partial(self.full_p_standard, p)
 
@@ -415,7 +412,7 @@ class StochasticModel(BaseModel):
         """
         if not callable(fn) or len(signature(fn).parameters) != 1:
             raise TypeError(
-                'You must pass a callable function with the time step parameter'
+                'A callable function with the time_step parameter must be passed'
             )
         return partial(self.full_p_function, fn)
 
@@ -468,23 +465,19 @@ class StochasticModel(BaseModel):
         if fn is not None:
             if not callable(fn) or len(signature(fn).parameters) != 4:
                 raise TypeError(
-                    'You must pass a callable function with the time step parameter'
+                    'A callable function with the time_step parameter must be passed'
                 )
 
         if p_infected_states_list is not None:
             if not isinstance(p_infected_states_list, list):
-                raise TypeError(
-                    'You must pass a list of float values which can be used in your user-defined function. '
-                    'This is an optional parameter')
+                raise TypeError('A list of float values must be passed.')
             for val in p_infected_states_list:
                 if not isinstance(val, float):
-                    raise TypeError(
-                        'You must pass a list of float values which can be used in your user-defined '
-                        'function. This is an optional parameter')
+                    raise TypeError('A list of float values must be passed.')
 
         if fn is None and p_infected_states_list is not None:
             warnings.warn(
-                'You have passed a list but there is no user-defined function passed to use it'
+                'A list has been passed but there is no user-defined function passed to use it'
             )
 
         return partial(self.full_p_infection, fn, p_infected_states_list)
@@ -500,12 +493,13 @@ class ScheduledModel(BaseModel):
         self.state_transition_fn: Dict[str, Callable] = {}
         self.state_mean: Dict[str, Union[int, None]] = {}
         self.state_vary: Dict[str, Union[int, None]] = {}
-        self.state_proportion: Dict[str, float] = {}
+        self.state_proportion: Dict[str, Union[float, int]] = {}
         self.state_fn: Dict[str, Union[Callable, None]] = {}
 
     def insert_state(self, state: str, mean: Union[int, None],
                      vary: Union[int, None], transition_fn: Callable,
-                     infected_state: bool, proportion: float) -> None:
+                     infected_state: bool, proportion: Union[float,
+                                                             int]) -> None:
         """
         Inserts a state into the model and schedules the agent for this state using a Normal
         distribution. The mean and variance are passed here as parameters to the Normal distribution. The user
@@ -515,6 +509,9 @@ class ScheduledModel(BaseModel):
 
         * :meth:`~p_infection`
 
+        The last two parameters define whether the state is an infected state and the initial proportion of agents
+        belonging to this state.
+
         Args:
             state: The state to be inserted
             mean: The mean parameter of the Normal distribution
@@ -523,6 +520,37 @@ class ScheduledModel(BaseModel):
             infected_state: Defines whether the state is infectious
             proportion: Initial proportion of the state
         """
+        if not isinstance(state, str):
+            raise TypeError('State parameter must be a string.')
+
+        if mean is not None:
+            if not isinstance(mean, int):
+                raise TypeError('Mean parameter must be an integer.')
+
+        if vary is not None:
+            if not isinstance(vary, int):
+                raise TypeError('Variance parameter must be an integer.')
+
+        if not callable(transition_fn) or len(
+                signature(transition_fn).parameters) != 2:
+            raise TypeError(
+                'One of the two callable functions (templates) - scheduled or '
+                'p_infection must be passed.')
+
+        if not isinstance(infected_state, bool):
+            raise TypeError('infected_state parameter must be a boolean value')
+
+        if not isinstance(proportion, float) and not isinstance(
+                proportion, int):
+            raise TypeError(
+                'proportion parameter must be a float or integer value between 0.0 and 1.0'
+            )
+
+        if proportion < 0.0 or proportion > 1.0:
+            raise ValueError(
+                'proportion parameter must be a float or integer value between 0.0 and 1.0'
+            )
+
         if infected_state:
             self.infected_states.append(state)
         self.individual_state_types.append(state)
@@ -536,7 +564,7 @@ class ScheduledModel(BaseModel):
 
     def insert_state_custom(self, state: str, fn: Callable,
                             transition_fn: Callable, infected_state: bool,
-                            proportion: float) -> None:
+                            proportion: Union[float, int]) -> None:
         """
         Inserts a state into the model and schedules the agent for this state using a custom distribution
         specified by the user-defined function. The user must specify one of the following functions for the transition
@@ -546,6 +574,9 @@ class ScheduledModel(BaseModel):
 
         * :meth:`~p_infection`
 
+        The last two parameters define whether the state is an infected state and the initial proportion of agents
+        belonging to this state.
+
         Args:
             state: The state to be inserted
             fn: User-defined function that encodes the scheduled time step for transition
@@ -553,8 +584,35 @@ class ScheduledModel(BaseModel):
             infected_state: Defines whether the state is infectious
             proportion: Initial proportion of the state
         """
-        if infected_state:
+        if not isinstance(state, str):
+            raise TypeError('State parameter must be a string.')
 
+        if not callable(fn) or len(signature(fn).parameters) != 1:
+            raise TypeError(
+                'fn must be a callable function with the time_step parameter representing the current'
+                'time step.')
+
+        if not callable(transition_fn) or len(
+                signature(transition_fn).parameters) != 2:
+            raise TypeError(
+                'One of the two callable functions (templates) - scheduled or '
+                'p_infection must be passed.')
+
+        if not isinstance(infected_state, bool):
+            raise TypeError('infected_state parameter must be a boolean value')
+
+        if not isinstance(proportion, float) and not isinstance(
+                proportion, int):
+            raise TypeError(
+                'proportion parameter must be a float or integer value between 0.0 and 1.0'
+            )
+
+        if proportion < 0.0 or proportion > 1.0:
+            raise ValueError(
+                'proportion parameter must be a float or integer value between 0.0 and 1.0'
+            )
+
+        if infected_state:
             self.infected_states.append(state)
         self.individual_state_types.append(state)
         self.state_transition_fn[state] = transition_fn
@@ -674,7 +732,8 @@ class ScheduledModel(BaseModel):
     def scheduled(self, new_states: Dict[str, float]) -> Callable:
         """
         This function can be used by the user in ``UserModel.py`` to specify an independent transition. The transition
-        will occur based on a calculated scheduled time of stay for the state.
+        will occur based on a calculated scheduled time of stay for the state. The only parameter required here is
+        a dictionary mapping new states to transition proportions.
         Returns a partial function of :meth:`~full_scheduled`.
 
         Args:
@@ -683,6 +742,28 @@ class ScheduledModel(BaseModel):
         Returns:
             A partial function of :meth:`~full_scheduled`
         """
+        if not isinstance(new_states, dict):
+            raise TypeError(
+                'A dictionary mapping destination states to valid integer or float valued transition'
+                ' proportions must be passed')
+
+        for key in new_states.keys():
+            if not isinstance(key, str):
+                raise TypeError(
+                    'A dictionary mapping destination states (string) to valid integer or float valued '
+                    'transition proportions must be passed')
+        for val in new_states.values():
+            if not isinstance(val, float) and not isinstance(val, int):
+                raise TypeError(
+                    'A dictionary mapping destination states to valid integer or float valued '
+                    'transition proportions must be passed')
+
+        sum_proportion = 0
+        for val in new_states.values():
+            sum_proportion += val
+        if sum_proportion != 1:
+            raise ValueError('Transition proportions do not add up to 1')
+
         return partial(self.full_scheduled, new_states)
 
     def full_p_infection(self, new_states: Dict[str, float], fn: Callable,
@@ -745,13 +826,19 @@ class ScheduledModel(BaseModel):
         """
         if not isinstance(new_states, dict):
             raise TypeError(
-                'You must pass a dictionary mapping destination states to valid integer or float valued transition'
-                ' proportions')
+                'A dictionary mapping destination states to valid integer or float valued transition'
+                ' proportions must be passed')
+
+        for key in new_states.keys():
+            if not isinstance(key, str):
+                raise TypeError(
+                    'A dictionary mapping destination states (string) to valid integer or float valued '
+                    'transition proportions must be passed')
         for val in new_states.values():
             if not isinstance(val, float) and not isinstance(val, int):
                 raise TypeError(
-                    'You must pass a dictionary mapping destination states to valid integer or float valued '
-                    'transition proportions')
+                    'A dictionary mapping destination states to valid integer or float valued '
+                    'transition proportions must be passed')
 
         sum_proportion = 0
         for val in new_states.values():
@@ -762,23 +849,19 @@ class ScheduledModel(BaseModel):
         if fn is not None:
             if not callable(fn) or len(signature(fn).parameters) != 4:
                 raise TypeError(
-                    'You must pass a callable function with the time step parameter'
+                    'A callable function with the time step parameter must be passed'
                 )
 
         if p_infected_states_list is not None:
             if not isinstance(p_infected_states_list, list):
-                raise TypeError(
-                    'You must pass a list of float values which can be used in your user-defined function. '
-                    'This is an optional parameter')
+                raise TypeError('A list of float values must be passed')
             for val in p_infected_states_list:
                 if not isinstance(val, float):
-                    raise TypeError(
-                        'You must pass a list of float values which can be used in your user-defined '
-                        'function. This is an optional parameter')
+                    raise TypeError('A list of float values must be passed')
 
         if fn is None and p_infected_states_list is not None:
             warnings.warn(
-                'You have passed a list but there is no user-defined function passed to use it'
+                'A list has been passed but there is no user-defined function passed to use it'
             )
 
         return partial(self.full_p_infection, new_states, fn,

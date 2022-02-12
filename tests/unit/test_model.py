@@ -131,14 +131,6 @@ class TestModel(unittest.TestCase):
         stoch_model.set_transition('Recovered', 'Susceptible',
                                    stoch_model.p_function(p_func))
 
-        def custom_prob_of_trans(agent, agents):
-            if agent.index == 1:
-                return 0.8
-            else:
-                return 0.1
-
-        stoch_model.set_transition('Recovered', 'Susceptible',
-                                   custom_prob_of_trans)
         self.assertRaises(TypeError, stoch_model.set_transition, 'Susceptible',
                           'Recovered', 1.0)
 
@@ -192,29 +184,67 @@ class TestModel(unittest.TestCase):
                          [0.1, 0.2])
 
     def test_sched_insert_state(self):
-        pass
+        sched_model = ScheduledModel()
+        self.assertRaises(TypeError, sched_model.insert_state, 1, None, None,
+                          sched_model.scheduled({'2': 1}), False, 0)
+        self.assertRaises(TypeError, sched_model.insert_state,
+                          'Infected', 1.1, 2.2,
+                          sched_model.scheduled({'Recovered': 1}), True, 0.1)
+        self.assertRaises(TypeError, sched_model.insert_state, 'Infected', 1,
+                          2, 10, False, 0.1)
+        self.assertRaises(TypeError, sched_model.insert_state, 'Infected', 1,
+                          2, sched_model.scheduled({'Recovered': 1}), 9, 0.1)
+        self.assertRaises(ValueError, sched_model.insert_state,
+                          'Infected', 1, 2,
+                          sched_model.scheduled({'Recovered': 1}), True, 1.1)
+        self.assertRaises(ValueError, sched_model.insert_state,
+                          'Infected', 1, 2,
+                          sched_model.scheduled({'Recovered': 1}), True, -0.1)
 
     def test_sched_insert_state_custom(self):
-        pass
+        sched_model = ScheduledModel()
+
+        def fn(time_step):
+            if time_step < 10:
+                return 1
+
+            else:
+                return 3
+
+        self.assertRaises(TypeError, sched_model.insert_state_custom, 1, fn,
+                          sched_model.scheduled({'2': 1}), False, 0)
+        self.assertRaises(TypeError, sched_model.insert_state_custom,
+                          'Infected', 12,
+                          sched_model.scheduled({'Recovered': 1}), True, 0.1)
+        self.assertRaises(TypeError, sched_model.insert_state_custom,
+                          'Infected', fn, 10, False, 0.1)
+        self.assertRaises(TypeError, sched_model.insert_state_custom,
+                          'Infected', fn,
+                          sched_model.scheduled({'Recovered': 1}), 9, 0.1)
+        self.assertRaises(ValueError, sched_model.insert_state_custom,
+                          'Infected', fn,
+                          sched_model.scheduled({'Recovered': 1}), True, 1.1)
+        self.assertRaises(ValueError, sched_model.insert_state_custom,
+                          'Infected', fn,
+                          sched_model.scheduled({'Recovered': 1}), True, -0.1)
 
     def test_sched_scheduled(self):
-        pass
+        sched_model = ScheduledModel()
+
+        self.assertRaises(TypeError, sched_model.scheduled, [1])
+        self.assertRaises(TypeError, sched_model.scheduled,
+                          {'Infected': 'abc'})
+        self.assertRaises(TypeError, sched_model.scheduled, {1: 1})
+        self.assertRaises(ValueError, sched_model.scheduled,
+                          {'Infected': 0.99})
 
     def test_sched_p_infection(self):
         sched_model = ScheduledModel()
-        sched_model.insert_state('Susceptible', None, None,
-                                 sched_model.p_infection({'Infected': 1}),
-                                 False, 0.99)
-        sched_model.insert_state('Infected', 6, 3,
-                                 sched_model.scheduled({'Recovered': 1}), True,
-                                 0.01)
-        sched_model.insert_state('Recovered', 0, 0,
-                                 sched_model.scheduled({'Recovered': 1}),
-                                 False, 0)
 
         self.assertRaises(TypeError, sched_model.p_infection, [1])
         self.assertRaises(TypeError, sched_model.p_infection,
                           {'Infected': 'abc'})
+        self.assertRaises(TypeError, sched_model.p_infection, {1: 1})
         self.assertRaises(ValueError, sched_model.p_infection,
                           {'Infected': 0.99})
 

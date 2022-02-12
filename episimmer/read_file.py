@@ -71,8 +71,7 @@ class ReadConfiguration():
 
         if 'Agent Index' not in self.agent_info_keys.split(':'):
             raise Exception(
-                "Error! Agent file  does not contain parameter \'Agent Index\'"
-            )
+                "Error! Agent file does not contain parameter \'Agent Index\'")
 
         if self.interaction_info_keys.split(':') != ['']:
             if (self.probabilistic_interactions_files_list_list != [''] and self.interactions_files_list_list != ['']) \
