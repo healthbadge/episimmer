@@ -11,7 +11,7 @@ def generate_policy():
     policy_list=[]
     Normal_Test1 = testing_policy.TestPolicy(agents_per_step_fn)
     Normal_Test1.add_machine('Simple_Machine', 200, 0.0, 0.0, 0, 50, 3, 2)
-    Normal_Test1.set_register_agent_testtube_func(Normal_Test1.random_agents(1,1))
+    Normal_Test1.set_register_agent_testtube_func(Normal_Test1.random_normal_testing())
 
     Normal_Test2 = testing_policy.TestPolicy(agents_per_step_fn)
     Normal_Test2.add_machine('Simple_Machine', 200, 0.0, 0.0, 0, 50, 3, 2)

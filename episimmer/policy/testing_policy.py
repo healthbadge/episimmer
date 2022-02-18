@@ -583,6 +583,7 @@ class TestPolicy(AgentPolicy):
             self.cur_testtubes.append(testtube)
 
         # Assign agents to testtubes and populate ready queue
+        #print("agents to test", agents_to_test)
         for agent in agents_to_test:
             if len(self.cur_testtubes) > 0:
                 cur_list = random.sample(
@@ -597,6 +598,17 @@ class TestPolicy(AgentPolicy):
                         self.cur_testtubes.remove(testtube)
             else:
                 break
+
+    def check_agent_tested(self, agent: Agent, time_step: int):
+        history = agent.get_policy_history('Testing')
+        if len(history):
+            last_time_step = history[-1].time_step
+            validity_period = history[-1].valid_period
+            if time_step - last_time_step < validity_period:
+                return True
+            else:
+                return False
+        return None
 
     def full_random_agents(self, num_agents_per_testtube: int,
                            num_testtubes_per_agent: int,
@@ -632,13 +644,15 @@ class TestPolicy(AgentPolicy):
 
             elif attribute is None or agent.info[attribute] in value_list:
                 if not only_symptomatic or agent.state in model.symptomatic_states:
-                    agents_to_test.append(agent)
+                    #if (self.check_agent_tested(agent) is not None) and (not self.check_agent_tested(agent)):
+                    if not self.check_agent_tested(agent, time_step):
+                        agents_to_test.append(agent)
 
         print('Added by random testing:', agents_to_test)
         self.populate_test_queue(agents_to_test, num_agents_per_testtube,
                                  num_testtubes_per_agent, time_step)
 
-    def random_agents(self,
+    def random_pool_testing(self,
                       num_agents_per_testtube: int = 1,
                       num_testtubes_per_agent: int = 1,
                       only_symptomatic: bool = False,
@@ -668,6 +682,34 @@ class TestPolicy(AgentPolicy):
                        num_testtubes_per_agent, only_symptomatic, attribute,
                        value_list)
 
+    def random_normal_testing(self,
+                      only_symptomatic: bool = False,
+                      attribute: Union[str, None] = None,
+                      value_list: List[str] = []) -> Callable:
+        """
+        This function can be used by the user in ``Generate_policy.py`` to specify random agents to be tested. This
+        function can handle normal or pool testing. Normal testing refers to testing a single agent once i.e. A
+        single agent's sample present in a single testtube, or, pool testing where you may have multiple agents in a
+        testtube defined by the num_agents_per_testtube parameter and multiple testtubes for an agent defined by the
+        num_testtubes_per_agent parameter. If symptomatic states are defined in the disease model in the
+        ``UserModel.py`` file, then you may also only test symptomatic agents. This function returns a partial
+        function of :meth:`~full_random_agents`.
+
+        Args:
+            num_agents_per_testtube: Number of agents per testtube (NAPT)
+            num_testtubes_per_agent: Number of testtubes per agent (NAPT)
+            only_symptomatic: Choose whether to only select symptomatic agents or not (If set to True, you must have
+                              symptomatic states set in ``UserModel.py``)
+            attribute: Parameter (attribute) type of agents
+            value_list: List of attribute values of agents
+
+        Returns:
+            Partial function of :meth:`~full_random_agents`
+        """
+        return partial(self.full_random_agents, 1,
+                       1, only_symptomatic, attribute,
+                       value_list)
+
     def full_contacts_agents(self, num_agents_per_testtube: int,
                              num_testtubes_per_agent: int,
                              attribute: Union[str, None],
@@ -693,13 +735,17 @@ class TestPolicy(AgentPolicy):
                         contacts += CTPolicy.get_contact_list(
                             agent, policy_index)
                         contacts = list(dict.fromkeys(contacts))
+                    #contacts = [agents[c] for c in contacts if (self.check_agent_tested(agents[c]) is not None) and (not self.check_agent_tested(agents[c]))]
+                    contacts_agent_obj = []
+                    for c in contacts:
+                        contacts_agent_obj.append(agents[c]) 
+                    contacts_not_tested = [c for c in contacts_agent_obj if not self.check_agent_tested(c, time_step)]
                     capacity = self.num_agents_to_test - len(agents_to_test)
-                    if len(contacts) <= capacity:
-                        agents_to_test += [agents[c] for c in contacts]
+                    if len(contacts_not_tested) <= capacity:
+                        agents_to_test += contacts_not_tested
                     else:
-                        agents_to_test += [
-                            agents[c] for c in contacts[:capacity]
-                        ]
+                        agents_to_test += contacts_not_tested[:capacity]
+                        
 
         print('Contact testing:', agents_to_test)
         self.populate_test_queue(agents_to_test, num_agents_per_testtube,
@@ -922,3 +968,11 @@ class TestPolicy(AgentPolicy):
                     history, last_time_step)
                 return result
         return None
+
+
+'''
+validity of test: this will be passed from generate policy. if the agent's test is still within its validity, 
+it should not be added for random testing or contact testing. valid period- parameter in add_machine
+
+functionsa thng: 
+'''
