@@ -16,8 +16,9 @@ from .read_file import (ReadAgents, ReadConfiguration, ReadEvents,
 from .simulate import Simulate
 from .vulnerability_detection import (VD, AgentVD, AgentVulnerability,
                                       BanditAlgos, ChunkAgentVulnerability,
-                                      EarlyVulnerableAgent,
+                                      EarlyVulnerableAgent, EventVD,
                                       SimpleAgentVulnerability,
+                                      SimpleEventVulnerability,
                                       SimpleVulnerableAgent, VulnerableAgent)
 from .world import World
 
