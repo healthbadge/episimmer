@@ -1,2 +1,0 @@
-<empty_interactions.txt>
-<simple_interactions.txt>

@@ -636,7 +636,6 @@ class TestPolicy(AgentPolicy):
                     if TestPolicy.is_agent_test_ready(agent, time_step):
                         agents_to_test.append(agent)
 
-        print('Added by random testing:', agents_to_test)
         self.populate_test_queue(agents_to_test, num_agents_per_testtube,
                                  num_testtubes_per_agent, time_step)
 
@@ -706,7 +705,6 @@ class TestPolicy(AgentPolicy):
                     else:
                         agents_to_test += valid_contacts[:capacity]
 
-        print('Contact testing:', agents_to_test)
         self.populate_test_queue(agents_to_test, num_agents_per_testtube,
                                  num_testtubes_per_agent, time_step)
 

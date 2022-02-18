@@ -1,4 +1,4 @@
-4
+100
 Agent Index:Type
 0:Student
 1:Teacher
