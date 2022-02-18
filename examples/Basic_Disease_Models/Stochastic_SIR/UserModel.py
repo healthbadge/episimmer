@@ -25,11 +25,11 @@ class UserModel(model.StochasticModel):
 							'Recovered':0
 						}
 		model.StochasticModel.__init__(self,individual_types,infected_states,state_proportion)  #We use the inbuilt model in the package
-		self.set_transition('Susceptible', 'Infected', self.p_infection())	#Adding S-> I transition which is redundant in this case as we use the event_contribute and event_receive function
-		self.set_transition('Infected', 'Recovered', self.p_standard(0.2))	#Adding the I->R transition
+		self.set_transition('Susceptible', 'Infected', self.p_infection())	#Adding S-> I dependent transition
+		self.set_transition('Infected', 'Recovered', self.p_standard(0.2))	#Adding the I->R independent transition
 
 
-		self.set_event_contribution_fn(event_contribute_fn)	#Setting the above defined function into the model
-		self.set_event_receive_fn(event_receive_fn)	#Setting the above defined function into the model
+		self.set_event_contribution_fn(event_contribute_fn)
+		self.set_event_receive_fn(event_receive_fn)
 
 		self.name='Stochastic SIR'

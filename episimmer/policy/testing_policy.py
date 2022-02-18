@@ -1,5 +1,6 @@
 import copy
 import json
+import math
 import random
 from collections import deque
 from functools import partial
@@ -10,6 +11,7 @@ from episimmer.location import Location
 from episimmer.model import BaseModel
 
 from .base import AgentPolicy
+from .contact_tracing_policy import CTPolicy
 
 
 class TestResult():
@@ -23,15 +25,18 @@ class TestResult():
         time_step: Time step agent tested
         machine_start_step: Time step machine started testing
         time_step_done: Time step machine completed test
+        valid_period: Number of time steps the test is considered to be valid
     """
     def __init__(self, result: str, agent: Agent, machine_name: str,
-                 time_step: int, machine_start_step: int, time_step_done: int):
+                 time_step: int, machine_start_step: int, time_step_done: int,
+                 valid_period: int):
         self.result: str = result
         self.agent: Agent = agent
         self.machine_name: str = machine_name
         self.time_step: int = time_step
         self.machine_start_step: int = machine_start_step
         self.time_step_done: int = time_step_done
+        self.valid_period: int = valid_period
 
     def get_machine_name(self) -> str:
         """
@@ -148,10 +153,11 @@ class Machine():
         false_negative_rate: False negative rate of the machine
         turnaround_time: Time taken for a test result
         capacity: Capacity of the machine for tests
+        valid_period: Number of time steps the test is considered to be valid
     """
     def __init__(self, machine_name: str, cost: int,
                  false_positive_rate: float, false_negative_rate: float,
-                 turnaround_time: int, capacity: int):
+                 turnaround_time: int, capacity: int, valid_period: int):
         self.machine_name: str = machine_name
         self.cost: int = cost
         self.false_positive_rate: float = false_positive_rate
@@ -160,6 +166,7 @@ class Machine():
         self.true_negative_rate: float = 1 - self.false_positive_rate
         self.turnaround_time: int = turnaround_time
         self.capacity: int = capacity
+        self.valid_period: int = valid_period
         self.testtubes: List[TestTube] = []
         self.results: List[TestResult] = []
         self.available: bool = True
@@ -309,7 +316,8 @@ class Machine():
                 'time_step']
             result_obj = TestResult(testtube.testtube_result, agent,
                                     self.machine_name, time_step_entered,
-                                    self.start_step, time_step)
+                                    self.start_step, time_step,
+                                    self.valid_period)
             self.results.append(result_obj)
 
     def get_results(self) -> List[TestResult]:
@@ -395,7 +403,7 @@ class TestPolicy(AgentPolicy):
         self.new_time_step(time_step)
         self.populate_results_in_machine(time_step)
         self.release_results(time_step)
-        self.register_agent_testtube_func(agents.values(), time_step, model)
+        self.register_agent_testtube_func(agents, time_step, model)
         self.add_partial_to_ready_queue()
         self.register_testtubes_to_machines()
         self.run_tests(model, time_step)
@@ -421,7 +429,7 @@ class TestPolicy(AgentPolicy):
         Registers the function that determines how agents are mapped to testtubes.
         The user must specify one of the following functions
 
-        * :meth:`~random_agents`
+        * :meth:`~random_testing`
 
         Args:
             fn: Function that determines the type of testing to be performed
@@ -435,6 +443,7 @@ class TestPolicy(AgentPolicy):
                     false_negative_rate: float,
                     turnaround_time: int,
                     capacity: int,
+                    valid_period: int,
                     num: int = 1) -> None:
         """
         This function enables the user to add a machine. A machine must be defined as it performs the testing
@@ -447,6 +456,7 @@ class TestPolicy(AgentPolicy):
             false_negative_rate: False negative rate of the machine
             turnaround_time: Time taken for a test result
             capacity: Capacity of the machine for tests
+            valid_period: Number of time steps the test is considered to be valid
             num: Number of instances of this machine
         """
         if machine_name in self.current_machines.keys():
@@ -470,7 +480,7 @@ class TestPolicy(AgentPolicy):
             self.current_machines[machine_name] = {
                 'parameters': [
                     cost, false_positive_rate, false_negative_rate,
-                    turnaround_time, capacity
+                    turnaround_time, capacity, valid_period
                 ],
                 'number':
                 num
@@ -479,7 +489,8 @@ class TestPolicy(AgentPolicy):
             for i in range(num):
                 self.machine_list.append(
                     Machine(machine_name, cost, false_positive_rate,
-                            false_negative_rate, turnaround_time, capacity))
+                            false_negative_rate, turnaround_time, capacity,
+                            valid_period))
 
     def initialize_statistics_logs(self, time_step: int) -> None:
         """
@@ -587,11 +598,12 @@ class TestPolicy(AgentPolicy):
             else:
                 break
 
-    def full_random_agents(self, num_agents_per_testtube: int,
-                           num_testtubes_per_agent: int,
-                           only_symptomatic: bool, attribute: Union[str, None],
-                           value_list: List[str], agents: ValuesView[Agent],
-                           time_step: int, model: BaseModel) -> None:
+    def full_random_testing(self, num_agents_per_testtube: int,
+                            num_testtubes_per_agent: int,
+                            only_symptomatic: bool, attribute: Union[str,
+                                                                     None],
+                            value_list: List[str], agents: Dict[str, Agent],
+                            time_step: int, model: BaseModel) -> None:
         """
         Agents are first selected for testing and added to a list based on the number of agents to test in the
         current time step, agent parameters (if given) and symptomatic states (if set to True). Then, the test ready
@@ -609,7 +621,7 @@ class TestPolicy(AgentPolicy):
             model: Disease model specified by the user
 
         """
-        agents_copy = copy.copy(list(agents))
+        agents_copy = copy.copy(list(agents.values()))
         random.shuffle(agents_copy)
 
         # Get agents for test
@@ -621,17 +633,18 @@ class TestPolicy(AgentPolicy):
 
             elif attribute is None or agent.info[attribute] in value_list:
                 if not only_symptomatic or agent.state in model.symptomatic_states:
-                    agents_to_test.append(agent)
+                    if TestPolicy.is_agent_test_ready(agent, time_step):
+                        agents_to_test.append(agent)
 
         self.populate_test_queue(agents_to_test, num_agents_per_testtube,
                                  num_testtubes_per_agent, time_step)
 
-    def random_agents(self,
-                      num_agents_per_testtube: int = 1,
-                      num_testtubes_per_agent: int = 1,
-                      only_symptomatic: bool = False,
-                      attribute: Union[str, None] = None,
-                      value_list: List[str] = []) -> Callable:
+    def random_testing(self,
+                       num_agents_per_testtube: int = 1,
+                       num_testtubes_per_agent: int = 1,
+                       only_symptomatic: bool = False,
+                       attribute: Union[str, None] = None,
+                       value_list: List[str] = []) -> Callable:
         """
         This function can be used by the user in ``Generate_policy.py`` to specify random agents to be tested. This
         function can handle normal or pool testing. Normal testing refers to testing a single agent once i.e. A
@@ -639,7 +652,7 @@ class TestPolicy(AgentPolicy):
         testtube defined by the num_agents_per_testtube parameter and multiple testtubes for an agent defined by the
         num_testtubes_per_agent parameter. If symptomatic states are defined in the disease model in the
         ``UserModel.py`` file, then you may also only test symptomatic agents. This function returns a partial
-        function of :meth:`~full_random_agents`.
+        function of :meth:`~full_random_testing`.
 
         Args:
             num_agents_per_testtube: Number of agents per testtube (NAPT)
@@ -650,11 +663,58 @@ class TestPolicy(AgentPolicy):
             value_list: List of attribute values of agents
 
         Returns:
-            Partial function of :meth:`~full_random_agents`
+            Partial function of :meth:`~full_random_testing`
         """
-        return partial(self.full_random_agents, num_agents_per_testtube,
+        return partial(self.full_random_testing, num_agents_per_testtube,
                        num_testtubes_per_agent, only_symptomatic, attribute,
                        value_list)
+
+    def full_contact_testing(self, num_agents_per_testtube: int,
+                             num_testtubes_per_agent: int,
+                             attribute: Union[str, None],
+                             value_list: List[str], agents: Dict[str, Agent],
+                             time_step: int, model: BaseModel) -> None:
+
+        agents_copy = copy.copy(list(agents.values()))
+        random.shuffle(agents_copy)
+
+        # Get agents for test
+        agents_to_test = []
+        for agent in agents_copy:
+
+            if len(agents_to_test) == self.num_agents_to_test:
+                break
+
+            elif attribute is None or agent.info[attribute] in value_list:
+                if TestPolicy.get_agent_test_result(agent,
+                                                    time_step) == 'Positive':
+                    contacts = []
+                    policy_index_list = CTPolicy.get_policy_index_list(agent)
+                    for policy_index in policy_index_list:
+                        contacts += CTPolicy.get_contact_list(
+                            agent, policy_index)
+                        contacts = list(dict.fromkeys(contacts))
+                    valid_contacts = [
+                        agents[c] for c in contacts
+                        if TestPolicy.is_agent_test_ready(
+                            agents[c], time_step)
+                    ]
+                    capacity = self.num_agents_to_test - len(agents_to_test)
+                    if len(valid_contacts) <= capacity:
+                        agents_to_test += valid_contacts
+                    else:
+                        agents_to_test += valid_contacts[:capacity]
+
+        self.populate_test_queue(agents_to_test, num_agents_per_testtube,
+                                 num_testtubes_per_agent, time_step)
+
+    def contact_testing(self,
+                        num_agents_per_testtube: int = 1,
+                        num_testtubes_per_agent: int = 1,
+                        attribute: Union[str, None] = None,
+                        value_list: List[str] = []) -> Callable:
+        return partial(self.full_contact_testing, num_agents_per_testtube,
+                       num_testtubes_per_agent, attribute, value_list)
 
     def add_partial_to_ready_queue(self) -> None:
         """
@@ -843,15 +903,14 @@ class TestPolicy(AgentPolicy):
         return 'Positive'
 
     @staticmethod
-    def get_agent_test_result(agent: Agent, time_step: int,
-                              time_period: int) -> Union[str, None]:
+    def get_agent_test_result(agent: Agent,
+                              time_step: int) -> Union[str, None]:
         """
         Returns the most recent test result of an agent (if it exists).
 
         Args:
             agent: Current Agent
             time_step: Current time step
-            time_period: Time period of validity of test
 
         Returns:
             A string either "Positive" or "Negative" representing the most recent test result of the agent. None if no
@@ -860,8 +919,16 @@ class TestPolicy(AgentPolicy):
         history = agent.get_policy_history('Testing')
         if len(history):
             last_time_step = history[-1].time_step
-            if time_step - last_time_step < time_period:
+            validity_period = history[-1].valid_period
+            if time_step - last_time_step < validity_period:
                 result = TestPolicy.get_accumulated_test_result(
                     history, last_time_step)
                 return result
         return None
+
+    @staticmethod
+    def is_agent_test_ready(agent: Agent, time_step: int) -> bool:
+        if TestPolicy.get_agent_test_result(agent, time_step) is None:
+            return True
+
+        return False

@@ -3,9 +3,6 @@ import math
 import episimmer.model as model
 
 
-#User defined functions
-#This function is user defined, based on the parameters the user has inputed in agents file and interaction/contact file
-#This function represents the probability of getting infected during a single interaction/contact
 def probability_of_infection_fn(p_infected_states_list,contact_agent,c_dict,current_time_step):
 
 	p_inf_symp,p_inf_asymp=p_infected_states_list[0],p_infected_states_list[1]

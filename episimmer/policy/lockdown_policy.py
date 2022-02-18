@@ -88,7 +88,6 @@ class AgentLockdown(AgentLockdownPolicy):
         super().__init__(do_lockdown_fn, p)
         self.attribute: str = attribute
         self.value_list: List[str] = value_list
-        super().__init__(do_lockdown_fn, p)
 
     def enact_policy(self,
                      time_step: int,
@@ -122,17 +121,17 @@ class TestingBasedLockdown(AgentLockdownPolicy):
 
     Args:
         do_lockdown_fn: User-defined function to specify which time steps to enforce lockdown in
-        time_period: Number of time steps for which an agent has to lock down
+        lockdown_period: Number of time steps for which an agent has to lock down
         contact_tracing: Boolean specifying whether lockdown for contacts of positively tested agents is enabled or not
         p: Probability of agent to contribute and receive infection from any source of infection under lockdown
     """
     def __init__(self,
                  do_lockdown_fn: Callable,
-                 time_period: int,
+                 lockdown_period: int,
                  contact_tracing: bool = False,
                  p: float = 0.0):
         super().__init__(do_lockdown_fn, p)
-        self.time_period: int = time_period
+        self.lockdown_period: int = lockdown_period
         self.contact_tracing: bool = contact_tracing
 
     def enact_policy(self,
@@ -172,9 +171,7 @@ class TestingBasedLockdown(AgentLockdownPolicy):
             time_step: Current time step
         """
         for agent in agents.values():
-            result = TestPolicy.get_agent_test_result(
-                agent, time_step, self.time_period)  # The number of time steps
-            # an agent must be lockdown is considered to be the same as the number of time steps a test is valid.
+            result = TestPolicy.get_agent_test_result(agent, time_step)
             if result == 'Positive':
                 self.lockdown_agent(agent)
                 if self.contact_tracing:
@@ -185,7 +182,7 @@ class TestingBasedLockdown(AgentLockdownPolicy):
                         if contacts:
                             CTPolicy.set_contacts_schedule_time(
                                 agents, contacts, policy_index,
-                                self.time_period)
+                                self.lockdown_period)
 
     def lockdown_contacts(self, agents: Dict[str, Agent]) -> None:
         """

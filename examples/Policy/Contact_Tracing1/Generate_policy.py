@@ -10,8 +10,8 @@ def agents_per_step_fn(cur_time_step):
 def generate_policy():
     policy_list=[]
     Normal_Test = testing_policy.TestPolicy(agents_per_step_fn)
-    Normal_Test.add_machine('Simple_Machine', 200, 0.0, 0.0, 0, 50, 2)
-    Normal_Test.set_register_agent_testtube_func(Normal_Test.random_agents(1,1))
+    Normal_Test.add_machine('Simple_Machine', 200, 0.0, 0.0, 0, 50, 3, 2)
+    Normal_Test.set_register_agent_testtube_func(Normal_Test.random_testing())
 
     # Num of timesteps to store agents
     CT_object = contact_tracing_policy.CTPolicy(7, 'Type', ['Teacher'])

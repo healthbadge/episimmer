@@ -26,6 +26,15 @@ class Agent():
                                                     object]]] = {}
         self.initialize_policy_dict()
 
+    def __repr__(self) -> str:
+        """
+        Shows the representation of the object as the string index
+
+        Returns:
+            The index of agent
+        """
+        return str(self.index)
+
     def initialize_state(self,
                          state: str,
                          schedule_time_left: Union[int, None] = None) -> None:
