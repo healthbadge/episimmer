@@ -47,7 +47,7 @@ class BaseModel():
             proportion_sum += p
         if proportion_sum != 1:
             raise ValueError(
-                "Error! Starting state proportions don't add up to 1")
+                'Error! Starting state proportions don\'t add up to 1')
 
     def initialize_states(self, agents: Dict[str, Agent]) -> None:
         """
@@ -310,6 +310,12 @@ class BaseModel():
             agent: Current agent object
             agents: A dictionary mapping from agent indices to agent objects
         """
+        if agent.contact_list and fn is None:
+            raise TypeError(
+                'The environment has one-to-one interactions but a function to handle them has not been '
+                'passed. A callable must be passed as parameter to the dependent function.'
+            )
+
         p_not_inf = 1
         for c_dict in agent.contact_list:
             contact_index = c_dict['Interacting Agent Index']
@@ -809,7 +815,7 @@ class ScheduledModel(BaseModel):
 
         if not callable(fn) or len(signature(fn).parameters) != 1:
             raise TypeError(
-                'fn must be a callable function with the time_step parameter representing the current'
+                'fn must be a callable function with the time_step parameter representing the current '
                 'time step.')
 
         if not callable(transition_fn) or len(

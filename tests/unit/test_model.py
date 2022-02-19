@@ -89,6 +89,9 @@ class TestModel(unittest.TestCase):
             'Interacting Agent Index': '0'
         }]
 
+        self.assertRaises(TypeError, base_model.get_final_infection_prob, None,
+                          None, agent0, agents)
+
         def interactions_fn(p_infected_states_list, contact_agent, c_dict,
                             time_step):
             return 0.2
