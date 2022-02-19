@@ -647,10 +647,10 @@ class TestPolicy(AgentPolicy):
                        value_list: List[str] = []) -> Callable:
         """
         This function can be used by the user in ``Generate_policy.py`` to specify random agents to be tested. This
-        function can handle normal or pool testing. Normal testing refers to testing a single agent once i.e. A
-        single agent's sample present in a single testtube, or, pool testing where you may have multiple agents in a
-        testtube defined by the num_agents_per_testtube parameter and multiple testtubes for an agent defined by the
-        num_testtubes_per_agent parameter. If symptomatic states are defined in the disease model in the
+        function can handle normal or pool testing. Normal testing refers to testing a single agent
+        once i.e. A single agent's sample present in a single testtube. Pool testing refers to having multiple agents
+        in a testtube defined by the num_agents_per_testtube parameter and multiple testtubes for an agent defined by
+        the num_testtubes_per_agent parameter. If symptomatic states are defined in the disease model in the
         ``UserModel.py`` file, then you may also only test symptomatic agents. This function returns a partial
         function of :meth:`~full_random_testing`.
 
@@ -674,7 +674,22 @@ class TestPolicy(AgentPolicy):
                              attribute: Union[str, None],
                              value_list: List[str], agents: Dict[str, Agent],
                              time_step: int, model: BaseModel) -> None:
+        """
+        Agents are first checked for positive history of testing and then contacts of the positive agents are selected
+        for testing. They are added to a list based on the number of agents to test in the
+        current time step, agent parameters (if given) and symptomatic states (if set to True). Then, the test ready
+        queue is populated.
 
+        Args:
+            num_agents_per_testtube: Number of agents per testtube (NAPT)
+            num_testtubes_per_agent: Number of testtubes per agent (NTPA)
+            attribute: Parameter (attribute) type of agents
+            value_list: List of attribute values of agents
+            agents: Collection of :class:`~episimmer.agent.Agent` objects
+            time_step: Current time step
+            model: Disease model specified by the user
+
+        """
         agents_copy = copy.copy(list(agents.values()))
         random.shuffle(agents_copy)
 
@@ -713,6 +728,23 @@ class TestPolicy(AgentPolicy):
                         num_testtubes_per_agent: int = 1,
                         attribute: Union[str, None] = None,
                         value_list: List[str] = []) -> Callable:
+        """
+        This function can be used by the user in ``Generate_policy.py`` to specify positive agents contacts to be
+        tested. This function can handle normal or pool testing. Normal testing refers to testing a single agent
+        once i.e. A single agent's sample present in a single testtube. Pool testing refers to having multiple agents
+        in a testtube defined by the num_agents_per_testtube parameter and multiple testtubes for an agent defined by
+        the num_testtubes_per_agent parameter. This function returns a partial
+        function of :meth:`~full_contact_testing`.
+
+        Args:
+            num_agents_per_testtube: Number of agents per testtube (NAPT)
+            num_testtubes_per_agent: Number of testtubes per agent (NAPT)
+            attribute: Parameter (attribute) type of agents
+            value_list: List of attribute values of agents
+
+        Returns:
+            Partial function of :meth:`~full_contact_testing`
+        """
         return partial(self.full_contact_testing, num_agents_per_testtube,
                        num_testtubes_per_agent, attribute, value_list)
 
@@ -928,6 +960,17 @@ class TestPolicy(AgentPolicy):
 
     @staticmethod
     def is_agent_test_ready(agent: Agent, time_step: int) -> bool:
+        """
+        Returns a boolean representing whether an agent can test. If the agent has tested before, he can only test
+        once the validity of the latest test has expired.
+
+        Args:
+            agent: Current Agent
+            time_step: Current time step
+
+        Returns:
+            A boolean representing agent's ability to test
+        """
         if TestPolicy.get_agent_test_result(agent, time_step) is None:
             return True
 
