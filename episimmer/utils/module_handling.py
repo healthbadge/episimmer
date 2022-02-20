@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING, List
 
 if TYPE_CHECKING:
     from episimmer.model import BaseModel
-    from episimmer.policy.base import AgentPolicy
+    from episimmer.policy.base import Policy
 
 
 def module_from_file(module_name: str, file_path: str) -> ModuleType:
@@ -42,7 +42,7 @@ def get_model(example_path: str) -> 'BaseModel':
     return model
 
 
-def get_policy(example_path: str) -> List['AgentPolicy']:
+def get_policy(example_path: str) -> List['Policy']:
     """
     Returns the policy list created in the Generate_policy.py file
 

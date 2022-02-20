@@ -5,7 +5,7 @@ import networkx as nx
 
 from episimmer.agent import Agent
 from episimmer.model import BaseModel
-from episimmer.policy.base import AgentPolicy
+from episimmer.policy.base import Policy
 
 from .read_file import (ReadAgents, ReadConfiguration, ReadEvents,
                         ReadInteractions, ReadLocations, ReadOneTimeEvents,
@@ -27,12 +27,12 @@ class Simulate():
         locations_obj: An object of class :class:`~episimmer.read_file.ReadLocations`
     """
     def __init__(self, config_obj: ReadConfiguration, model: BaseModel,
-                 policy_list: List[AgentPolicy], agents_obj: ReadAgents,
+                 policy_list: List[Policy], agents_obj: ReadAgents,
                  locations_obj: ReadLocations):
         self.agents_obj: ReadAgents = agents_obj
         self.locations_obj: ReadLocations = locations_obj
         self.model: BaseModel = model
-        self.policy_list: List[AgentPolicy] = policy_list
+        self.policy_list: List[Policy] = policy_list
         self.config_obj: ReadConfiguration = config_obj
         self.g_list: List[nx.Graph] = []
         self.state_list: Dict[str, List[str]] = {}
@@ -75,8 +75,7 @@ class Simulate():
         Function to reset agents and locations for a new time step, to load all the types of interactions from their
         respective files and to run policies. Policies are run in two steps here. First, the policies that are
         independent of all the interactions and events present are run with the `enact_policy` method and the policies
-        that do depend on them are run with `post_policy` method (Both methods from the
-        :class:`~episimmer.policy.base.AgentPolicy` class). After the policy is finished running. all types of
+        that do depend on them are run with `post_policy` method. After the policy is finished running, all types of
         events are handled by saving the probability of infection for each agent.
 
 
