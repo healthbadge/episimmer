@@ -27,8 +27,7 @@ Currently, the policies that can be implemented are:
 * :ref:`Contact Tracing Policy`
 
 Each of these policies have template functions that can be used by the user to run standard simulations. For example, standard testing,
-pool testing, standard vaccination, lockdown or restriction policies based on attributes of the agent (like age). Even the way these policies
-behave can be molded to the user's wishes.
+pool testing, standard vaccination, lockdown or restriction policies based on attributes of the agent (like age).
 
 Lockdown Policy
 ~~~~~~~~~~~~~~~~
