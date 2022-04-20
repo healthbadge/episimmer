@@ -334,6 +334,47 @@ class StochasticModel(BaseModel):
     """
     Class for the Stochastic model.
 
+    A simple example of a UserModel.py file with a Stochastic disease model is given below
+
+    .. code-block:: python
+        :linenos:
+
+        import episimmer.model as model
+
+        def event_contribute_fn(agent,event_info,location,current_time_step):
+                if agent.state=='Symptomatic':
+                    return 1
+                elif agent.state=='Asymptomatic':
+                    return 0.5
+                return 0
+
+        def event_receive_fn(agent,ambient_infection,event_info,location,current_time_step):
+            #Example 1
+            beta=0.001
+            return ambient_infection*beta
+
+
+        class UserModel(model.StochasticModel):
+            def __init__(self):
+                individual_types=['Susceptible','Exposed','Asymptomatic','Symptomatic','Recovered']
+                infected_states=['Asymptomatic','Symptomatic']
+                state_proportion={
+                                    'Susceptible':0.99,
+                                    'Exposed':0,
+                                    'Recovered':0,
+                                    'Asymptomatic':0,
+                                    'Symptomatic':0.01
+                                }
+                model.StochasticModel.__init__(self,individual_types,infected_states,state_proportion)
+                self.set_transition('Susceptible', 'Exposed', self.p_infection())
+                self.set_transition('Exposed', 'Symptomatic', self.p_standard(0.15))
+                self.set_transition('Exposed', 'Asymptomatic', self.p_standard(0.2))
+                self.set_transition('Symptomatic', 'Recovered', self.p_standard(0.1))
+                self.set_transition('Asymptomatic', 'Recovered', self.p_standard(0.1))
+
+                self.set_event_contribution_fn(event_contribute_fn)
+                self.set_event_receive_fn(event_receive_fn)
+
     Args:
         individual_state_types: The states in the compartment model
         infected_states: The states that are infectious
@@ -680,6 +721,34 @@ class StochasticModel(BaseModel):
 class ScheduledModel(BaseModel):
     """
     Class for the Scheduled model.
+
+    A simple example of a UserModel.py file with a Scheduled disease model is given below
+
+    .. code-block:: python
+        :linenos:
+
+        import episimmer.model as model
+
+        def event_contribute_fn(agent,event_info,location,current_time_step):
+                if agent.state=='Infected':
+                    return 1
+                return 0
+
+        def event_receive_fn(agent,ambient_infection,event_info,location,current_time_step):
+            #Example 1
+            beta=0.001
+            return ambient_infection*beta
+
+
+        class UserModel(model.ScheduledModel):
+            def __init__(self):
+                model.ScheduledModel.__init__(self)
+                self.insert_state('Susceptible',None, None,self.p_infection({'Infected':1}),False,0.99)
+                self.insert_state('Infected',6,3,self.scheduled({'Recovered':1}),True,0.01)
+                self.insert_state('Recovered',0, 0,self.scheduled({'Recovered':1}),False,0)
+
+                self.set_event_contribution_fn(event_contribute_fn)
+                self.set_event_receive_fn(event_receive_fn)
     """
     def __init__(self):
         super().__init__('Scheduled Model')
