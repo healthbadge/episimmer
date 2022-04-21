@@ -39,6 +39,27 @@ class FullLockdown(AgentLockdownPolicy):
     Class for implementing a lockdown policy common for all agents.
     Inherits :class:`AgentLockdownPolicy` class.
 
+    An example of a GeneratePolicy.py file illustrating full lockdown policy where all agents are lockdown on
+    alternate days is given below
+
+    .. code-block:: python
+            :linenos:
+
+            from episimmer.policy import lockdown_policy
+
+            def generate_policy():
+                policy_list=[]
+
+                def lockdown_fn(time_step):
+                    if time_step % 2 == 0:
+                        return True
+
+                    return False
+
+                policy_list.append(lockdown_policy.FullLockdown(lockdown_fn))
+
+                return policy_list
+
     Args:
         do_lockdown_fn: User-defined function to specify which time step(s) to enforce lockdown in
         p: Probability of agent to contribute and receive infection from any source of infection under lockdown
@@ -73,6 +94,24 @@ class AgentLockdown(AgentLockdownPolicy):
     """
     Class for implementing the lockdown policy for agents based on a fixed attribute of the agent.
     Inherits :class:`~episimmer.policy.lockdown_policy.AgentLockdownPolicy` class.
+
+    An example of a GeneratePolicy.py file illustrating an agent lockdown policy where agents are lockdown
+    based on their Grade attribute
+
+    .. code-block:: python
+            :linenos:
+
+            from episimmer.policy import lockdown_policy
+
+            def generate_policy():
+                policy_list=[]
+
+                def lockdown_fn(time_step):
+                    return True
+
+                policy_list.append(lockdown_policy.AgentLockdown('Grade',['Grade 1'],lockdown_fn))
+
+                return policy_list
 
     Args:
         attribute: Parameter (attribute) type of agents
@@ -118,6 +157,51 @@ class TestingBasedLockdown(AgentLockdownPolicy):
     Class for implementing the lockdown policy for agents taking into account their test results. This policy also
     handles locking down contacts of positively tested agents.
     Inherits :class:`~episimmer.policy.lockdown_policy.AgentLockdownPolicy` class.
+
+    An example of a GeneratePolicy.py file illustrating locking down positively tested agents for a period of 10 days
+    is given below
+
+    .. code-block:: python
+            :linenos:
+
+            from episimmer.policy import lockdown_policy, testing_policy
+
+            def generate_policy():
+                policy_list=[]
+
+                Normal_Test = testing_policy.TestPolicy(lambda x:60)
+                Normal_Test.add_machine('Simple_Machine', 200, 0.0, 0.0, 0, 50, 3, 2)
+                Normal_Test.set_register_agent_testtube_func(Normal_Test.random_testing())
+                policy_list.append(Normal_Test)
+
+                ATP = lockdown_policy.TestingBasedLockdown(lambda x:True,10)
+                policy_list.append(ATP)
+
+                return policy_list
+
+    An example of a GeneratePolicy.py file illustrating locking down positively tested agents along with their contacts
+    for a period of 2 days is given below
+
+    .. code-block:: python
+            :linenos:
+
+            from episimmer.policy import (contact_tracing_policy, lockdown_policy,
+                                          testing_policy)
+
+            def generate_policy():
+                policy_list=[]
+                Normal_Test = testing_policy.TestPolicy(lambda x:7)
+                Normal_Test.add_machine('Simple_Machine', 200, 0.0, 0.0, 0, 50, 3, 2)
+                Normal_Test.set_register_agent_testtube_func(Normal_Test.random_testing())
+                policy_list.append(Normal_Test)
+
+                CT_object = contact_tracing_policy.CTPolicy(7)
+                policy_list.append(CT_object)
+
+                Lockdown_object = lockdown_policy.TestingBasedLockdown(lambda x:True, 2, True)
+                policy_list.append(Lockdown_object)
+
+                return policy_list
 
     Args:
         do_lockdown_fn: User-defined function to specify which time steps to enforce lockdown in
@@ -227,6 +311,22 @@ class EventLockdown(EventLockdownPolicy):
     """
     Class for implementing the lockdown policy for events based on a fixed attribute of the event.
     Inherits :class:`~episimmer.policy.lockdown_policy.EventLockdownPolicy` class.
+
+    An example of a GeneratePolicy.py file illustrating Event lockdown policy where events are lockdown based on an
+    Event attribute.
+
+    .. code-block:: python
+            :linenos:
+
+            from episimmer.policy import lockdown_policy, testing_policy
+
+            def generate_policy():
+                policy_list=[]
+
+                event_lockdown = lockdown_policy.EventLockdown('Type', ['Low Priority'], lambda x: True)
+                policy_list.append(event_lockdown)
+
+                return policy_list
 
     Args:
         attribute: Parameter (attribute) type of events
