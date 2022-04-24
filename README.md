@@ -99,7 +99,7 @@ Or you can install from source
 ```
 git clone https://github.com/healthbadge/episimmer.git
 ```
-2. Then, to install the package, run:
+2. Then, to install the package, run the following command inside the episimmer directory:
 ```
 pip install -e .
 ```
