@@ -21,7 +21,7 @@ CLASSIFIERS = [
 with open(osp.join("episimmer", "version.txt")) as f:
     VERSION = f.read().strip()
 
-with open(osp.join("docs", "PYPI_README.md")) as f:
+with open(osp.join("PYPI_README.md")) as f:
     LONG_DESC = f.read()
 
 with open('requirements.txt') as f:
