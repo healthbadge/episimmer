@@ -50,7 +50,33 @@ Or you could even model a fancy Zombie Apocalypse disease model like this
 <p align = "center"> <b> Zombie Apocalypse </b> </p>
 
 
-Post modelling your environment and disease model, you can run simulations to obtain epidemic trajectories and compare policies like Lockdown (Restriction), Testing and Vaccination policies. Check the [official documentation](https://episimmer.readthedocs.io/en/latest/) for more details.
+## Intervention Policies
+
+There are many kinds of policies that can be implemented in Episimmer by the user and each policy is built to be flexible.
+Multiple policies defined by the user can be run in a simulation seamlessly. We have also created templates for the user to test different kinds of examples of policies.
+
+Currently, the policies that can be implemented are:
+
+1. Lockdown Policy
+2. Testing Policy
+3. Vaccination Policy
+4. Contact Tracing Policy
+
+
+## Vulnerability Detection
+
+Vulnerability Detection refers to finding vulnerabilities in the system that highly affect or are highly affected by
+disease spread. A major part of decision support is detecting vulnerabilities in the ecosystem and taking appropriate
+actions to control the disease spread.
+
+Two kinds of Vulnerability Detection exist in Episimmer -
+
+1. Agent-based Vulnerability Detection
+2. Event-based Vulnerability Detection
+
+
+For more details, check out the [official documentation](https://episimmer.readthedocs.io/en/latest/).
+
 
 ## Installation
 
