@@ -261,7 +261,7 @@ Illustrating Contact Tracing with a simple example, we shall show the effect of 
 Implementing Policies
 ----------------------
 
-The GeneratePolicy.py file is where the user must define his intervention policies.
+The Generate_policy.py file is where the user must define his intervention policies.
 
 .. note ::
         This file is a mandatory file required for any simulation in Episimmer.
@@ -274,7 +274,7 @@ Let us now look at how we can implement each policy discussed.
 3. `Implementing Vaccination`_
 4. `Implementing Contact Tracing`_
 
-The template of the GeneratePolicy.py file for each policy is given below -
+The template of the Generate_policy.py file for each policy is given below -
 
 .. code-block:: python
     :linenos:
@@ -304,7 +304,7 @@ The class used to implement Full Lockdown is FullLockdown. The parameters to be 
 * do_lockdown_fn: User-defined function to specify which time step(s) to enforce lockdown in
 * p: Probability of agent to contribute and receive infection from any source of infection under lockdown
 
-An example of a GeneratePolicy.py file illustrating full lockdown policy where all agents are lockdown on
+An example of a Generate_policy.py file illustrating full lockdown policy where all agents are lockdown on
 alternate days is given below
 
 .. code-block:: python
@@ -334,7 +334,7 @@ The class used to implement Agent-Based Lockdown is AgentLockdown. The parameter
 * do_lockdown_fn: User-defined function to specify which time step(s) to enforce lockdown in
 * p: Probability of agent to contribute and receive infection from any source of infection under lockdown
 
-An example of a GeneratePolicy.py file illustrating an agent lockdown policy where agents are lockdown
+An example of a Generate_policy.py file illustrating an agent lockdown policy where agents are lockdown
 based on their Grade attribute
 
 .. code-block:: python
@@ -362,7 +362,7 @@ The class used to implement Testing-Based Lockdown is TestingBasedLockdown. The 
 * contact_tracing: Boolean specifying whether lockdown for contacts of positively tested agents is enabled or not
 * p: Probability of agent to contribute and receive infection from any source of infection under lockdown
 
-An example of a GeneratePolicy.py file illustrating locking down positively tested agents for a period of 10 days
+An example of a Generate_policy.py file illustrating locking down positively tested agents for a period of 10 days
 is given below
 
 .. code-block:: python
@@ -383,7 +383,7 @@ is given below
 
         return policy_list
 
-An example of a GeneratePolicy.py file illustrating locking down positively tested agents along with their contacts
+An example of a Generate_policy.py file illustrating locking down positively tested agents along with their contacts
 for a period of 2 days is given below
 
 .. code-block:: python
@@ -416,7 +416,7 @@ The class used to implement Event-Based Lockdown is EventLockdown. The parameter
 * do_lockdown_fn: User-defined function to specify which time step(s) to enforce lockdown in
 * p: Probability of an event occurring during lockdown
 
-An example of a GeneratePolicy.py file illustrating Event lockdown policy where events are lockdown based on an
+An example of a Generate_policy.py file illustrating Event lockdown policy where events are lockdown based on an
 Event attribute. Here, Events of Type - Low Priority are lockdown.
 
 .. code-block:: python
@@ -438,7 +438,7 @@ Implementing Testing
 As mentioned previously, Testing requires us to define what method of testing is to be conducted and also requires
 us to define testing machines. Let us illustrate with an example,
 
-First, we create a TestPolicy object (as mentioned in our GeneratePolicy.py template). This class requires
+First, we create a TestPolicy object (as mentioned in our Generate_policy.py template). This class requires
 a single parameter which is a callable function. This function will take parameter time step and return the number of
 agents to test each time step. Let us assume we test 10 agents per time step.
 
@@ -538,7 +538,7 @@ The parameters to be passed are
 * attribute: Parameter (attribute) type of agents
 * value_list: List of attribute values of agents
 
-An example of a GeneratePolicy.py file illustrating normally testing random agents (and locking down positively
+An example of a Generate_policy.py file illustrating normally testing random agents (and locking down positively
 tested agents) is given below.
 
 .. code-block:: python
@@ -563,7 +563,7 @@ tested agents) is given below.
         You may pass agent attributes and values to choose who you would like to test. You can also choose to test only
         symptomatic agents. Be sure to update your disease model if you choose this option!
 
-An example of a GeneratePolicy.py file illustrating pool testing random agents with (NAPT, NTPA) = (3,2) (and
+An example of a Generate_policy.py file illustrating pool testing random agents with (NAPT, NTPA) = (3,2) (and
 locking down positively tested agents) is given below
 
 .. code-block:: python
@@ -593,7 +593,7 @@ The parameters to be passed are
 * attribute: Parameter (attribute) type of agents
 * value_list: List of attribute values of agents
 
-An example of a GeneratePolicy.py file illustrating normally testing random agents along with testing their contacts
+An example of a Generate_policy.py file illustrating normally testing random agents along with testing their contacts
 in case they are positive (and locking down positively tested agents) is given below. Here, we need to also include
 a contact tracing policy to save contacts each time step. Check `Implementing Contact Tracing`_ for more details on
 Contact Tracing implementation.
@@ -632,7 +632,7 @@ Implementing Vaccination
 Vaccination requires us to define which method of vaccination to implement and define the vaccines themselves.
 
 
-First, we create a VaccinationPolicy object (as mentioned in our GeneratePolicy.py template). This class requires
+First, we create a VaccinationPolicy object (as mentioned in our Generate_policy.py template). This class requires
 a single parameter which is a callable function. This function will take parameter time step and return the number of
 agents to vaccinate each time step. Let us assume we vaccinate 10 agents per time step.
 
@@ -739,7 +739,7 @@ Finally, let us add it to the policy list which is to be returned by the functio
 
 1. *Single Dose Vaccination*
 
-An example of a GeneratePolicy.py file illustrating single dose vaccination is given below.
+An example of a Generate_policy.py file illustrating single dose vaccination is given below.
 
 .. code-block:: python
         :linenos:
@@ -762,7 +762,7 @@ An example of a GeneratePolicy.py file illustrating single dose vaccination is g
 
 2. *Multi Dose Vaccination*
 
- An example of a GeneratePolicy.py file illustrating multi dose vaccination is given below.
+ An example of a Generate_policy.py file illustrating multi dose vaccination is given below.
 
 .. code-block:: python
         :linenos:
@@ -817,7 +817,7 @@ Let us implement each kind of Contact Tracing policy which uses other policies f
 
 1. *Contact Tracing - Lockdown*
 
-An example of a GeneratePolicy.py file illustrating Contact Tracing for all agents followed by Lockdown for a period of
+An example of a Generate_policy.py file illustrating Contact Tracing for all agents followed by Lockdown for a period of
 2 days is given below
 
 .. code-block:: python
@@ -850,7 +850,7 @@ An example of a GeneratePolicy.py file illustrating Contact Tracing for all agen
 
 2. *Contact Tracing - Testing*
 
-An example of a GeneratePolicy.py file illustrating Contact Tracing for all agents followed by testing contacts of positive
+An example of a Generate_policy.py file illustrating Contact Tracing for all agents followed by testing contacts of positive
 agents and subsequently locking down positive agents, is given below
 
 .. code-block:: python
