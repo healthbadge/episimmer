@@ -16,11 +16,11 @@ of simple text files, you can have your agents and the interaction network setup
 of the environments you can create.
 
 
-![SIR_2_locations.gif](Light/SIR_2_locations.gif)|![random_SIR.gif](Light/random_SIR.gif)
+![SIR_2_locations.gif](_figures/Light/SIR_2_locations.gif)|![random_SIR.gif](_figures/Light/random_SIR.gif)
 :-------------------------:|:-------------------------:
 <b>Completely connected agents at two locations</b>  |  <b>Random Graph G(100, 0.1)</b>
 
-![Star_graph.gif](Light/Star_graph.gif)|![cellular_automaton.gif](Light/cellular_automaton.gif)|![multi_cycle.gif](Light/multi_cycle.gif)
+![Star_graph.gif](_figures/Light/Star_graph.gif)|![cellular_automaton.gif](_figures/Light/cellular_automaton.gif)|![multi_cycle.gif](_figures/Light/multi_cycle.gif)
 :-------------------------:|:-------------------------:|:-------------------------:
 <b>Star Graph</b>  |  <b>Cellular Automaton</b> | <b>Multi-cycle graph</b>
 
@@ -29,7 +29,7 @@ The edges represent connections between the agents and the node colours represen
 But these are static networks, which aren't truly representing real-world phenomena. Episimmer allows you to have cycling dynamic networks which more closely
 align with real-world social networks than static networks.
 
-<p align = "center"><img width="600" alt="Dynamic Network" src="Light/dyn_graph.gif"> </p>
+<p align = "center"><img width="600" alt="Dynamic Network" src="_figures/Light/dyn_graph.gif"> </p>
 <p align = "center"> <b> Dynamic Network </b> </p>
 
 
@@ -37,14 +37,14 @@ align with real-world social networks than static networks.
 
 Episimmer also allows easy creation of compartmental disease models. You can be as creative as you like, for example,
 
-![complex_model1.png](Light/complex_model1.png)|![complex_model2.png](Light/complex_model2.png)
+![complex_model1.png](_figures/Light/complex_model1.png)|![complex_model2.png](_figures/Light/complex_model2.png)
 :-------------------------:|:-------------------------:
 <b>Complex Model 1 (Taken from <a href=https://arxiv.org/abs/2007.14392>here</a>)</b>  |  <b>Complex Model 2 (Taken from <a href=https://www.nature.com/articles/s41591-020-0883-7>here</a>)</b>
 
 <br/>
 
 Or you could even model a fancy Zombie Apocalypse disease model like this
-<p align = "center"><img width="600" alt="Zombie Apocalypse" src="Light/zombie_apo.png"> </p>
+<p align = "center"><img width="600" alt="Zombie Apocalypse" src="_figures/Light/zombie_apo.png"> </p>
 <p align = "center"> <b> Zombie Apocalypse </b> </p>
 
 
