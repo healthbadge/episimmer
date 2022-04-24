@@ -3,7 +3,7 @@ from typing import Dict, List, Tuple, Union
 import numpy as np
 
 from episimmer.model import BaseModel
-from episimmer.policy.base import AgentPolicy
+from episimmer.policy.base import Policy
 
 from .read_file import (ReadAgents, ReadConfiguration, ReadLocations,
                         ReadOneTimeEvents)
@@ -30,13 +30,13 @@ class World():
         one_time_event_file: File name of the one time event
     """
     def __init__(self, config_obj: ReadConfiguration, model: BaseModel,
-                 policy_list: List[AgentPolicy], agents_filename: str,
+                 policy_list: List[Policy], agents_filename: str,
                  interaction_files_list: List[List[str]],
                  probabilistic_interaction_files_list: List[List[str]],
                  locations_filename: str, event_files_list: List[List[str]],
                  one_time_event_file: Union[str, None]):
         self.config_obj: ReadConfiguration = config_obj
-        self.policy_list: List[AgentPolicy] = policy_list
+        self.policy_list: List[Policy] = policy_list
         self.agents_filename: str = agents_filename
         self.locations_filename: str = locations_filename
         self.model: BaseModel = model

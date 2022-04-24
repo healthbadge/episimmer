@@ -1,4 +1,4 @@
-from episimmer.policy import lockdown_policy, vaccination_policy
+from episimmer.policy import vaccination_policy
 
 
 def agents_per_step_fn(time_step):

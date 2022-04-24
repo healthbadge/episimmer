@@ -116,7 +116,7 @@ All the parameters of the configuration can be set in the mandatory config.txt f
 
 6. **Interaction Info Keys (string)** : This field works in a similar manner as the Agent Info Keys. Any interaction file provided, whether interactions or probabilistic interactions, must have matching parameter keys in the files and the config.txt file.
 
-.. note::
+.. note ::
         If you have both types of interactions, you should use Agent Index:Interacting Agent Index key, omitting the Probability:Agents parameter keys. Please note that if you have additional user-defined parameters (like ‘duration’), it must be present in both the interaction files and appended to the Interaction Info Keys. Check out the example - :ref:`Double_Style_Interactions` for an implementation of the same.
 
 7. **Interactions File List filename (string)** : This field takes the interaction file list filename(s). It refers to a text file that contains the list of other individual interaction files that run at each timestep. You may also pass multiple interactions file list filenames separated by a comma.
@@ -165,7 +165,7 @@ All the parameters of the configuration can be set in the mandatory config.txt f
 
 11. **Event parameter keys (string)** : This field works in a similar manner as the other Info Keys parameters. Any event file provided, whether regular events or one time events, must have matching parameter keys in the files and the config.txt file.
 
-.. note::
+.. note ::
         While using One Time Events, skip the Timestep parameter in the event parameter keys in config.txt. Similar to interactions, if using both types of events, you must have the same keys in both files (excluding the Timestep parameter). Check out the example :ref:`One_Time_Event` for an implementation of the same.
 
 12. **Event Files List Filename (string)** : This field takes the event files list filename. Similar to Interaction and Probabilistic Interactions Files list, it is a text file for events.

@@ -1,6 +1,5 @@
 import copy
 import json
-import math
 import random
 from collections import deque
 from functools import partial
@@ -344,6 +343,83 @@ class TestPolicy(AgentPolicy):
     Class for implementing the testing policy.
     Inherits :class:`~episimmer.policy.base.AgentPolicy` class.
 
+    Note that for disease control, we require locking down agents that are positive, thus we have included a
+    lockdown policy in the examples below.
+
+    An example of a GeneratePolicy.py file illustrating normally testing random agents (and locking down positively
+    tested agents) is given below.
+
+    .. code-block:: python
+            :linenos:
+
+            from episimmer.policy import lockdown_policy, testing_policy
+
+            def generate_policy():
+                policy_list=[]
+
+                Normal_Test = testing_policy.TestPolicy(lambda x:60)
+                Normal_Test.add_machine('Simple_Machine', 200, 0.0, 0.0, 0, 50, 3, 2)
+                Normal_Test.set_register_agent_testtube_func(Normal_Test.random_testing(1, 1))
+                policy_list.append(Normal_Test)
+
+                ATP = lockdown_policy.TestingBasedLockdown(lambda x:True,10)
+                policy_list.append(ATP)
+
+                return policy_list
+
+    An example of a GeneratePolicy.py file illustrating pool testing random agents with (NAPT, NTPA) = (3,2) (and
+    locking down positively tested agents) is given below
+
+    .. code-block:: python
+            :linenos:
+
+            from episimmer.policy import lockdown_policy, testing_policy
+
+            def generate_policy():
+                policy_list=[]
+
+                Normal_Test = testing_policy.TestPolicy(lambda x:60)
+                Normal_Test.add_machine('Simple_Machine', 200, 0.0, 0.0, 0, 50, 3, 2)
+                Normal_Test.set_register_agent_testtube_func(Normal_Test.random_testing(3, 2))
+                policy_list.append(Normal_Test)
+
+                ATP = lockdown_policy.TestingBasedLockdown(lambda x:True,10)
+                policy_list.append(ATP)
+
+                return policy_list
+
+    An example of a GeneratePolicy.py file illustrating normally testing random agents along with testing their contacts
+    in case they are positive (and locking down positively tested agents) is given below. Here, we need to also include
+    a contact tracing policy to save contacts each time step.
+
+    .. code-block:: python
+            :linenos:
+
+            from episimmer.policy import (contact_tracing_policy, lockdown_policy,
+                                          testing_policy)
+
+
+            def generate_policy():
+                policy_list=[]
+                Normal_Test1 = testing_policy.TestPolicy(lambda x: 2)
+                Normal_Test1.add_machine('Simple_Machine', 200, 0.0, 0.0, 0, 50, 2, 2)
+                Normal_Test1.set_register_agent_testtube_func(Normal_Test1.random_testing(1, 1))
+                policy_list.append(Normal_Test1)
+
+                Normal_Test2 = testing_policy.TestPolicy(lambda x: 2)
+                Normal_Test2.add_machine('Simple_Machine', 200, 0.0, 0.0, 0, 50, 2, 2)
+                Normal_Test2.set_register_agent_testtube_func(Normal_Test2.contact_testing(1, 1))
+                policy_list.append(Normal_Test2)
+
+                CT_object = contact_tracing_policy.CTPolicy(7)
+                policy_list.append(CT_object)
+
+                Lockdown_object = lockdown_policy.TestingBasedLockdown(lambda x:1, 2)
+                policy_list.append(Lockdown_object)
+
+                return policy_list
+
+
     Args:
         agents_per_step_fn: User-defined function to specify the number of agents to test per time step
     """
@@ -424,18 +500,6 @@ class TestPolicy(AgentPolicy):
                 self.release_results(time_step)
                 break
 
-    def set_register_agent_testtube_func(self, fn: Callable) -> None:
-        """
-        Registers the function that determines how agents are mapped to testtubes.
-        The user must specify one of the following functions
-
-        * :meth:`~random_testing`
-
-        Args:
-            fn: Function that determines the type of testing to be performed
-        """
-        self.register_agent_testtube_func = fn
-
     def add_machine(self,
                     machine_name: str,
                     cost: int,
@@ -446,8 +510,13 @@ class TestPolicy(AgentPolicy):
                     valid_period: int,
                     num: int = 1) -> None:
         """
-        This function enables the user to add a machine. A machine must be defined as it performs the testing
-        procedure on testtubes. It defines parameters of the testing policy.
+        This function enables the user to add a machine in the ``Generate_policy.py`` file. A machine must be defined as
+        it performs the testing procedure on testtubes. It defines parameters of the testing policy.
+
+        .. code-block:: python
+            :linenos:
+
+            Normal_Test.add_machine('Simple_Machine', 200, 0.0, 0.0, 0, 50, 2, 2)
 
         Args:
             machine_name: Name of machine
@@ -469,8 +538,8 @@ class TestPolicy(AgentPolicy):
                 for i in range(num):
                     self.machine_list.append(
                         Machine(machine_name, cost, false_positive_rate,
-                                false_negative_rate, turnaround_time,
-                                capacity))
+                                false_negative_rate, turnaround_time, capacity,
+                                valid_period))
 
             else:
                 raise Exception(
@@ -491,6 +560,27 @@ class TestPolicy(AgentPolicy):
                     Machine(machine_name, cost, false_positive_rate,
                             false_negative_rate, turnaround_time, capacity,
                             valid_period))
+
+    def set_register_agent_testtube_func(self, fn: Callable) -> None:
+        """
+        Registers the function that determines how agents are mapped to testtubes.
+        The user must specify one of the following functions in the ``Generate_policy.py`` file.
+
+        * :meth:`~random_testing`
+        * :meth:`~contact_testing`
+
+        The example below illustrates the use of both testing methods.
+
+        .. code-block:: python
+            :linenos:
+
+            Normal_Test1.set_register_agent_testtube_func(Normal_Test1.random_testing(1, 1))
+            Normal_Test2.set_register_agent_testtube_func(Normal_Test2.contact_testing(1, 1))
+
+        Args:
+            fn: Function that determines the type of testing to be performed
+        """
+        self.register_agent_testtube_func = fn
 
     def initialize_statistics_logs(self, time_step: int) -> None:
         """
@@ -646,13 +736,41 @@ class TestPolicy(AgentPolicy):
                        attribute: Union[str, None] = None,
                        value_list: List[str] = []) -> Callable:
         """
-        This function can be used by the user in ``Generate_policy.py`` to specify random agents to be tested. This
+        This function can be used by the user in ``Generate_policy.py`` to test random agents. This
         function can handle normal or pool testing. Normal testing refers to testing a single agent
         once i.e. A single agent's sample present in a single testtube. Pool testing refers to having multiple agents
         in a testtube defined by the num_agents_per_testtube parameter and multiple testtubes for an agent defined by
         the num_testtubes_per_agent parameter. If symptomatic states are defined in the disease model in the
         ``UserModel.py`` file, then you may also only test symptomatic agents. This function returns a partial
         function of :meth:`~full_random_testing`.
+
+
+        An example of a GeneratePolicy.py file illustrating normally testing and pool testing random agents
+        (and locking down positively tested agents) is given below.
+
+        .. code-block:: python
+                :linenos:
+                :emphasize-lines: 8, 13
+
+                from episimmer.policy import lockdown_policy, testing_policy
+
+                def generate_policy():
+                    policy_list=[]
+
+                    Normal_Test = testing_policy.TestPolicy(lambda x:60)
+                    Normal_Test.add_machine('Simple_Machine', 200, 0.0, 0.0, 0, 50, 3, 2)
+                    Normal_Test.set_register_agent_testtube_func(Normal_Test.random_testing(1, 1))
+                    policy_list.append(Normal_Test)
+
+                    Pool_Testing = testing_policy.TestPolicy(lambda x:150)
+                    Pool_Testing.add_machine('Simple_Machine', 200, 0.0, 0.0, 0, 50, 3, 2)
+                    Pool_Testing.set_register_agent_testtube_func(Pool_Testing.random_testing(5,2))
+                    policy_list.append(Pool_Testing)
+
+                    ATP = lockdown_policy.TestingBasedLockdown(lambda x:True,10)
+                    policy_list.append(ATP)
+
+                    return policy_list
 
         Args:
             num_agents_per_testtube: Number of agents per testtube (NAPT)
@@ -729,12 +847,44 @@ class TestPolicy(AgentPolicy):
                         attribute: Union[str, None] = None,
                         value_list: List[str] = []) -> Callable:
         """
-        This function can be used by the user in ``Generate_policy.py`` to specify positive agents contacts to be
-        tested. This function can handle normal or pool testing. Normal testing refers to testing a single agent
+        This function can be used by the user in ``Generate_policy.py`` to test contacts of positive agents. This
+        function can handle normal or pool testing. Normal testing refers to testing a single agent
         once i.e. A single agent's sample present in a single testtube. Pool testing refers to having multiple agents
         in a testtube defined by the num_agents_per_testtube parameter and multiple testtubes for an agent defined by
         the num_testtubes_per_agent parameter. This function returns a partial
         function of :meth:`~full_contact_testing`.
+
+        An example of a GeneratePolicy.py file illustrating normally testing random agents along with testing their
+        contacts in case they are positive (and locking down positively tested agents) is given below. Here, we need
+        to also include a contact tracing policy to save contacts each time step.
+
+        .. code-block:: python
+                :linenos:
+                :emphasize-lines: 14
+
+                from episimmer.policy import (contact_tracing_policy, lockdown_policy,
+                                              testing_policy)
+
+
+                def generate_policy():
+                    policy_list=[]
+                    Normal_Test1 = testing_policy.TestPolicy(lambda x: 2)
+                    Normal_Test1.add_machine('Simple_Machine', 200, 0.0, 0.0, 0, 50, 2, 2)
+                    Normal_Test1.set_register_agent_testtube_func(Normal_Test1.random_testing(1, 1))
+                    policy_list.append(Normal_Test1)
+
+                    Normal_Test2 = testing_policy.TestPolicy(lambda x: 2)
+                    Normal_Test2.add_machine('Simple_Machine', 200, 0.0, 0.0, 0, 50, 2, 2)
+                    Normal_Test2.set_register_agent_testtube_func(Normal_Test2.contact_testing(1, 1))
+                    policy_list.append(Normal_Test2)
+
+                    CT_object = contact_tracing_policy.CTPolicy(7)
+                    policy_list.append(CT_object)
+
+                    Lockdown_object = lockdown_policy.TestingBasedLockdown(lambda x:1, 2)
+                    policy_list.append(Lockdown_object)
+
+                    return policy_list
 
         Args:
             num_agents_per_testtube: Number of agents per testtube (NAPT)

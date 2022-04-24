@@ -68,6 +68,26 @@ class CTPolicy(AgentPolicy):
     Class built to implement the contact tracing policy. Agent contacts are saved based on all types of interactions
     in Episimmer. You can optionally choose the agents that save their contacts by passing an agent attribute and
     a value list.
+    Inherits :class:`~episimmer.policy.base.AgentPolicy` class.
+
+    An example of a GeneratePolicy.py file illustrating contact tracing policy is given below. It saves contacts for
+    agents of Type Teacher and Student for a period of 7 and 3 time steps respectively.
+
+    .. code-block:: python
+            :linenos:
+
+            from episimmer.policy import contact_tracing_policy
+
+            def generate_policy():
+                policy_list=[]
+
+                CT_object = contact_tracing_policy.CTPolicy(7, 'Type', ['Teacher'])
+                CT_object2 = contact_tracing_policy.CTPolicy(3, 'Type', ['Student'])
+
+                policy_list.append(CT_object)
+                policy_list.append(CT_object2)
+
+                return policy_list
 
     Args:
         num_of_days : Number of days to store the agent's contacts

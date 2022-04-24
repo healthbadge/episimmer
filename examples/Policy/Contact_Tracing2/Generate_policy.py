@@ -1,5 +1,3 @@
-import random
-
 from episimmer.policy import (contact_tracing_policy, lockdown_policy,
                               testing_policy)
 
@@ -22,7 +20,7 @@ def generate_policy():
 
 
     # do lockdown function, Num of days to lockdown based on test result, Contact tracing boolean
-    Lockdown_object = lockdown_policy.TestingBasedLockdown(lambda x:1, 2)
+    Lockdown_object = lockdown_policy.TestingBasedLockdown(lambda x: True, 2)
     policy_list.append(Normal_Test1)
     policy_list.append(Normal_Test2)
     policy_list.append(CT_object)

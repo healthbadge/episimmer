@@ -118,6 +118,39 @@ class VaccinationPolicy(AgentPolicy):
     Class for implementing the vaccination policy.
     Inherits :class:`~episimmer.policy.base.AgentPolicy` class.
 
+    An example of a GeneratePolicy.py file illustrating single dose and multi dose vaccination is given below.
+
+    .. code-block:: python
+            :linenos:
+
+            from episimmer.policy import vaccination_policy
+
+            def generate_policy():
+                policy_list=[]
+
+                # Single Dose Vaccination
+                vp1= vaccination_policy.VaccinationPolicy(lambda x: 100)
+                vaccines1 = {
+                    'cov_single_dose': {'cost': 40, 'count': 20, 'efficacy': 0.9, 'decay': 40},
+                    'cov_single_dose2': {'cost': 50, 'count': 15, 'efficacy': 0.5, 'decay': 30},
+                }
+                vp1.add_vaccines(vaccines1, 'Single')
+                vp1.set_register_agent_vaccine_func(vp1.random_vaccination())
+                policy_list.append(vp1)
+
+                # Multi Dose Vaccination
+                vp2= vaccination_policy.VaccinationPolicy(lambda x: 100)
+                vaccines2 = {
+                    'cov_multi_dose': {'cost': 40, 'count': 25, 'efficacy': 0.4, 'decay': [15, 14, 8], 'dose': 3, 'interval': [3, 2]},
+                    'cov_multi_dose2': {'cost': 30, 'count': 40, 'efficacy': 0.7, 'decay': [20, 25, 17, 5], 'dose': 4, 'interval': [12, 26, 14]},
+                    'cov_multi_dose3': {'cost': 30, 'count': 15, 'efficacy': 0.7, 'decay': [8], 'dose': 1, 'interval': []}
+                }
+                vp2.add_vaccines(vaccines2, 'Multi')
+                vp2.set_register_agent_vaccine_func(vp2.multi_dose_vaccination())
+                policy_list.append(vp2)
+
+                return policy_list
+
     Args:
         agents_per_step_fn: User-defined function to specify the number of agents to vaccinate per time step
     """
@@ -185,14 +218,107 @@ class VaccinationPolicy(AgentPolicy):
                                           vaccine.get('interval', []))
                 self.vaccines.append(vaccine_obj)
 
+    def add_vaccines(self,
+                     vaccines: Dict[str, Dict[str, Union[int, float, List[int],
+                                                         str]]],
+                     dosage: str = 'Single') -> None:
+        """
+        This function enables the user to add vaccines.
+
+        Parameters to be specified for single dose vaccines in the vaccines dict:
+
+        * cost: Cost of vaccine.
+        * count: Number of vaccine available.
+        * efficacy: Vaccine efficacy.
+        * decay: Number of days of protection offered by the vaccine.
+
+        .. code-block:: python
+            :linenos:
+
+            vp1= vaccination_policy.VaccinationPolicy(lambda x: 100)
+            vaccines1 = {
+                'cov_single_dose': {'cost': 40, 'count': 20, 'efficacy': 0.9, 'decay': 40},
+                'cov_single_dose2': {'cost': 50, 'count': 15, 'efficacy': 0.5, 'decay': 30},
+            }
+            vp1.add_vaccines(vaccines1, 'Single')
+
+        Parameters to be specified for multi dose vaccines in the vaccines dict:
+
+        * cost: Cost of vaccine.
+        * count: Number of vaccine available.
+        * efficacy: Vaccine efficacy.
+        * decay: A list of number of days of protection offered by each dose of the vaccine.
+        * dose: Number of doses of the vaccine.
+        * interval: A list specifying minimum days to pass before the administration of the next dose for each dose.
+
+
+        .. code-block:: python
+            :linenos:
+
+            vp2= vaccination_policy.VaccinationPolicy(lambda x: 100)
+            vaccines2 = {
+                'cov_multi_dose': {'cost': 40, 'count': 25, 'efficacy': 0.4, 'decay': [15, 14, 8], 'dose': 3, 'interval': [3, 2]},
+                'cov_multi_dose2': {'cost': 30, 'count': 40, 'efficacy': 0.7, 'decay': [20, 25, 17, 5], 'dose': 4, 'interval': [12, 26, 14]},
+                'cov_multi_dose3': {'cost': 30, 'count': 15, 'efficacy': 0.7, 'decay': [8], 'dose': 1, 'interval': []}
+            }
+            vp2.add_vaccines(vaccines2, 'Multi')
+
+        Args:
+            vaccines: A dictionary mapping vaccine names to its parameters
+            dosage: Specifies if the vaccines are either ``Single`` dose or ``Multi`` dose
+        """
+        if dosage == 'Single':
+            for name, vaccine in vaccines.items():
+                if not isinstance(vaccine['decay'], int):
+                    raise TypeError('Vaccine decay must be a type integer')
+                self.available_vaccines[name] = vaccine
+                self.available_vaccines[name]['type'] = dosage
+                self.statistics[name] = {
+                    'Total Vaccination': [],
+                    'Total Successful': [],
+                    'Total Unsuccessful': []
+                }
+        elif dosage == 'Multi':
+            for name, vaccine in vaccines.items():
+                if not isinstance(vaccine['decay'], list):
+                    raise TypeError('Vaccine decay must be a list')
+                if vaccine.get('dose') is None:
+                    raise Exception('Dose parameter missing')
+
+                if vaccine.get('interval') is None:
+                    raise Exception('Interval parameter missing')
+
+                if not isinstance(vaccine['interval'], list):
+                    raise TypeError('Interval must be a list')
+                if len(vaccine['decay']) != vaccine['dose']:
+                    raise ValueError(
+                        'Vaccine decay must be a list of length equal to the count of vaccine dosage'
+                    )
+                if len(vaccine['interval']) != vaccine['dose'] - 1:
+                    raise ValueError(
+                        'Vaccine interval must be a list of length one less than the count of vaccine dosage'
+                    )
+                self.available_vaccines[name] = vaccine
+                self.available_vaccines[name]['type'] = dosage
+                self.statistics[name] = {
+                    'Total Vaccination': [],
+                    'Total Successful': [],
+                    'Total Unsuccessful': []
+                }
+
     def set_register_agent_vaccine_func(self, func: Callable) -> None:
         """
         Registers the function that determines the type of vaccination to be performed.
         The user must specify one of the following functions
 
         * :meth:`~random_vaccination`
-
         * :meth:`~multi_dose_vaccination`
+
+        .. code-block:: python
+            :linenos:
+
+            vp1.set_register_agent_vaccine_func(vp1.random_vaccination())
+            vp2.set_register_agent_vaccine_func(vp2.multi_dose_vaccination())
 
         Args:
             func: Function that determines the type of vaccination to be performed
@@ -237,6 +363,28 @@ class VaccinationPolicy(AgentPolicy):
         """
         This function can be used by the user in ``Generate_policy.py`` to specify randomized vaccination to be
         performed  for the agents. This function returns a partial function of :meth:`~full_random_vaccination`.
+
+        An example of a GeneratePolicy.py file illustrating single dose vaccination is given below.
+
+        .. code-block:: python
+                :linenos:
+                :emphasize-lines: 12
+
+                from episimmer.policy import vaccination_policy
+
+                def generate_policy():
+                    policy_list=[]
+
+                    vp1= vaccination_policy.VaccinationPolicy(lambda x: 100)
+                    vaccines1 = {
+                        'cov_single_dose': {'cost': 40, 'count': 20, 'efficacy': 0.9, 'decay': 40},
+                        'cov_single_dose2': {'cost': 50, 'count': 15, 'efficacy': 0.5, 'decay': 30},
+                    }
+                    vp1.add_vaccines(vaccines1, 'Single')
+                    vp1.set_register_agent_vaccine_func(vp1.random_vaccination())
+                    policy_list.append(vp1)
+
+                    return policy_list
 
         Args:
             attribute: Attribute name of agents
@@ -313,6 +461,29 @@ class VaccinationPolicy(AgentPolicy):
         This function can be used by the user in ``Generate_policy.py`` to specify multi-dose vaccination to be
         performed for the agents. This function returns a partial function of :meth:`~full_multi_dose_vaccination`.
 
+        An example of a GeneratePolicy.py file illustrating multi dose vaccination is given below.
+
+        .. code-block:: python
+                :linenos:
+                :emphasize-lines: 13
+
+                from episimmer.policy import vaccination_policy
+
+                def generate_policy():
+                    policy_list=[]
+
+                    vp2= vaccination_policy.VaccinationPolicy(lambda x: 100)
+                    vaccines2 = {
+                        'cov_multi_dose': {'cost': 40, 'count': 25, 'efficacy': 0.4, 'decay': [15, 14, 8], 'dose': 3, 'interval': [3, 2]},
+                        'cov_multi_dose2': {'cost': 30, 'count': 40, 'efficacy': 0.7, 'decay': [20, 25, 17, 5], 'dose': 4, 'interval': [12, 26, 14]},
+                        'cov_multi_dose3': {'cost': 30, 'count': 15, 'efficacy': 0.7, 'decay': [8], 'dose': 1, 'interval': []}
+                    }
+                    vp2.add_vaccines(vaccines2, 'Multi')
+                    vp2.set_register_agent_vaccine_func(vp2.multi_dose_vaccination())
+                    policy_list.append(vp2)
+
+                    return policy_list
+
         Args:
             attribute: Attribute name of agents
             value_list: List of attribute values of agents
@@ -321,72 +492,6 @@ class VaccinationPolicy(AgentPolicy):
             Partial function of :meth:`~full_multi_dose_vaccination`
         """
         return partial(self.full_multi_dose_vaccination, attribute, value_list)
-
-    def add_vaccines(self,
-                     vaccines: Dict[str, Dict[str, Union[int, float, List[int],
-                                                         str]]],
-                     dosage: str = 'Single') -> None:
-        """
-        This function enables the user to add vaccines.
-
-        Parameters to be specified for single dose vaccines:
-
-        * cost: Cost of vaccine.
-        * count: Number of vaccine available.
-        * efficacy: Vaccine efficacy.
-        * decay: Number of days of protection offered by the vaccine.
-
-        Parameters to be specified for multi dose vaccines:
-
-        * cost: Cost of vaccine.
-        * count: Number of vaccine available.
-        * efficacy: Vaccine efficacy.
-        * decay: A list of number of days of protection offered by each dose of the vaccine.
-        * dose: Number of doses of the vaccine.
-        * interval: A list specifying minimum days to pass before the administration of the next dose for each dose.
-
-        Args:
-            vaccines: A dictionary mapping vaccine names to its parameters
-            dosage: Specifies if the vaccines are either ``Single`` dose or ``Multi`` dose
-        """
-        if dosage == 'Single':
-            for name, vaccine in vaccines.items():
-                if not isinstance(vaccine['decay'], int):
-                    raise TypeError('Vaccine decay must be a type integer')
-                self.available_vaccines[name] = vaccine
-                self.available_vaccines[name]['type'] = dosage
-                self.statistics[name] = {
-                    'Total Vaccination': [],
-                    'Total Successful': [],
-                    'Total Unsuccessful': []
-                }
-        elif dosage == 'Multi':
-            for name, vaccine in vaccines.items():
-                if not isinstance(vaccine['decay'], list):
-                    raise TypeError('Vaccine decay must be a list')
-                if vaccine.get('dose') is None:
-                    raise Exception('Dose parameter missing')
-
-                if vaccine.get('interval') is None:
-                    raise Exception('Interval parameter missing')
-
-                if not isinstance(vaccine['interval'], list):
-                    raise TypeError('Interval must be a list')
-                if len(vaccine['decay']) != vaccine['dose']:
-                    raise ValueError(
-                        'Vaccine decay must be a list of length equal to the count of vaccine dosage'
-                    )
-                if len(vaccine['interval']) != vaccine['dose'] - 1:
-                    raise ValueError(
-                        'Vaccine interval must be a list of length one less than the count of vaccine dosage'
-                    )
-                self.available_vaccines[name] = vaccine
-                self.available_vaccines[name]['type'] = dosage
-                self.statistics[name] = {
-                    'Total Vaccination': [],
-                    'Total Successful': [],
-                    'Total Unsuccessful': []
-                }
 
     def set_protection(self, agents: ValuesView[Agent]) -> None:
         """

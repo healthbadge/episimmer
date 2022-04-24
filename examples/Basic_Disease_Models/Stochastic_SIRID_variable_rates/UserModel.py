@@ -9,9 +9,9 @@ def fn2(current_time_step): #People going into ICU decreases due to better drugs
 	return max(0.02,0.1-current_time_step*0.001)
 
 def event_contribute_fn(agent,event_info,location,current_time_step):
-		if agent.state=='Infected':
-			return 1
-		return 0
+	if agent.state=='Infected':
+		return 1
+	return 0
 
 def event_receive_fn(agent,ambient_infection,event_info,location,current_time_step):
 	#Example 1

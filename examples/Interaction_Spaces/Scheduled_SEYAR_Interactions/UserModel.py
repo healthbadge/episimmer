@@ -7,11 +7,11 @@ def probability_of_infection_fn(p_infected_states_list,contact_agent,c_dict,curr
 	return 0
 
 def event_contribute_fn(agent,event_info,location,current_time_step):
-		if agent.state=='Symptomatic':
-			return 1
-		elif agent.state=='Asymptomatic':
-			return 0.6
-		return 0
+	if agent.state=='Symptomatic':
+		return 1
+	elif agent.state=='Asymptomatic':
+		return 0.6
+	return 0
 
 def event_receive_fn(agent,ambient_infection,event_info,location,current_time_step):
 	beta=0.001

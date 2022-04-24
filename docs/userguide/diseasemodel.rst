@@ -103,7 +103,7 @@ one can schedule changes in state based on distributions. For example in the rea
 .. note ::
         While Scheduled model's independent transitions are solely based on scheduled times, dependent transitions are dependent on probability of change (infection) just as in the Stochastic models.
 
-.. note::
+.. note ::
     Internally in Episimmer, for an agent, the probabilities of infection from Individual interactions, Probabilistic interactions, Events and One-Time Events are
     all stored with the agent for a time step. The agent's next disease state at the time step is then calculated based on these stored probabilities.
 
@@ -113,7 +113,7 @@ Building the Disease Model
 ----------------------------
 
 Both Stochastic and Scheduled models can be implemented by the user using the UserModel.py file. They must define compartments and transitions between compartments. Additionally, user defined functions must be created for Events (common for both regular Events and One-Time
-Events) and Interactions (common for Individual Interactions and Probabilitic Interactions). These functions are relevant when we need to define Dependent transitions.
+Events) and Interactions (common for Individual Interactions and Probabilistic Interactions). These functions are relevant when we need to define Dependent transitions.
 
 .. note ::
         This file is a mandatory file required for any simulation in Episimmer.
@@ -242,7 +242,7 @@ For every agent the current agent is in contact with, this function will be used
 
 We need to concern ourselves with only the first parameter p_infected_states_list as it is a list that can be used to return probabilities of infection for each state. This list will come from the UserModel class. The user must unpack the probabilities himself and then use them.
 
-.. note::
+.. note ::
         If you do not have any of the two kinds of Individual Interactions, you need not define this function
 
 5. **Handling Events in the Environment**
@@ -280,7 +280,7 @@ he returns 1. This value will be accumulated and finally represent the ambient i
 total number of infected agents in the Event. In the event_receive_fn, a probability of infection is returned based on the ambient infection.
 
 
-.. note::
+.. note ::
         Just like the user-defined function for Interactions, If you do not have any of the two kinds of Events, you need not define these functions.
 
 6. **Bringing them all together**
@@ -339,7 +339,7 @@ Then, we link the event functions with the set_event_contribution_fn() and set_e
 
 We can also provide a name for the model which would be used in visualization.
 
-.. note::
+.. note ::
     You are now equipped with the right tools to implement your own Stochastic Model. Try it out yourself!
     Check out the :doc:`examples page<examples>` to get some ideas.
 
@@ -453,7 +453,7 @@ For every agent the current agent is in contact with, this function will be used
 
 We need to concern ourselves with only the first parameter p_infected_states_list as it is a list that can be used to return probabilities of infection for each state. This list will come from the UserModel class. The user must unpack the probabilities himself and then use them.
 
-.. note::
+.. note ::
         If you do not have any of the two kinds of Individual Interactions, you need not define this function
 
 4. **Handling Events in the Environment**
@@ -491,7 +491,7 @@ he returns 1. This value will be accumulated and finally represent the ambient i
 total number of infected agents in the Event. In the event_receive_fn, a probability of infection is returned based on the ambient infection.
 
 
-.. note::
+.. note ::
         Just like the user-defined function for Interactions, If you do not have any of the two kinds of Events, you need not define these functions.
 
 5. **Bringing them all together**
@@ -546,7 +546,7 @@ Then, we link the event functions with the set_event_contribution_fn() and set_e
 
 We can also provide a name for the model which would be used in visualization.
 
-.. note::
+.. note ::
     You are now equipped with the right tools to implement your own Scheduled Model. Try it out yourself!
     Check out the :doc:`examples page<examples>` to get some ideas.
 
