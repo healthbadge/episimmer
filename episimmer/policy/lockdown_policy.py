@@ -313,7 +313,7 @@ class EventLockdown(EventLockdownPolicy):
     Inherits :class:`~episimmer.policy.lockdown_policy.EventLockdownPolicy` class.
 
     An example of a GeneratePolicy.py file illustrating Event lockdown policy where events are lockdown based on an
-    Event attribute.
+    Event attribute. Here, Events of Type - Low Priority are lockdown.
 
     .. code-block:: python
             :linenos:

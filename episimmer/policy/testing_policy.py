@@ -344,7 +344,7 @@ class TestPolicy(AgentPolicy):
     Inherits :class:`~episimmer.policy.base.AgentPolicy` class.
 
     Note that for disease control, we require locking down agents that are positive, thus we have included a
-    lockdown policy inn the examples below.
+    lockdown policy in the examples below.
 
     An example of a GeneratePolicy.py file illustrating normally testing random agents (and locking down positively
     tested agents) is given below.

@@ -47,7 +47,7 @@ In the below figure, a susceptible agent is in contact with two infectious agent
 
     Individual Interactions between 3 agents (Red-Infected, Green-Healthy)
 
-.. note::
+.. note ::
     Due to the interactions being unidirectional, the natural case of interactions occur both ways between two agents. Thus, in this example,
     we would have 6 interactions rather than just 3.
 
@@ -105,7 +105,7 @@ save probabilities for each interaction (Number of interactions for a complete n
 The downside to higher efficiency in Events is that we save only one probability value regardless of the number of agents in the event. This could be a costly assumption
 when we have heterogeneous agents and the accumulated ambient infection isn't representative of all the agents. Thus, both Events and Individual interactions have their pros and cons.
 
-.. note::
+.. note ::
     Always use Events when modelling a complete graph of interactions and you do not have information of the individual interactions.
 
 
@@ -118,7 +118,7 @@ All Environment files including Individual interactions and Events are implement
 in the simplest case, the simulator will run the same set of individual interactions each timestep.
 If there were two files, then we would have alternating sets of individual interactions. The same applies to Events.
 
-.. note::
+.. note ::
     The next two components are derivatives of the Events and Interactions components. We implement them separately
     and treat them as distinct components as they have important use cases in the real world.
 
@@ -335,10 +335,10 @@ An individual file for probabilistic interactions will have ‘Probability’ an
 an edge between agent 1 and agent 2. But a line 0.5:1,2 will have an edge only in 50% of the situations that this interaction is called upon.
 Furthermore 0.3:1,2,3,4 will ensure that each of the 6 edges (1-2,1-3,1-4,2-3,2-4,3-4) occur with 0.3 probability when this line is called upon.
 
-.. note::
+.. note ::
     Each line represents an Erdos Renyi graph with p denoting the probability of having an edge and the agents denoting the vertices.
 
-.. note::
+.. note ::
     Probabilistic interaction will consider a bidirectional interaction. Thus, an interaction confirmed between two agents would add both
     directions of interactions.
 

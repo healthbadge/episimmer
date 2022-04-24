@@ -42,12 +42,12 @@ def plot_results(example_path: str, model: 'BaseModel',
         plt.plot(avg_dict[state], color=model.colors[state])
         # y=np.array(avg_dict[state])
         # error=np.array(stddev_dict[state])
-        plt.fill_between(x,
-                         min_dict[state],
-                         max_dict[state],
-                         alpha=0.2,
-                         facecolor=model.colors[state],
-                         linewidth=0)
+        # plt.fill_between(x,
+        #                  min_dict[state],
+        #                  max_dict[state],
+        #                  alpha=0.2,
+        #                  facecolor=model.colors[state],
+        #                  linewidth=0)
     plt.title(model.name + ' Plot')
     plt.legend(list(avg_dict.keys()), loc='upper right', shadow=True)
     plt.ylabel('Population')

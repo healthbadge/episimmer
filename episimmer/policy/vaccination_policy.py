@@ -225,7 +225,7 @@ class VaccinationPolicy(AgentPolicy):
         """
         This function enables the user to add vaccines.
 
-        Parameters to be specified for single dose vaccines:
+        Parameters to be specified for single dose vaccines in the vaccines dict:
 
         * cost: Cost of vaccine.
         * count: Number of vaccine available.
@@ -242,7 +242,7 @@ class VaccinationPolicy(AgentPolicy):
             }
             vp1.add_vaccines(vaccines1, 'Single')
 
-        Parameters to be specified for multi dose vaccines:
+        Parameters to be specified for multi dose vaccines in the vaccines dict:
 
         * cost: Cost of vaccine.
         * count: Number of vaccine available.
