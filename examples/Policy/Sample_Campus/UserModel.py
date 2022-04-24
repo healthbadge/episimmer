@@ -5,13 +5,13 @@ import episimmer.model as model
 #User defined functions
 
 def event_contribute_fn(agent,event_info,location,current_time_step):
-		#Example 1
-		if agent.state=='Symptomatic':
-			return 0.7
-		elif agent.state=='Asymptomatic':
-			return 0.3
-		else:
-			return 0
+	#Example 1
+	if agent.state=='Symptomatic':
+		return 0.7
+	elif agent.state=='Asymptomatic':
+		return 0.3
+	else:
+		return 0
 
 def event_receive_fn(agent,ambient_infection,event_info,location,current_time_step):
 	p=math.tanh(ambient_infection*0.3)

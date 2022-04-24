@@ -5,9 +5,9 @@ import episimmer.model as model
 # This function states the amount an agent contributes to ambient infection in the region
 #note that only infected agents contibute to the ambient infection
 def event_contribute_fn(agent,event_info,location,current_time_step):
-		if agent.state=='Infected':
-			return 1
-		return 0
+	if agent.state=='Infected':
+		return 1
+	return 0
 
 #This function states the probability of an agent becoming infected from the ambient infection
 def event_receive_fn(agent,ambient_infection,event_info,location,current_time_step):

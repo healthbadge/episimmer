@@ -23,23 +23,23 @@ def probability_of_infection_fn(p_infected_states_list,contact_agent,c_dict,curr
 		return 0
 
 def event_contribute_fn(agent,event_info,location,current_time_step):
-		#Example 1
-		if agent.state=='Symptomatic':
-			return 1
-		elif agent.state=='Asymptomatic':
-			return 0.3
-		else:
-			return 0
+	#Example 1
+	if agent.state=='Symptomatic':
+		return 1
+	elif agent.state=='Asymptomatic':
+		return 0.3
+	else:
+		return 0
 
-		#Example 2
-		susceptibility=1
-		if agent.info['HLA Type']=='A':
-			susceptibility=0.9
+	#Example 2
+	susceptibility=1
+	if agent.info['HLA Type']=='A':
+		susceptibility=0.9
 
-		if agent.state=='Symptomatic':
-			return math.tanh(float(event_info['Time Interval']))*(1-location.info['Ventilation'])*susceptibility
-		elif agent.state=='Asymptomatic':
-			return 0.3*math.tanh(float(event_info['Time Interval']))*(1-location.info['Ventilation'])*susceptibility
+	if agent.state=='Symptomatic':
+		return math.tanh(float(event_info['Time Interval']))*(1-location.info['Ventilation'])*susceptibility
+	elif agent.state=='Asymptomatic':
+		return 0.3*math.tanh(float(event_info['Time Interval']))*(1-location.info['Ventilation'])*susceptibility
 
 def event_receive_fn(agent,ambient_infection,event_info,location,current_time_step):
 	p=math.tanh(ambient_infection*0.3)
