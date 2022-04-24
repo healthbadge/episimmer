@@ -113,7 +113,7 @@ Building the Disease Model
 ----------------------------
 
 Both Stochastic and Scheduled models can be implemented by the user using the UserModel.py file. They must define compartments and transitions between compartments. Additionally, user defined functions must be created for Events (common for both regular Events and One-Time
-Events) and Interactions (common for Individual Interactions and Probabilitic Interactions). These functions are relevant when we need to define Dependent transitions.
+Events) and Interactions (common for Individual Interactions and Probabilistic Interactions). These functions are relevant when we need to define Dependent transitions.
 
 .. note ::
         This file is a mandatory file required for any simulation in Episimmer.
