@@ -13,8 +13,8 @@ Introduction - Intervention Policy
 An Intervention Policy, in Epidemic terms, is a user defined intervention method which applies to any activity undertaken with the
 objective of improving human health by preventing disease, or reducing the severity or duration of an existing disease.
 
-There are many kinds of policies that can be implemented in Episimmer by the user and it ensures high flexibility.
-Multiple policies defined by the user can be run in a simulation seamlessly with existing policies. We have also created templates for the user to test different kinds of examples of policies.
+There are many kinds of policies that can be implemented in Episimmer by the user and each policy is built to be flexible.
+Multiple policies defined by the user can be run in a simulation seamlessly. We have also created templates for the user to test different kinds of examples of policies.
 
 Currently, the policies that can be implemented are:
 
