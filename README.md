@@ -53,7 +53,7 @@ Or you could even model a fancy Zombie Apocalypse disease model like this
 ## Intervention Policies
 
 There are many kinds of policies that can be implemented in Episimmer by the user and each policy is built to be flexible.
-Multiple policies defined by the user can be run in a simulation seamlessly. We have also created templates for the user to test different kinds of examples of policies.
+Multiple policies defined by the user can be run in a simulation seamlessly. We have also created templates for the user to test different kinds of policies.
 
 Currently, the policies that can be implemented are:
 
@@ -154,12 +154,3 @@ Check out Episimmer's [official documentation](https://episimmer.readthedocs.io/
 
 ## UI
 Our current UI can be found at [here](https://episimmer.herokuapp.com/). Note that it has minimal functionality as compared to running the codebase directly. Yet it competes with the current state of the art systems with multiple novel features. <br>
-
-Episimmer is currently Work in Progress. Check out these point solutions built using the Episimmer codebase. <br>
-
-- [Optimizing Lockdowns](https://optimising-lockdowns.herokuapp.com) <br>
-- [Efficient Contact tracing](https://contact-tracing.herokuapp.com) <br>
-- [YACHT protocol](https://hb-yacht.herokuapp.com) <br>
-- [Custom Stochastic Model on a complete graph](https://share.streamlit.io/inavamsi/custom_epidemic_model/main/main.py) <br>
-- [Testing strategies (Pool testing, Friendship testing)](https://share.streamlit.io/suryadheeshjith/epidemic-testing-ui/main.py) <br>
-- [Vaccination with multiple vaccine types](https://share.streamlit.io/ruthushankar/vaccination_ui/main/vac.py) <br>
