@@ -1,0 +1,5 @@
+{
+    "states":["Infected","Recovered"],
+    "num_runs":100,
+    "num_agents_to_remove":1
+}
