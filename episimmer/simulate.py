@@ -26,6 +26,7 @@ class Simulate():
         agents_obj: An object of class :class:`~episimmer.read_file.ReadAgents`
         locations_obj: An object of class :class:`~episimmer.read_file.ReadLocations`
     """
+
     def __init__(self, config_obj: ReadConfiguration, model: BaseModel,
                  policy_list: List[Policy], agents_obj: ReadAgents,
                  locations_obj: ReadLocations):

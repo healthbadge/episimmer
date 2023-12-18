@@ -9,6 +9,7 @@ from episimmer.read_file import (ReadAgents, ReadConfiguration, ReadEvents,
 
 
 class TestReadFile(unittest.TestCase):
+
     def test_read_config(self):
         example_path = osp.join('tests', 'unit', 'Complete_Interaction_Space')
         config_filename = osp.join(example_path, 'config.txt')

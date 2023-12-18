@@ -19,6 +19,7 @@ class ReadConfiguration():
     Args:
         filename: Name of the directory containing simulation files
     """
+
     def __init__(self, filename: str):
 
         self.filename: str = filename
@@ -246,6 +247,7 @@ class ReadVDConfiguration():
     Args:
         filename: Name of the directory containing simulation files
     """
+
     def __init__(self, filename: str):
         self.filename: str = filename
         self.example_path: str = osp.dirname(filename)
@@ -320,6 +322,7 @@ class ReadFilesList():
     Args:
         filename: Name of the files list file
     """
+
     def __init__(self, filename: str):
         self.filename: str = filename
         self.file_list: List[str] = []
@@ -345,6 +348,7 @@ class BaseReadFile():
     """
     Base class for reading agents, locations, interactions and events from a file.
     """
+
     def __init__(self):
         pass
 
@@ -374,6 +378,7 @@ class ReadAgents(BaseReadFile):
         config_obj: An object of class :class:`~episimmer.read_file.ReadConfiguration` containing the simulation
                     configurations.
     """
+
     def __init__(self, filename: str, config_obj: ReadConfiguration):
         super().__init__()
         self.filename: str = filename
@@ -457,6 +462,7 @@ class ReadInteractions(BaseReadFile):
                     configurations.
         agents_obj: An object of class :class:`ReadAgents` containing agent information
     """
+
     def __init__(self, filename: str, config_obj: ReadConfiguration,
                  agents_obj: ReadAgents):
         super().__init__()
@@ -556,6 +562,7 @@ class ReadProbabilisticInteractions(BaseReadFile):
                     configurations.
         agents_obj: An object of class :class:`ReadAgents` containing agent information
     """
+
     def __init__(self, filename: str, config_obj: ReadConfiguration,
                  agents_obj: ReadAgents):
         super().__init__()
@@ -664,6 +671,7 @@ class ReadLocations(BaseReadFile):
         config_obj: An object of class :class:`ReadConfiguration` containing the simulation
                     configurations.
     """
+
     def __init__(self, filename: str, config_obj: ReadConfiguration):
         super().__init__()
         self.filename: str = filename
@@ -727,6 +735,7 @@ class ReadEvents(BaseReadFile):
         locations_obj: An object of class :class:`ReadLocations` containing location information
         agents_obj: An object of class :class:`ReadAgents` containing agent information
     """
+
     def __init__(self,
                  filename: str,
                  config_obj: Union[ReadConfiguration, None] = None,
@@ -824,6 +833,7 @@ class ReadOneTimeEvents(ReadEvents):
     Args:
         filename: Name of the file containing one time event information.
     """
+
     def __init__(self, filename: str):
         super().__init__(filename)
         self.event_info_keys: str = ''
