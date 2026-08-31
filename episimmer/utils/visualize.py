@@ -142,8 +142,8 @@ def get_interaction_graph_from_object(obj: 'Simulate') -> nx.Graph:
         if agent.can_contribute_infection > 0:
             for int_agent in agent.contact_list:
                 int_agent_indx = int_agent['Interacting Agent Index']
-                if (agents_obj.agents[int_agent_indx].can_receive_infection >
-                        0):
+                if (agents_obj.agents[int_agent_indx].can_receive_infection
+                        > 0):
                     g.add_edge(agent.index, int_agent_indx, color='black')
 
     # Events
@@ -155,8 +155,8 @@ def get_interaction_graph_from_object(obj: 'Simulate') -> nx.Graph:
                            pos=(-1500 - 500 * j, 500 * i))
                 for agent in event_info['Agents']:
                     if (agents_obj.agents[agent].can_receive_infection > 0 or
-                            agents_obj.agents[agent].can_contribute_infection >
-                            0):
+                            agents_obj.agents[agent].can_contribute_infection
+                            > 0):
                         g.add_edge(event_info['Location Index'] + '_event' +
                                    str(i),
                                    agent,
@@ -172,7 +172,9 @@ def save_env_graph() -> Callable:
     Returns:
         Callable function
     """
+
     def decorator(func: Callable) -> Callable:
+
         @functools.wraps(func)
         def wrapper(ref: 'Simulate', *args, **kwargs) -> None:
             func(ref, *args, **kwargs)
@@ -279,7 +281,9 @@ def store_animated_dynamic_graph() -> Callable:
     Returns:
         Callable function
     """
+
     def decorator(func: Callable) -> Callable:
+
         @functools.wraps(func)
         def wrapper(ref: 'Simulate', *args, **kwargs) -> None:
             if ref.config_obj.worlds - 1 == Time.get_current_world():

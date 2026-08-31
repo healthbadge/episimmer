@@ -237,7 +237,9 @@ def save_stats(
     Returns:
         Callable function
     """
+
     def decorator(func: Callable) -> Callable:
+
         @functools.wraps(func)
         def wrapper(ref: 'Simulate', *args, **kwargs) -> None:
             func(ref, *args, **kwargs)
@@ -270,7 +272,9 @@ def write_stats(pickle_file: str, text_file: str) -> Callable:
     Returns:
         Callable function
     """
+
     def decorator(func: Callable) -> Callable:
+
         @functools.wraps(func)
         def wrapper(*args, **kwargs):
             func(*args, **kwargs)
