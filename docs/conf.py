@@ -106,6 +106,7 @@ rst_context = {'episimmer': episimmer, 'examples': examples}
 
 
 def setup(app):
+
     def skip(app, what, name, obj, skip, options):
         members = [
             '__init__',
