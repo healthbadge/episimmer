@@ -12,6 +12,7 @@ class ContactList():
     """
     Class built to implement an ordered and unique list of contacts
     """
+
     def __init__(self):
         self.contacts: List[str] = []
 
@@ -94,6 +95,7 @@ class CTPolicy(AgentPolicy):
         attribute : Parameter (attribute) type of agents
         value_list: List of attribute values of agents
     """
+
     def __init__(self,
                  num_of_days: int,
                  attribute: Union[str, None] = None,
