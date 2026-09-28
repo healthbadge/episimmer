@@ -26,6 +26,7 @@ class TestResult():
         time_step_done: Time step machine completed test
         valid_period: Number of time steps the test is considered to be valid
     """
+
     def __init__(self, result: str, agent: Agent, machine_name: str,
                  time_step: int, machine_start_step: int, time_step_done: int,
                  valid_period: int):
@@ -69,6 +70,7 @@ class TestTube():
     """
     Class for a Testtube.
     """
+
     def __init__(self):
         self.testtube_agent_dict: Dict[Agent, Dict[str, Union[str, int]]] = {}
         self.testtube_result: Union[str, None] = None
@@ -154,6 +156,7 @@ class Machine():
         capacity: Capacity of the machine for tests
         valid_period: Number of time steps the test is considered to be valid
     """
+
     def __init__(self, machine_name: str, cost: int,
                  false_positive_rate: float, false_negative_rate: float,
                  turnaround_time: int, capacity: int, valid_period: int):
@@ -423,6 +426,7 @@ class TestPolicy(AgentPolicy):
     Args:
         agents_per_step_fn: User-defined function to specify the number of agents to test per time step
     """
+
     def __init__(self, agents_per_step_fn: Callable):
         super().__init__('Testing')
         self.register_agent_testtube_func: Union[Callable, None] = None
