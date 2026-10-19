@@ -6,6 +6,7 @@ from episimmer.model import BaseModel, ScheduledModel, StochasticModel
 
 
 class TestModel(unittest.TestCase):
+
     def test_state_proportion_checker(self):
         base_model = BaseModel('Test')
         success_dict = {'a': 0.1, 'b': 0.2, 'c': 0.7}
