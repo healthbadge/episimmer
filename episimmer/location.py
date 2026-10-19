@@ -8,6 +8,7 @@ class Location():
     Args:
         info_dict: Information of each location taken from the locations file .
     """
+
     def __init__(self, info_dict: Dict[str, str]):
         self.info: Dict[str, str] = info_dict
         self.index: str = info_dict['Location Index']
