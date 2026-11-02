@@ -18,6 +18,7 @@ class AgentLockdownPolicy(AgentPolicy):
         do_lockdown_fn: User-defined function to specify which time step(s) to enforce lockdown in
         p: Probability of agent to contribute and receive infection from any source of infection under lockdown
     """
+
     def __init__(self, do_lockdown_fn: Callable, p: float):
         super().__init__('Restrict')
         self.do_lockdown_fn: Callable = do_lockdown_fn
@@ -64,6 +65,7 @@ class FullLockdown(AgentLockdownPolicy):
         do_lockdown_fn: User-defined function to specify which time step(s) to enforce lockdown in
         p: Probability of agent to contribute and receive infection from any source of infection under lockdown
     """
+
     def __init__(self, do_lockdown_fn: Callable, p: float = 0.0):
         super().__init__(do_lockdown_fn, p)
 
@@ -119,6 +121,7 @@ class AgentLockdown(AgentLockdownPolicy):
         do_lockdown_fn: User-defined function to specify which time step(s) to enforce lockdown in
         p: Probability of agent to contribute and receive infection from any source of infection under lockdown
     """
+
     def __init__(self,
                  attribute: str,
                  value_list: List[str],
@@ -209,6 +212,7 @@ class TestingBasedLockdown(AgentLockdownPolicy):
         contact_tracing: Boolean specifying whether lockdown for contacts of positively tested agents is enabled or not
         p: Probability of agent to contribute and receive infection from any source of infection under lockdown
     """
+
     def __init__(self,
                  do_lockdown_fn: Callable,
                  lockdown_period: int,
@@ -290,6 +294,7 @@ class EventLockdownPolicy(EventPolicy):
         do_lockdown_fn: User-defined function to specify which time step(s) to enforce lockdown in
         p: Probability of an event occurring during lockdown
     """
+
     def __init__(self, do_lockdown_fn: Callable, p: float):
         super().__init__('Restrict')
         self.do_lockdown_fn: Callable = do_lockdown_fn
@@ -334,6 +339,7 @@ class EventLockdown(EventLockdownPolicy):
         do_lockdown_fn: User-defined function to specify which time step(s) to enforce lockdown in
         p: Probability of an event occurring during lockdown
     """
+
     def __init__(self,
                  attribute: str,
                  value_list: List[str],

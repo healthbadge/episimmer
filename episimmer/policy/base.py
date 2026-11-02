@@ -12,6 +12,7 @@ class Policy():
     Args:
         policy_type: Type of Agent Policy
     """
+
     def __init__(self, policy_type: str):
         self.policy_type: str = policy_type
 
@@ -67,6 +68,7 @@ class AgentPolicy(Policy):
     Args:
         policy_type: Type of Agent Policy
     """
+
     def __init__(self, policy_type: str):
         super().__init__(policy_type)
 
@@ -124,5 +126,6 @@ class EventPolicy(Policy):
     Args:
         policy_type: Type of Event Policy
     """
+
     def __init__(self, policy_type: str):
         super().__init__(policy_type)
