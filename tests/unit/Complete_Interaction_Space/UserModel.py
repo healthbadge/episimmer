@@ -21,6 +21,7 @@ def event_receive_fn(agent, ambient_infection, event_info, location,
 
 
 class UserModel(model.StochasticModel):
+
     def __init__(self):
         individual_types = ['Susceptible', 'Infected', 'Recovered']
         infected_states = ['Infected']

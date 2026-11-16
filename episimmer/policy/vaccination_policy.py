@@ -23,6 +23,7 @@ class VaccineResult():
         decay_days: Number of days of protection offered by the vaccine
         current_dose: The dose of the vaccine administered to the agent
     """
+
     def __init__(self, vaccine_name: str, agent: Agent, result: str,
                  time_step: int, efficacy: float, decay_days: int,
                  current_dose: int):
@@ -57,6 +58,7 @@ class VaccineType():
         interval: List specifying minimum days to pass before the administration of the next dose, for each dose of a
                   multi-dose vaccine
     """
+
     def __init__(self,
                  name: str,
                  cost: int,
@@ -154,6 +156,7 @@ class VaccinationPolicy(AgentPolicy):
     Args:
         agents_per_step_fn: User-defined function to specify the number of agents to vaccinate per time step
     """
+
     def __init__(self, agents_per_step_fn: Callable):
         super().__init__('Vaccination')
 
@@ -437,10 +440,10 @@ class VaccinationPolicy(AgentPolicy):
                       and lh.vaccine_name in self.available_vaccines
                       and self.available_vaccines[lh.vaccine_name]['type']
                       == 'Multi'):
-                    if (lh.current_dose <
-                            self.available_vaccines[lh.vaccine_name]['dose']
-                            and time_step - lh.time_stamp >=
-                            self.available_vaccines[lh.vaccine_name]
+                    if (lh.current_dose
+                            < self.available_vaccines[lh.vaccine_name]['dose']
+                            and time_step - lh.time_stamp
+                            >= self.available_vaccines[lh.vaccine_name]
                         ['interval'][lh.current_dose - 1]):
                         current_vaccine = None
                         for vaccine in self.vaccines:
