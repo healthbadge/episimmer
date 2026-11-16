@@ -29,6 +29,7 @@ class World():
         event_files_list: List of path names of all the events list files
         one_time_event_file: File name of the one time event
     """
+
     def __init__(self, config_obj: ReadConfiguration, model: BaseModel,
                  policy_list: List[Policy], agents_filename: str,
                  interaction_files_list: List[List[str]],

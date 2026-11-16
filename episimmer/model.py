@@ -20,6 +20,7 @@ class BaseModel():
     Args:
         name: Name of Disease Model
     """
+
     def __init__(self, name: str):
         self.name: str = name
 
@@ -380,6 +381,7 @@ class StochasticModel(BaseModel):
         infected_states: The states that are infectious
         state_proportion: Starting proportions of each state
     """
+
     def __init__(self, individual_state_types: List[str],
                  infected_states: List[str],
                  state_proportion: Dict[str, Union[float, int]]):
@@ -750,6 +752,7 @@ class ScheduledModel(BaseModel):
                 self.set_event_contribution_fn(event_contribute_fn)
                 self.set_event_receive_fn(event_receive_fn)
     """
+
     def __init__(self):
         super().__init__('Scheduled Model')
         self.individual_state_types: List[str] = []
